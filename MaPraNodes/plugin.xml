@@ -16,6 +16,7 @@
    <extension point="org.knime.workbench.repository.nodes">
       <node category-path="/" factory-class="firstnode.FirstNodeNodeFactory" id="firstnode.FirstNodeNodeFactory"/>
    <node category-path="/" factory-class="firstnode.FirstNodeNodeFactory" id="firstnode.FirstNodeNodeFactory"/>
+<node category-path="/" factory-class="phenomizer.PhenomizerNodeFactory" id="phenomizer.PhenomizerNodeFactory"/>
 </extension>
    
 </plugin>
