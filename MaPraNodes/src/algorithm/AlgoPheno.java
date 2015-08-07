@@ -30,6 +30,7 @@ public class AlgoPheno {
 		ontology = new Ontology(onto);
 		
 		for(int symp : symptoms){
+			//FALSCH!!!
 			double icS = calculateIC(symp);
 			ic.put(symp,icS);
 			kszS.put(symp, null);
@@ -76,6 +77,7 @@ public class AlgoPheno {
 		maxQueue.addAll(Arrays.asList(tmp));
 		
 		LinkedList<String[]>result = new LinkedList<String[]>();
+		//mehrere??
 		for(int i=0; i<num; i++){
 			String currEl = maxQueue.remove();
 			String[]parts = currEl.split(",");
@@ -118,6 +120,7 @@ public class AlgoPheno {
 	 */
 	private static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer>symptoms2){
 		
+		//global speichern
 		HashMap<String,Double>calculatedSim = new HashMap<String,Double>();
 		
 		double sim1 = 0;
