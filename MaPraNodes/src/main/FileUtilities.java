@@ -13,78 +13,92 @@ import java.util.List;
 
 public class FileUtilities {
 	
-	public static LinkedList<Integer> readInSymptoms(String path){
+	public static LinkedList<Integer>readInQuery(String path){
 		LinkedList<Integer> symptoms = new LinkedList<Integer>();
 		
 		List<String> content = readLines(path);
+		content.remove(0);
+		content.remove(0);
 		
 		for(String line : content){
-			if(!line.startsWith("#") || !line.startsWith("[a-z]|[A-Z]")){
-				String [] parts = line.split("\\s");
-				int id = Integer.valueOf(parts[0]);
-				symptoms.add(id);
-			}
+			symptoms.add(Integer.valueOf(line));
+		}
+		
+		return symptoms;
+	}
+
+	public static LinkedList<Integer> readInSymptoms(String path){
+		LinkedList<Integer> symptoms = new LinkedList<Integer>();
+
+		List<String> content = readLines(path);
+		content.remove(0);
+		content.remove(0);
+
+		for(String line : content){
+			String [] parts = line.split("\\s");
+			int id = Integer.valueOf(parts[0]);
+			symptoms.add(id);
 		}
 		return symptoms;
 	}
-	
+
 	public static HashMap<Integer,LinkedList<Integer>> readInKSZ(String path){
 		HashMap<Integer,LinkedList<Integer>> ksz = new HashMap<Integer,LinkedList<Integer>>();
-		
+
 		List<String> content = readLines(path);
-		
+		content.remove(0);
+		content.remove(0);
+
 		for(String line : content){
-			if(!line.startsWith("#") || !line.startsWith("[a-z]|[A-Z]")){
-				String [] parts = line.split("\\s");
-				int id = Integer.valueOf(parts[0]);
-				LinkedList<Integer> symptoms = new LinkedList<Integer>();
-				if(ksz.containsKey(id)){
-					symptoms = ksz.get(id);
-					symptoms.add(Integer.valueOf(parts[1]));
-				}
-				else{
-					symptoms.add(Integer.valueOf(parts[1]));
-				}
-				ksz.put(id, symptoms);
+			String [] parts = line.split("\\s");
+			int id = Integer.valueOf(parts[0]);
+			LinkedList<Integer> symptoms = new LinkedList<Integer>();
+			if(ksz.containsKey(id)){
+				symptoms = ksz.get(id);
+				symptoms.add(Integer.valueOf(parts[1]));
 			}
+			else{
+				symptoms.add(Integer.valueOf(parts[1]));
+			}
+			ksz.put(id, symptoms);
 		}
-		
+
 		return ksz;
 	}
 
 	public static int[][] readInOntology(String path){
-		
+
 		List<String> content = readLines(path);
 		int[][] ontologyArray = new int[content.size()-2][2];
-		
+		content.remove(0);
+		content.remove(0);
+
 		int position = 0;
 		for(String line : content){
-			if(!line.startsWith("#") || !line.startsWith("[a-z]|[A-Z]")){
-				String [] parts = line.split("\\s");
-				int idChild = Integer.valueOf(parts[0]);
-				int idParent = Integer.valueOf(parts[1]);
-				ontologyArray[position][0]=idChild;
-				ontologyArray[position][1]=idParent;
-				position++;
-			}
+			String [] parts = line.split("\\s");
+			int idChild = Integer.valueOf(parts[0]);
+			int idParent = Integer.valueOf(parts[1]);
+			ontologyArray[position][0]=idChild;
+			ontologyArray[position][1]=idParent;
+			position++;
 		}
 		return ontologyArray;
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * to write content into a given file
 	 * @param path
@@ -158,7 +172,7 @@ public class FileUtilities {
 		}
 
 	}
-	
+
 	private static List<String> readLines(String path){
 		ArrayList<String> lines = new ArrayList<String>();
 
