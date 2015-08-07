@@ -1,0 +1,164 @@
+package main;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
+public class FileUtilities {
+	
+	public static LinkedList<Integer> readInSymptoms(String path){
+		LinkedList<Integer> symptoms = new LinkedList<Integer>();
+		
+		List<String> content = readLines(path);
+		
+		for(String line : content){
+			if(!line.startsWith("#")&&!line.startsWith("[a-z]|[A-Z]")){
+				String [] parts = line.split("\\s");
+				int id = Integer.valueOf(parts[0]);
+				symptoms.add(id);
+			}
+		}
+		return symptoms;
+	}
+	
+	public static HashMap<Integer,LinkedList<Integer>> readInKSZ(String path){
+		HashMap<Integer,LinkedList<Integer>> ksz = new HashMap<Integer,LinkedList<Integer>>();
+		
+		List<String> content = readLines(path);
+		
+		for(String line : content){
+			if(!line.startsWith("#")&&!line.startsWith("[a-z]|[A-Z]")){
+				String [] parts = line.split("\\s");
+				int id = Integer.valueOf(parts[0]);
+				LinkedList<Integer> symptoms = new LinkedList<Integer>();
+				if(ksz.containsKey(id)){
+					symptoms = ksz.get(id);
+					symptoms.add(Integer.valueOf(parts[1]));
+				}
+				else{
+					symptoms.add(Integer.valueOf(parts[1]));
+				}
+				ksz.put(id, symptoms);
+			}
+		}
+		
+		return ksz;
+	}
+
+	/**
+	 * to write content into a given file
+	 * @param path
+	 * @param content
+	 */
+	public static void writeString(String path, String content) {
+		//Open file
+		File file = new File(path);
+
+		//Create File if necessary
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException ex) {
+				System.err.println(ex);
+				System.exit(1);
+			}
+		}
+
+		//Error if not writable
+		if (!file.canWrite()) {
+			System.err.println(file + " could not be written to!");
+			System.exit(1);
+		}
+
+		//Write lines
+		try {
+			FileWriter writer = new FileWriter(file);
+			writer.write(content);
+			writer.close();
+		} catch (IOException ex) {
+			System.err.println(ex);
+			System.exit(1);
+		}
+
+	}
+
+	/**
+	 * to write content into a given file without deleting its current content
+	 * @param path
+	 * @param content
+	 */
+	public static void writeStringToExistingFile(String path, String content) {
+		//Open file
+		File file = new File(path);
+
+		//Create File if necessary
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException ex) {
+				System.err.println(ex);
+				System.exit(1);
+			}
+		}
+
+		//Error if not writable
+		if (!file.canWrite()) {
+			System.err.println(file + " could not be written to!");
+			System.exit(1);
+		}
+
+		//Write lines
+		try {
+			FileWriter writer = new FileWriter(file,true);
+			writer.write(content);
+			writer.close();
+		} catch (IOException ex) {
+			System.err.println(ex);
+			System.exit(1);
+		}
+
+	}
+	
+	private static List<String> readLines(String path){
+		ArrayList<String> lines = new ArrayList<String>();
+
+		//open file
+		File file = new File(path);
+
+		//Error if not readable
+		if (!file.canRead()) {
+			System.err.println("File " + file.getAbsolutePath() + " could not be read!");
+			System.exit(1);
+		}
+
+		BufferedReader inputStream = null;
+		//Return lines
+		try {
+			inputStream = new BufferedReader(new FileReader(file));
+			String line;
+			while((line = inputStream.readLine()) != null)  {
+				lines.add(line);
+			}
+
+			inputStream.close();
+		} catch (FileNotFoundException ex) {
+			System.err.println(file.getAbsolutePath() + " not found!");
+			System.exit(1);
+		} catch (IOException ex) {
+			System.err.println(ex);
+			System.exit(1);
+		}
+
+		return lines;
+	}
+
+
+}
+
