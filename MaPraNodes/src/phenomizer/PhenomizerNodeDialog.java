@@ -24,13 +24,7 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
      */
     protected PhenomizerNodeDialog() {
         super();
-        
-        addDialogComponent(new DialogComponentNumber(
-                new SettingsModelIntegerBounded(
-                    PhenomizerNodeModel.CFGKEY_COUNT,
-                    PhenomizerNodeModel.DEFAULT_COUNT,
-                    Integer.MIN_VALUE, Integer.MAX_VALUE),
-                    "Counter:", /*step*/ 1, /*componentwidth*/ 5));
+
                     
     }
 }
