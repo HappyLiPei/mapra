@@ -51,7 +51,6 @@ public class PhenomizerNodeModel extends NodeModel {
     private static final String P_VALUE = "p_value";
         
 
-    
 
     /**
      * Constructor for the node model.
@@ -120,16 +119,19 @@ public class PhenomizerNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	
     	logger.info("configure");
-    	//check port 0: symptom
+    	//check port 0: symptom table
     	checkColumn(inSpecs, 0, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE);
-    	//check port 1: isa
-    	//check port 2: ksz
-    	//check port 3: query
-    	
- 
-        
-
-    	
+    	checkColumn(inSpecs, 0, SYMPTOM_NAME, StringCell.TYPE, null);
+    	//check port 1: isa table
+    	checkColumn(inSpecs, 1, CHILD_ID, IntCell.TYPE, LongCell.TYPE);
+    	checkColumn(inSpecs, 1, PARENT_ID, IntCell.TYPE, LongCell.TYPE);
+    	//TODO: check source if required
+    	//check port 2: ksz table
+    	checkColumn(inSpecs, 2, DISEASE_ID, IntCell.TYPE, LongCell.TYPE);
+    	checkColumn(inSpecs, 2, DISEASE_NAME, StringCell.TYPE, null);
+    	checkColumn(inSpecs, 2, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE);
+    	//check port 3: query  
+    	checkColumn(inSpecs, 3, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE);
 
         return new DataTableSpec[]{generateOutputSpec()};
     }
@@ -141,7 +143,7 @@ public class PhenomizerNodeModel extends NodeModel {
     		throw new InvalidSettingsException("Table at port "+port+" requires column "+SYMPTOM_ID);
     	}
     	if((s.getType() != type1 && s.getType() != type2)){
-    		throw new InvalidSettingsException("Column "+SYMPTOM_ID+" is not the correct data type");
+    		throw new InvalidSettingsException("Table at port "+port+": Column "+SYMPTOM_ID+" is not the correct data type");
     	}
     }
     
