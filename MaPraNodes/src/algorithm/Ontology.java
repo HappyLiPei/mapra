@@ -1,6 +1,8 @@
 package algorithm;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 //save ontology as data structure
@@ -8,12 +10,12 @@ public class Ontology {
 	//in ontology ist zu jedem knoten die liste seiner eltern gespeichert
 	private HashMap<Integer,LinkedList<Integer>> ontology;
 	
+	
 	// konstruktor bekommt ein 2d array, das alle kanten aus isa enthält (child_id, parent_id)
 	public Ontology(int[][] edges){
-		for(int child=0; child<edges.length; child++){
-			for (int parent=0; parent<edges[child].length; parent++){
-				addEdge(parent,child);
-			}
+		ontology = new HashMap<Integer,LinkedList<Integer>>();
+		for(int position=0; position<edges.length; position++){
+			addEdge(edges[position][1],edges[position][0]);
 		}
 	}
 
@@ -35,12 +37,51 @@ public class Ontology {
 	}
 	
 	
-	//methode, die eine liste aller eltern eines knotens zurückgibt
-	//wurzel gibt null zurück
+	//methode, die eine liste aller eltern eines knotens zurückgibt (wurzel gibt null zurück)
 	public LinkedList<Integer> getParents (int node){
-		LinkedList<Integer> parents = ontology.get(node);
-		return parents;
+		if(ontology.containsKey(node)){
+			LinkedList<Integer> parents = ontology.get(node);
+			return parents;
+		}
+		else{
+			return null;
+		}
+		
 	}
+	
+
+	// gibt eine Menge (HashSet) aller vorfahren eines knotens zurück (wurzel gibt null zurück)
+	public HashSet<Integer> getAllAncestors (int node){
+		
+		if(ontology.containsKey(node)){
+			HashSet<Integer> ancestors = new HashSet<Integer>();
+			addAncestors(node, ancestors);
+			return ancestors;
+		}
+		
+		else{
+			return null;
+		}
+	}
+	
+	
+	
+	private void addAncestors(int actNode, HashSet<Integer> ancestors){
+		if(ontology.containsKey(actNode)){
+			if(!ancestors.contains(actNode)){
+				//actNode noch nicht enthalten, also hinzufügen und rekursiv für alle parents von actNode aufrufen
+				ancestors.add(actNode);
+				LinkedList<Integer> parents = ontology.get(actNode);
+				Iterator<Integer> iter = parents.iterator();
+				while(iter.hasNext()){
+					addAncestors(iter.next(), ancestors);
+				}
+			}
+		}
+	}
+	
+	
+	
 }
 
 
