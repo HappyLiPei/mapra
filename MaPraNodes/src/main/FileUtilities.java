@@ -19,7 +19,7 @@ public class FileUtilities {
 		List<String> content = readLines(path);
 		
 		for(String line : content){
-			if(!line.startsWith("#")&&!line.startsWith("[a-z]|[A-Z]")){
+			if(!line.startsWith("#") || !line.startsWith("[a-z]|[A-Z]")){
 				String [] parts = line.split("\\s");
 				int id = Integer.valueOf(parts[0]);
 				symptoms.add(id);
@@ -34,7 +34,7 @@ public class FileUtilities {
 		List<String> content = readLines(path);
 		
 		for(String line : content){
-			if(!line.startsWith("#")&&!line.startsWith("[a-z]|[A-Z]")){
+			if(!line.startsWith("#") || !line.startsWith("[a-z]|[A-Z]")){
 				String [] parts = line.split("\\s");
 				int id = Integer.valueOf(parts[0]);
 				LinkedList<Integer> symptoms = new LinkedList<Integer>();
@@ -52,6 +52,39 @@ public class FileUtilities {
 		return ksz;
 	}
 
+	public static int[][] readInOntology(String path){
+		
+		List<String> content = readLines(path);
+		int[][] ontologyArray = new int[content.size()-2][2];
+		
+		int position = 0;
+		for(String line : content){
+			if(!line.startsWith("#") || !line.startsWith("[a-z]|[A-Z]")){
+				String [] parts = line.split("\\s");
+				int idChild = Integer.valueOf(parts[0]);
+				int idParent = Integer.valueOf(parts[1]);
+				ontologyArray[position][0]=idChild;
+				ontologyArray[position][1]=idParent;
+				position++;
+			}
+		}
+		return ontologyArray;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * to write content into a given file
 	 * @param path
