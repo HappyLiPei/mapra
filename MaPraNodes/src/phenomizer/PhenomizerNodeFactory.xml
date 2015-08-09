@@ -8,10 +8,17 @@
     
     <fullDescription>
         <intro>
-			This node implements the Phenomizer algorithm for the PhenoDis Database at Helmholtz Zentrum. <br/>
-			Phenomizer requires several input tables. Table 0 to 2 are directly extracted from PhenoDis. Table 3 contains
-			the PhenoDis symptom_ids of your query symptoms. Note that the column names of your tables have to match the names
-			specified in the ports section. For more information about the input tables see example data from ... .
+			This node implements the Phenomizer algorithm for the PhenoDis database at Helmholtz Zentrum. <br/>
+			The Phenomizer algorithm is an ontology-based similarity search algorithm. 
+			It compares a list of symptoms against a set of annotated diseases. 
+			The similarity measure of the algorithm makes use of a symptom ontology 
+			i.e a directed acyclic graph that represents a is-a hierarchy of the symptoms. 
+			The algorithm is described in detail in ... .  <br/>
+			Phenomizer requires several input tables. 
+			Table 0 to 2 are directly extracted from PhenoDis. 
+			Table 3 contains the PhenoDis symptom_ids of the query symptoms. 
+			Note that the column names of the tables have to match the names specified in the ports section. 
+			For more information about the format of the input tables see example data from ... .
         </intro>
         
         
@@ -30,10 +37,10 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Symptoms">Symptoms from PhenoDis with columns symptom_id and symptom_name</inPort>
+        <inPort index="0" name="Symptoms">Symptom table from PhenoDis with columns symptom_id and symptom_name</inPort>
         <inPort index="1" name="ISA">ISA table from PhenoDis with columns parent_id and child_id</inPort>
         <inPort index="2" name="KSZ">KSZ table from PhenoDis with columns disease_id, disease, symptom_id</inPort>
         <inPort index="3" name="Query">Query symptoms with colum symptom_id</inPort>
-        <outPort index="0" name="Top Scoring Diseases">Diseases with high similarity to the query symptoms</outPort>
+        <outPort index="0" name="Most Similar Diseases">Diseases with high similarity to the query symptoms</outPort>
     </ports>    
 </knimeNode>
