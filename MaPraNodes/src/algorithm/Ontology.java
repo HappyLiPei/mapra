@@ -53,7 +53,7 @@ public class Ontology {
 	
 
 	// gibt eine Menge (HashSet) aller vorfahren eines knotens zurück (wurzel gibt null zurück)
-	private HashSet<Integer> getAllAncestors (int node){
+	public HashSet<Integer> getAllAncestors (int node){
 		
 		if(ontology.containsKey(node)){
 			HashSet<Integer> ancestors = new HashSet<Integer>();
