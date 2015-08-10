@@ -59,15 +59,16 @@ public class Ontology {
 	
 
 	// gibt eine Menge (HashSet) aller vorfahren eines knotens zurück (selbst auch enthalten!)
-	//wurzel gibt liste mit sich selbst zurück; in ontologie nicht vorhandener knoten gibt null zurück
+	//wurzel gibt liste mit sich selbst zurück; in ontologie nicht vorhandener knoten ebenfalls
 	public HashSet<Integer> getAllAncestors (int node){
+		HashSet<Integer> ancestors = new HashSet<Integer>();
 		if(ontology.containsKey(node)){
-			HashSet<Integer> ancestors = new HashSet<Integer>();
 			addAncestors(node, ancestors);
 			return ancestors;
 		}
 		else{
-			return null;
+			ancestors.add(node);
+			return ancestors;
 		}
 	}
 	
