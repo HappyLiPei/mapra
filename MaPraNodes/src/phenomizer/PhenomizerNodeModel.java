@@ -30,6 +30,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
+import algorithm.AlgoPheno;
 import algorithm.TableProcessor;
 
 
@@ -57,8 +58,8 @@ public class PhenomizerNodeModel extends NodeModel {
     public static final String DISEASE_NAME = "disease";
     public static final String CHILD_ID = "child_id";
     public static final String PARENT_ID = "parent_id";
-    private static final String SCORE = "score";
-    private static final String P_VALUE = "p_value";
+    public static final String SCORE = "score";
+    public static final String P_VALUE = "p_value";
 
     /**
      * Constructor for the node model.
@@ -79,59 +80,45 @@ public class PhenomizerNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
 
-        logger.info("Node Model Stub... this is not yet implemented !");
-        
-        logger.info("Test generateQuery()");
+
         LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY]);
-        for(Integer i: query){
-        	logger.info(""+i);
-        }
-        
-        logger.info("Test generateQSymptomList()");
         LinkedList<Integer> symptoms = TableProcessor.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
-        for(Integer i: symptoms){
-        	logger.info(""+i);
-        }
-        
-        logger.info("Test generateEdges()");
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
-        for(int [] edge:edges){
-        	logger.info("child "+edge[0]+" parent "+edge[1]);
-        }
-        
-        logger.info("Test generateKSZ()");
         HashMap<Integer,LinkedList<Integer>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ]);
-        for(Integer i: diseases.keySet()){
-        	logger.info("Disease "+i);
-        	for(Integer j: diseases.get(i)){
-        		logger.info("Symptom "+j);
-        	}
-        }
-
         
-        DataTableSpec outputSpec = generateOutputSpec();
+//        logger.info("Test generateQuery()");
+//        for(Integer i: query){
+//        	logger.info(""+i);
+//        }
+//        
+//        logger.info("Test generateQSymptomList()");
+//        for(Integer i: symptoms){
+//        	logger.info(""+i);
+//        }
+//        
+//        logger.info("Test generateEdges()");
+//        for(int [] edge:edges){
+//        	logger.info("child "+edge[0]+" parent "+edge[1]);
+//        }
+//        
+//        logger.info("Test generateKSZ()");
+//        for(Integer i: diseases.keySet()){
+//        	logger.info("Disease "+i);
+//        	for(Integer j: diseases.get(i)){
+//        		logger.info("Symptom "+j);
+//        	}
+//        }
         
+        AlgoPheno.setInput(query, symptoms, diseases, edges);
+        LinkedList<String[]> result = AlgoPheno.runPhenomizer(11);
         
-        BufferedDataContainer container = exec.createDataContainer(outputSpec);
+//        for(String [] entry: result){
+//        	for(String s : entry){
+//        		logger.info(s);
+//        	}
+//        }
         
-        // add dummy rows
-        for (int i = 0; i < 10; i++) {
-        	RowKey key = new RowKey("Row "+i);
-        	DataCell[] cells = new DataCell [4];
-        	cells[0]= new IntCell(i);
-        	cells[1] = new StringCell("disease "+i);
-        	cells[2] = new DoubleCell(i*2.5);
-        	cells[3] = new DoubleCell((double)i/10);
-        	DataRow row = new DefaultRow(key, cells);
-        	container.addRowToTable(row);
-
-            // check if the execution monitor was canceled
-        	//exec.checkCanceled();
-        	//exec.setProgress(i / 10, "Adding row " + i);
-        }
-
-        container.close();
-        BufferedDataTable out = container.getTable();
+        BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
         return new BufferedDataTable[]{out};
     }
 
@@ -197,7 +184,7 @@ public class PhenomizerNodeModel extends NodeModel {
 	 * col 2 : score (double)
 	 * col 3 : p-value (double)
 	 */
-    private DataTableSpec generateOutputSpec(){
+    public static DataTableSpec generateOutputSpec(){
     	DataColumnSpec [] colspecs = new DataColumnSpec [4];
     	colspecs[0] = new DataColumnSpecCreator(DISEASE_ID, IntCell.TYPE).createSpec();
     	colspecs[1] = new DataColumnSpecCreator(DISEASE_NAME, StringCell.TYPE).createSpec();
