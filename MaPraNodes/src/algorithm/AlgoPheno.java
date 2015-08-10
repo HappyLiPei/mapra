@@ -9,18 +9,20 @@ import java.util.PriorityQueue;
 
 public class AlgoPheno {
 	
-	static LinkedList<Integer> queryIds;
-	static LinkedList<Integer> symptomIds;
-	static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
-	static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
-	static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
-	static Ontology ontology;
+	public static LinkedList<Integer> queryIds;
+	public static LinkedList<Integer> symptomIds;
+	public static Ontology ontology;
+	public static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
+	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
+	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
 	
 	/**
-	 * initialize the needed data structures using the given inputs
+	 * initialize the needed data structures using the given parameters
+	 * 
 	 * @param query - list of symptoms from the query
 	 * @param symptoms - list of symptoms from the database
 	 * @param ksz - association of diseases and symptoms
+	 * @param onto - ontology given the hierarchical ordering of the symptoms
 	 */
 	public static void setInput(LinkedList<Integer> query, LinkedList<Integer>symptoms,
 			HashMap<Integer,LinkedList<Integer>> ksz,int[][]onto){
@@ -30,33 +32,40 @@ public class AlgoPheno {
 		ontology = new Ontology(onto);
 		
 		for(int symp : symptoms){
-			//FALSCH!!!
-			double icS = calculateIC(symp);
-			ic.put(symp,icS);
-			kszS.put(symp, null);
+			kszS.put(symp, new HashSet<Integer>());
 		}
-
 		
 		for(int disease : ksz.keySet()){
 			LinkedList<Integer> tmpSymp = ksz.get(disease);
 			for(int symp : tmpSymp){
-				HashSet<Integer> tmp = kszS.get(symp);
-				if(!tmp.contains(disease)){
-					tmp.add(disease);
+				HashSet<Integer>ancestorsOrSelf = ontology.getAllAncestors(symp);
+				/*System.out.println(symp);
+				System.out.println(listToString(ancestorsOrSelf));*/
+				for(int nextSymp : ancestorsOrSelf){
+					HashSet<Integer> tmp = kszS.get(nextSymp);
+					if(!tmp.contains(disease)){
+						tmp.add(disease);
+					}
+					kszS.put(nextSymp, tmp);
 				}
-				kszS.put(symp, tmp);
-				//Add symptom to all parents using the ontology
 			}
 		}
-		
 	}
 	
 	/**
 	 * execute the phenomizer algorithm and return the top num results
 	 * @param num
-	 * @return
+	 * @return diseases with the highest similarity score
 	 */
 	public static LinkedList<String[]> runPhenomizer(int num){
+		
+		for(int symp : symptomIds){
+			if(!ic.containsKey(symp)){
+				double icS = calculateIC(symp);
+				ic.put(symp,icS);
+			}
+		}
+		
 		PriorityQueue<String> minQueue = new PriorityQueue<String>();
 		
 		for(int disease : kszD.keySet()){
@@ -77,22 +86,31 @@ public class AlgoPheno {
 		maxQueue.addAll(Arrays.asList(tmp));
 		
 		LinkedList<String[]>result = new LinkedList<String[]>();
-		//mehrere??
+		String score = "";
 		for(int i=0; i<num; i++){
 			String currEl = maxQueue.remove();
 			String[]parts = currEl.split(",");
 			String[]res = new String[2];
 			res[0]=parts[1];
-			res[1]=parts[2];
+			res[1]=parts[0];
+			score = parts[0];
+			result.add(res);
 		}
-		
+		while(maxQueue.remove().split(",")[0].equals(score)){
+			String currEl = maxQueue.remove();
+			String[]parts = currEl.split(",");
+			String[]res = new String[2];
+			res[0]=parts[1];
+			res[1]=parts[0];
+			result.add(res);
+		}
 		return result;
 	} 
 	
 	/**
 	 * calculates the information content of a given term (symptom)
 	 * @param term
-	 * @return
+	 * @return information content
 	 */
 	private static double calculateIC(int term){
 		
@@ -103,10 +121,23 @@ public class AlgoPheno {
 		return ic;
 	}
 	
+	/**
+	 * calculates the pairwise similarity of two terms (symptoms) as the information content of their most informative common ancestor
+	 * @param term1
+	 * @param term2
+	 * @return pairwise similarity
+	 */
 	private static double calculatePairwiseSim(int term1, int term2){
-		double pairwiseSim = 0;
-
-		//calculate pairwise similarity
+		
+		double pairwiseSim = Double.MIN_VALUE;
+		HashSet<Integer>commonAncestors = ontology.getAllCommonAncestors(term1,term2); 
+		
+		for(int symp : commonAncestors){
+			double currIC = ic.get(symp);
+			if(currIC>pairwiseSim){
+				pairwiseSim=currIC;
+			}
+		}
 		
 		return pairwiseSim;
 	}
@@ -177,5 +208,14 @@ public class AlgoPheno {
 		
 		double similarity=(sim1+sim2)/2;
 		return similarity;
+	}
+	
+	private static String listToString(HashSet<Integer>list){
+		StringBuilder sb = new StringBuilder();
+		for(int value : list){
+			sb.append(value+"\t");
+		}
+		
+		return sb.toString();
 	}
 }
