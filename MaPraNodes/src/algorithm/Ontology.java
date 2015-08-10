@@ -59,7 +59,7 @@ public class Ontology {
 	
 
 	// gibt eine Menge (HashSet) aller vorfahren eines knotens zurück (selbst auch enthalten!)
-	//wurzel gibt leere liste zurück; in ontologie nicht vorhandener knoten gibt null zurück
+	//wurzel gibt liste mit sich selbst zurück; in ontologie nicht vorhandener knoten gibt null zurück
 	public HashSet<Integer> getAllAncestors (int node){
 		if(ontology.containsKey(node)){
 			HashSet<Integer> ancestors = new HashSet<Integer>();
@@ -95,13 +95,19 @@ public class Ontology {
 		HashSet<Integer> ancestors2 = getAllAncestors(node2);
 		
 		//gemeinsamkeiten von ancestors1 und ancestors2 finden:
-		// fall 1: 
+		// fall 1: node1 und/oder node2 sind nicht in ontologie (ancestors ist null) -> leeres Set zurückgeben
+		if(ancestors1==null || ancestors2==null){
+			return commonAncestors;
+		}
 		
-		
-		
-		
-		
-		
+		//fall 2: es gibt einen CA bzw mehrere CAs -> Schnitt beider mengen zurückgeben
+		Iterator<Integer> iter1 = ancestors1.iterator();
+		while(iter1.hasNext()){
+			int actNode = iter1.next();
+			if(ancestors2.contains(actNode) && !commonAncestors.contains(actNode)){
+				commonAncestors.add(actNode);
+			}
+		}
 		return commonAncestors;
 	}
 	
