@@ -8,6 +8,7 @@ import java.util.LinkedList;
 //save ontology as data structure
 public class Ontology {
 	//in ontology ist zu jedem knoten die liste seiner eltern gespeichert
+	// wurzel hat leere liste
 	private HashMap<Integer,LinkedList<Integer>> ontology;
 	
 	
@@ -37,7 +38,8 @@ public class Ontology {
 	}
 	
 	
-	//methode, die eine liste aller eltern eines knotens zurückgibt (wurzel gibt null zurück)
+	//methode, die eine liste aller eltern eines knotens zurückgibt 
+	//wurzel gibt leere liste zurück
 	public LinkedList<Integer> getParents (int node){
 		if(ontology.containsKey(node)){
 			LinkedList<Integer> parents = ontology.get(node);
@@ -51,7 +53,7 @@ public class Ontology {
 	
 
 	// gibt eine Menge (HashSet) aller vorfahren eines knotens zurück (wurzel gibt null zurück)
-	public HashSet<Integer> getAllAncestors (int node){
+	private HashSet<Integer> getAllAncestors (int node){
 		
 		if(ontology.containsKey(node)){
 			HashSet<Integer> ancestors = new HashSet<Integer>();
@@ -65,7 +67,7 @@ public class Ontology {
 	}
 	
 	
-	
+	// nötig für getAllAncestors()
 	private void addAncestors(int actNode, HashSet<Integer> ancestors){
 		if(ontology.containsKey(actNode)){
 			if(!ancestors.contains(actNode)){
@@ -81,6 +83,13 @@ public class Ontology {
 	}
 	
 	
+	//TODO methode, die alle common ancestors zurückgibt
+	public HashSet<Integer> getAllCommonAncestors (int node){
+		
+		
+		
+		return null;
+	}
 	
 }
 
