@@ -2,6 +2,7 @@ package phenomizer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.knime.base.node.preproc.joiner.ColumnSpecListRenderer;
@@ -80,9 +81,31 @@ public class PhenomizerNodeModel extends NodeModel {
 
         logger.info("Node Model Stub... this is not yet implemented !");
         
+        logger.info("Test generateQuery()");
         LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY]);
         for(Integer i: query){
         	logger.info(""+i);
+        }
+        
+        logger.info("Test generateQSymptomList()");
+        LinkedList<Integer> symptoms = TableProcessor.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
+        for(Integer i: symptoms){
+        	logger.info(""+i);
+        }
+        
+        logger.info("Test generateEdges()");
+        int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
+        for(int [] edge:edges){
+        	logger.info("child "+edge[0]+" parent "+edge[1]);
+        }
+        
+        logger.info("Test generateKSZ()");
+        HashMap<Integer,LinkedList<Integer>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ]);
+        for(Integer i: diseases.keySet()){
+        	logger.info("Disease "+i);
+        	for(Integer j: diseases.get(i)){
+        		logger.info("Symptom "+j);
+        	}
         }
 
         
