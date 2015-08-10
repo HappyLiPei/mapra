@@ -111,7 +111,7 @@ public class AlgoPheno {
 			res[1]=parts[0];
 			result.add(res);
 		}
-		main.FileUtilities.writeString("D:/Dokumente/Masterpraktikum/Testdatensatz/PairwiseSim.txt",hashMapToString(calculatedSim));
+		//main.FileUtilities.writeString("D:/Dokumente/Masterpraktikum/Testdatensatz/PairwiseSim.txt",hashMapToString(calculatedSim));
 		
 		return result;
 	} 
