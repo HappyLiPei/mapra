@@ -2,6 +2,7 @@ package phenomizer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import org.knime.base.node.preproc.joiner.ColumnSpecListRenderer;
 import org.knime.core.data.DataCell;
@@ -28,6 +29,8 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
+import algorithm.TableProcessor;
+
 
 /**
  * This is the model implementation of Phenomizer.
@@ -47,12 +50,12 @@ public class PhenomizerNodeModel extends NodeModel {
     private static final int INPORT_QUERY = 3;
     
     //column names
-    private static final String SYMPTOM_ID ="symptom_id";
-    private static final String SYMPTOM_NAME = "symptom_name";
-    private static final String DISEASE_ID ="disease_id";
-    private static final String DISEASE_NAME = "disease";
-    private static final String CHILD_ID = "child_id";
-    private static final String PARENT_ID = "parent_id";
+    public static final String SYMPTOM_ID ="symptom_id";
+    public static final String SYMPTOM_NAME = "symptom_name";
+    public static final String DISEASE_ID ="disease_id";
+    public static final String DISEASE_NAME = "disease";
+    public static final String CHILD_ID = "child_id";
+    public static final String PARENT_ID = "parent_id";
     private static final String SCORE = "score";
     private static final String P_VALUE = "p_value";
 
@@ -76,6 +79,11 @@ public class PhenomizerNodeModel extends NodeModel {
             final ExecutionContext exec) throws Exception {
 
         logger.info("Node Model Stub... this is not yet implemented !");
+        
+        LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY]);
+        for(Integer i: query){
+        	logger.info(""+i);
+        }
 
         
         DataTableSpec outputSpec = generateOutputSpec();
