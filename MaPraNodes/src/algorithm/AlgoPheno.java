@@ -1,6 +1,5 @@
 package algorithm;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,12 +8,13 @@ import java.util.PriorityQueue;
 
 public class AlgoPheno {
 	
-	public static LinkedList<Integer> queryIds;
-	public static LinkedList<Integer> symptomIds;
-	public static Ontology ontology;
-	public static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
-	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
-	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
+	private static LinkedList<Integer> queryIds;
+	private static LinkedList<Integer> symptomIds;
+	private static Ontology ontology;
+	private static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
+	private static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
+	private static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
+	private static HashMap<String,Double>calculatedSim = new HashMap<String,Double>();
 	
 	/**
 	 * initialize the needed data structures using the given parameters
@@ -63,6 +63,7 @@ public class AlgoPheno {
 			if(!ic.containsKey(symp)){
 				double icS = calculateIC(symp);
 				ic.put(symp,icS);
+				//System.out.println(symp+"\t"+icS);
 			}
 		}
 		
@@ -74,16 +75,22 @@ public class AlgoPheno {
 			Math.round(similarity);
 			similarity = similarity/1000;
 			String res = similarity+","+disease;
-			if(res.compareTo(minQueue.peek())>=0){
+			if(minQueue.size()<num){
+				minQueue.add(res);
+			}
+			else if(res.compareTo(minQueue.peek())>=0){
 				minQueue.add(res);
 			}
 		}
 		
-		String[]tmp = (String[]) minQueue.toArray();
+		//String[]tmp = (String[]) minQueue.toArray();
 		
 		Comparator<String> comp = new MaxPriorityComparator();
 		PriorityQueue<String> maxQueue = new PriorityQueue<String>(20,comp);
-		maxQueue.addAll(Arrays.asList(tmp));
+		while(!minQueue.isEmpty()){
+			String nextEl = minQueue.remove();
+			maxQueue.add(nextEl);
+		}
 		
 		LinkedList<String[]>result = new LinkedList<String[]>();
 		String score = "";
@@ -96,7 +103,7 @@ public class AlgoPheno {
 			score = parts[0];
 			result.add(res);
 		}
-		while(maxQueue.remove().split(",")[0].equals(score)){
+		while(!maxQueue.isEmpty()&&maxQueue.remove().split(",")[0].equals(score)){
 			String currEl = maxQueue.remove();
 			String[]parts = currEl.split(",");
 			String[]res = new String[2];
@@ -115,7 +122,7 @@ public class AlgoPheno {
 	private static double calculateIC(int term){
 		
 		double ic = 0;
-		double freq = kszS.get(term).size()/kszD.size();
+		double freq = (double)kszS.get(term).size()/kszD.size();
 		ic = -Math.log(freq);
 		
 		return ic;
@@ -132,10 +139,20 @@ public class AlgoPheno {
 		double pairwiseSim = Double.MIN_VALUE;
 		HashSet<Integer>commonAncestors = ontology.getAllCommonAncestors(term1,term2); 
 		
-		for(int symp : commonAncestors){
-			double currIC = ic.get(symp);
-			if(currIC>pairwiseSim){
-				pairwiseSim=currIC;
+		if(!commonAncestors.isEmpty()){
+			for(int symp : commonAncestors){
+				double currIC = ic.get(symp);
+				if(currIC>pairwiseSim){
+					pairwiseSim=currIC;
+				}
+			}
+		}
+		else{
+			if(term1==term2){
+				pairwiseSim=ic.get(term1);
+			}
+			else{
+				pairwiseSim=0;
 			}
 		}
 		
@@ -150,10 +167,7 @@ public class AlgoPheno {
 	 * @return similiarty score
 	 */
 	private static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer>symptoms2){
-		
-		//global speichern
-		HashMap<String,Double>calculatedSim = new HashMap<String,Double>();
-		
+
 		double sim1 = 0;
 		for(int symp1 : symptoms1){
 			double currMax = Double.MIN_VALUE;
@@ -208,14 +222,5 @@ public class AlgoPheno {
 		
 		double similarity=(sim1+sim2)/2;
 		return similarity;
-	}
-	
-	private static String listToString(HashSet<Integer>list){
-		StringBuilder sb = new StringBuilder();
-		for(int value : list){
-			sb.append(value+"\t");
-		}
-		
-		return sb.toString();
 	}
 }
