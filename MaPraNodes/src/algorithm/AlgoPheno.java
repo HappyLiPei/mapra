@@ -59,6 +59,10 @@ public class AlgoPheno {
 	 */
 	public static LinkedList<String[]> runPhenomizer(int num){
 		
+		if(num>kszD.size()){
+			num = kszD.size();
+		}
+		
 		for(int symp : symptomIds){
 			if(!ic.containsKey(symp)){
 				double icS = calculateIC(symp);
@@ -111,7 +115,6 @@ public class AlgoPheno {
 			res[1]=parts[0];
 			result.add(res);
 		}
-		//main.FileUtilities.writeString("D:/Dokumente/Masterpraktikum/Testdatensatz/PairwiseSim.txt",hashMapToString(calculatedSim));
 		
 		return result;
 	} 
@@ -144,7 +147,7 @@ public class AlgoPheno {
 		if(!commonAncestors.isEmpty()){
 			for(int symp : commonAncestors){
 				double currIC = ic.get(symp);
-				if(currIC>pairwiseSim){
+				if(Double.compare(currIC,pairwiseSim)>0){
 					pairwiseSim=currIC;
 				}
 			}
@@ -224,17 +227,5 @@ public class AlgoPheno {
 		
 		double similarity=(sim1+sim2)/2;
 		return similarity;
-	}
-	
-	private static String hashMapToString(HashMap<String,Double>map){
-		StringBuilder sb = new StringBuilder();
-		for(String key : map.keySet()){
-			String[]parts = key.split(",");
-			double val = map.get(key)*1000;
-			val = Math.round(val);
-			val = val/1000;
-			sb.append(parts[0]+"\t"+parts[1]+"\t"+val+"\n");
-		}
-		return sb.toString();
 	}
 }
