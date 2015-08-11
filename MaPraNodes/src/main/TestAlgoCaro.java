@@ -11,11 +11,20 @@ public class TestAlgoCaro {
 
 	public static void main(String[]args){
 		
+		/*
 		String dataPath = "C:/Users/Carolin/Dropbox/Masterpraktikum/Testdatensatz/";
 		
 		String diseasesIn = dataPath + "Krankheiten.txt";
 		String symptomsIn = dataPath + "Symptome.txt";
 		String ontologyIn = dataPath + "Ontology.txt";
+		String queryIn = dataPath + "query1.txt";		
+		*/
+		
+		String dataPath = "C:/Users/Carolin/Dropbox/Masterpraktikum/Datenbank/";
+		
+		String diseasesIn = dataPath + "ksz_HPO_test.csv";
+		String symptomsIn = dataPath + "symptoms_HPO_test.csv";
+		String ontologyIn = dataPath + "isa_HPO_test.csv";
 		String queryIn = dataPath + "query1.txt";
 
 		HashMap<Integer,LinkedList<Integer>>ksz = FileUtilities.readInKSZ(diseasesIn);
