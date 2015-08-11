@@ -31,7 +31,7 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
         super();
         
         createNewGroup("Output");
-        addDialogComponent(new DialogComponentNumberEdit(outputsize, "Number of diseases in outputtable",5));
+        addDialogComponent(new DialogComponentNumberEdit(outputsize, "Number of diseases in output",5));
 
                     
     }

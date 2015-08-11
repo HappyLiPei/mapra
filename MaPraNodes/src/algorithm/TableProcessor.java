@@ -11,6 +11,7 @@ import org.knime.core.data.RowKey;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
+import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
@@ -45,8 +46,17 @@ public class TableProcessor {
 		
 		HashSet<Integer> symptoms_in_dict = new HashSet<Integer>(table_symptoms.getRowCount()*3);
 		int index = table_symptoms.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
+		boolean is_int =false;
+		if(table_symptoms.getDataTableSpec().getColumnSpec(index).getType()==IntCell.TYPE){
+			is_int = true;
+		}
 		for(DataRow r: table_symptoms){
-			symptoms_in_dict.add(((IntCell) r.getCell(index)).getIntValue());
+			if(is_int){
+				symptoms_in_dict.add(((IntCell) r.getCell(index)).getIntValue());
+			}
+			else{
+				symptoms_in_dict.add((int) ((LongCell) r.getCell(index)).getLongValue());
+			}
 		}
 		
 		LinkedList<Integer> res = new LinkedList<Integer>();
@@ -69,9 +79,18 @@ public class TableProcessor {
 	
 	public static LinkedList<Integer> generateSymptomList(BufferedDataTable table){
 		int index = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
+		boolean is_int =false;
+		if(table.getDataTableSpec().getColumnSpec(index).getType()==IntCell.TYPE){
+			is_int = true;
+		}
 		LinkedList<Integer> result = new LinkedList<Integer>();
 		for (DataRow r: table){
-			result.add(((IntCell) r.getCell(index)).getIntValue());
+			if(is_int){
+				result.add(((IntCell) r.getCell(index)).getIntValue());
+			}
+			else{
+				result.add((int) ((LongCell) r.getCell(index)).getLongValue());
+			}
 		}
 		return result;
 	}
@@ -87,9 +106,31 @@ public class TableProcessor {
 		HashMap<Integer, LinkedList<Integer>> res = new HashMap<Integer, LinkedList<Integer>>(table.getRowCount()*3);
 		int index_disease = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
 		int index_symptom = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
+		
+		boolean disease_is_int=false;
+		if(table.getDataTableSpec().getColumnSpec(index_disease).getType()==IntCell.TYPE){
+			disease_is_int = true;
+		}
+		boolean symptom_is_int=false;
+		if(table.getDataTableSpec().getColumnSpec(index_symptom).getType()==IntCell.TYPE){
+			symptom_is_int = true;
+		}
+		
 		for(DataRow r : table){
-			int disease_id = ((IntCell) r.getCell(index_disease)).getIntValue();
-			int symptom_id = ((IntCell) r.getCell(index_symptom)).getIntValue();
+			int disease_id=-1;
+			int symptom_id=-1;
+			if(disease_is_int){
+				disease_id = ((IntCell) r.getCell(index_disease)).getIntValue();
+			}
+			else{
+				disease_id = (int) ((LongCell) r.getCell(index_disease)).getLongValue();
+			}
+			if(symptom_is_int){
+				symptom_id = ((IntCell) r.getCell(index_symptom)).getIntValue();
+			}
+			else{
+				symptom_id = (int) ((LongCell) r.getCell(index_symptom)).getLongValue();
+			}
 			if(res.containsKey(disease_id)){
 				res.get(disease_id).add(symptom_id);
 			}
@@ -114,10 +155,29 @@ public class TableProcessor {
 		int [][] res = new int [table.getRowCount()][2];
 		int index_child = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.CHILD_ID);
 		int index_parent = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.PARENT_ID);
+		boolean child_is_int=false;
+		if(table.getDataTableSpec().getColumnSpec(index_child).getType()==IntCell.TYPE){
+			child_is_int = true;
+		}
+		boolean parent_is_int=false;
+		if(table.getDataTableSpec().getColumnSpec(index_parent).getType()==IntCell.TYPE){
+			parent_is_int = true;
+		}
+		
 		int rowcounter = 0;
 		for(DataRow r: table){
-			res[rowcounter][0] = ((IntCell) r.getCell(index_child)).getIntValue();
-			res[rowcounter][1] = ((IntCell) r.getCell(index_parent)).getIntValue();
+			if(child_is_int){
+				res[rowcounter][0] = ((IntCell) r.getCell(index_child)).getIntValue();
+			}
+			else{
+				res[rowcounter][0] = (int)((LongCell) r.getCell(index_child)).getLongValue();
+			}
+			if(parent_is_int){
+				res[rowcounter][1] = ((IntCell) r.getCell(index_parent)).getIntValue();
+			}
+			else{
+				res[rowcounter][1] = (int) ((LongCell) r.getCell(index_parent)).getLongValue();
+			}
 			rowcounter++;
 		}
 		return res;
@@ -136,8 +196,18 @@ public class TableProcessor {
 		HashMap<Integer,String> IdToName = new HashMap<Integer,String>(ksz.getRowCount()*3);
 		int pos_disease_name = ksz.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
 		int pos_disease_id = ksz.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
+		boolean is_int = false;
+		if(ksz.getDataTableSpec().getColumnSpec(pos_disease_id).getType()==IntCell.TYPE){
+			is_int=true;
+		}
 		for(DataRow r: ksz){
-			int id = ((IntCell) r.getCell(pos_disease_id)).getIntValue();
+			int id=-1;
+			if(is_int){
+				id = ((IntCell) r.getCell(pos_disease_id)).getIntValue();
+			}
+			else{
+				id = (int) ((LongCell) r.getCell(pos_disease_id)).getLongValue();
+			}
 			if(!IdToName.containsKey(id)){
 				IdToName.put(id, ((StringCell) r.getCell(pos_disease_name)).getStringValue());
 			}

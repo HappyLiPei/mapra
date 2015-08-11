@@ -81,10 +81,13 @@ public class PhenomizerNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
 
-
+    	logger.info("generateQuery");
         LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
+        logger.info("generateSymptomList");
         LinkedList<Integer> symptoms = TableProcessor.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
+        logger.info("generateEdges");
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
+        logger.info("generateKSZ");
         HashMap<Integer,LinkedList<Integer>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ]);
         
 //        logger.info("Test generateQuery()");
@@ -109,7 +112,7 @@ public class PhenomizerNodeModel extends NodeModel {
 //        		logger.info("Symptom "+j);
 //        	}
 //        }
-        logger.info(m_outputsize.getIntValue());
+//        logger.info(m_outputsize.getIntValue());
         
         AlgoPheno.setInput(query, symptoms, diseases, edges);
         LinkedList<String[]> result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
@@ -120,6 +123,7 @@ public class PhenomizerNodeModel extends NodeModel {
 //        	}
 //        }
         
+        logger.info("generate output");
         BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
         return new BufferedDataTable[]{out};
     }
