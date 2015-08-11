@@ -1,15 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: FirstNode-Node extension for KNIME Workbench
-Bundle-SymbolicName: firstnode; singleton:=true
+Bundle-Name: Phenomizer for PhenoDis
+Bundle-SymbolicName: phenomizer;singleton:=true
 Bundle-Version: 1.0.0
-Bundle-ClassPath: firstnode.jar
-Bundle-Activator: firstnode.FirstNodeNodePlugin
+Bundle-ClassPath: phenomizer.jar
+Bundle-Activator: phenomizer.PhenomizerNodePlugin
 Bundle-Vendor: 
 Require-Bundle: org.eclipse.core.runtime,
  org.knime.workbench.core,
  org.knime.workbench.repository,
  org.knime.base
 Bundle-ActivationPolicy: lazy
-Export-Package: firstnode
+Export-Package: phenomizer
 
