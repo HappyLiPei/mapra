@@ -1,6 +1,7 @@
 package algorithm;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import org.knime.core.data.DataCell;
@@ -14,6 +15,7 @@ import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
+import org.knime.core.node.NodeLogger;
 
 import phenomizer.PhenomizerNodeModel;
 
@@ -25,8 +27,38 @@ public class TableProcessor {
 	 * @return LinkedList of symptom ids of the query
 	 */
 	
-	public static LinkedList<Integer> generateQuery(BufferedDataTable table){
+	private static LinkedList<Integer> generateQuery(BufferedDataTable table){
 		return generateSymptomList(table);
+	}
+	
+	/**
+	 * converts BufferedDataTable with query symptoms to phenomizer data structure
+	 * and removes ids that are not part of the ontology
+	 * @param table_query: table with query symptoms received at inport of PhenomizerNode
+	 * @param table_symptoms: table with symptom dictionary received at inport of PhenomizerNode
+	 * @param l: node logger to make output to KNIME konsole
+	 * @return filtered LinkedList of symptom ids of the query
+	 */
+	
+	public static LinkedList<Integer> generateQuery(BufferedDataTable table_query, BufferedDataTable table_symptoms, NodeLogger l){
+		LinkedList<Integer> query_complete = generateQuery(table_query);
+		
+		HashSet<Integer> symptoms_in_dict = new HashSet<Integer>(table_symptoms.getRowCount()*3);
+		int index = table_symptoms.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
+		for(DataRow r: table_symptoms){
+			symptoms_in_dict.add(((IntCell) r.getCell(index)).getIntValue());
+		}
+		
+		LinkedList<Integer> res = new LinkedList<Integer>();
+		for(Integer i: query_complete){
+			if(symptoms_in_dict.contains(i)){
+				res.add(i);
+			}
+			else{
+				l.warn("Symptom_id " +i+ " ist not part of the ontology: Phenomizer will ignore this symptom.");
+			}
+		}
+		return res;
 	}
 	
 	/**

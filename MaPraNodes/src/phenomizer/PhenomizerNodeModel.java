@@ -81,15 +81,15 @@ public class PhenomizerNodeModel extends NodeModel {
             final ExecutionContext exec) throws Exception {
 
 
-        LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY]);
+        LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
         LinkedList<Integer> symptoms = TableProcessor.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
         HashMap<Integer,LinkedList<Integer>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ]);
         
-//        logger.info("Test generateQuery()");
-//        for(Integer i: query){
-//        	logger.info(""+i);
-//        }
+        logger.info("Test generateQuery()");
+        for(Integer i: query){
+        	logger.info(""+i);
+        }
 //        
 //        logger.info("Test generateQSymptomList()");
 //        for(Integer i: symptoms){
