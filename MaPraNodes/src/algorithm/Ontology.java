@@ -42,21 +42,6 @@ public class Ontology {
 		}
 	}
 	
-	
-	//nicht verwendet?!?
-	//methode, die eine liste aller eltern eines knotens zurückgibt 
-	//wurzel gibt leere liste zurück; in ontologie nicht vorhandener knoten gibt null zurück
-	private LinkedList<Integer> getParents (int node){
-		if(ontology.containsKey(node)){
-			LinkedList<Integer> parents = ontology.get(node);
-			return parents;
-		}
-		else{
-			return null;
-		}
-		
-	}
-	
 
 	// gibt eine Menge (HashSet) aller vorfahren eines knotens zurück (selbst auch enthalten!)
 	//wurzel gibt liste mit sich selbst zurück; in ontologie nicht vorhandener knoten ebenfalls
@@ -111,6 +96,41 @@ public class Ontology {
 		}
 		return commonAncestors;
 	}
+	
+	
+	// alternative zu getAllCommonAncestors:
+	// gibt alle für IC relevanten ancestors von 2 knoten zurück (falls es keinen gibt -> leere menge)
+	public HashSet<Integer> getRelevantCommonAncestors (int node1, int node2){
+		HashSet<Integer> relevantAncestors = new HashSet<Integer>();
+		HashSet<Integer> ancestors1 = getAllAncestors(node1);
+		
+		// für node2 nicht alle ancestors nötig... 
+		// wenn ein CA gefunden: für diesen pfad abbrechen (eltern von diesem CA irrelevant)
+		addRelevantCommonAncestors(node2, relevantAncestors, ancestors1);
+		return relevantAncestors;
+	}
+	
+	// nötig für getRelevantCommonAncestors()
+	private void addRelevantCommonAncestors(int actNode, HashSet<Integer> relevantAncestors, HashSet<Integer> ancestors1){
+		if(ancestors1.contains(actNode)){
+			// ein CA gefunden, also zu relevantAncestors hinzufügen und eltern von actNode nicht mehr betrachten
+			relevantAncestors.add(actNode);
+		}
+		else{
+			// kein CA gefunden, also methode für eltern von actNode aufrufen
+			if(ontology.containsKey(actNode)){
+				LinkedList<Integer> parents = ontology.get(actNode);
+				Iterator<Integer> iter = parents.iterator();
+				while(iter.hasNext()){
+					addRelevantCommonAncestors(iter.next(), relevantAncestors, ancestors1);
+				}
+			}
+		}
+		
+	}
+	
+	
+	
 	
 }
 
