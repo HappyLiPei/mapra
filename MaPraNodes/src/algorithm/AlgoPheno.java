@@ -8,13 +8,13 @@ import java.util.PriorityQueue;
 
 public class AlgoPheno {
 	
-	private static LinkedList<Integer> queryIds;
-	private static LinkedList<Integer> symptomIds;
-	private static Ontology ontology;
-	private static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
-	private static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
-	private static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
-	private static HashMap<String,Double>calculatedSim = new HashMap<String,Double>();
+	public static LinkedList<Integer> queryIds;
+	public static LinkedList<Integer> symptomIds;
+	public static Ontology ontology;
+	public static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
+	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
+	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
+	public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 	
 	/**
 	 * initialize the needed data structures using the given parameters
@@ -26,10 +26,19 @@ public class AlgoPheno {
 	 */
 	public static void setInput(LinkedList<Integer> query, LinkedList<Integer>symptoms,
 			HashMap<Integer,LinkedList<Integer>> ksz,int[][]onto){
-		queryIds = query;
-		symptomIds = symptoms;
-		kszD = ksz;
+		
 		ontology = new Ontology(onto);
+		
+		//query = removeDuplicates(query);
+		queryIds = removeAncestors(query);
+		System.out.println(listToString(queryIds));
+		
+		symptomIds = symptoms;
+		for(int key : ksz.keySet()){
+			//LinkedList<Integer>value = removeAncestors(ksz.get(key));
+			LinkedList<Integer>value=ksz.get(key);
+			kszD.put(key, value);
+		}
 		
 		for(int symp : symptoms){
 			kszS.put(symp, new HashSet<Integer>());
@@ -227,5 +236,55 @@ public class AlgoPheno {
 		
 		double similarity=(sim1+sim2)/2;
 		return similarity;
+	}
+	
+	/**
+	 * remove duplicates from a given list
+	 * @param symptoms
+	 * @return duplicate-free list
+	 */
+	private static LinkedList<Integer> removeDuplicates(LinkedList<Integer>symptoms){
+		LinkedList<Integer> result = new LinkedList<Integer>();
+		for(int element: symptoms){
+			if(!result.contains(element)){
+				result.add(element);
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * remove symptoms whose successor(s) are also in the list
+	 * @param symptoms
+	 * @return list without any ancestors of query terms
+	 */
+	private static LinkedList<Integer>removeAncestors(LinkedList<Integer>symptoms){
+		LinkedList<Integer>result = new LinkedList<Integer>();
+		for(int element : symptoms){
+			if(!result.contains(element)){
+				result.add(element);
+			}
+		}
+		
+		for(int element : symptoms){
+			//System.out.println(element);
+			HashSet<Integer>ancestors=ontology.getAllAncestors(element);
+			ancestors.remove(element);
+			for(int element1 : symptoms){
+				if(ancestors.contains(element1)&&result.contains(element1)){
+					int index = result.indexOf(element1);
+					result.remove(index);
+				}
+			}
+		}
+		return result;
+	}
+	
+	private static String listToString(LinkedList<Integer>list){
+		StringBuilder sb = new StringBuilder();
+		for(int element : list){
+			sb.append(element+"\t");
+		}
+		return sb.toString();
 	}
 }

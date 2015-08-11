@@ -14,7 +14,7 @@ public class TestAlgo {
 		String symptomsIn = dataPath + "Symptome.txt";
 		String ontologyIn = dataPath + "Ontology.txt";
 		
-		String output = dataPath + "PhenomizerTestResults.txt";
+		String output = dataPath + "PhenomizerTestResults1.txt";
 		
 
 		HashMap<Integer,LinkedList<Integer>>ksz = FileUtilities.readInKSZ(diseasesIn);
