@@ -5,20 +5,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.knime.base.node.preproc.joiner.ColumnSpecListRenderer;
-import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
-import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
-import org.knime.core.data.RowKey;
-import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
@@ -60,6 +54,13 @@ public class PhenomizerNodeModel extends NodeModel {
     public static final String PARENT_ID = "parent_id";
     public static final String SCORE = "score";
     public static final String P_VALUE = "p_value";
+    
+    //settingsmodels
+    protected static final String CFGKEY_OUTPUTSIZE="outputsize";
+    protected static final int DEF_OUTPUTSIZE=20;
+    protected static final int MIN_OUTPUTSIZE=1;
+    protected static final int MAX_OUTPUTSIZE=Integer.MAX_VALUE;
+    private final SettingsModelIntegerBounded m_outputsize = new SettingsModelIntegerBounded(CFGKEY_OUTPUTSIZE, DEF_OUTPUTSIZE, MIN_OUTPUTSIZE, MAX_OUTPUTSIZE);
 
     /**
      * Constructor for the node model.
@@ -86,10 +87,10 @@ public class PhenomizerNodeModel extends NodeModel {
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
         HashMap<Integer,LinkedList<Integer>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ]);
         
-        logger.info("Test generateQuery()");
-        for(Integer i: query){
-        	logger.info(""+i);
-        }
+//        logger.info("Test generateQuery()");
+//        for(Integer i: query){
+//        	logger.info(""+i);
+//        }
 //        
 //        logger.info("Test generateQSymptomList()");
 //        for(Integer i: symptoms){
@@ -108,9 +109,10 @@ public class PhenomizerNodeModel extends NodeModel {
 //        		logger.info("Symptom "+j);
 //        	}
 //        }
+        logger.info(m_outputsize.getIntValue());
         
         AlgoPheno.setInput(query, symptoms, diseases, edges);
-        LinkedList<String[]> result = AlgoPheno.runPhenomizer(11);
+        LinkedList<String[]> result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
         
 //        for(String [] entry: result){
 //        	for(String s : entry){
@@ -199,8 +201,7 @@ public class PhenomizerNodeModel extends NodeModel {
      */
     @Override
     protected void saveSettingsTo(final NodeSettingsWO settings) {
-
-
+    	m_outputsize.saveSettingsTo(settings);
     }
 
     /**
@@ -209,7 +210,7 @@ public class PhenomizerNodeModel extends NodeModel {
     @Override
     protected void loadValidatedSettingsFrom(final NodeSettingsRO settings)
             throws InvalidSettingsException {
-            
+    	m_outputsize.loadSettingsFrom(settings);
 
     }
 
@@ -219,7 +220,7 @@ public class PhenomizerNodeModel extends NodeModel {
     @Override
     protected void validateSettings(final NodeSettingsRO settings)
             throws InvalidSettingsException {
-
+    	m_outputsize.validateSettings(settings);
     }
     
     /**
