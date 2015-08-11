@@ -28,18 +28,17 @@ public class AlgoPheno {
 			HashMap<Integer,LinkedList<Integer>> ksz,int[][]onto){
 		
 		ontology = new Ontology(onto);
-		
-		//query = removeDuplicates(query);
+
 		queryIds = removeAncestors(query);
-		System.out.println(listToString(queryIds));
-		
+
+		//build disease-symptom map without duplicates and without ancestors whose successors are also in the annotation
 		symptomIds = symptoms;
 		for(int key : ksz.keySet()){
-			//LinkedList<Integer>value = removeAncestors(ksz.get(key));
-			LinkedList<Integer>value=ksz.get(key);
+			LinkedList<Integer>value = removeAncestors(ksz.get(key));
 			kszD.put(key, value);
 		}
 		
+		//build symptom-disease map listing for each symptom the diseases it is annotated to
 		for(int symp : symptoms){
 			kszS.put(symp, new HashSet<Integer>());
 		}
@@ -48,8 +47,6 @@ public class AlgoPheno {
 			LinkedList<Integer> tmpSymp = ksz.get(disease);
 			for(int symp : tmpSymp){
 				HashSet<Integer>ancestorsOrSelf = ontology.getAllAncestors(symp);
-				/*System.out.println(symp);
-				System.out.println(listToString(ancestorsOrSelf));*/
 				for(int nextSymp : ancestorsOrSelf){
 					HashSet<Integer> tmp = kszS.get(nextSymp);
 					if(!tmp.contains(disease)){
@@ -72,14 +69,15 @@ public class AlgoPheno {
 			num = kszD.size();
 		}
 		
+		//calculate information content
 		for(int symp : symptomIds){
 			if(!ic.containsKey(symp)){
 				double icS = calculateIC(symp);
 				ic.put(symp,icS);
-				//System.out.println(symp+"\t"+icS);
 			}
 		}
 		
+		//identify results leading to the highest similiarty scores
 		PriorityQueue<String> minQueue = new PriorityQueue<String>();
 		
 		for(int disease : kszD.keySet()){
@@ -95,11 +93,10 @@ public class AlgoPheno {
 				minQueue.add(res);
 			}
 		}
-		
-		//String[]tmp = (String[]) minQueue.toArray();
-		
+
+		//convert the min priority queue to a max priority queue and identify the top num results
 		Comparator<String> comp = new MaxPriorityComparator();
-		PriorityQueue<String> maxQueue = new PriorityQueue<String>(20,comp);
+		PriorityQueue<String> maxQueue = new PriorityQueue<String>(num,comp);
 		while(!minQueue.isEmpty()){
 			String nextEl = minQueue.remove();
 			maxQueue.add(nextEl);
@@ -182,6 +179,7 @@ public class AlgoPheno {
 	 */
 	private static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer>symptoms2){
 
+		//calculate the similarity symptoms1->symptoms2
 		double sim1 = 0;
 		for(int symp1 : symptoms1){
 			double currMax = Double.MIN_VALUE;
@@ -195,10 +193,12 @@ public class AlgoPheno {
 					key = symp2 + "," +symp1;
 				}
 				if(calculatedSim.containsKey(key)){
+					//similarity was already calculated, use pre-calculated result
 					currSym = calculatedSim.get(key);
 				}
 				else{
 					currSym = calculatePairwiseSim(symp1,symp2);
+					//save calculated similarity values globally to use again later
 					calculatedSim.put(key, currSym);
 				}
 				if(Double.compare(currMax, currSym)<0)
@@ -208,6 +208,7 @@ public class AlgoPheno {
 		}
 		sim1 = sim1/symptoms1.size();
 		
+		//calculate the similarity symptoms2->symptoms1
 		double sim2 = 0;
 		for(int symp1 : symptoms2){
 			double currMax = Double.MIN_VALUE;
@@ -221,10 +222,12 @@ public class AlgoPheno {
 					key = symp2 + "," +symp1;
 				}
 				if(calculatedSim.containsKey(key)){
+					//similarity was already calculated, use pre-calculated result
 					currSym = calculatedSim.get(key);
 				}
 				else{
 					currSym = calculatePairwiseSim(symp1,symp2);
+					//save calculated similarity values globally to use again later
 					calculatedSim.put(key, currSym);
 				}
 				if(Double.compare(currMax, currSym)<0)
@@ -239,27 +242,14 @@ public class AlgoPheno {
 	}
 	
 	/**
-	 * remove duplicates from a given list
-	 * @param symptoms
-	 * @return duplicate-free list
-	 */
-	private static LinkedList<Integer> removeDuplicates(LinkedList<Integer>symptoms){
-		LinkedList<Integer> result = new LinkedList<Integer>();
-		for(int element: symptoms){
-			if(!result.contains(element)){
-				result.add(element);
-			}
-		}
-		return result;
-	}
-	
-	/**
 	 * remove symptoms whose successor(s) are also in the list
 	 * @param symptoms
 	 * @return list without any ancestors of query terms
 	 */
 	private static LinkedList<Integer>removeAncestors(LinkedList<Integer>symptoms){
+		
 		LinkedList<Integer>result = new LinkedList<Integer>();
+		//generate duplicate-free list
 		for(int element : symptoms){
 			if(!result.contains(element)){
 				result.add(element);
@@ -267,10 +257,10 @@ public class AlgoPheno {
 		}
 		
 		for(int element : symptoms){
-			//System.out.println(element);
 			HashSet<Integer>ancestors=ontology.getAllAncestors(element);
 			ancestors.remove(element);
 			for(int element1 : symptoms){
+				//check if element from list is ancestors of another element and remove the element
 				if(ancestors.contains(element1)&&result.contains(element1)){
 					int index = result.indexOf(element1);
 					result.remove(index);
@@ -279,12 +269,5 @@ public class AlgoPheno {
 		}
 		return result;
 	}
-	
-	private static String listToString(LinkedList<Integer>list){
-		StringBuilder sb = new StringBuilder();
-		for(int element : list){
-			sb.append(element+"\t");
-		}
-		return sb.toString();
-	}
+
 }
