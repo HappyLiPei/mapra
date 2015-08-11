@@ -46,8 +46,11 @@ public class AlgoPheno {
 		for(int disease : ksz.keySet()){
 			LinkedList<Integer> tmpSymp = ksz.get(disease);
 			for(int symp : tmpSymp){
+				//System.out.println(symp);
 				HashSet<Integer>ancestorsOrSelf = ontology.getAllAncestors(symp);
+				//System.out.println(ancestorsOrSelf.size());
 				for(int nextSymp : ancestorsOrSelf){
+					//System.out.println(nextSymp);
 					HashSet<Integer> tmp = kszS.get(nextSymp);
 					if(!tmp.contains(disease)){
 						tmp.add(disease);
@@ -148,7 +151,7 @@ public class AlgoPheno {
 	private static double calculatePairwiseSim(int term1, int term2){
 		
 		double pairwiseSim = Double.MIN_VALUE;
-		HashSet<Integer>commonAncestors = ontology.getAllCommonAncestors(term1,term2); 
+		HashSet<Integer>commonAncestors = ontology.getRelevantCommonAncestors(term1,term2); 
 		
 		if(!commonAncestors.isEmpty()){
 			for(int symp : commonAncestors){

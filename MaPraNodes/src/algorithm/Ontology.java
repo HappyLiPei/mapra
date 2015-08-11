@@ -5,14 +5,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-//save ontology as data structure
 public class Ontology {
-	//in ontology ist zu jedem knoten die liste seiner eltern gespeichert
-	// wurzel hat leere liste
+	
+	//save for each node a list of its parents where the root has an empty list
 	private HashMap<Integer,LinkedList<Integer>> ontology;
 	
 	
-	// konstruktor bekommt ein 2d array, das alle kanten aus isa enthält (child_id, parent_id)
+	/**
+	 * construct ontology from a 2d array with columns child-id, parent-id
+	 * @param edges
+	 */
 	public Ontology(int[][] edges){
 		ontology = new HashMap<Integer,LinkedList<Integer>>();
 		for(int position=0; position<edges.length; position++){
@@ -20,22 +22,26 @@ public class Ontology {
 		}
 	}
 
-	
-	//methode, die eine kante zwischen parent und child hinzufügt (falls sie noch nicht existiert)
+	/**
+	 * add an edge between parent and child by adding the parent to the parentlist of the child if it doesn't already exist
+	 * @param parent
+	 * @param child
+	 */
 	private void addEdge(int parent, int child){
-		//falls child-knoten schon enthalten, elter evtl in parentlist hinzufügen
+
+		//child node already exists -> maybe add parent to parentlist
 		if(ontology.containsKey(child)){
 			if(!ontology.get(child).contains(parent)){
 				ontology.get(child).add(parent);
 			}	
 		}
-		//falls child-knoten noch nicht enthalten, neu hinzufügen
+		//add child node if it doesn't already exist
 		else{
 			LinkedList<Integer> parentList = new LinkedList<Integer>();
 			parentList.add(parent);
 			ontology.put(child, parentList);
 		}
-		//falls elter nicht enthalten (zb bei wurzel) -> hinzufügen mit leerer liste
+		//if parent node doesn't already exist, add it with an empty parentlist
 		if(!ontology.containsKey(parent)){
 			LinkedList<Integer> parentList = new LinkedList<Integer>();
 			ontology.put(parent, parentList);
@@ -43,8 +49,11 @@ public class Ontology {
 	}
 	
 
-	// gibt eine Menge (HashSet) aller vorfahren eines knotens zurück (selbst auch enthalten!)
-	//wurzel gibt liste mit sich selbst zurück; in ontologie nicht vorhandener knoten ebenfalls
+	/**
+	 * calculate all ancestors of a node including the node itself
+	 * @param node
+	 * @return list of ancestors and the node itself
+	 */
 	public HashSet<Integer> getAllAncestors (int node){
 		HashSet<Integer> ancestors = new HashSet<Integer>();
 		if(ontology.containsKey(node)){
@@ -58,11 +67,14 @@ public class Ontology {
 	}
 	
 	
-	// nötig für getAllAncestors()
+	/**
+	 * recursively determines all ancestors of the given node
+	 * @param actNode
+	 * @param ancestors
+	 */
 	private void addAncestors(int actNode, HashSet<Integer> ancestors){
 		if(ontology.containsKey(actNode)){
 			if(!ancestors.contains(actNode)){
-				//actNode noch nicht enthalten, also hinzufügen und rekursiv für alle parents von actNode aufrufen
 				ancestors.add(actNode);
 				LinkedList<Integer> parents = ontology.get(actNode);
 				Iterator<Integer> iter = parents.iterator();
@@ -73,20 +85,22 @@ public class Ontology {
 		}
 	}
 	
-	
-	//gibt alle common ancestors von 2 knoten zurück (falls es keinen gibt -> leere menge)
+	/**
+	 * generates all common ancestors of 2 given nodes
+	 * @param node1
+	 * @param node2
+	 * @return list of common ancestors, empty if no common ancestors exist
+	 */
 	public HashSet<Integer> getAllCommonAncestors (int node1, int node2){
 		HashSet<Integer> commonAncestors = new HashSet<Integer>();
 		HashSet<Integer> ancestors1 = getAllAncestors(node1);
 		HashSet<Integer> ancestors2 = getAllAncestors(node2);
 		
-		//gemeinsamkeiten von ancestors1 und ancestors2 finden:
-		// fall 1: node1 und/oder node2 sind nicht in ontologie (ancestors ist null) -> leeres Set zurückgeben
+		//return empty list if one of the nodes is not in the ontology
 		if(ancestors1==null || ancestors2==null){
 			return commonAncestors;
 		}
 		
-		//fall 2: es gibt einen CA bzw mehrere CAs -> Schnitt beider mengen zurückgeben
 		Iterator<Integer> iter1 = ancestors1.iterator();
 		while(iter1.hasNext()){
 			int actNode = iter1.next();
@@ -96,28 +110,29 @@ public class Ontology {
 		}
 		return commonAncestors;
 	}
-	
-	
-	// alternative zu getAllCommonAncestors:
-	// gibt alle für IC relevanten ancestors von 2 knoten zurück (falls es keinen gibt -> leere menge)
+
+	/**
+	 * generates list of only the common ancestors of 2 given nodes which could be a most informative common ancestor
+	 * @param node1
+	 * @param node2
+	 * @return list of common ancestors relevant for ic calculation
+	 */
 	public HashSet<Integer> getRelevantCommonAncestors (int node1, int node2){
 		HashSet<Integer> relevantAncestors = new HashSet<Integer>();
 		HashSet<Integer> ancestors1 = getAllAncestors(node1);
 		
-		// für node2 nicht alle ancestors nötig... 
-		// wenn ein CA gefunden: für diesen pfad abbrechen (eltern von diesem CA irrelevant)
+		//not all ancestors of node2 needed, terminate if a common ancestor was found -> no consideration of the parents
 		addRelevantCommonAncestors(node2, relevantAncestors, ancestors1);
 		return relevantAncestors;
 	}
 	
-	// nötig für getRelevantCommonAncestors()
 	private void addRelevantCommonAncestors(int actNode, HashSet<Integer> relevantAncestors, HashSet<Integer> ancestors1){
 		if(ancestors1.contains(actNode)){
-			// ein CA gefunden, also zu relevantAncestors hinzufügen und eltern von actNode nicht mehr betrachten
+			//common ancestor was found -> add to common ancestor and don't consider parents of this node
 			relevantAncestors.add(actNode);
 		}
 		else{
-			// kein CA gefunden, also methode für eltern von actNode aufrufen
+			//no common ancestor found -> consider parents of this node
 			if(ontology.containsKey(actNode)){
 				LinkedList<Integer> parents = ontology.get(actNode);
 				Iterator<Integer> iter = parents.iterator();
@@ -128,14 +143,4 @@ public class Ontology {
 		}
 		
 	}
-	
-	
-	
-	
 }
-
-
-
-
-
-

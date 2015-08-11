@@ -8,20 +8,26 @@ public class TestAlgo {
 	
 	public static void main(String[]args){
 		
-		String dataPath = "D:/Dokumente/Masterpraktikum/Testdatensatz/";
+		String dataPath = "D:/Dokumente/Masterpraktikum/Datenbank/";
 		
-		String diseasesIn = dataPath + "Krankheiten.txt";
-		String symptomsIn = dataPath + "Symptome.txt";
-		String ontologyIn = dataPath + "Ontology.txt";
+		String diseasesIn = dataPath + "ksz_hpo_test.csv";
+		String symptomsIn = dataPath + "symptoms_hpo_test.csv";
+		String ontologyIn = dataPath + "isa_hpo_test.csv";
+		String queryIn = dataPath + "testQuery.txt";
 		
-		String output = dataPath + "PhenomizerTestResults1.txt";
 		
 
 		HashMap<Integer,LinkedList<Integer>>ksz = FileUtilities.readInKSZ(diseasesIn);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontologyIn);
+		LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
+		AlgoPheno.setInput(query, symptoms, ksz, ontology);
+		LinkedList<String[]>res = AlgoPheno.runPhenomizer(10);
+		String tmpRes = resultToString(res);
+		System.out.println(tmpRes);
 		
-		StringBuilder result = new StringBuilder();
+		//String output = dataPath + "PhenomizerTestResult2.txt";
+		/*StringBuilder result = new StringBuilder();
 		for(int i=1; i<=10;i++){
 			String queryIn = dataPath + "query"+i+".txt";
 			LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
@@ -31,7 +37,9 @@ public class TestAlgo {
 			result.append("Query"+i+":\n"+tmpRes);
 		}
 		
-		FileUtilities.writeString(output, result.toString());
+		FileUtilities.writeString(output, result.toString());*/
+		
+		
 	}
 	
 	public static String resultToString(LinkedList<String[]>res){
