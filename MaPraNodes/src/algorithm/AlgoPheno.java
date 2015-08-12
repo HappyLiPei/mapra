@@ -116,7 +116,7 @@ public class AlgoPheno {
 			score = parts[0];
 			result.add(res);
 		}
-		while(!maxQueue.isEmpty()&&maxQueue.remove().split(",")[0].equals(score)){
+		while(!maxQueue.isEmpty()&&maxQueue.element().split(",")[0].equals(score)){
 			String currEl = maxQueue.remove();
 			String[]parts = currEl.split(",");
 			String[]res = new String[2];
