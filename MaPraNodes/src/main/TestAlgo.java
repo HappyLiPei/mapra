@@ -23,9 +23,9 @@ public class TestAlgo {
 		LinkedList<Integer> query = new LinkedList<Integer>();
 		query.add(1);
 		AlgoPheno.setInput(query, symptoms, ksz, ontology);
-		LinkedList<Integer> sortedKeys = AlgoPheno.getSortedKeys();
-		double[][]result = AlgoPheno.allAgainstAll();
-		String res = arrayToString(result,sortedKeys);
+		int[] keys = AlgoPheno.getKeys();
+		int[][]result = AlgoPheno.allAgainstAll();
+		String res = arrayToString(result,keys);
 		
 		/*LinkedList<String[]>res = AlgoPheno.runPhenomizer(10);
 		String tmpRes = resultToString(res);
@@ -56,16 +56,17 @@ public class TestAlgo {
 		return sb.toString();
 	}
 	
-	public static String arrayToString(double[][]array, LinkedList<Integer>colNames){
+	public static String arrayToString(int[][]array, int[] colNames){
 		StringBuilder sb = new StringBuilder();
 		for(int el : colNames){
 			sb.append(el+"\t");
 		}
 		sb.append("\n");
 		for(int i=0;i<array.length; i++){
-			sb.append(colNames.get(i)+"\t");
+			sb.append(colNames[i]+"\t");
 			for(int j=0; j<array[i].length; j++){
-				sb.append(array[i][j]+"\t");
+				double element = array[i][j]/100.0;
+				sb.append(element+"\t");
 			}
 			sb.append("\n");
 		}

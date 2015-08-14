@@ -14,7 +14,7 @@ public class AlgoPheno {
 	public static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
 	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
 	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
-	public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
+	//public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 
 	/**
 	 * initialize the needed data structures using the given parameters
@@ -128,8 +128,8 @@ public class AlgoPheno {
 		return result;
 	} 
 
-	public static double[][] allAgainstAll(){
-		double[][]results = new double[kszD.size()][kszD.size()];
+	public static int[][] allAgainstAll(){
+		int[][]results = new int[kszD.size()][kszD.size()];
 
 		//calculate information content
 		for(int symp : symptomIds){
@@ -139,23 +139,22 @@ public class AlgoPheno {
 			}
 		}
 		
-		LinkedList<Integer>keys = getSortedKeys();
+		int[]keys = getKeys();
 		
-		for(int i=0; i<keys.size(); i++){
-			double percentage = (double) i/keys.size();
-			System.out.println(percentage);
+		for(int i=0; i<keys.length; i++){
+			int num = i+1;
+			System.out.println(num);
 			
-			for(int j=i; j<keys.size(); j++){
+			for(int j=i; j<keys.length; j++){
 				if(i==j){
 					results[i][j]=0;
 				}
 				else{
-					int element1 = keys.get(i);
-					int element2 = keys.get(j);
-					double similarity = calculateSymmetricSimilarity(kszD.get(element1),kszD.get(element2));
-					similarity = similarity*1000;
-					similarity = Math.round(similarity);
-					similarity = similarity/1000;
+					int element1 = keys[i];
+					int element2 = keys[j];
+					double sim = calculateSymmetricSimilarity(kszD.get(element1),kszD.get(element2));
+					sim = sim*100;
+					int similarity = (int) Math.round(sim);
 					results[i][j]=  similarity;
 					results[j][i] = similarity;
 				}
@@ -165,11 +164,13 @@ public class AlgoPheno {
 		return results;
 	}
 	
-	public static LinkedList<Integer> getSortedKeys(){
+	public static int[] getKeys(){
 		
-		LinkedList<Integer>keys = new LinkedList<Integer>();
-		for(int element : kszD.keySet()){
-			keys.add(element);
+		int[]keys = new int[kszD.size()];
+		int i=0;
+		for(int value : kszD.keySet()){
+			keys[i]=value;
+			i++;
 		}
 		
 		return keys;
@@ -229,6 +230,8 @@ public class AlgoPheno {
 	 */
 	private static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer>symptoms2){
 
+		HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
+		
 		//calculate the similarity symptoms1->symptoms2
 		double sim1 = 0;
 		for(int symp1 : symptoms1){
