@@ -98,14 +98,15 @@ public class TableProcessor {
 	/**
 	 * converts BufferedDataTable with disease annotation to phenomizer data structure
 	 * @param table: table with disease annotation received at inport of PhenomizerNode
-	 * @return HashMap which maps a disease id to the annotated symptom ids
+	 * @param weight: specifies if algorithm should use weights
+	 * @return HashMap which maps a disease id to the annotated symptom ids (pos 0) and to the annotated frequencies (pos 1)
 	 */
-	
-	public static HashMap<Integer, LinkedList<Integer>> generateKSZ(BufferedDataTable table){
+	public static HashMap<Integer, LinkedList<Integer []>> generateKSZ(BufferedDataTable table, boolean weight){
 		
-		HashMap<Integer, LinkedList<Integer>> res = new HashMap<Integer, LinkedList<Integer>>(table.getRowCount()*3);
+		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(table.getRowCount()*3);
 		int index_disease = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
 		int index_symptom = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
+		int index_frequency = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.FREQUENCY);
 		
 		boolean disease_is_int=false;
 		if(table.getDataTableSpec().getColumnSpec(index_disease).getType()==IntCell.TYPE){
@@ -131,12 +132,28 @@ public class TableProcessor {
 			else{
 				symptom_id = (int) ((LongCell) r.getCell(index_symptom)).getLongValue();
 			}
-			if(res.containsKey(disease_id)){
-				res.get(disease_id).add(symptom_id);
+			
+			Integer [] symptom_and_freq = new Integer [2];
+			symptom_and_freq[0]=symptom_id;
+			if(index_frequency==-1||!weight){
+				symptom_and_freq[1]=10;
 			}
 			else{
-				LinkedList<Integer> tmp = new LinkedList<Integer>();
-				tmp.add(symptom_id);
+				if(r.getCell(index_frequency).getType()!=StringCell.TYPE){
+					symptom_and_freq[1]=10;
+				}
+				else{
+					symptom_and_freq[1]= FrequencyConverter.convertFrequency(
+						((StringCell) r.getCell(index_frequency)).getStringValue());
+				}
+			}
+			
+			if(res.containsKey(disease_id)){
+				res.get(disease_id).add(symptom_and_freq);
+			}
+			else{
+				LinkedList<Integer[]> tmp = new LinkedList<Integer[]>();
+				tmp.add(symptom_and_freq);
 				res.put(disease_id, tmp);
 			}
 		}

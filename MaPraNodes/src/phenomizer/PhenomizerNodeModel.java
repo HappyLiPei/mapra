@@ -15,6 +15,7 @@ import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
@@ -50,18 +51,24 @@ public class PhenomizerNodeModel extends NodeModel {
     public static final String SYMPTOM_NAME = "symptom_name";
     public static final String DISEASE_ID ="disease_id";
     public static final String DISEASE_NAME = "disease";
+    public static final String FREQUENCY ="frequency";
     public static final String CHILD_ID = "child_id";
     public static final String PARENT_ID = "parent_id";
     public static final String SCORE = "score";
     public static final String P_VALUE = "p_value";
     
     //settingsmodels
+    //size of output
     protected static final String CFGKEY_OUTPUTSIZE="outputsize";
     protected static final int DEF_OUTPUTSIZE=20;
     protected static final int MIN_OUTPUTSIZE=1;
     protected static final int MAX_OUTPUTSIZE=Integer.MAX_VALUE;
     private final SettingsModelIntegerBounded m_outputsize = new SettingsModelIntegerBounded(CFGKEY_OUTPUTSIZE, DEF_OUTPUTSIZE, MIN_OUTPUTSIZE, MAX_OUTPUTSIZE);
-
+    
+    protected static final String CFGKEY_WEIGHT="weight";
+    protected static final boolean DEF_WEIGHT=true;
+    private final SettingsModelBoolean m_weight = new SettingsModelBoolean(CFGKEY_WEIGHT, DEF_WEIGHT);
+    
     /**
      * Constructor for the node model.
      * 4 inports:
@@ -88,7 +95,7 @@ public class PhenomizerNodeModel extends NodeModel {
         logger.info("generateEdges");
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
         logger.info("generateKSZ");
-        HashMap<Integer,LinkedList<Integer>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ]);
+        HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
         
 //        logger.info("Test generateQuery()");
 //        for(Integer i: query){
@@ -108,12 +115,11 @@ public class PhenomizerNodeModel extends NodeModel {
 //        logger.info("Test generateKSZ()");
 //        for(Integer i: diseases.keySet()){
 //        	logger.info("Disease "+i);
-//        	for(Integer j: diseases.get(i)){
-//        		logger.info("Symptom "+j);
+//        	for(Integer [] j: diseases.get(i)){
+//        		logger.info("Symptom "+j[0]+"\tFrequency "+j[1]);
 //        	}
 //        }
-//        logger.info(m_outputsize.getIntValue());
-        
+
         AlgoPheno.setInput(query, symptoms, diseases, edges);
         LinkedList<String[]> result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
         
@@ -145,18 +151,21 @@ public class PhenomizerNodeModel extends NodeModel {
     	
     	logger.info("configure");
     	//check port 0: symptom table
-    	checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE);
-    	checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, StringCell.TYPE, null);
+    	checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE, null);
+    	checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, StringCell.TYPE, null, null);
     	//check port 1: isa table
-    	checkColumn(inSpecs, INPORT_ISA, CHILD_ID, IntCell.TYPE, LongCell.TYPE);
-    	checkColumn(inSpecs, INPORT_ISA, PARENT_ID, IntCell.TYPE, LongCell.TYPE);
-    	//TODO: check source if required
+    	checkColumn(inSpecs, INPORT_ISA, CHILD_ID, IntCell.TYPE, LongCell.TYPE, null);
+    	checkColumn(inSpecs, INPORT_ISA, PARENT_ID, IntCell.TYPE, LongCell.TYPE, null);
     	//check port 2: ksz table
-    	checkColumn(inSpecs, INPORT_KSZ, DISEASE_ID, IntCell.TYPE, LongCell.TYPE);
-    	checkColumn(inSpecs, INPORT_KSZ, DISEASE_NAME, StringCell.TYPE, null);
-    	checkColumn(inSpecs, INPORT_KSZ, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE);
+    	checkColumn(inSpecs, INPORT_KSZ, DISEASE_ID, IntCell.TYPE, LongCell.TYPE, null);
+    	checkColumn(inSpecs, INPORT_KSZ, DISEASE_NAME, StringCell.TYPE, null, null);
+    	checkColumn(inSpecs, INPORT_KSZ, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE,null);
+    	if(m_weight.getBooleanValue()){
+    		checkColumn(inSpecs, INPORT_KSZ, FREQUENCY, StringCell.TYPE, null,
+			"Please uncheck the option \"use frequency weights\" in the node dialog or use another input table with frequency values");
+    	}
     	//check port 3: query  
-    	checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE);
+    	checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE,null);
 
         return new DataTableSpec[]{generateOutputSpec()};
     }
@@ -169,14 +178,20 @@ public class PhenomizerNodeModel extends NodeModel {
      * @param colname
      * @param type1
      * @param type2
+     * @param message: error message
      * @throws InvalidSettingsException
      */
     
-    private void checkColumn(DataTableSpec[] inSpecs, int port, String colname, DataType type1, DataType type2) throws InvalidSettingsException{
+    private void checkColumn(DataTableSpec[] inSpecs, int port, String colname, DataType type1, DataType type2, String message) throws InvalidSettingsException{
     	
     	DataColumnSpec s =inSpecs[port].getColumnSpec(colname);
     	if(s==null){
-    		throw new InvalidSettingsException("Table at port "+port+" requires column "+colname);
+    		if(message==null){
+    			throw new InvalidSettingsException("Table at port "+port+" requires column "+colname);
+    		}
+    		else{
+    			throw new InvalidSettingsException("Table at port "+port+" requires column "+colname+"\n"+message);
+    		}
     	}
     	if((s.getType() != type1 && s.getType() != type2)){
     		throw new InvalidSettingsException("Table at port "+port+": Column "+colname+" is not the correct data type");
@@ -206,6 +221,7 @@ public class PhenomizerNodeModel extends NodeModel {
     @Override
     protected void saveSettingsTo(final NodeSettingsWO settings) {
     	m_outputsize.saveSettingsTo(settings);
+    	m_weight.saveSettingsTo(settings);
     }
 
     /**
@@ -215,7 +231,7 @@ public class PhenomizerNodeModel extends NodeModel {
     protected void loadValidatedSettingsFrom(final NodeSettingsRO settings)
             throws InvalidSettingsException {
     	m_outputsize.loadSettingsFrom(settings);
-
+    	m_weight.loadSettingsFrom(settings);
     }
 
     /**
@@ -225,6 +241,7 @@ public class PhenomizerNodeModel extends NodeModel {
     protected void validateSettings(final NodeSettingsRO settings)
             throws InvalidSettingsException {
     	m_outputsize.validateSettings(settings);
+    	m_weight.validateSettings(settings);
     }
     
     /**

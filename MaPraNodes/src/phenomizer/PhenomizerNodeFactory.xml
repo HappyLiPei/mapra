@@ -23,6 +23,10 @@
         
         
         <option name="Number of diseases in output">Limits the number of diseases passed to the outport table</option>
+        <option name="Use frequency weights">
+        	Phenomizer uses weights to calculate similarity scores depending on the frequency
+        	of a symptom for a given disease. If this option is unchecked, all symptoms have equal weight.
+    	</option>
         <!--<option name="short name of first option (like in the dialog)">description of first option</option>
         <option name="short name of second option (like in the dialog)">description of second option</option>-->
         <!-- possibly more options that can also be grouped by tabs -->
@@ -40,7 +44,7 @@
     <ports>
         <inPort index="0" name="Symptoms">Symptom table from PhenoDis with columns symptom_id and symptom_name</inPort>
         <inPort index="1" name="ISA">ISA table from PhenoDis with columns parent_id and child_id</inPort>
-        <inPort index="2" name="KSZ">KSZ table from PhenoDis with columns disease_id, disease, symptom_id</inPort>
+        <inPort index="2" name="KSZ">KSZ table from PhenoDis with columns disease_id, disease, symptom_id and frequency</inPort>
         <inPort index="3" name="Query">Query symptoms with colum symptom_id</inPort>
         <outPort index="0" name="Most Similar Diseases">Diseases with high similarity to the query symptoms</outPort>
     </ports>    

@@ -172,9 +172,9 @@ public class MainSophie {
 				System.out.println("Calculate pair "+pair[1]+"\t"+pair[0]);
 				
 				if(start){
-					AlgoPheno.setInput(queries.get(pair[1]),
-							FileUtilities.readInSymptoms(symptom),
-							FileUtilities.readInKSZ(ksz), FileUtilities.readInOntology(isa));
+//					AlgoPheno.setInput(queries.get(pair[1]),
+//							FileUtilities.readInSymptoms(symptom),
+//							FileUtilities.readInKSZ(ksz), FileUtilities.readInOntology(isa));
 					start = false;
 				}
 				else{
@@ -197,12 +197,12 @@ public class MainSophie {
 	
 	public static void main(String args[]){
 		
-		String file= "/home/marie-sophie/Uni/mapra/omim/Test.txt";
+		String file= "/home/marie-sophie/Uni/mapra/omim/Test2.txt";
 		String isa="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";
 		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";
 		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";
 		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";
-		String outfile="/home/marie-sophie/Uni/mapra/omim/test_out.txt";
+		String outfile="/home/marie-sophie/Uni/mapra/omim/test_out2.txt";
 		
 		
 		MainSophie ms = new MainSophie();

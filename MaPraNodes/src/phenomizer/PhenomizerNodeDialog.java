@@ -1,7 +1,9 @@
 package phenomizer;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumberEdit;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 
 /**
@@ -21,6 +23,8 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
 	private final SettingsModelIntegerBounded outputsize = new SettingsModelIntegerBounded(
 			PhenomizerNodeModel.CFGKEY_OUTPUTSIZE,	PhenomizerNodeModel.DEF_OUTPUTSIZE,
 			PhenomizerNodeModel.MIN_OUTPUTSIZE, PhenomizerNodeModel.MAX_OUTPUTSIZE);
+	private final SettingsModelBoolean weight = new SettingsModelBoolean(
+			PhenomizerNodeModel.CFGKEY_WEIGHT, PhenomizerNodeModel.DEF_WEIGHT);
 	
     /**
      * New pane for configuring Phenomizer node dialog.
@@ -32,7 +36,7 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
         
         createNewGroup("Output");
         addDialogComponent(new DialogComponentNumberEdit(outputsize, "Number of diseases in output",5));
-
+        addDialogComponent(new DialogComponentBoolean(weight, "Use frequency weights"));
                     
     }
 }
