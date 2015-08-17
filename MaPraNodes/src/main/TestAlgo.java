@@ -8,11 +8,11 @@ public class TestAlgo {
 	
 	public static void main(String[]args){
 		
-		String dataPath = "D:/Dokumente/Masterpraktikum/Datenbank/";
+		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/Testdatensatz/";
 		
-		String diseasesIn = dataPath + "ksz_hpo_test.csv";
-		String symptomsIn = dataPath + "symptoms_hpo_test.csv";
-		String ontologyIn = dataPath + "isa_hpo_test.csv";
+		String diseasesIn = dataPath + "Krankheiten.txt";
+		String symptomsIn = dataPath + "Symptome.txt";
+		String ontologyIn = dataPath + "Ontology.txt";
 		//String queryIn = dataPath + "testQuery.txt";
 		
 		String output = dataPath + "allAgainstAll.txt";
@@ -24,7 +24,7 @@ public class TestAlgo {
 		query.add(1);
 		AlgoPheno.setInput(query, symptoms, ksz, ontology);
 		int[] keys = AlgoPheno.getKeys();
-		int[][]result = AlgoPheno.allAgainstAll();
+		double[][]result = AlgoPheno.allAgainstAll();
 		String res = arrayToString(result,keys);
 		
 		/*LinkedList<String[]>res = AlgoPheno.runPhenomizer(10);
@@ -56,8 +56,9 @@ public class TestAlgo {
 		return sb.toString();
 	}
 	
-	public static String arrayToString(int[][]array, int[] colNames){
+	public static String arrayToString(double[][]array, int[] colNames){
 		StringBuilder sb = new StringBuilder();
+		sb.append("id\t");
 		for(int el : colNames){
 			sb.append(el+"\t");
 		}
@@ -65,8 +66,7 @@ public class TestAlgo {
 		for(int i=0;i<array.length; i++){
 			sb.append(colNames[i]+"\t");
 			for(int j=0; j<array[i].length; j++){
-				double element = array[i][j]/100.0;
-				sb.append(element+"\t");
+				sb.append(array[i][j]+"\t");
 			}
 			sb.append("\n");
 		}

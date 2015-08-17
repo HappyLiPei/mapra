@@ -14,7 +14,7 @@ public class AlgoPheno {
 	public static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
 	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
 	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
-	//public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
+	public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 
 	/**
 	 * initialize the needed data structures using the given parameters
@@ -128,7 +128,7 @@ public class AlgoPheno {
 		return result;
 	} 
 
-	public static int[][] allAgainstAll(){
+	public static double[][] allAgainstAll(){
 		int[][]results = new int[kszD.size()][kszD.size()];
 
 		//calculate information content
@@ -140,6 +140,7 @@ public class AlgoPheno {
 		}
 		
 		int[]keys = getKeys();
+		int maximum = Integer.MIN_VALUE;
 		
 		for(int i=0; i<keys.length; i++){
 			int num = i+1;
@@ -153,15 +154,21 @@ public class AlgoPheno {
 					int element1 = keys[i];
 					int element2 = keys[j];
 					double sim = calculateSymmetricSimilarity(kszD.get(element1),kszD.get(element2));
+					setCalculatedSim();
 					sim = sim*100;
 					int similarity = (int) Math.round(sim);
+					if(similarity>maximum){
+						maximum=similarity;
+					}
 					results[i][j]=  similarity;
 					results[j][i] = similarity;
 				}
 			}
 		}
 		
-		return results;
+		double[][]distanceMatrix = convertAdjacencyToDistance(results,maximum);
+		
+		return distanceMatrix;
 	}
 	
 	public static int[] getKeys(){
@@ -176,6 +183,14 @@ public class AlgoPheno {
 		return keys;
 	}
 
+	public static void setQuery(LinkedList<Integer>query){
+		queryIds=removeAncestors(query);
+	}
+	
+	public static void setCalculatedSim(){
+		calculatedSim = new HashMap<String,Double>();
+	}
+	
 	/**
 	 * calculates the information content of a given term (symptom)
 	 * @param term
@@ -323,4 +338,22 @@ public class AlgoPheno {
 		return result;
 	}
 
+	
+	private static double[][] convertAdjacencyToDistance(int[][]adjacency, int maximum){
+		double[][]distance = new double[adjacency.length][adjacency.length];
+		for(int i=0;i<adjacency.length;i++){
+			for(int j=i; j<adjacency[i].length;j++){
+				if(i==j){
+					distance[i][j]=0;
+				}
+				else{
+					int value = maximum+1-adjacency[i][j];
+					distance[i][j]= (double)value/100;
+					distance[j][i]=distance[i][j];
+				}
+			}
+		}
+		
+		return distance;
+	}
 }
