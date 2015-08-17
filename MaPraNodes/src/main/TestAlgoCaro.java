@@ -11,6 +11,11 @@ public class TestAlgoCaro {
 
 	public static void main(String[]args){
 		
+		String a = "11 of 21 [HPO]";
+		String[] ar = a.split(" ");
+		System.out.println(ar[2]);
+		
+		
 		/*
 		String dataPath = "C:/Users/Carolin/Dropbox/Masterpraktikum/Testdatensatz/";
 		
@@ -25,14 +30,14 @@ public class TestAlgoCaro {
 		String diseasesIn = dataPath + "ksz_HPO_test.csv";
 		String symptomsIn = dataPath + "symptoms_HPO_test.csv";
 		String ontologyIn = dataPath + "isa_HPO_test.csv";
-		String queryIn = dataPath + "query1.txt";
+		//String queryIn = dataPath + "query1.txt";
 
 		HashMap<Integer,LinkedList<Integer>>ksz = FileUtilities.readInKSZ(diseasesIn);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontologyIn);
-		LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
+		//LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
 		
-		AlgoPheno.setInput(query, symptoms, ksz, ontology);
+		//AlgoPheno.setInput(query, symptoms, ksz, ontology);
 		Ontology onto = new Ontology(ontology);
 		
 		/*
