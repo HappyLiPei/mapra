@@ -3,19 +3,25 @@ package main;
 import java.util.HashMap;
 import java.util.LinkedList;
 import algorithm.AlgoPheno;
+import algorithm.FrequencyConverter;
 
 public class TestAlgo {
 	
 	public static void main(String[]args){
 		
-		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/Testdatensatz/";
+		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/Datenbank/";
 		
-		String diseasesIn = dataPath + "Krankheiten.txt";
+		//Test frequency converter
+		String diseasesFreqIn = dataPath+"ksz_HPO_frequency.csv";
+		HashMap<Integer,LinkedList<String[]>>ksz = FileUtilities.frequencyIn(diseasesFreqIn);
+		FrequencyConverter.testConvert(ksz);
+		
+		/*String diseasesIn = dataPath + "Krankheiten.txt";
 		String symptomsIn = dataPath + "Symptome.txt";
-		String ontologyIn = dataPath + "Ontology.txt";
+		String ontologyIn = dataPath + "Ontology.txt";*/
 		//String queryIn = dataPath + "testQuery.txt";
 		
-		String output = dataPath + "allAgainstAll.txt";
+		/*String output = dataPath + "allAgainstAll.txt";
 		
 		HashMap<Integer,LinkedList<Integer>>ksz = FileUtilities.readInKSZ(diseasesIn);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
@@ -25,7 +31,7 @@ public class TestAlgo {
 		AlgoPheno.setInput(query, symptoms, ksz, ontology);
 		int[] keys = AlgoPheno.getKeys();
 		double[][]result = AlgoPheno.allAgainstAll();
-		String res = arrayToString(result,keys);
+		String res = arrayToString(result,keys);*/
 		
 		/*LinkedList<String[]>res = AlgoPheno.runPhenomizer(10);
 		String tmpRes = resultToString(res);
@@ -43,7 +49,7 @@ public class TestAlgo {
 		}
 		
 		FileUtilities.writeString(output, result.toString());*/
-		FileUtilities.writeString(output, res);
+		//FileUtilities.writeString(output, res);
 		
 		
 	}

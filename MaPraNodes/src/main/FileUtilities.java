@@ -13,6 +13,32 @@ import java.util.List;
 
 public class FileUtilities {
 	
+	public static HashMap<Integer,LinkedList<String[]>>frequencyIn(String path){
+		HashMap<Integer,LinkedList<String[]>> frequency = new HashMap<Integer,LinkedList<String[]>>();
+		
+		List<String> content = readLines(path);
+		content.remove(0);
+
+		for(String line : content){
+			String [] parts = line.split("\t");
+			int id = Integer.valueOf(parts[0]);
+			String[]newSymptom = new String[2];
+			newSymptom[0]=parts[1];
+			newSymptom[1]=parts[2];
+			LinkedList<String[]> symptoms = new LinkedList<String[]>();
+			if(frequency.containsKey(id)){
+				symptoms = frequency.get(id);
+				symptoms.add(newSymptom);
+			}
+			else{
+				symptoms.add(newSymptom);
+			}
+			frequency.put(id, symptoms);
+		}
+		
+		return frequency;
+	}
+	
 	public static LinkedList<Integer>readInQuery(String path){
 		LinkedList<Integer> symptoms = new LinkedList<Integer>();
 		
