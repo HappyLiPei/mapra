@@ -11,7 +11,7 @@ public class AlgoPheno {
 	public static LinkedList<Integer> queryIds;
 	public static LinkedList<Integer> symptomIds;
 	public static Ontology ontology;
-	public static HashMap<Integer,LinkedList<Integer>> kszD = new HashMap<Integer,LinkedList<Integer>>();
+	public static HashMap<Integer,LinkedList<Integer[]>> kszD = new HashMap<Integer,LinkedList<Integer[]>>();
 	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
 	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
 	public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
@@ -25,16 +25,15 @@ public class AlgoPheno {
 	 * @param onto - ontology given the hierarchical ordering of the symptoms
 	 */
 	public static void setInput(LinkedList<Integer> query, LinkedList<Integer>symptoms,
-			HashMap<Integer,LinkedList<Integer>> ksz,int[][]onto){
+			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto){
 
 		ontology = new Ontology(onto);
-
 		queryIds = removeAncestors(query);
 
 		//build disease-symptom map without duplicates and without ancestors whose successors are also in the annotation
 		symptomIds = symptoms;
 		for(int key : ksz.keySet()){
-			LinkedList<Integer>value = removeAncestors(ksz.get(key));
+			LinkedList<Integer[]>value = removeAncestors2(ksz.get(key));
 			kszD.put(key, value);
 		}
 
@@ -44,10 +43,10 @@ public class AlgoPheno {
 		}
 
 		for(int disease : ksz.keySet()){
-			LinkedList<Integer> tmpSymp = ksz.get(disease);
-			for(int symp : tmpSymp){
+			LinkedList<Integer[]> tmpSymp = ksz.get(disease);
+			for(Integer[] symp : tmpSymp){
 				//System.out.println(symp);
-				HashSet<Integer>ancestorsOrSelf = ontology.getAllAncestors(symp);
+				HashSet<Integer>ancestorsOrSelf = ontology.getAllAncestors(symp[0]);
 				//System.out.println(ancestorsOrSelf.size());
 				for(int nextSymp : ancestorsOrSelf){
 					//System.out.println(nextSymp);
@@ -153,7 +152,11 @@ public class AlgoPheno {
 				else{
 					int element1 = keys[i];
 					int element2 = keys[j];
-					double sim = calculateSymmetricSimilarity(kszD.get(element1),kszD.get(element2));
+					LinkedList<Integer> onlySymptoms = new LinkedList<Integer>();
+					for(Integer[]element : kszD.get(element1)){
+						onlySymptoms.add(element[0]);
+					}
+					double sim = calculateSymmetricSimilarity(onlySymptoms,kszD.get(element2));
 					setCalculatedSim();
 					sim = sim*100;
 					int similarity = (int) Math.round(sim);
@@ -241,9 +244,9 @@ public class AlgoPheno {
 	 * 
 	 * @param symptoms1
 	 * @param symptoms2
-	 * @return similiarty score
+	 * @return similarity score
 	 */
-	private static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer>symptoms2){
+	private static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer[]>symptoms2){
 
 		HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 		
@@ -251,10 +254,11 @@ public class AlgoPheno {
 		double sim1 = 0;
 		for(int symp1 : symptoms1){
 			double currMax = Double.MIN_VALUE;
-			for(int symp2: symptoms2){
+			int maxWeight = Integer.MIN_VALUE;
+			for(Integer[] symp2: symptoms2){
 				String key = "";
 				double currSym = 0;
-				if(symp1<symp2){
+				if(symp1<symp2[0]){
 					key = symp1 + "," + symp2;
 				}
 				else{
@@ -265,25 +269,27 @@ public class AlgoPheno {
 					currSym = calculatedSim.get(key);
 				}
 				else{
-					currSym = calculatePairwiseSim(symp1,symp2);
+					currSym = calculatePairwiseSim(symp1,symp2[0]);
 					//save calculated similarity values globally to use again later
 					calculatedSim.put(key, currSym);
 				}
 				if(Double.compare(currMax, currSym)<0)
 					currMax = currSym;
+					maxWeight = symp2[1];
 			}
-			sim1 = sim1+ currMax;
+			sim1 = sim1+ currMax*(double)maxWeight/10;
 		}
 		sim1 = sim1/symptoms1.size();
 
 		//calculate the similarity symptoms2->symptoms1
 		double sim2 = 0;
-		for(int symp1 : symptoms2){
+		for(Integer[] symp1 : symptoms2){
 			double currMax = Double.MIN_VALUE;
+			int maxWeight = Integer.MIN_VALUE;
 			for(int symp2: symptoms1){
 				String key = "";
 				double currSym = 0;
-				if(symp1<symp2){
+				if(symp1[0]<symp2){
 					key = symp1 + "," + symp2;
 				}
 				else{
@@ -294,14 +300,15 @@ public class AlgoPheno {
 					currSym = calculatedSim.get(key);
 				}
 				else{
-					currSym = calculatePairwiseSim(symp1,symp2);
+					currSym = calculatePairwiseSim(symp1[0],symp2);
 					//save calculated similarity values globally to use again later
 					calculatedSim.put(key, currSym);
 				}
 				if(Double.compare(currMax, currSym)<0)
 					currMax = currSym;
+					maxWeight = symp1[1];
 			}
-			sim2 = sim2+ currMax;
+			sim2 = sim2+ currMax*(double)maxWeight/10;
 		}
 		sim2 = sim2/symptoms2.size();
 
@@ -338,6 +345,29 @@ public class AlgoPheno {
 		return result;
 	}
 
+	private static LinkedList<Integer[]> removeAncestors2(LinkedList<Integer[]> symptoms){
+		
+		LinkedList<Integer[]>result = new LinkedList<Integer[]>();
+		//generate duplicate-free list
+		for(Integer[] element : symptoms){
+			if(!result.contains(element)){
+				result.add(element);
+			}
+		}
+
+		for(Integer[] element : symptoms){
+			HashSet<Integer>ancestors=ontology.getAllAncestors(element[0]);
+			ancestors.remove(element[0]);
+			for(Integer[] element1 : symptoms){
+				//check if element from list is ancestors of another element and remove the element
+				if(ancestors.contains(element1[0])&&result.contains(element1)){
+					int index = result.indexOf(element1);
+					result.remove(index);
+				}
+			}
+		}
+		return result;
+	}
 	
 	private static double[][] convertAdjacencyToDistance(int[][]adjacency, int maximum){
 		double[][]distance = new double[adjacency.length][adjacency.length];
