@@ -13,10 +13,11 @@ import java.util.List;
 
 public class FileUtilities {
 	
-	public static HashMap<Integer,LinkedList<String[]>>frequencyIn(String path){
+	public static HashMap<Integer,LinkedList<String[]>>readInKSZFrequency(String path){
 		HashMap<Integer,LinkedList<String[]>> frequency = new HashMap<Integer,LinkedList<String[]>>();
 		
 		List<String> content = readLines(path);
+		content.remove(0);
 		content.remove(0);
 
 		for(String line : content){

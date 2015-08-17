@@ -88,19 +88,29 @@ public class FrequencyConverter {
 		return weight;
 	}
 
-	public static void testConvert(HashMap<Integer,LinkedList<String[]>>test){
+	public static HashMap<Integer,LinkedList<Integer[]>>convertAll(HashMap<Integer,LinkedList<String[]>>test){
 
+		HashMap<Integer,LinkedList<Integer[]>>result = new HashMap<Integer,LinkedList<Integer[]>>();
 		for(int key : test.keySet()){
 			LinkedList<String []> values = test.get(key);
+			LinkedList<Integer[]>symptoms = new LinkedList<Integer[]>();
 			for(String[] val : values){
 				int weight = convertFrequency(val[1]);
-
-				if(weight==0){
+				//System.out.println(weight);
+				
+				/*if(weight==0){
 					System.out.println(val[1]);
 					System.out.println(weight);
-				}
+				}*/
+				Integer[]nextEl = new Integer[2];
+				nextEl[0]=Integer.valueOf(val[0]);
+				nextEl[1]=weight;
+				symptoms.add(nextEl);
 			}
+			result.put(key, symptoms);
 		}
+		
+		return result;
 	}
 
 	private static int getWeight(double value){

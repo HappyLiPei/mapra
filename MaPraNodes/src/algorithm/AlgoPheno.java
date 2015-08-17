@@ -29,6 +29,7 @@ public class AlgoPheno {
 
 		ontology = new Ontology(onto);
 		queryIds = removeAncestors(query);
+		queryIds.size();
 
 		//build disease-symptom map without duplicates and without ancestors whose successors are also in the annotation
 		symptomIds = symptoms;
@@ -127,6 +128,10 @@ public class AlgoPheno {
 		return result;
 	} 
 
+	/**
+	 * generate a distance matrix given the distances between all diseases in the database
+	 * @return distance matrix
+	 */
 	public static double[][] allAgainstAll(){
 		int[][]results = new int[kszD.size()][kszD.size()];
 
@@ -157,7 +162,6 @@ public class AlgoPheno {
 						onlySymptoms.add(element[0]);
 					}
 					double sim = calculateSymmetricSimilarity(onlySymptoms,kszD.get(element2));
-					setCalculatedSim();
 					sim = sim*100;
 					int similarity = (int) Math.round(sim);
 					if(similarity>maximum){
@@ -167,6 +171,9 @@ public class AlgoPheno {
 					results[j][i] = similarity;
 				}
 			}
+			//delete the pre-calculated values to ensure that the hash map doesn't get too large 
+			//during the execution of the algorithm
+			setCalculatedSim();
 		}
 		
 		double[][]distanceMatrix = convertAdjacencyToDistance(results,maximum);
@@ -174,6 +181,9 @@ public class AlgoPheno {
 		return distanceMatrix;
 	}
 	
+	/**
+	 * @return array of keys in the ksz table
+	 */
 	public static int[] getKeys(){
 		
 		int[]keys = new int[kszD.size()];
@@ -186,10 +196,17 @@ public class AlgoPheno {
 		return keys;
 	}
 
+	/**
+	 * set the query to a certain list of symptom ids
+	 * @param query
+	 */
 	public static void setQuery(LinkedList<Integer>query){
 		queryIds=removeAncestors(query);
 	}
 	
+	/**
+	 * delete pre-calculated pairwise similarity values
+	 */
 	public static void setCalculatedSim(){
 		calculatedSim = new HashMap<String,Double>();
 	}
@@ -252,17 +269,18 @@ public class AlgoPheno {
 		
 		//calculate the similarity symptoms1->symptoms2
 		double sim1 = 0;
+
 		for(int symp1 : symptoms1){
 			double currMax = Double.MIN_VALUE;
 			int maxWeight = Integer.MIN_VALUE;
-			for(Integer[] symp2: symptoms2){
+			for(Integer[]symp2:symptoms2){
 				String key = "";
 				double currSym = 0;
 				if(symp1<symp2[0]){
-					key = symp1 + "," + symp2;
+					key = symp1 + "," + symp2[0];
 				}
 				else{
-					key = symp2 + "," +symp1;
+					key = symp2[0] + "," +symp1;
 				}
 				if(calculatedSim.containsKey(key)){
 					//similarity was already calculated, use pre-calculated result
@@ -277,6 +295,7 @@ public class AlgoPheno {
 					currMax = currSym;
 					maxWeight = symp2[1];
 			}
+			//System.out.println(maxWeight);
 			sim1 = sim1+ currMax*(double)maxWeight/10;
 		}
 		sim1 = sim1/symptoms1.size();
@@ -285,15 +304,15 @@ public class AlgoPheno {
 		double sim2 = 0;
 		for(Integer[] symp1 : symptoms2){
 			double currMax = Double.MIN_VALUE;
-			int maxWeight = Integer.MIN_VALUE;
+			int maxWeight = symp1[1];
 			for(int symp2: symptoms1){
 				String key = "";
 				double currSym = 0;
 				if(symp1[0]<symp2){
-					key = symp1 + "," + symp2;
+					key = symp1[0] + "," + symp2;
 				}
 				else{
-					key = symp2 + "," +symp1;
+					key = symp2 + "," +symp1[0];
 				}
 				if(calculatedSim.containsKey(key)){
 					//similarity was already calculated, use pre-calculated result
@@ -306,8 +325,8 @@ public class AlgoPheno {
 				}
 				if(Double.compare(currMax, currSym)<0)
 					currMax = currSym;
-					maxWeight = symp1[1];
 			}
+			//System.out.println(maxWeight);
 			sim2 = sim2+ currMax*(double)maxWeight/10;
 		}
 		sim2 = sim2/symptoms2.size();
@@ -369,6 +388,12 @@ public class AlgoPheno {
 		return result;
 	}
 	
+	/**
+	 * convert a given similarity matrix to a distance matrix
+	 * @param adjacency
+	 * @param maximum in the similarity matrix
+	 * @return distance matrix
+	 */
 	private static double[][] convertAdjacencyToDistance(int[][]adjacency, int maximum){
 		double[][]distance = new double[adjacency.length][adjacency.length];
 		for(int i=0;i<adjacency.length;i++){
