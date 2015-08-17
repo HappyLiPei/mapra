@@ -5,16 +5,28 @@ import java.util.LinkedList;
 
 public class FrequencyConverter {
 
+	//default values for weights
 	static int occasional=5;
 	static int frequent=10;
 	static int veryFrequent=15;
 
+	/**
+	 * set weights
+	 * @param occ
+	 * @param freq
+	 * @param very
+	 */
 	public static void setWeights(int occ, int freq, int very){
 		occasional = occ;
 		frequent = freq;
 		veryFrequent = very;
 	}
 
+	/**
+	 * convert a frequency given as string into the corresponding weight
+	 * @param term to convert
+	 * @return corresponding weight
+	 */
 	public static int convertFrequency(String term){
 		int weight = 0;
 		if(term.equals("")){
@@ -88,11 +100,16 @@ public class FrequencyConverter {
 		return weight;
 	}
 
-	public static HashMap<Integer,LinkedList<Integer[]>>convertAll(HashMap<Integer,LinkedList<String[]>>test){
+	/**
+	 * convert all terms in a given hash map
+	 * @param terms
+	 * @return hash map with integer weights instead of string frequencies
+	 */
+	public static HashMap<Integer,LinkedList<Integer[]>>convertAll(HashMap<Integer,LinkedList<String[]>>terms){
 
 		HashMap<Integer,LinkedList<Integer[]>>result = new HashMap<Integer,LinkedList<Integer[]>>();
-		for(int key : test.keySet()){
-			LinkedList<String []> values = test.get(key);
+		for(int key : terms.keySet()){
+			LinkedList<String []> values = terms.get(key);
 			LinkedList<Integer[]>symptoms = new LinkedList<Integer[]>();
 			for(String[] val : values){
 				int weight = convertFrequency(val[1]);
@@ -113,6 +130,11 @@ public class FrequencyConverter {
 		return result;
 	}
 
+	/**
+	 * get the weight corresponding to a certain interval
+	 * @param value
+	 * @return
+	 */
 	private static int getWeight(double value){
 		if(Double.compare(value, 0.075)<=0){
 			return occasional;
