@@ -13,6 +13,10 @@ import algorithm.AlgoPheno;
 
 public class MainSophie {
 	
+	private static final int NO_WEIGHT_NO_P_VALUE=1;
+	private static final int P_VALUE=2;
+	private static final int WEIGHT=3;
+	
 	/*
 	 * generates query lists from text mining results
 	 * HashMap omim id -> symptom list extracted via text mining 
@@ -153,13 +157,33 @@ public class MainSophie {
 		return d;
 	}
 	
-	private void runOMIMVal(String outfile, String phenofile, String tmfile, String isa, String symptom, String ksz){
+	private HashMap<Integer, LinkedList<Integer []>> addWeights (HashMap<Integer, LinkedList<Integer>> ksz){
+		
+		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer []>>(ksz.size()*3);
+		for(Integer k: ksz.keySet()){
+			LinkedList<Integer []> list = new LinkedList<Integer[]>();
+			res.put(k, list);
+			for(int i: ksz.get(k)){
+				Integer [] symp_and_weight = new Integer [2];
+				symp_and_weight[0]=i;
+				symp_and_weight[1]=10;
+				list.add(symp_and_weight);
+			}			
+		}
+		return res;
+	}
+	
+	private void runOMIMVal(int mode, String outfile, String phenofile, String tmfile, String isa, String symptom, String ksz){
 		
 		// read symptom queries for omim entries extracted with textmiming
-		//TODO: convert LinkedList<Integer> to LinkedList<Integer []>: pos 1 -> value 10
 		HashMap<String, LinkedList<Integer>> queries = readQueriesTM(tmfile);
 		//read omim ids and corresponding phenodis disease_ids
 		LinkedList<String []> disease_pairs = readOMIMPheno(phenofile);
+		
+		//read input files for phenomizer data structure
+		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = addWeights(FileUtilities.readInKSZ(ksz));
+		LinkedList<Integer> symptom_struct = FileUtilities.readInSymptoms(symptom);
+		int [][] isa_struct = FileUtilities.readInOntology(isa);
 		
 		
 		boolean start = true;
@@ -173,9 +197,8 @@ public class MainSophie {
 				System.out.println("Calculate pair "+pair[1]+"\t"+pair[0]);
 				
 				if(start){
-//					AlgoPheno.setInput(queries.get(pair[1]),
-//							FileUtilities.readInSymptoms(symptom),
-//							FileUtilities.readInKSZ(ksz), FileUtilities.readInOntology(isa));
+					AlgoPheno.setInput(queries.get(pair[1]),
+							symptom_struct,ksz_struct,isa_struct);
 					start = false;
 				}
 				else{
@@ -198,16 +221,16 @@ public class MainSophie {
 	
 	public static void main(String args[]){
 		
-		String file= "/home/marie-sophie/Uni/mapra/omim/Test2.txt";
+		String file= "/home/marie-sophie/Uni/mapra/omim/omim_tm_res.txt";
 		String isa="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";
 		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";
 		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";
 		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";
-		String outfile="/home/marie-sophie/Uni/mapra/omim/test_out2.txt";
+		String outfile="/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
 		
 		
 		MainSophie ms = new MainSophie();
-		ms.runOMIMVal(outfile, phenofile,file, isa, symptom, ksz);
+		ms.runOMIMVal(NO_WEIGHT_NO_P_VALUE,outfile, phenofile,file, isa, symptom, ksz);
 //		ms.readOMIMPheno(phenofile);
 //		HashMap<String, LinkedList<Integer>> queries = ms.readQueriesTM(file);
 //		
@@ -338,6 +361,7 @@ public class MainSophie {
 		public void writeFile(String s){
 			try{
 				w.write(s);
+				w.flush();
 			}
 			catch(IOException e){
 				System.out.println("Error while writing to file "+path);
