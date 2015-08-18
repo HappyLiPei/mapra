@@ -24,8 +24,9 @@
         
         <option name="Number of diseases in output">Limits the number of diseases passed to the outport table</option>
         <option name="Use frequency weights">
-        	Phenomizer uses weights to calculate similarity scores depending on the frequency
-        	of a symptom for a given disease. If this option is unchecked, all symptoms have equal weight.
+        	Phenomizer uses weights to calculate similarity scores. The weights depend on the frequency
+        	of a symptom for a given disease (column frequency of ksz table).
+        	If this option is unchecked, all symptoms have equal weight.
     	</option>
         <!--<option name="short name of first option (like in the dialog)">description of first option</option>
         <option name="short name of second option (like in the dialog)">description of second option</option>-->

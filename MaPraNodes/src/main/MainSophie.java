@@ -156,6 +156,7 @@ public class MainSophie {
 	private void runOMIMVal(String outfile, String phenofile, String tmfile, String isa, String symptom, String ksz){
 		
 		// read symptom queries for omim entries extracted with textmiming
+		//TODO: convert LinkedList<Integer> to LinkedList<Integer []>: pos 1 -> value 10
 		HashMap<String, LinkedList<Integer>> queries = readQueriesTM(tmfile);
 		//read omim ids and corresponding phenodis disease_ids
 		LinkedList<String []> disease_pairs = readOMIMPheno(phenofile);
