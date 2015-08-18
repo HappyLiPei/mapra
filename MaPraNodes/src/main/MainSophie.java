@@ -14,8 +14,8 @@ import algorithm.AlgoPheno;
 public class MainSophie {
 	
 	private static final int NO_WEIGHT_NO_P_VALUE=1;
-	private static final int P_VALUE=2;
-	private static final int WEIGHT=3;
+	private static final int WEIGHT_NO_P_VALUE=2;
+	private static final int P_VALUE=3;
 	
 	/*
 	 * generates query lists from text mining results

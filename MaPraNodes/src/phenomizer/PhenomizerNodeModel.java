@@ -17,6 +17,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
@@ -64,10 +65,18 @@ public class PhenomizerNodeModel extends NodeModel {
     protected static final int MIN_OUTPUTSIZE=1;
     protected static final int MAX_OUTPUTSIZE=Integer.MAX_VALUE;
     private final SettingsModelIntegerBounded m_outputsize = new SettingsModelIntegerBounded(CFGKEY_OUTPUTSIZE, DEF_OUTPUTSIZE, MIN_OUTPUTSIZE, MAX_OUTPUTSIZE);
-    
+    //use weights for similarity score
     protected static final String CFGKEY_WEIGHT="weight";
     protected static final boolean DEF_WEIGHT=true;
     private final SettingsModelBoolean m_weight = new SettingsModelBoolean(CFGKEY_WEIGHT, DEF_WEIGHT);
+    //calculate p values
+    protected static final String CFGKEY_PVALUE="pvalue";
+    protected static final boolean DEF_PVALUE=true;
+    private final SettingsModelBoolean m_pval = new SettingsModelBoolean(CFGKEY_PVALUE, DEF_PVALUE);
+    //folder with precalculated p values
+    protected static final String CFGKEY_FOLDER="folder";
+    protected static final String DEF_FOLDER="";
+    private final SettingsModelString m_folder = new SettingsModelString(CFGKEY_FOLDER, DEF_FOLDER);
     
     /**
      * Constructor for the node model.
@@ -222,6 +231,8 @@ public class PhenomizerNodeModel extends NodeModel {
     protected void saveSettingsTo(final NodeSettingsWO settings) {
     	m_outputsize.saveSettingsTo(settings);
     	m_weight.saveSettingsTo(settings);
+    	m_folder.saveSettingsTo(settings);
+    	m_pval.saveSettingsTo(settings);
     }
 
     /**
@@ -232,6 +243,8 @@ public class PhenomizerNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	m_outputsize.loadSettingsFrom(settings);
     	m_weight.loadSettingsFrom(settings);
+    	m_folder.loadSettingsFrom(settings);
+    	m_pval.loadSettingsFrom(settings);
     }
 
     /**
@@ -242,6 +255,8 @@ public class PhenomizerNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	m_outputsize.validateSettings(settings);
     	m_weight.validateSettings(settings);
+    	m_folder.validateSettings(settings);
+    	m_pval.validateSettings(settings);
     }
     
     /**
