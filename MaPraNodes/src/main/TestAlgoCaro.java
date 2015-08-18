@@ -1,15 +1,40 @@
 package main;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+
 import algorithm.AlgoPheno;
 import algorithm.Ontology;
 
 public class TestAlgoCaro {
 
-	public static void main(String[]args){
+	public static void main(String[]args) throws IOException{
+		
+		/*
+		// for classification of diseases:
+		String dataPathDisease = "C:/Users/Carolin/Downloads/disease_classification.txt";
+		String outDisease = "C:/Users/Carolin/Downloads/disease_classification_parsed.txt";
+		List<String> content = FileUtilities.readLines(dataPathDisease);
+		FileWriter fw = new FileWriter(outDisease);
+		BufferedWriter bw = new BufferedWriter(fw);
+		for(String line : content){
+			String[] a = line.split("\t");
+			if(a.length>=3){
+				String[] c = a[2].split("<");
+				String lineOut = a[0]+"\t"+a[1]+"\t<"+c[c.length-1];
+				System.out.println(lineOut);
+				bw.append(lineOut);
+				bw.newLine();
+			}
+		}
+		bw.close();
+		*/
 		
 		String a = "11 of 21 [HPO]";
 		String[] ar = a.split(" ");
