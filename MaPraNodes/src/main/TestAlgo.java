@@ -26,12 +26,12 @@ public class TestAlgo {
 		HashMap<Integer,LinkedList<Integer[]>>ksz=FrequencyConverter.convertAll(kszTmp);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontologyIn);
-		LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
+		//LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
 
-		AlgoPheno.setInput(query, symptoms, ksz, ontology);
+		/*AlgoPheno.setInput(query, symptoms, ksz, ontology);
 		LinkedList<String[]>res = AlgoPheno.runPhenomizer(11);
 		String tmpRes = resultToString(res);
-		System.out.println(tmpRes);
+		System.out.println(tmpRes);*/
 
 		//Test phenomizer for all queries
 		/*String output = dataPath + "PhenomizerTestResult2.txt";
@@ -48,13 +48,14 @@ public class TestAlgo {
 		FileUtilities.writeString(output, result.toString());*/
 
 		//generate distance matrix
-		/*String output = dataPath + "allAgainstAll.txt";
+		String output = dataPath + "allAgainstAll_new.txt";
+		LinkedList<Integer>query = new LinkedList<Integer>();
 		query.add(1);
 		AlgoPheno.setInput(query, symptoms, ksz, ontology);
 		int[] keys = AlgoPheno.getKeys();
 		double[][]result = AlgoPheno.allAgainstAll();
 		String res = arrayToString(result,keys);
-		FileUtilities.writeString(output, res);*/
+		FileUtilities.writeString(output, res);
 	}
 
 	public static String resultToString(LinkedList<String[]>res){
@@ -67,16 +68,19 @@ public class TestAlgo {
 
 	public static String arrayToString(double[][]array, int[] colNames){
 		StringBuilder sb = new StringBuilder();
-		sb.append("id\t");
-		for(int el : colNames){
-			sb.append(el+"\t");
+		sb.append("id,");
+		for(int i=0; i<colNames.length-1; i++){
+			sb.append(colNames[i]+",");
 		}
+		sb.append(colNames[colNames.length-1]);
 		sb.append("\n");
+		
 		for(int i=0;i<array.length; i++){
-			sb.append(colNames[i]+"\t");
-			for(int j=0; j<array[i].length; j++){
-				sb.append(array[i][j]+"\t");
+			sb.append(colNames[i]+",");
+			for(int j=0; j<array[i].length-1; j++){
+				sb.append(array[i][j]+",");
 			}
+			sb.append(array[i][array[i].length-1]);
 			sb.append("\n");
 		}
 		return sb.toString();

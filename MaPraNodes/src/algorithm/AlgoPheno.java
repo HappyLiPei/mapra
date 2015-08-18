@@ -73,12 +73,7 @@ public class AlgoPheno {
 		}
 
 		//calculate information content
-		for(int symp : symptomIds){
-			if(!ic.containsKey(symp)){
-				double icS = calculateIC(symp);
-				ic.put(symp,icS);
-			}
-		}
+		setIC();
 
 		//identify results leading to the highest similiarty scores
 		PriorityQueue<String> minQueue = new PriorityQueue<String>();
@@ -127,6 +122,21 @@ public class AlgoPheno {
 
 		return result;
 	} 
+	
+	public static HashMap<Integer,Double> runPhenomizerWithPValue(){
+		HashMap<Integer,Double> result = new HashMap<Integer,Double>();
+		
+		setIC();
+		for(int disease : kszD.keySet()){
+			double similarity = calculateSymmetricSimilarity(queryIds,kszD.get(disease));
+			similarity = similarity*1000;
+			similarity = Math.round(similarity);
+			similarity = similarity/1000;
+			result.put(disease,similarity);
+		}
+		
+		return result;
+	}
 
 	/**
 	 * generate a distance matrix given the distances between all diseases in the database
