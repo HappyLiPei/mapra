@@ -136,12 +136,7 @@ public class AlgoPheno {
 		int[][]results = new int[kszD.size()][kszD.size()];
 
 		//calculate information content
-		for(int symp : symptomIds){
-			if(!ic.containsKey(symp)){
-				double icS = calculateIC(symp);
-				ic.put(symp,icS);
-			}
-		}
+		setIC();
 		
 		int[]keys = getKeys();
 		int maximum = Integer.MIN_VALUE;
@@ -211,6 +206,14 @@ public class AlgoPheno {
 		calculatedSim = new HashMap<String,Double>();
 	}
 	
+	public static void setIC(){
+		for(int symp : symptomIds){
+			if(!ic.containsKey(symp)){
+				double icS = calculateIC(symp);
+				ic.put(symp,icS);
+			}
+		}
+	}
 	/**
 	 * calculates the information content of a given term (symptom)
 	 * @param term
@@ -263,7 +266,7 @@ public class AlgoPheno {
 	 * @param symptoms2
 	 * @return similarity score
 	 */
-	private static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer[]>symptoms2){
+	public static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer[]>symptoms2){
 
 		HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 		
@@ -340,7 +343,7 @@ public class AlgoPheno {
 	 * @param symptoms
 	 * @return list without any ancestors of query terms
 	 */
-	private static LinkedList<Integer>removeAncestors(LinkedList<Integer>symptoms){
+	public static LinkedList<Integer>removeAncestors(LinkedList<Integer>symptoms){
 
 		LinkedList<Integer>result = new LinkedList<Integer>();
 		//generate duplicate-free list
