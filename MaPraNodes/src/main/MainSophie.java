@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import algorithm.AlgoPheno;
+import algorithm.FrequencyConverter;
 
 public class MainSophie {
 	
@@ -173,6 +174,22 @@ public class MainSophie {
 		return res;
 	}
 	
+	private HashMap<Integer, LinkedList<Integer[]>> convertFreqs (HashMap<Integer, LinkedList<String[]>> ksz){
+		
+		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(ksz.size()*3);
+		for(Integer k: ksz.keySet()){
+			LinkedList<Integer []> list = new LinkedList<Integer[]>();
+			res.put(k, list);
+			for(String [] s: ksz.get(k)){
+				Integer [] symp_and_weight = new Integer [2];
+				symp_and_weight[0]=Integer.valueOf(s[0]);
+				symp_and_weight[1]=FrequencyConverter.convertFrequency(s[1]);
+				list.add(symp_and_weight);
+			}
+		}
+		return res;
+	}
+	
 	private void runOMIMVal(int mode, String outfile, String phenofile, String tmfile, String isa, String symptom, String ksz){
 		
 		// read symptom queries for omim entries extracted with textmiming
@@ -181,7 +198,13 @@ public class MainSophie {
 		LinkedList<String []> disease_pairs = readOMIMPheno(phenofile);
 		
 		//read input files for phenomizer data structure
-		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = addWeights(FileUtilities.readInKSZ(ksz));
+		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = null;
+		if(mode==NO_WEIGHT_NO_P_VALUE){
+			ksz_struct = addWeights(FileUtilities.readInKSZ(ksz));
+		}
+		else{
+			ksz_struct = convertFreqs(FileUtilities.readInKSZFrequency(ksz));
+		}
 		LinkedList<Integer> symptom_struct = FileUtilities.readInSymptoms(symptom);
 		int [][] isa_struct = FileUtilities.readInOntology(isa);
 		
@@ -221,16 +244,16 @@ public class MainSophie {
 	
 	public static void main(String args[]){
 		
-		String file= "/home/marie-sophie/Uni/mapra/omim/omim_tm_res.txt";
-		String isa="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";
-		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";
-		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";
-		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";
-		String outfile="/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
+		String file="D:\\transfer\\omim_tm_res.txt"; //"/home/marie-sophie/Uni/mapra/omim/omim_tm_res.txt";
+		String isa="D:\\transfer\\Datenbank\\isa_HPO_test.csv";//"/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";
+		String ksz="D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//"/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";
+		String symptom="D:\\transfer\\Datenbank\\symptoms_HPO_test.csv";//"/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";
+		String phenofile ="D:\\transfer\\phenodis_omimids.txt";//"/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";
+		String outfile="D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
 		
 		
 		MainSophie ms = new MainSophie();
-		ms.runOMIMVal(NO_WEIGHT_NO_P_VALUE,outfile, phenofile,file, isa, symptom, ksz);
+		ms.runOMIMVal(WEIGHT_NO_P_VALUE,outfile, phenofile,file, isa, symptom, ksz);
 //		ms.readOMIMPheno(phenofile);
 //		HashMap<String, LinkedList<Integer>> queries = ms.readQueriesTM(file);
 //		
