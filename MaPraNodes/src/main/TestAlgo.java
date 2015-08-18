@@ -9,7 +9,14 @@ public class TestAlgo {
 
 	public static void main(String[]args){
 
-		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/Testdatensatz/";
+		
+		
+		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/";
+
+		String dataIn = dataPath+"Datenbank/";
+		String ontoIn = dataIn + "isa_HPO_test.csv";
+		String kszIn = dataIn + "ksz_HPO_test.csv";
+		String symptomsIn = dataIn + "symptoms_HPO_test.csv";
 
 		//Test frequency converter
 		/*String diseasesFreqIn = dataPath+"ksz_HPO_frequency.csv";
@@ -17,15 +24,17 @@ public class TestAlgo {
 		FrequencyConverter.testConvert(ksz);*/
 
 		//Test phenomizer
-		String diseasesIn = dataPath + "Krankheiten.txt";
+		/*String diseasesIn = dataPath + "Krankheiten.txt";
 		String symptomsIn = dataPath + "Symptome.txt";
 		String ontologyIn = dataPath + "Ontology.txt";
-		String queryIn = dataPath + "query7.txt";
+		String queryIn = dataPath + "query7.txt";*/
 
-		HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilities.readInKSZFrequency(diseasesIn);
-		HashMap<Integer,LinkedList<Integer[]>>ksz=FrequencyConverter.convertAll(kszTmp);
+		/*HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilities.readInKSZFrequency(diseasesIn);
+		HashMap<Integer,LinkedList<Integer[]>>ksz=FrequencyConverter.convertAll(kszTmp);*/
+		HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilities.readInKSZ(kszIn);
+		HashMap<Integer,LinkedList<Integer[]>>ksz= CalcPValueMaria.addWeights(kszTmp);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
-		int[][]ontology = FileUtilities.readInOntology(ontologyIn);
+		int[][]ontology = FileUtilities.readInOntology(ontoIn);
 		//LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
 
 		/*AlgoPheno.setInput(query, symptoms, ksz, ontology);
@@ -48,7 +57,7 @@ public class TestAlgo {
 		FileUtilities.writeString(output, result.toString());*/
 
 		//generate distance matrix
-		String output = dataPath + "allAgainstAll_new.txt";
+		String output = dataPath + "Clustering/allAgainstAll_complete.txt";
 		LinkedList<Integer>query = new LinkedList<Integer>();
 		query.add(1);
 		AlgoPheno.setInput(query, symptoms, ksz, ontology);
