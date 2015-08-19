@@ -13,10 +13,10 @@ public class CalcPValueMaria2 {
 	 */
 	public static void main(String[] args) {
 
-		int queryLength = 1;
-		int iterations = 10;
+		int queryLength = 3;
+		int iterations = 100000;
 
-		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/";
+		String dataPath = "C:/Users/Maria Schelling/Dropbox/Masterpraktikum/";
 
 		String dataIn = dataPath + "Datenbank/";
 		String ontoIn = dataIn + "isa_HPO_test.csv";

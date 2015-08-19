@@ -136,10 +136,10 @@ public class FrequencyConverter {
 	 * @return
 	 */
 	private static int getWeight(double value){
-		if(Double.compare(value, 0.075)<=0){
+		if(Double.compare(value, 0.25)<=0){
 			return occasional;
 		}
-		else if(Double.compare(value, 0.9)<0){
+		else if(Double.compare(value, 0.75)<0){
 			return frequent;
 		}
 		else{
