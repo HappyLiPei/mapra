@@ -16,7 +16,6 @@ public class MainSophie {
 	
 	private static final int NO_WEIGHT_NO_P_VALUE=1;
 	private static final int WEIGHT_NO_P_VALUE=2;
-	private static final int P_VALUE=3;
 	
 	/*
 	 * generates query lists from text mining results
@@ -240,20 +239,50 @@ public class MainSophie {
 		
 	}
 	
+	private void extractDiseasesWithFreq(String phenofile, String ksz, String out){
+		
+		//phenodis to omim
+		LinkedList<String []> disease_pairs = readOMIMPheno(phenofile);
+		//phenodis to symptom
+		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = convertFreqs(FileUtilities.readInKSZFrequency(ksz));
+		
+		Writer_Output w = new Writer_Output(out);
+		int counter =0;
+		for(String[] pair :disease_pairs){
+			if(ksz_struct.containsKey(Integer.valueOf(pair[0]))){
+				boolean freq = false;
+				for(Integer[] symp: ksz_struct.get(Integer.valueOf(pair[0]))){
+					if(symp[1]!=10){
+						freq = true;
+						
+					}
+				}
+				if(freq){
+					w.writeFileln(pair[0]+"\tunknown\t"+pair[1]);
+					counter++;
+				}
+			}
+		}
+		System.out.println(counter);
+		w.closew();
+		
+	}
+	
 	
 	
 	public static void main(String args[]){
 		
-		String file="D:\\transfer\\omim_tm_res.txt"; //"/home/marie-sophie/Uni/mapra/omim/omim_tm_res.txt";
-		String isa="D:\\transfer\\Datenbank\\isa_HPO_test.csv";//"/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";
-		String ksz="D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//"/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";
-		String symptom="D:\\transfer\\Datenbank\\symptoms_HPO_test.csv";//"/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";
-		String phenofile ="D:\\transfer\\phenodis_omimids.txt";//"/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";
-		String outfile="D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
+		String file="/home/marie-sophie/Uni/mapra/omim/omim_tm_res.txt";//"D:\\transfer\\omim_tm_res.txt"; //;
+		String isa="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";//"D:\\transfer\\Datenbank\\isa_HPO_test.csv";//
+		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_frequency.csv";//"D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//
+		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";//"D:\\transfer\\Datenbank\\symptoms_HPO_test.csv";//
+		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";//"D:\\transfer\\phenodis_omimids.txt";//
+		String outfile="/home/marie-sophie/Uni/mapra/omim/reduced_phenodis_omimids.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
 		
 		
 		MainSophie ms = new MainSophie();
-		ms.runOMIMVal(WEIGHT_NO_P_VALUE,outfile, phenofile,file, isa, symptom, ksz);
+//		ms.extractDiseasesWithFreq(phenofile, ksz, outfile);
+//		ms.runOMIMVal(WEIGHT_NO_P_VALUE,outfile, phenofile,file, isa, symptom, ksz);
 //		ms.readOMIMPheno(phenofile);
 //		HashMap<String, LinkedList<Integer>> queries = ms.readQueriesTM(file);
 //		
