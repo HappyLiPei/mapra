@@ -67,16 +67,16 @@ public class PhenomizerNodeModel extends NodeModel {
     private final SettingsModelIntegerBounded m_outputsize = new SettingsModelIntegerBounded(CFGKEY_OUTPUTSIZE, DEF_OUTPUTSIZE, MIN_OUTPUTSIZE, MAX_OUTPUTSIZE);
     //use weights for similarity score
     protected static final String CFGKEY_WEIGHT="weight";
-    protected static final boolean DEF_WEIGHT=true;
+    protected static final boolean DEF_WEIGHT=false;
     private final SettingsModelBoolean m_weight = new SettingsModelBoolean(CFGKEY_WEIGHT, DEF_WEIGHT);
     //calculate p values
     protected static final String CFGKEY_PVALUE="pvalue";
-    protected static final boolean DEF_PVALUE=true;
+    protected static final boolean DEF_PVALUE=false;
     private final SettingsModelBoolean m_pval = new SettingsModelBoolean(CFGKEY_PVALUE, DEF_PVALUE);
-    //folder with precalculated p values
-    protected static final String CFGKEY_FOLDER="folder";
+    //folder to pvalues
+    protected static final String CFGKEY_FOLDER="pval_folder";
     protected static final String DEF_FOLDER="";
-    private final SettingsModelString m_folder = new SettingsModelString(CFGKEY_FOLDER, DEF_FOLDER);
+    private static final SettingsModelString m_folder = new SettingsModelString(CFGKEY_FOLDER, DEF_FOLDER);
     
     /**
      * Constructor for the node model.
@@ -88,6 +88,9 @@ public class PhenomizerNodeModel extends NodeModel {
      */
     protected PhenomizerNodeModel() {
         super(4, 1);
+        if(!DEF_PVALUE){
+        	m_folder.setEnabled(false);
+        }
     }
 
     /**
@@ -97,13 +100,9 @@ public class PhenomizerNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
 
-    	logger.info("generateQuery");
         LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
-        logger.info("generateSymptomList");
         LinkedList<Integer> symptoms = TableProcessor.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
-        logger.info("generateEdges");
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
-        logger.info("generateKSZ");
         HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
         
 //        logger.info("Test generateQuery()");
@@ -128,9 +127,16 @@ public class PhenomizerNodeModel extends NodeModel {
 //        		logger.info("Symptom "+j[0]+"\tFrequency "+j[1]);
 //        	}
 //        }
-
-        AlgoPheno.setInput(query, symptoms, diseases, edges);
-        LinkedList<String[]> result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
+        if(!m_pval.getBooleanValue()){
+	        AlgoPheno.setInput(query, symptoms, diseases, edges);
+	        LinkedList<String[]> result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
+	        logger.info("generate output");
+	        BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
+	        return new BufferedDataTable[]{out};
+        }
+        else{
+        	throw new Exception("P-value feature not implemented yet");
+        }
         
 //        for(String [] entry: result){
 //        	for(String s : entry){
@@ -138,9 +144,7 @@ public class PhenomizerNodeModel extends NodeModel {
 //        	}
 //        }
         
-        logger.info("generate output");
-        BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
-        return new BufferedDataTable[]{out};
+
     }
 
     /**
@@ -231,8 +235,8 @@ public class PhenomizerNodeModel extends NodeModel {
     protected void saveSettingsTo(final NodeSettingsWO settings) {
     	m_outputsize.saveSettingsTo(settings);
     	m_weight.saveSettingsTo(settings);
-    	m_folder.saveSettingsTo(settings);
     	m_pval.saveSettingsTo(settings);
+    	m_folder.saveSettingsTo(settings);
     }
 
     /**
@@ -243,8 +247,8 @@ public class PhenomizerNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	m_outputsize.loadSettingsFrom(settings);
     	m_weight.loadSettingsFrom(settings);
-    	m_folder.loadSettingsFrom(settings);
     	m_pval.loadSettingsFrom(settings);
+    	m_folder.loadSettingsFrom(settings);
     }
 
     /**
@@ -255,8 +259,8 @@ public class PhenomizerNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	m_outputsize.validateSettings(settings);
     	m_weight.validateSettings(settings);
-    	m_folder.validateSettings(settings);
     	m_pval.validateSettings(settings);
+    	m_folder.validateSettings(settings);
     }
     
     /**

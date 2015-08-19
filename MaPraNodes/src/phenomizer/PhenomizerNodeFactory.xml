@@ -24,9 +24,22 @@
         
         <option name="Number of diseases in output">Limits the number of diseases passed to the outport table</option>
         <option name="Use frequency weights">
-        	Phenomizer uses weights to calculate similarity scores. The weights depend on the frequency
+        	Phenomizer is able to use weights to calculate similarity scores. The weights depend on the frequency
         	of a symptom for a given disease (column frequency of ksz table).
         	If this option is unchecked, all symptoms have equal weight.
+    	</option>
+    	<option name="Calculate p values">
+    		Phenomizer with p values performs a significance test for the similarity score of each disease.
+    		The corresponding p values are part of the out port table.
+    		The p values are adjusted for multiple testing using the Bonferroni method.
+    		The diseases are ranked according their p values.<br/>
+    		Phenomizer without p values just reports similarity scores.
+    		The diseases are ranked according to those scores.
+    	</option>
+    	<option name="Choose folder with p value files">
+    		This option is required only if the calculate p values option is chosen.
+    		Phenomizer with p values depends on files with pre-calculated score distributions for the PhenoDis database.
+    		TODO: explain content of folder...
     	</option>
         <!--<option name="short name of first option (like in the dialog)">description of first option</option>
         <option name="short name of second option (like in the dialog)">description of second option</option>-->

@@ -14,7 +14,7 @@ public class CalcPValueSophie {
 	 */
 	public static void main(String[] args) {
 
-		int queryLength = 2;
+		int queryLength = 5;
 		int iterations = 10000;
 
 		String dataPath = "/home/marie-sophie/Uni/mapra/phenodis/";
