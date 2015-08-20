@@ -8,13 +8,13 @@ import java.util.PriorityQueue;
 
 public class AlgoPheno {
 
-	public static LinkedList<Integer> queryIds;
-	public static LinkedList<Integer> symptomIds;
-	public static Ontology ontology;
-	public static HashMap<Integer,LinkedList<Integer[]>> kszD = new HashMap<Integer,LinkedList<Integer[]>>();
-	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
-	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
-	public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
+	private static LinkedList<Integer> queryIds;
+	private static LinkedList<Integer> symptomIds;
+	private static Ontology ontology;
+	private static HashMap<Integer,LinkedList<Integer[]>> kszD = new HashMap<Integer,LinkedList<Integer[]>>();
+	private static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
+	private static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
+	private static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 
 	/**
 	 * initialize the needed data structures using the given parameters
@@ -209,8 +209,11 @@ public class AlgoPheno {
 		queryIds=removeAncestors(query);
 	}
 	
+	public static int getQueryLength(){
+		return queryIds.size();
+	}
 	/**
-	 * delete pre-calculated pairwise similarity values
+	 * delete precalculated pairwise similarity values
 	 */
 	public static void setCalculatedSim(){
 		calculatedSim = new HashMap<String,Double>();

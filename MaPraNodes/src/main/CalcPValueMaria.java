@@ -13,15 +13,14 @@ public class CalcPValueMaria {
 	 */
 	public static void main(String[] args) {
 
-		int queryLength = 1;
-		int iterations = 10;
+		int queryLength = 9;
+		int iterations = 10000;
 
-		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/";
+		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/Testdatensatz/";
 
-		String dataIn = dataPath + "Datenbank/";
-		String ontoIn = dataIn + "isa_HPO_test.csv";
-		String kszIn = dataIn + "ksz_HPO_test.csv";
-		String symptomsIn = dataIn + "symptoms_HPO_test.csv";
+		String ontoIn = dataPath + "Ontology.txt";
+		String kszIn = dataPath + "Krankheiten.txt";
+		String symptomsIn = dataPath + "Symptome.txt";
 		
 		String output = dataPath+"pvalues/length_"+queryLength+".txt";
 
@@ -50,9 +49,9 @@ public class CalcPValueMaria {
 				query = calculateQuery(ids,queryLength);
 				AlgoPheno.setQuery(query);
 				double score = AlgoPheno.calculateSymmetricSimilarity(query, ksz.get(disease));
-				score = score * 100;
+				score = score * 1000;
 				score = Math.round(score);
-				score = (double)score/100;
+				score = (double)score/1000;
 				scores.add(score);
 			}
 			AlgoPheno.setCalculatedSim();

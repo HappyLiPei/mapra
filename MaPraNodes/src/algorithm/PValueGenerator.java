@@ -9,13 +9,15 @@ import main.FileInputReader;
 
 public class PValueGenerator {
 
-	public static LinkedList<String[]>phenomizerWithPValues(int num, String path,LinkedList<Integer> query, LinkedList<Integer>symptoms,
+	public static LinkedList<String[]>phenomizerWithPValues(int num, LinkedList<Integer> query, LinkedList<Integer>symptoms,
 			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
 		AlgoPheno.setInput(query, symptoms, ksz, onto);
 		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue();
 		
+		int queryLength = AlgoPheno.getQueryLength();
+		String path = PValueFolder.getPvalFile(queryLength);
 		FileInputReader reader = new FileInputReader(path);
 		String line ="";
 		
