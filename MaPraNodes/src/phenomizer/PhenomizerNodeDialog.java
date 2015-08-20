@@ -13,6 +13,8 @@ import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
+import algorithm.PValueFolder;
+
 /**
  * <code>NodeDialog</code> for the "Phenomizer" Node.
  * 
@@ -42,7 +44,8 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
      * This is just a suggestion to demonstrate possible default dialog
      * components.
      */
-    protected PhenomizerNodeDialog() {
+    @SuppressWarnings("deprecation")
+	protected PhenomizerNodeDialog() {
         super();
         
         createNewGroup("Output");
@@ -52,25 +55,38 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
         createNewGroup("P values");
         addDialogComponent(new DialogComponentBoolean(pval, "Calculate p values"));
         
-        DialogComponentFileChooser dcfc = new DialogComponentFileChooser(folder, "history_pval_folder", JFileChooser.OPEN_DIALOG, true);
+        final DialogComponentFileChooser dcfc = new DialogComponentFileChooser(folder, "history_pval_folder", JFileChooser.OPEN_DIALOG, true);
         dcfc.setBorderTitle("Choose folder with p value files");
         addDialogComponent(dcfc);
         final DialogComponentLabel l = new DialogComponentLabel("");
         addDialogComponent(l);
-        if(!PhenomizerNodeModel.DEF_PVALUE){
-        	folder.setEnabled(false);
-        }
+        	folder.setEnabled(pval.getBooleanValue());
+        	dcfc.setEnabled(pval.getBooleanValue());
+        	
         pval.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				folder.setEnabled(pval.getBooleanValue());
+				dcfc.setEnabled(pval.getBooleanValue());
 			}
 		});
         folder.addChangeListener(new ChangeListener() {
-			//TODO: check folder
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				l.setText("huhu");
+				if(pval.getBooleanValue()){
+					PValueFolder.setPvalFoder(folder.getStringValue());
+					boolean loop_break = false;
+			    	for(int i=1; i<=10; i++){
+			    		if(!PValueFolder.checkFile(i)){
+			    			l.setText("File "+PValueFolder.PART1+i+PValueFolder.PART2+" is missing");
+			    			loop_break=true;
+			    			break;
+			    		}
+			    	}
+			    	if(!loop_break){
+			    		l.setText("");
+			    	}
+				}
 			}
 		});
                     

@@ -7,14 +7,12 @@ public class PValueFolder {
 	
 	private static String pvalfolder;
 	private static boolean set = false;
-	private static String PART1 ="length_";
-	private static String PART2 =".txt";
+	public static String PART1 ="length_";
+	public static String PART2 =".txt";
 	
 	public static void setPvalFoder(String folder){
-		if(!set){
 			pvalfolder=folder;
 			set=true;
-		}
 	}
 	
 	public static String getPvalFile(int query_length){
