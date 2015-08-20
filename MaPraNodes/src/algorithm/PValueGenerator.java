@@ -19,6 +19,7 @@ public class PValueGenerator {
 		int queryLength = AlgoPheno.getQueryLength();
 		String path = PValueFolder.getPvalFile(queryLength);
 		result = getValuesForGeneralFiles(path,resPhenomizer,num);
+		//result = getValuesForCompressedFiles(path,resPhenomizer,num);
 
 		return result;
 	}
@@ -56,11 +57,33 @@ public class PValueGenerator {
 		return result;
 	}
 	
-	private static PriorityQueue<String>getValuesForCompressedFiles(String path){
+	private static LinkedList<String[]> getValuesForCompressedFiles(String path, HashMap<Integer,Double> resPhenomizer, int num){
+		LinkedList<String[]>result = new LinkedList<String[]>();
+		
 		Comparator<String> comp = new MaxPValueComparator();
 		PriorityQueue<String> maxQueue = new PriorityQueue<String>(6000,comp);
 		
-		return maxQueue;
+		FileInputReader reader = new FileInputReader(path);
+		String line ="";
+
+		int numScores = 0;
+		int numDiseases = 0;
+		
+		while((line=reader.read())!=null){
+			String[] scores = line.split("\t");
+			numScores = Integer.valueOf(scores[1]);
+			numDiseases++;
+			int disease = Integer.valueOf(scores[0]);
+			double simScore = resPhenomizer.get(disease);
+			int index = (int) Math.round(simScore*100)+1;
+			int counter = Integer.valueOf(scores[index]);
+			String tmpRes = counter+","+simScore+","+disease;
+			maxQueue.add(tmpRes);
+		}
+		
+		result = resultFromQueue(maxQueue,num,numScores,numDiseases);
+		
+		return result;
 	}
 	
 	private static LinkedList<String[]>resultFromQueue(PriorityQueue<String>queue,int num, int numScores,int numDiseases){
