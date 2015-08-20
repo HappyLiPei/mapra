@@ -36,9 +36,39 @@ public class TestAlgoCaro {
 		bw.close();
 		*/
 		
+		
+		/*
+		// for parsing all-against-all (for disease network):
+		String dataPathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/Clustering/allAgainstAll_complete.txt";
+		String pathOut = "C:/Users/Carolin/Downloads/allAgainstAll_complete_parsed.txt";
+		List<String> content = FileUtilities.readLines(dataPathIn);
+		FileWriter fw = new FileWriter(pathOut);
+		BufferedWriter bw = new BufferedWriter(fw);
+		
+		String[] ids = null;
+		for(String line : content){
+			if(line.startsWith("id")){
+				ids = line.split(",");//erste id in ids[1] usw... bis ids[7554] mit letzter disease-id
+				//System.out.println(ids[7554]);
+			}
+			else{
+				String[] l = line.split(",");
+				for(int i=1; i<=7554; i++){
+					String lineOut = l[0]+"\t"+ids[i]+"\t"+l[i];
+					System.out.println(lineOut);
+					bw.append(lineOut);
+					bw.newLine();
+				}
+			}
+		}
+		bw.close();
+		*/
+		
+		
+		
 		String a = "11 of 21 [HPO]";
 		String[] ar = a.split(" ");
-		System.out.println(ar[2]);
+		//System.out.println(ar[2]);
 		
 		
 		/*
@@ -77,19 +107,19 @@ public class TestAlgoCaro {
 		*/
 		
 		
-		System.out.println("AllCommonAncestors");
+		//System.out.println("AllCommonAncestors");
 		int node1 = 34;
 		int[] node2 = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40}; 
 		for(int i = 0; i<40; i++){
-			System.out.println(node1+"\t"+node2[i]+"\t"+onto.getAllCommonAncestors(node1, node2[i]).toString());
+			//System.out.println(node1+"\t"+node2[i]+"\t"+onto.getAllCommonAncestors(node1, node2[i]).toString());
 		}
 		
 		
-		System.out.println("RelevantCommonAncestors");
+		//System.out.println("RelevantCommonAncestors");
 		int node1b = 34;
 		int[] node2b = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40}; 
 		for(int i = 0; i<40; i++){
-			System.out.println(node1+"\t"+node2[i]+"\t"+onto.getRelevantCommonAncestors(node1b, node2b[i]).toString());
+			//System.out.println(node1+"\t"+node2[i]+"\t"+onto.getRelevantCommonAncestors(node1b, node2b[i]).toString());
 		}
 		
 
