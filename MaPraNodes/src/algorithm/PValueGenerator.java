@@ -57,6 +57,9 @@ public class PValueGenerator {
 			res[1]=parts[1];
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
 			pValue = pValue*numDiseases;
+			if(Double.compare(pValue, 1)>0){
+				pValue=1;
+			}
 			res[2]=pValue+"";
 			result.add(res);
 			
@@ -71,6 +74,9 @@ public class PValueGenerator {
 			res[1]=parts[1];
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
 			pValue = pValue*numDiseases;
+			if(Double.compare(pValue, 1)>0){
+				pValue=1;
+			}
 			res[2]=pValue+"";
 			result.add(res);
 		}
