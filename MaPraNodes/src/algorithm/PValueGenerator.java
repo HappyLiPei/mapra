@@ -18,12 +18,20 @@ public class PValueGenerator {
 		
 		int queryLength = AlgoPheno.getQueryLength();
 		String path = PValueFolder.getPvalFile(queryLength);
-		FileInputReader reader = new FileInputReader(path);
-		String line ="";
+		result = getValuesForGeneralFiles(path,resPhenomizer,num);
+
+		return result;
+	}
+	
+	private static LinkedList<String[]> getValuesForGeneralFiles(String path,HashMap<Integer,Double>resPhenomizer, int num){
+		LinkedList<String[]> result = new LinkedList<String[]>();
 		
 		Comparator<String> comp = new MaxPValueComparator();
 		PriorityQueue<String> maxQueue = new PriorityQueue<String>(6000,comp);
 		
+		FileInputReader reader = new FileInputReader(path);
+		String line ="";
+
 		int numScores = 0;
 		int numDiseases = 0;
 		
@@ -43,14 +51,29 @@ public class PValueGenerator {
 			maxQueue.add(tmpRes);
 		}
 		
+		result = resultFromQueue(maxQueue,num,numScores,numDiseases);
+		
+		return result;
+	}
+	
+	private static PriorityQueue<String>getValuesForCompressedFiles(String path){
+		Comparator<String> comp = new MaxPValueComparator();
+		PriorityQueue<String> maxQueue = new PriorityQueue<String>(6000,comp);
+		
+		return maxQueue;
+	}
+	
+	private static LinkedList<String[]>resultFromQueue(PriorityQueue<String>queue,int num, int numScores,int numDiseases){
+		LinkedList<String[]> result = new LinkedList<String[]>();
+		
 		String score = "";
 		String p = "";
-		if(num>maxQueue.size()){
-			num = maxQueue.size();
+		if(num>queue.size()){
+			num = queue.size();
 		}
 		
 		for(int i=0; i<num; i++){
-			String currEl = maxQueue.remove();
+			String currEl = queue.remove();
 			String[]parts = currEl.split(",");
 			String[]res = new String[3];
 			res[0]=parts[2];
@@ -66,8 +89,9 @@ public class PValueGenerator {
 			score=res[1];
 			p=res[2];
 		}
-		while(!maxQueue.isEmpty()&&maxQueue.element().split(",")[1].equals(score)&&maxQueue.element().split(",")[0].equals(p)){
-			String currEl = maxQueue.remove();
+		
+		while(!queue.isEmpty()&&queue.element().split(",")[1].equals(score)&&queue.element().split(",")[0].equals(p)){
+			String currEl = queue.remove();
 			String[]parts = currEl.split(",");
 			String[]res = new String[3];
 			res[0]=parts[2];
@@ -80,7 +104,8 @@ public class PValueGenerator {
 			res[2]=pValue+"";
 			result.add(res);
 		}
-
+		
 		return result;
 	}
+
 }
