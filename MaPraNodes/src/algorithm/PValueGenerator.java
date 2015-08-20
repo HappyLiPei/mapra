@@ -45,6 +45,10 @@ public class PValueGenerator {
 		
 		String score = "";
 		String p = "";
+		if(num>maxQueue.size()){
+			num = maxQueue.size();
+		}
+		
 		for(int i=0; i<num; i++){
 			String currEl = maxQueue.remove();
 			String[]parts = currEl.split(",");
