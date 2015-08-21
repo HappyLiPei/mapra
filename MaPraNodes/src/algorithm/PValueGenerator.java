@@ -82,8 +82,11 @@ public class PValueGenerator {
 			numDiseases++;
 			int disease = Integer.valueOf(scores[0]);
 			double simScore = resPhenomizer.get(disease);
-			int index = (int) Math.round(simScore*100)+1;
-			int counter = Integer.valueOf(scores[index]);
+			int index = (int) Math.round(simScore*1000)+1;
+			int counter = 0;
+			if(index<scores.length){
+				counter = Integer.valueOf(scores[index]);
+			}
 			String tmpRes = counter+","+simScore+","+disease;
 			maxQueue.add(tmpRes);
 		}
