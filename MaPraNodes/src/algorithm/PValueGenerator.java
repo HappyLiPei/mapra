@@ -18,8 +18,8 @@ public class PValueGenerator {
 		
 		int queryLength = AlgoPheno.getQueryLength();
 		String path = PValueFolder.getPvalFile(queryLength);
-		result = getValuesForGeneralFiles(path,resPhenomizer,num);
-		//result = getValuesForCompressedFiles(path,resPhenomizer,num);
+		//result = getValuesForGeneralFiles(path,resPhenomizer,num);
+		result = getValuesForCompressedFiles(path,resPhenomizer,num);
 
 		return result;
 	}
