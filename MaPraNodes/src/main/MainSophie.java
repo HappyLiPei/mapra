@@ -334,12 +334,12 @@ public class MainSophie {
 	
 	public static void main(String args[]){
 		
-		String file="/home/marie-sophie/Uni/mapra/omim/Test.txt";//"D:\\transfer\\omim_tm_res.txt"; //;
+		String file="/home/marie-sophie/Uni/mapra/omim/Test2.txt";//"D:\\transfer\\omim_tm_res.txt"; //;
 		String isa="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";//"D:\\transfer\\Datenbank\\isa_HPO_test.csv";//
 		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";//"D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//
 		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";//"D:\\transfer\\Datenbank\\symptoms_HPO_test.csv";//
 		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";//"D:\\transfer\\phenodis_omimids.txt";//
-		String outfile="/home/marie-sophie/Uni/mapra/omim/test_out12p.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
+		String outfile="/home/marie-sophie/Uni/mapra/omim/test_out22p.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
 		String pval="/home/marie-sophie/Uni/mapra/phenodis/pvalues";
 		
 		MainSophie ms = new MainSophie();
