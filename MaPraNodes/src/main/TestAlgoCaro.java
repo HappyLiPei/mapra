@@ -64,13 +64,6 @@ public class TestAlgoCaro {
 		bw.close();
 		*/
 		
-		
-		
-		String a = "11 of 21 [HPO]";
-		String[] ar = a.split(" ");
-		//System.out.println(ar[2]);
-		
-		
 		/*
 		String dataPath = "C:/Users/Carolin/Dropbox/Masterpraktikum/Testdatensatz/";
 		
