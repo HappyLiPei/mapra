@@ -124,7 +124,7 @@ public class AlgoPheno {
 	} 
 	
 	public static HashMap<Integer,Double> runPhenomizerWithPValue(){
-		HashMap<Integer,Double> result = new HashMap<Integer,Double>();
+		HashMap<Integer,Double> result = new HashMap<Integer,Double>(kszD.size()*3);
 		
 		setIC();
 		for(int disease : kszD.keySet()){
@@ -281,7 +281,7 @@ public class AlgoPheno {
 	 */
 	public static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer[]>symptoms2){
 
-		HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
+		//HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 		
 		//calculate the similarity symptoms1->symptoms2
 		double sim1 = 0;

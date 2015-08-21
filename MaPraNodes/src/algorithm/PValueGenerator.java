@@ -35,7 +35,7 @@ public class PValueGenerator {
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
 		Comparator<String> comp = new MaxPValueComparator();
-		PriorityQueue<String> maxQueue = new PriorityQueue<String>(6000,comp);
+		PriorityQueue<String> maxQueue = new PriorityQueue<String>(8000,comp);
 		
 		FileInputReader reader = new FileInputReader(path);
 		String line ="";
@@ -58,7 +58,7 @@ public class PValueGenerator {
 			String tmpRes = counter+","+simScore+","+disease;
 			maxQueue.add(tmpRes);
 		}
-		
+		reader.closer();
 		result = resultFromQueue(maxQueue,num,numScores,numDiseases);
 		
 		return result;
@@ -68,7 +68,7 @@ public class PValueGenerator {
 		LinkedList<String[]>result = new LinkedList<String[]>();
 		
 		Comparator<String> comp = new MaxPValueComparator();
-		PriorityQueue<String> maxQueue = new PriorityQueue<String>(6000,comp);
+		PriorityQueue<String> maxQueue = new PriorityQueue<String>(8000,comp);
 		
 		FileInputReader reader = new FileInputReader(path);
 		String line ="";
@@ -90,7 +90,7 @@ public class PValueGenerator {
 			String tmpRes = counter+","+simScore+","+disease;
 			maxQueue.add(tmpRes);
 		}
-		
+		reader.closer();
 		result = resultFromQueue(maxQueue,num,numScores,numDiseases);
 		
 		return result;

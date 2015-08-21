@@ -19,6 +19,7 @@ public class MainSophie {
 	private static final int NO_WEIGHT_NO_P_VALUE=1;
 	private static final int WEIGHT_NO_P_VALUE=2;
 	private static final int NO_WEIGHT_P_VALUE=3;
+	private static final int WEIGHT_P_VALUE=4;
 	
 	/*
 	 * generates query lists from text mining results
@@ -265,7 +266,7 @@ public class MainSophie {
 				if(start){
 						AlgoPheno.setInput(queries.get(pair[1]),
 								symptom_struct,ksz_struct,isa_struct);
-						if(mode==NO_WEIGHT_P_VALUE){
+						if(mode==NO_WEIGHT_P_VALUE|| mode ==WEIGHT_P_VALUE){
 							PValueFolder.setPvalFoder(folder_pval);
 						}
 						start = false;
@@ -275,7 +276,7 @@ public class MainSophie {
 				}
 				
 				LinkedList<String[]> res = new LinkedList<String[]>();
-				if(mode==NO_WEIGHT_P_VALUE){
+				if(mode==NO_WEIGHT_P_VALUE|| mode == WEIGHT_P_VALUE){
 					HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue();
 					res=PValueGenerator.getResultsWithPvaluesForOMIM(resPhenomizer, 8000);
 				}
@@ -284,7 +285,7 @@ public class MainSophie {
 				}
 				
 				double rank=-1;
-				if(mode==NO_WEIGHT_P_VALUE){
+				if(mode==NO_WEIGHT_P_VALUE|| mode == WEIGHT_P_VALUE){
 					rank = calculateRankPval(pair[0], res);
 				}
 				else{
@@ -334,12 +335,12 @@ public class MainSophie {
 	
 	public static void main(String args[]){
 		
-		String file="/home/marie-sophie/Uni/mapra/omim/Test2.txt";//"D:\\transfer\\omim_tm_res.txt"; //;
+		String file="/home/marie-sophie/Uni/mapra/omim/omim_tm_res.txt";//"D:\\transfer\\omim_tm_res.txt"; //;
 		String isa="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";//"D:\\transfer\\Datenbank\\isa_HPO_test.csv";//
 		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";//"D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//
 		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";//"D:\\transfer\\Datenbank\\symptoms_HPO_test.csv";//
 		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";//"D:\\transfer\\phenodis_omimids.txt";//
-		String outfile="/home/marie-sophie/Uni/mapra/omim/test_out22p.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
+		String outfile="/home/marie-sophie/Uni/mapra/omim/no_weight_pval.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
 		String pval="/home/marie-sophie/Uni/mapra/phenodis/pvalues";
 		
 		MainSophie ms = new MainSophie();
