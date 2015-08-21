@@ -22,7 +22,10 @@ public class Binner {
 		
 		FileInputReader reader = new FileInputReader(pathIn);
 		String line;
+		int disease = 1;
 		while((line=reader.read())!=null){
+			System.out.print("disease "+disease+":\t");
+			disease++;
 			String lineOut = createString(line.split("\t"));
 			FileUtilities.writeStringToExistingFile(pathOut, lineOut+"\n");
 		}

@@ -19,15 +19,16 @@ public class TestAlgoCaro {
 
 	public static void main(String[]args) throws IOException{
 		
-		/*
+		
 		// files mit empirischen sim-scores umwandeln (binnen)
-		String file = "length_2.txt";
+		String file = "length_1.txt";
 		String pathIn = "C:/Users/Carolin/Downloads/pvalues/"+file;
 		String pathOut = "C:/Users/Carolin/Downloads/pvalues_binned/"+file;
 		Binner.runBinner(pathIn, pathOut);
-		*/
 		
-		// testdaten mit compressed p-value files
+		
+		/*
+		// testdaten mit compressed p-value files: compressed files korrekt!
 		String dataPath = "C:/Users/Carolin/Dropbox/Masterpraktikum/Testdatensatz/";
 		String diseasesIn = dataPath + "Krankheiten.txt";
 		String symptomsIn = dataPath + "Symptome.txt";
@@ -50,7 +51,7 @@ public class TestAlgoCaro {
     		}
     		System.out.print("\n");
     	}
-   		
+   		*/
 		
 		
 		/*
