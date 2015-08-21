@@ -24,6 +24,13 @@ public class PValueGenerator {
 		return result;
 	}
 	
+	public static LinkedList<String[]> getResultsWithPvaluesForOMIM(HashMap<Integer,Double> resPhenomizer, int num){
+		int queryLength = AlgoPheno.getQueryLength();
+		String path = PValueFolder.getPvalFile(queryLength);
+		LinkedList<String[]> result = getValuesForGeneralFiles(path,resPhenomizer,num);
+		return result;
+	}
+	
 	private static LinkedList<String[]> getValuesForGeneralFiles(String path,HashMap<Integer,Double>resPhenomizer, int num){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
