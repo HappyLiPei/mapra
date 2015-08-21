@@ -11,11 +11,14 @@ import java.util.LinkedList;
 
 import algorithm.AlgoPheno;
 import algorithm.FrequencyConverter;
+import algorithm.PValueFolder;
+import algorithm.PValueGenerator;
 
 public class MainSophie {
 	
 	private static final int NO_WEIGHT_NO_P_VALUE=1;
 	private static final int WEIGHT_NO_P_VALUE=2;
+	private static final int NO_WEIGHT_P_VALUE=3;
 	
 	/*
 	 * generates query lists from text mining results
@@ -116,7 +119,7 @@ public class MainSophie {
 		return pheno_to_omim;
 	}
 	
-	private double calculateRank(String disease_id, LinkedList<String []> pheno_res){
+	private double calculateRankNoPval(String disease_id, LinkedList<String []> pheno_res){
 		
 		String prev="";
 		int count = 1;
@@ -132,6 +135,47 @@ public class MainSophie {
 				}
 				rank++;
 				prev=score[1];
+				count=1;
+			}
+			else{
+				rank++;
+				count++;
+			}
+			if(score[0].equals(disease_id)){
+				found=true;
+			}
+			//System.out.println(score[0]+"\t"+score[1]+"\t"+rank+"\t"+count);
+		}
+		
+		if(!found){
+			System.out.println("Error: could not calculate rank");
+		}
+		
+		int sum=0;
+		for(int i=0; i<count; i++){
+			sum+=rank-i;
+		}
+		double d = ((double)sum)/count;
+		//System.out.println(disease_id+" Rang: "+d);
+		return d;
+	}
+	
+	private double calculateRankPval(String disease_id, LinkedList<String []> pheno_res){
+		
+		String prev="";
+		int count = 1;
+		boolean found=false;
+		int rank =0;
+		
+		//score[0]: disease_id, score[1]: score, score[2]:pvalue
+		for(String [] score: pheno_res){
+			if(!(score[2]+"+"+score[1]).equals(prev)){
+				if(found){
+					//System.out.println(rank+"\t"+count);
+					break;
+				}
+				rank++;
+				prev=score[2]+"+"+score[1];
 				count=1;
 			}
 			else{
@@ -189,7 +233,7 @@ public class MainSophie {
 		return res;
 	}
 	
-	private void runOMIMVal(int mode, String outfile, String phenofile, String tmfile, String isa, String symptom, String ksz){
+	private void runOMIMVal(int mode, String outfile, String phenofile, String tmfile, String isa, String symptom, String ksz, String folder_pval){
 		
 		// read symptom queries for omim entries extracted with textmiming
 		HashMap<String, LinkedList<Integer>> queries = readQueriesTM(tmfile);
@@ -198,7 +242,7 @@ public class MainSophie {
 		
 		//read input files for phenomizer data structure
 		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = null;
-		if(mode==NO_WEIGHT_NO_P_VALUE){
+		if(mode==NO_WEIGHT_NO_P_VALUE||NO_WEIGHT_P_VALUE==mode){
 			ksz_struct = addWeights(FileUtilities.readInKSZ(ksz));
 		}
 		else{
@@ -219,16 +263,34 @@ public class MainSophie {
 				System.out.println("Calculate pair "+pair[1]+"\t"+pair[0]);
 				
 				if(start){
-					AlgoPheno.setInput(queries.get(pair[1]),
-							symptom_struct,ksz_struct,isa_struct);
-					start = false;
+						AlgoPheno.setInput(queries.get(pair[1]),
+								symptom_struct,ksz_struct,isa_struct);
+						if(mode==NO_WEIGHT_P_VALUE){
+							PValueFolder.setPvalFoder(folder_pval);
+						}
+						start = false;
 				}
 				else{
 					AlgoPheno.setQuery(queries.get(pair[1]));
 				}
-				LinkedList<String[]> res = AlgoPheno.runPhenomizer(8000);
 				
-				double rank = calculateRank(pair[0], res);
+				LinkedList<String[]> res = new LinkedList<String[]>();
+				if(mode==NO_WEIGHT_P_VALUE){
+					HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue();
+					res=PValueGenerator.getResultsWithPvaluesForOMIM(resPhenomizer, 8000);
+				}
+				else{
+					res=AlgoPheno.runPhenomizer(8000);
+				}
+				
+				double rank=-1;
+				if(mode==NO_WEIGHT_P_VALUE){
+					rank = calculateRankPval(pair[0], res);
+				}
+				else{
+					rank = calculateRankNoPval(pair[0], res);
+				}
+				
 				System.out.println(pair[0]+"\t"+pair[1]+"\t"+rank);
 				w.writeFileln(pair[0]+"\t"+pair[1]+"\t"+rank);
 				
@@ -272,17 +334,37 @@ public class MainSophie {
 	
 	public static void main(String args[]){
 		
-		String file="/home/marie-sophie/Uni/mapra/omim/omim_tm_res.txt";//"D:\\transfer\\omim_tm_res.txt"; //;
+		String file="/home/marie-sophie/Uni/mapra/omim/Test.txt";//"D:\\transfer\\omim_tm_res.txt"; //;
 		String isa="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/isa_HPO_test.csv";//"D:\\transfer\\Datenbank\\isa_HPO_test.csv";//
-		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_frequency.csv";//"D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//
+		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_test.csv";//"D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//
 		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";//"D:\\transfer\\Datenbank\\symptoms_HPO_test.csv";//
 		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";//"D:\\transfer\\phenodis_omimids.txt";//
-		String outfile="/home/marie-sophie/Uni/mapra/omim/reduced_phenodis_omimids.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
-		
+		String outfile="/home/marie-sophie/Uni/mapra/omim/test_out12p.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
+		String pval="/home/marie-sophie/Uni/mapra/phenodis/pvalues";
 		
 		MainSophie ms = new MainSophie();
+		ms.runOMIMVal(NO_WEIGHT_P_VALUE,outfile, phenofile,file, isa, symptom, ksz, pval);
+		
+//		LinkedList<String[]> res = new LinkedList<String[]>();
+//		res.add(new String[]{"1","4","0"});
+//		res.add(new String[]{"2","4","0"});
+//		res.add(new String[]{"3","4","0.1"});
+//		res.add(new String[]{"4","2","0.1"});
+//		res.add(new String[]{"5","3","0.2"});
+//		res.add(new String[]{"6","1","0.2"});
+//		res.add(new String[]{"7","1","0.2"});
+//		res.add(new String[]{"8","1","0.2"});
+//		
+//		System.out.println(ms.calculateRankPval("1", res));
+//		System.out.println(ms.calculateRankPval("2", res));
+//		System.out.println(ms.calculateRankPval("3", res));
+//		System.out.println(ms.calculateRankPval("4", res));
+//		System.out.println(ms.calculateRankPval("5", res));
+//		System.out.println(ms.calculateRankPval("6", res));
+//		System.out.println(ms.calculateRankPval("7", res));
+//		System.out.println(ms.calculateRankPval("8", res));
+		
 //		ms.extractDiseasesWithFreq(phenofile, ksz, outfile);
-//		ms.runOMIMVal(WEIGHT_NO_P_VALUE,outfile, phenofile,file, isa, symptom, ksz);
 //		ms.readOMIMPheno(phenofile);
 //		HashMap<String, LinkedList<Integer>> queries = ms.readQueriesTM(file);
 //		
