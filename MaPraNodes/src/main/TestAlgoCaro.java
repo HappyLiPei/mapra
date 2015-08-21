@@ -10,11 +10,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 import algorithm.AlgoPheno;
+import algorithm.Binner;
 import algorithm.Ontology;
 
 public class TestAlgoCaro {
 
 	public static void main(String[]args) throws IOException{
+		
+		
+		// files mit empirischen sim-scores umwandeln (binnen)
+		String file = "length_1.txt";
+		String pathIn = "C:/Users/Carolin/Downloads/pvalues/"+file;
+		String pathOut = "C:/Users/Carolin/Downloads/pvalues_binned/"+file;
+		Binner.runBinner(pathIn, pathOut);
+
+		
 		
 		/*
 		// for classification of diseases:
