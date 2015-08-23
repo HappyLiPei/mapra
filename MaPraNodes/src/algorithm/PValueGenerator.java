@@ -27,7 +27,7 @@ public class PValueGenerator {
 	public static LinkedList<String[]> getResultsWithPvaluesForOMIM(HashMap<Integer,Double> resPhenomizer, int num){
 		int queryLength = AlgoPheno.getQueryLength();
 		String path = PValueFolder.getPvalFile(queryLength);
-		LinkedList<String[]> result = getValuesForGeneralFiles(path,resPhenomizer,num);
+		LinkedList<String []> result = getValuesForCompressedFiles(path,resPhenomizer,num);
 		return result;
 	}
 	
