@@ -39,7 +39,7 @@ public class Binner {
 		int[] bins = createBins(line);
 		int counter = 0;
 		boolean maxScore = true; // zum Ausgeben des gr��ten Scores in einer Zeile
-		for(int i=10000; i>0; i--){
+		for(int i=bins.length; i>0; i--){
 			counter= counter+bins[i-1];
 			if (counter!=0){
 				if(maxScore){
@@ -64,7 +64,7 @@ public class Binner {
 	// gibt int-array mit anzahlen der scores zur�ck
 	private static int[] createBins(String[] line){
 		int[] bins = new int[15000];// andere l�nge?! nur 9 000
-		for (int i=1; i<=10000;i++){
+		for (int i=1; i<line.length;i++){
 			double score = Double.parseDouble(line[i]);
 			int pos = (int)Math.round(score*1000);
 			bins[pos]++;
