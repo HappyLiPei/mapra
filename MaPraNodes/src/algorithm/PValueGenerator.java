@@ -31,6 +31,92 @@ public class PValueGenerator {
 		return result;
 	}
 	
+	public static double[]getNextOfAsymmetricMatrix(double[]line,int[]keys,int queryLength){
+		double[]matrix = new double[line.length];
+		HashMap<Integer,Double> phenoRes = new HashMap<Integer,Double>();
+		HashMap<Integer,Integer>keyToIndex = new HashMap<Integer,Integer>();
+		for(int i=0;i <keys.length; i++){
+			phenoRes.put(keys[i], line[i]);
+			keyToIndex.put(keys[i], i);
+		}
+		int num= keys.length;
+		
+		String path = PValueFolder.getPvalFile(queryLength);
+		LinkedList<String[]> result = getValuesForCompressedFiles(path,phenoRes,num);
+		
+		for(String[] res : result){
+			int index = keyToIndex.get(Integer.valueOf(res[0]));
+			matrix[index]=Double.valueOf(res[2]);
+		}
+		
+		return matrix;
+	}
+	public static double[][] getMinimumMatrix(double[][]adj){
+		double[][] matrix = new double[adj.length][adj[1].length];
+		for(int i=0; i<matrix.length;i++){
+			for(int j=i; j<matrix.length;j++){
+				if(i==j){
+					matrix[i][j]=0;
+				}
+				else{
+					if(Double.compare(adj[i][j],adj[j][i])>0){
+						matrix[i][j]=adj[j][i];
+					}
+					else{
+						matrix[i][j]=adj[i][j];
+					}
+					matrix[j][i]=matrix[i][j];
+				}
+			}
+		}
+		
+		return matrix;
+	}
+	
+	public static double[][] getMaximumMatrix(double[][]adj){
+		double[][] matrix = new double[adj.length][adj[1].length];
+		for(int i=0; i<matrix.length;i++){
+			for(int j=i; j<matrix.length;j++){
+				if(i==j){
+					matrix[i][j]=0;
+				}
+				else{
+					if(Double.compare(adj[i][j],adj[j][i])>0){
+						matrix[i][j]=adj[i][j];
+					}
+					else{
+						matrix[i][j]=adj[j][i];
+					}
+					matrix[j][i]=matrix[i][j];
+				}
+				
+			}
+		}
+		return matrix;
+	}
+	
+	public static double[][]getAverageMatrix(double[][]adj){
+		double[][] matrix = new double[adj.length][adj[1].length];
+		for(int i=0; i<matrix.length;i++){
+			for(int j=i; j<matrix.length;j++){
+				if(i==j){
+					matrix[i][j]=0;
+				}
+				else{
+					double avgVal = (adj[i][j]+adj[j][i])/2;
+					avgVal = avgVal*1000;
+					int tmpVal = (int)Math.round(avgVal);
+					avgVal = tmpVal/1000.0;
+					matrix[i][j]= avgVal;
+					matrix[j][i]=matrix[i][j];
+				}
+			}
+		}
+		
+		return matrix;
+	}
+	
+
 	private static LinkedList<String[]> getValuesForGeneralFiles(String path,HashMap<Integer,Double>resPhenomizer, int num){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
