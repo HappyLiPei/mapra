@@ -9,6 +9,11 @@ import main.FileUtilities;
 
 public class Binner {
 	
+	/**
+	 * run the binner algorithm: read in a file with similarity scores and create a new file with binned similarity scores
+	 * @param pathIn
+	 * @param pathOut
+	 */
 	public static void runBinner(String pathIn, String pathOut){
 		
 		File file = new File(pathOut);
@@ -32,13 +37,16 @@ public class Binner {
 	}
 	
 	
-	
-	// gibt output-zeile zur�ck
+	/**
+	 * create a binned output line for a given input line
+	 * @param line
+	 * @return binned line with disease id, without \n
+	 */
 	public static String createString(String[] line){
 		LinkedList<String> stringList = new LinkedList<String>();
 		int[] bins = createBins(line);
 		int counter = 0;
-		boolean maxScore = true; // zum Ausgeben des gr��ten Scores in einer Zeile
+		boolean maxScore = true; // for printing the maximal score in a line
 		for(int i=bins.length; i>0; i--){
 			counter= counter+bins[i-1];
 			if (counter!=0){
@@ -60,10 +68,13 @@ public class Binner {
 	
 	
 	
-	// bekommt eine zeile mit id und  10 000 scores aus file
-	// gibt int-array mit anzahlen der scores zur�ck
+	/**
+	 * count number of scores in one input line
+	 * @param line
+	 * @return bins - array of counts
+	 */
 	private static int[] createBins(String[] line){
-		int[] bins = new int[15000];// andere l�nge?! nur 9 000
+		int[] bins = new int[15000];
 		for (int i=1; i<line.length;i++){
 			double score = Double.parseDouble(line[i]);
 			int pos = (int)Math.round(score*1000);
