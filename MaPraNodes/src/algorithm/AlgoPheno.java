@@ -181,7 +181,8 @@ public class AlgoPheno {
 			setCalculatedSim();
 		}
 		
-		double[][]distanceMatrix = convertAdjacencyToDistance(results,maximum);
+		//double[][]distanceMatrix = convertAdjacencyToDistance(results,maximum);
+		double[][]distanceMatrix = convertIntToDouble(results);
 		
 		return distanceMatrix;
 	}
@@ -426,5 +427,21 @@ public class AlgoPheno {
 		}
 		
 		return distance;
+	}
+	
+	private static double[][] convertIntToDouble(int[][]adjacency){
+		double[][]adj = new double[adjacency.length][adjacency.length];
+		for(int i=0;i<adjacency.length;i++){
+			for(int j=i; j<adjacency[i].length;j++){
+				if(i==j){
+					adj[i][j]=0;
+				}
+				else{
+					adj[i][j]=(double)adjacency[i][j]/100;
+					adj[j][i]=adj[i][j];
+				}
+			}
+		}
+		return adj;
 	}
 }
