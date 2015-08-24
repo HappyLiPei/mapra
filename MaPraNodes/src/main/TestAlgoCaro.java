@@ -19,6 +19,31 @@ public class TestAlgoCaro {
 
 	public static void main(String[]args) throws IOException{
 		
+		// aus case-study-output: ersten 30 disease-ids für netzwerk extrahieren (.noa files)
+		String file = "Systemic_lupus";
+		String pathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/OutputCaseStudiesValidation/output1_stupid/"+file+".csv";
+		String pathOut = "C:/Users/Carolin/Downloads/disease_network/01_cases_noa/"+file+".noa";
+		
+		FileInputReader reader = new FileInputReader(pathIn);
+		FileWriter fw = new FileWriter(pathOut);
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.append(file);
+		bw.newLine();
+		String line = reader.read();//erste zeile (header) verwerfen
+		int counter=1; //ersten 30 zeilen rausschreiben
+		while(counter<=30 && ((line=reader.read())!=null)){
+			String id = line.split("\t")[1];
+			String lineOut = id+"\t=\t"+file;
+			bw.append(lineOut);
+			bw.newLine();
+			counter++;
+		}
+		bw.close();
+		
+		
+		
+		
+		
 		/*
 		// files mit empirischen sim-scores umwandeln (binnen)
 		String file = "length_1.txt";
