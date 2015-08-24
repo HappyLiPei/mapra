@@ -33,12 +33,12 @@ public class Binner {
 	
 	
 	
-	// gibt output-zeile zurück
-	private static String createString(String[] line){
+	// gibt output-zeile zurï¿½ck
+	public static String createString(String[] line){
 		LinkedList<String> stringList = new LinkedList<String>();
 		int[] bins = createBins(line);
 		int counter = 0;
-		boolean maxScore = true; // zum Ausgeben des größten Scores in einer Zeile
+		boolean maxScore = true; // zum Ausgeben des grï¿½ï¿½ten Scores in einer Zeile
 		for(int i=10000; i>0; i--){
 			counter= counter+bins[i-1];
 			if (counter!=0){
@@ -61,9 +61,9 @@ public class Binner {
 	
 	
 	// bekommt eine zeile mit id und  10 000 scores aus file
-	// gibt int-array mit anzahlen der scores zurück
+	// gibt int-array mit anzahlen der scores zurï¿½ck
 	private static int[] createBins(String[] line){
-		int[] bins = new int[10000];// andere länge?! nur 9 000
+		int[] bins = new int[15000];// andere lï¿½nge?! nur 9 000
 		for (int i=1; i<=10000;i++){
 			double score = Double.parseDouble(line[i]);
 			int pos = (int)Math.round(score*1000);
