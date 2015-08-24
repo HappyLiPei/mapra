@@ -123,6 +123,10 @@ public class AlgoPheno {
 		return result;
 	} 
 	
+	/**
+	 * run phenomizer and use p values
+	 * @return
+	 */
 	public static HashMap<Integer,Double> runPhenomizerWithPValue(){
 		HashMap<Integer,Double> result = new HashMap<Integer,Double>(kszD.size()*3);
 		
@@ -210,9 +214,14 @@ public class AlgoPheno {
 		queryIds=removeAncestors(query);
 	}
 	
+	/**
+	 * get the length of the current query
+	 * @return length of queryy
+	 */
 	public static int getQueryLength(){
 		return queryIds.size();
 	}
+	
 	/**
 	 * delete precalculated pairwise similarity values
 	 */
@@ -220,6 +229,9 @@ public class AlgoPheno {
 		calculatedSim = new HashMap<String,Double>();
 	}
 	
+	/**
+	 * set the information content for all symptoms
+	 */
 	public static void setIC(){
 		for(int symp : symptomIds){
 			if(!ic.containsKey(symp)){
@@ -228,6 +240,7 @@ public class AlgoPheno {
 			}
 		}
 	}
+	
 	/**
 	 * calculates the information content of a given term (symptom)
 	 * @param term
@@ -381,6 +394,11 @@ public class AlgoPheno {
 		return result;
 	}
 
+	/**
+	 * remove symptoms whose successor(s) are also in the list for a list of weighted symptoms
+	 * @param symptoms with weights
+	 * @return list without any ancestors of query terms
+	 */
 	private static LinkedList<Integer[]> removeAncestors2(LinkedList<Integer[]> symptoms){
 		
 		LinkedList<Integer[]>result = new LinkedList<Integer[]>();
@@ -429,6 +447,11 @@ public class AlgoPheno {
 		return distance;
 	}
 	
+	/**
+	 * convert a given integer matrix to a double matrix
+	 * @param adjacency
+	 * @return
+	 */
 	private static double[][] convertIntToDouble(int[][]adjacency){
 		double[][]adj = new double[adjacency.length][adjacency.length];
 		for(int i=0;i<adjacency.length;i++){

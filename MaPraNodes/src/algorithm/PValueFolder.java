@@ -10,11 +10,20 @@ public class PValueFolder {
 	public static String PART1 ="length_";
 	public static String PART2 =".txt";
 	
+	/**
+	 * set path to the folder containing the files with the precalculated scores
+	 * @param folder
+	 */
 	public static void setPvalFoder(String folder){
 			pvalfolder=folder;
 			set=true;
 	}
 	
+	/**
+	 * get the file with precalculated scores corresponding to a certain query length
+	 * @param query_length
+	 * @return file name
+	 */
 	public static String getPvalFile(int query_length){
 		if(set){
 			if(0<query_length && query_length<=10){
@@ -32,6 +41,11 @@ public class PValueFolder {
 		}
 	}
 	
+	/**
+	 * test if the file for a certain query length exists in the set folder
+	 * @param length
+	 * @return
+	 */
 	public static boolean checkFile(int length){
 		if(!set|| length<=0||length>10){
 			return false;

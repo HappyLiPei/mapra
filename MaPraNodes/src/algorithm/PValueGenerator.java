@@ -9,6 +9,15 @@ import main.FileInputReader;
 
 public class PValueGenerator {
 
+	/**
+	 * run the phenomizer algorithm and calculate p values for each result.
+	 * @param num - number of results to return
+	 * @param query - query of symptoms
+	 * @param symptoms -list of symptoms in database
+	 * @param ksz - association between diseases and symptoms
+	 * @param onto - ontology
+	 * @return top num results
+	 */
 	public static LinkedList<String[]>phenomizerWithPValues(int num, LinkedList<Integer> query, LinkedList<Integer>symptoms,
 			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto){
 		LinkedList<String[]> result = new LinkedList<String[]>();
@@ -24,6 +33,12 @@ public class PValueGenerator {
 		return result;
 	}
 	
+	/**
+	 * for validation of phenomizer with p values for OMIM diseases
+	 * @param resPhenomizer
+	 * @param num
+	 * @return
+	 */
 	public static LinkedList<String[]> getResultsWithPvaluesForOMIM(HashMap<Integer,Double> resPhenomizer, int num){
 		int queryLength = AlgoPheno.getQueryLength();
 		String path = PValueFolder.getPvalFile(queryLength);
@@ -31,6 +46,13 @@ public class PValueGenerator {
 		return result;
 	}
 	
+	/**
+	 * get the p values for a certain result from Phenomizer to be a certain line in an asmmetric p value matrix
+	 * @param line
+	 * @param keys
+	 * @param queryLength
+	 * @return
+	 */
 	public static double[]getNextOfAsymmetricMatrix(double[]line,int[]keys,int queryLength){
 		double[]matrix = new double[line.length];
 		HashMap<Integer,Double> phenoRes = new HashMap<Integer,Double>();
@@ -51,6 +73,12 @@ public class PValueGenerator {
 		
 		return matrix;
 	}
+	
+	/**
+	 * get a symmetric p value matrix where the value for a pair (i,j) is the minimum p value for this pair
+	 * @param adj
+	 * @return
+	 */
 	public static double[][] getMinimumMatrix(double[][]adj){
 		double[][] matrix = new double[adj.length][adj[1].length];
 		for(int i=0; i<matrix.length;i++){
@@ -73,6 +101,11 @@ public class PValueGenerator {
 		return matrix;
 	}
 	
+	/**
+	 * get a symmetric p value matrix where the value for a pair (i,j) is the maxmimum p value for this pair
+	 * @param adj
+	 * @return
+	 */
 	public static double[][] getMaximumMatrix(double[][]adj){
 		double[][] matrix = new double[adj.length][adj[1].length];
 		for(int i=0; i<matrix.length;i++){
@@ -95,6 +128,11 @@ public class PValueGenerator {
 		return matrix;
 	}
 	
+	/**
+	 * get a symmetric p value matrix where the value for a pair (i,j) is the average p value for this pair
+	 * @param adj
+	 * @return
+	 */
 	public static double[][]getAverageMatrix(double[][]adj){
 		double[][] matrix = new double[adj.length][adj[1].length];
 		for(int i=0; i<matrix.length;i++){
@@ -116,7 +154,13 @@ public class PValueGenerator {
 		return matrix;
 	}
 	
-
+	/**
+	 * get the top num results and their p values for the Phenomizer result when using compressed files containing the precalculated scores
+	 * @param path - path to file containing precalculated scores
+	 * @param resPhenomizer - result from Phenomizer
+	 * @param num - number of results to return
+	 * @return
+	 */
 	private static LinkedList<String[]> getValuesForGeneralFiles(String path,HashMap<Integer,Double>resPhenomizer, int num){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
@@ -150,6 +194,13 @@ public class PValueGenerator {
 		return result;
 	}
 	
+	/**
+	 * get the top num results and their p values for the Phenomizer result when using compressed files containing the precalculated scores
+	 * @param path - path to file containing precalculated scores
+	 * @param resPhenomizer - result from Phenomizer
+	 * @param num - number of results to return
+	 * @return
+	 */
 	private static LinkedList<String[]> getValuesForCompressedFiles(String path, HashMap<Integer,Double> resPhenomizer, int num){
 		LinkedList<String[]>result = new LinkedList<String[]>();
 		
@@ -182,6 +233,14 @@ public class PValueGenerator {
 		return result;
 	}
 	
+	/**
+	 * get the top num results from a max priority queue
+	 * @param queue
+	 * @param num
+	 * @param numScores
+	 * @param numDiseases
+	 * @return
+	 */
 	private static LinkedList<String[]>resultFromQueue(PriorityQueue<String>queue,int num, int numScores,int numDiseases){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
