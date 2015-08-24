@@ -19,13 +19,13 @@ public class TestAlgoCaro {
 
 	public static void main(String[]args) throws IOException{
 		
-		
+		/*
 		// files mit empirischen sim-scores umwandeln (binnen)
 		String file = "length_1.txt";
 		String pathIn = "C:/Users/Carolin/Downloads/pvalues/"+file;
 		String pathOut = "C:/Users/Carolin/Downloads/pvalues_binned/"+file;
 		Binner.runBinner(pathIn, pathOut);
-		
+		*/
 		
 		/*
 		// testdaten mit compressed p-value files: compressed files korrekt!
@@ -76,27 +76,30 @@ public class TestAlgoCaro {
 		
 		
 		/*
-		// for parsing all-against-all (for disease network):
+		// for parsing all-against-all (for disease network, use upper triangle from matrix):
 		String dataPathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/Clustering/allAgainstAll_complete.txt";
-		String pathOut = "C:/Users/Carolin/Downloads/allAgainstAll_complete_parsed.txt";
-		List<String> content = FileUtilities.readLines(dataPathIn);
+		String pathOut = "C:/Users/Carolin/Downloads/allAgainstAll_complete_parsed2.txt";
+		FileInputReader reader = new FileInputReader(dataPathIn);
 		FileWriter fw = new FileWriter(pathOut);
 		BufferedWriter bw = new BufferedWriter(fw);
 		
 		String[] ids = null;
-		for(String line : content){
+		String line;
+		int counter = 2;
+		while((line=reader.read())!=null){
 			if(line.startsWith("id")){
 				ids = line.split(",");//erste id in ids[1] usw... bis ids[7554] mit letzter disease-id
 				//System.out.println(ids[7554]);
 			}
 			else{
 				String[] l = line.split(",");
-				for(int i=1; i<=7554; i++){
+				for(int i=counter; i<=7554; i++){
 					String lineOut = l[0]+"\t"+ids[i]+"\t"+l[i];
-					System.out.println(lineOut);
+					System.out.println(lineOut+"\t\t"+counter);
 					bw.append(lineOut);
 					bw.newLine();
 				}
+				counter++;
 			}
 		}
 		bw.close();
