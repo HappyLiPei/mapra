@@ -105,6 +105,11 @@ public class PValueGenerator {
 			num = queue.size();
 		}
 		
+		double maxPValue = Double.MIN_VALUE;
+		double lastPValue = Double.MIN_VALUE;
+		int currIndex = 1;
+		int currRank = 0;
+		
 		for(int i=0; i<num; i++){
 			String currEl = queue.remove();
 			String[]parts = currEl.split(",");
@@ -112,10 +117,24 @@ public class PValueGenerator {
 			res[0]=parts[2];
 			res[1]=parts[1];
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
-			pValue = pValue*numDiseases;
+			if(Double.compare(lastPValue, pValue)<0){
+				lastPValue = pValue;
+				currRank += currIndex;
+				currIndex = 0;
+			}
+			pValue = pValue*(numDiseases-currRank+1);
 			if(Double.compare(pValue, 1)>0){
 				pValue=1;
 			}
+			else if(Double.compare(pValue, maxPValue)<0){
+				pValue = maxPValue;
+			}
+			
+			if(Double.compare(pValue, maxPValue)>0){
+				maxPValue = pValue;
+			}
+			currIndex++;
+			
 			res[2]=pValue+"";
 			result.add(res);
 			
@@ -130,10 +149,14 @@ public class PValueGenerator {
 			res[0]=parts[2];
 			res[1]=parts[1];
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
-			pValue = pValue*numDiseases;
+			pValue = pValue*(numDiseases-currRank+1);
 			if(Double.compare(pValue, 1)>0){
 				pValue=1;
 			}
+			else if(Double.compare(pValue, maxPValue)<0){
+				pValue = maxPValue;
+			}
+
 			res[2]=pValue+"";
 			result.add(res);
 		}
