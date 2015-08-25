@@ -300,6 +300,7 @@ public class AlgoPheno {
 		//calculate the similarity symptoms1->symptoms2
 		double sim1 = 0;
 
+		//similarity between query and disease
 		for(int symp1 : symptoms1){
 			double currMax = Double.MIN_VALUE;
 			int maxWeight = Integer.MIN_VALUE;
@@ -330,7 +331,7 @@ public class AlgoPheno {
 		}
 		sim1 = sim1/symptoms1.size();
 
-		//calculate the similarity symptoms2->symptoms1
+		//similarity between disease and query
 		double sim2 = 0;
 		for(Integer[] symp1 : symptoms2){
 			double currMax = Double.MIN_VALUE;
@@ -356,8 +357,9 @@ public class AlgoPheno {
 				if(Double.compare(currMax, currSym)<0)
 					currMax = currSym;
 			}
-			//System.out.println(maxWeight);
+			//MAPRA: Don't use this line, use next line
 			sim2 = sim2+ currMax*(double)maxWeight/10;
+			//sim2 = sim2+currMax;
 		}
 		sim2 = sim2/symptoms2.size();
 
