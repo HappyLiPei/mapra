@@ -24,11 +24,11 @@ public class CalcPValueSophieCMDL {
 		String output = args[5];
 		String progress = args[6];
 		
-//		HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilities.readInKSZFrequency(kszIn);
-//		HashMap<Integer,LinkedList<Integer[]>>ksz=FrequencyConverter.convertAll(kszTmp);
+		HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilities.readInKSZFrequency(kszIn);
+		HashMap<Integer,LinkedList<Integer[]>>ksz=FrequencyConverter.convertAll(kszTmp);
 		
-		HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilities.readInKSZ(kszIn);
-		HashMap<Integer,LinkedList<Integer[]>>ksz= addWeights(kszTmp);
+//		HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilities.readInKSZ(kszIn);
+//		HashMap<Integer,LinkedList<Integer[]>>ksz= addWeights(kszTmp);
 		
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontoIn);

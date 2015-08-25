@@ -285,12 +285,15 @@ public class TableProcessor {
 		if(pval >= 0.001){
 			return "**";
 		}
-		if(pval >= 0.0001){
+		if(pval<0.001){
 			return "***";
 		}
-		if(pval < 0.0001){
-			return "****";
-		}
+//		if(pval >= 0.0001){
+//			return "***";
+//		}
+//		if(pval < 0.0001){
+//			return "****";
+//		}
 		return "";
 	}
 
