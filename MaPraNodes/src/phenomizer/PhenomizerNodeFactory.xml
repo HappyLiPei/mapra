@@ -11,10 +11,10 @@
 			This node implements the Phenomizer algorithm for the PhenoDis database at Helmholtz Zentrum. <br/>
 			The Phenomizer method is an ontology-based similarity search algorithm. 
 			It compares a list of symptoms against a set of annotated diseases. 
-			The similarity measure of the algorithm makes use of a symptom ontology 
-			i.e a directed acyclic graph that represents a is-a hierarchy of the symptoms. 
+			The similarity measure of the algorithm makes use of a symptom ontology, 
+			i.e. a directed acyclic graph that represents a is-a hierarchy of the symptoms. 
 			The algorithm is described in detail in the Phenomizer paper by Koehler et al. (2009).  <br/>
-			Phenomizer requires several input tables. 
+			Phenomizer requires several input tables: 
 			Table 0 to 2 are directly extracted from PhenoDis. 
 			Table 3 contains the PhenoDis symptom_ids of the query symptoms. 
 			Note that the column names of the tables have to match the names specified in the ports section. 
@@ -22,7 +22,7 @@
 			The output of Phenomizer is a list of diseases with similarity score and p value.
 			The list is sorted according to p value (ascending) and score (descending).
 			The score of a disease indicates the similarity of the query symptoms and the symptoms annotated for the disease.
-			The p value of a disease helps to evaluate the significance of the score.
+			The p value of a disease (result?) helps to evaluate the significance of the score.
 			Phenomizer uses the following categories to classify the p values:
 			<ul>
 				<li> ns : not significant (p value &gt;= 0.05) </li>
@@ -32,7 +32,7 @@
 			</ul>
         </intro>
         
-        <option name="Number of diseases in output">Limits the number of diseases passed to the outport table</option>
+        <option name="Number of diseases in output">Limits the number of diseases passed to the output table</option>
         <option name="Use frequency weights">
         	Phenomizer is able to use weights to calculate similarity scores. The weights depend on the frequency
         	of a symptom for a given disease (column frequency of ksz table).
@@ -40,7 +40,7 @@
     	</option>
     	<option name="Calculate p values">
     		Phenomizer with p values performs a significance test for the similarity score of each disease.
-    		The corresponding p values are part of the out port table.
+    		The corresponding p values are part of the output table.
     		The p values are adjusted for multiple testing using the Bonferroni-Holm method.
     		The diseases are ranked according their p values.<br/>
     		Phenomizer without p values just reports similarity scores.
@@ -49,7 +49,7 @@
     	<option name="Choose folder with p value files">
     		This option is required only if the calculate p values option is chosen.
     		Phenomizer with p values depends on files with pre-calculated score distributions for the PhenoDis database.
-    		The folder should contain 10 files with empirical score distributions for the diseases in PhenoDis.
+    		The provided folder should contain 10 files with empirical score distributions for the diseases in PhenoDis.
     		The files are named <i>length_x.txt</i> with x ranging from 1 to 10.
     		Note that you need different score distributions for Phenomizer with weights and Phenomizer without weights.
     	</option>
