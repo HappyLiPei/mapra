@@ -9,8 +9,6 @@ public class TestAlgo {
 
 	public static void main(String[]args){
 
-		
-		
 		String dataPath = "C:/Users/Maria Schelling/Dropbox/Masterpraktikum/";
 
 		String dataIn = dataPath+"Datenbank/";
