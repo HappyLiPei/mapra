@@ -207,7 +207,6 @@ public class TableProcessor {
 	 * @param ksz: ksz table from inport of PhenomizerNode
 	 * @return BufferedDataTable that is passed to the outport of Phenomizer Node
 	 */
-	
 	public static BufferedDataTable generateOutput(LinkedList<String[]> output, ExecutionContext exec, BufferedDataTable ksz){
 		
 		HashMap<Integer,String> IdToName = new HashMap<Integer,String>(ksz.getRowCount()*3);
@@ -230,11 +229,21 @@ public class TableProcessor {
 			}
 		}
 		
-		DataTableSpec spec = PhenomizerNodeModel.generateOutputSpec();
+		DataTableSpec spec = new DataTableSpec();
+		//lenght = 2 -> no pvalue, length = 3 -> pvalue
+		int out_len = output.peek().length;
+		if(out_len==2){
+			spec = PhenomizerNodeModel.generateOutputSpec(false);
+		}
+		else{
+			spec = PhenomizerNodeModel.generateOutputSpec(true);
+		}
 		int index_disease_id = spec.findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
 		int index_score = spec.findColumnIndex(PhenomizerNodeModel.SCORE);
 		int index_disease_name = spec.findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
 		int index_p_value = spec.findColumnIndex(PhenomizerNodeModel.P_VALUE);
+		int index_significance = spec.findColumnIndex(PhenomizerNodeModel.SIGNIFICANCE);
+		
 		BufferedDataContainer c = exec.createDataContainer(spec);
 		int counter = 0;
 		for(String [] rowdata : output){
@@ -245,14 +254,47 @@ public class TableProcessor {
 			cells[index_disease_id] = new IntCell(id);
 			cells[index_disease_name] = new StringCell(IdToName.get(id));
 			cells[index_score] = new DoubleCell(Double.parseDouble(rowdata[1]));
-			cells[index_p_value] = new DoubleCell(0.0);
+			if(out_len==3){
+				double pval = Double.parseDouble(rowdata[2]);
+				cells[index_p_value] = new DoubleCell(pval);
+				cells[index_significance] = new StringCell(getSignificance(pval));
+			}
 	    	DataRow row = new DefaultRow(key, cells);
 	    	c.addRowToTable(row);
 		}
 		c.close();
 
 		return c.getTable();
-		
+	}
+	
+	/** translates p value into star representation indicating the significance of the p value
+	 * @param pval : p value
+	 * @return : "" if pval >= 0.05
+	 * 			* if 0.01 <= pval < 0.05
+	 * 			** if 0.001 <= pval < 0.01
+	 * 			*** if 0.0001 <= pval < 0.001
+	 *			**** if pval <= 0.0001
+	 */
+	private static String getSignificance(Double pval){
+		if(pval >= 0.05){
+			return "ns";
+		}
+		if(pval >= 0.01){
+			return "*";
+		}
+		if(pval >= 0.001){
+			return "**";
+		}
+		if(pval<0.001){
+			return "***";
+		}
+//		if(pval >= 0.0001){
+//			return "***";
+//		}
+//		if(pval < 0.0001){
+//			return "****";
+//		}
+		return "";
 	}
 
 }

@@ -8,13 +8,13 @@ import java.util.PriorityQueue;
 
 public class AlgoPheno {
 
-	public static LinkedList<Integer> queryIds;
-	public static LinkedList<Integer> symptomIds;
-	public static Ontology ontology;
-	public static HashMap<Integer,LinkedList<Integer[]>> kszD = new HashMap<Integer,LinkedList<Integer[]>>();
-	public static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
-	public static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
-	public static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
+	private static LinkedList<Integer> queryIds;
+	private static LinkedList<Integer> symptomIds;
+	private static Ontology ontology;
+	private static HashMap<Integer,LinkedList<Integer[]>> kszD = new HashMap<Integer,LinkedList<Integer[]>>();
+	private static HashMap<Integer,HashSet<Integer>> kszS = new HashMap<Integer,HashSet<Integer>>();
+	private static HashMap<Integer,Double> ic = new HashMap<Integer,Double>();
+	private static HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 
 	/**
 	 * initialize the needed data structures using the given parameters
@@ -123,8 +123,12 @@ public class AlgoPheno {
 		return result;
 	} 
 	
+	/**
+	 * run phenomizer and use p values
+	 * @return
+	 */
 	public static HashMap<Integer,Double> runPhenomizerWithPValue(){
-		HashMap<Integer,Double> result = new HashMap<Integer,Double>();
+		HashMap<Integer,Double> result = new HashMap<Integer,Double>(kszD.size()*3);
 		
 		setIC();
 		for(int disease : kszD.keySet()){
@@ -181,7 +185,8 @@ public class AlgoPheno {
 			setCalculatedSim();
 		}
 		
-		double[][]distanceMatrix = convertAdjacencyToDistance(results,maximum);
+		//double[][]distanceMatrix = convertAdjacencyToDistance(results,maximum);
+		double[][]distanceMatrix = convertIntToDouble(results);
 		
 		return distanceMatrix;
 	}
@@ -210,12 +215,23 @@ public class AlgoPheno {
 	}
 	
 	/**
-	 * delete pre-calculated pairwise similarity values
+	 * get the length of the current query
+	 * @return length of queryy
+	 */
+	public static int getQueryLength(){
+		return queryIds.size();
+	}
+	
+	/**
+	 * delete precalculated pairwise similarity values
 	 */
 	public static void setCalculatedSim(){
 		calculatedSim = new HashMap<String,Double>();
 	}
 	
+	/**
+	 * set the information content for all symptoms
+	 */
 	public static void setIC(){
 		for(int symp : symptomIds){
 			if(!ic.containsKey(symp)){
@@ -224,6 +240,7 @@ public class AlgoPheno {
 			}
 		}
 	}
+	
 	/**
 	 * calculates the information content of a given term (symptom)
 	 * @param term
@@ -278,11 +295,12 @@ public class AlgoPheno {
 	 */
 	public static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer[]>symptoms2){
 
-		HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
+		//HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 		
 		//calculate the similarity symptoms1->symptoms2
 		double sim1 = 0;
 
+		//similarity between query and disease
 		for(int symp1 : symptoms1){
 			double currMax = Double.MIN_VALUE;
 			int maxWeight = Integer.MIN_VALUE;
@@ -313,7 +331,7 @@ public class AlgoPheno {
 		}
 		sim1 = sim1/symptoms1.size();
 
-		//calculate the similarity symptoms2->symptoms1
+		//similarity between disease and query
 		double sim2 = 0;
 		for(Integer[] symp1 : symptoms2){
 			double currMax = Double.MIN_VALUE;
@@ -339,8 +357,9 @@ public class AlgoPheno {
 				if(Double.compare(currMax, currSym)<0)
 					currMax = currSym;
 			}
-			//System.out.println(maxWeight);
+			//MAPRA: Don't use this line, use next line
 			sim2 = sim2+ currMax*(double)maxWeight/10;
+			//sim2 = sim2+currMax;
 		}
 		sim2 = sim2/symptoms2.size();
 
@@ -377,6 +396,11 @@ public class AlgoPheno {
 		return result;
 	}
 
+	/**
+	 * remove symptoms whose successor(s) are also in the list for a list of weighted symptoms
+	 * @param symptoms with weights
+	 * @return list without any ancestors of query terms
+	 */
 	private static LinkedList<Integer[]> removeAncestors2(LinkedList<Integer[]> symptoms){
 		
 		LinkedList<Integer[]>result = new LinkedList<Integer[]>();
@@ -423,5 +447,26 @@ public class AlgoPheno {
 		}
 		
 		return distance;
+	}
+	
+	/**
+	 * convert a given integer matrix to a double matrix
+	 * @param adjacency
+	 * @return
+	 */
+	private static double[][] convertIntToDouble(int[][]adjacency){
+		double[][]adj = new double[adjacency.length][adjacency.length];
+		for(int i=0;i<adjacency.length;i++){
+			for(int j=i; j<adjacency[i].length;j++){
+				if(i==j){
+					adj[i][j]=0;
+				}
+				else{
+					adj[i][j]=(double)adjacency[i][j]/100;
+					adj[j][i]=adj[i][j];
+				}
+			}
+		}
+		return adj;
 	}
 }

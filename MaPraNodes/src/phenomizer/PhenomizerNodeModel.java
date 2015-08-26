@@ -27,6 +27,8 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
 import algorithm.AlgoPheno;
+import algorithm.PValueFolder;
+import algorithm.PValueGenerator;
 import algorithm.TableProcessor;
 
 
@@ -57,6 +59,7 @@ public class PhenomizerNodeModel extends NodeModel {
     public static final String PARENT_ID = "parent_id";
     public static final String SCORE = "score";
     public static final String P_VALUE = "p_value";
+    public static final String SIGNIFICANCE = "significance";
     
     //settingsmodels
     //size of output
@@ -76,7 +79,7 @@ public class PhenomizerNodeModel extends NodeModel {
     //folder to pvalues
     protected static final String CFGKEY_FOLDER="pval_folder";
     protected static final String DEF_FOLDER="";
-    private static final SettingsModelString m_folder = new SettingsModelString(CFGKEY_FOLDER, DEF_FOLDER);
+    private final SettingsModelString m_folder = new SettingsModelString(CFGKEY_FOLDER, DEF_FOLDER);
     
     /**
      * Constructor for the node model.
@@ -89,7 +92,7 @@ public class PhenomizerNodeModel extends NodeModel {
     protected PhenomizerNodeModel() {
         super(4, 1);
         if(!DEF_PVALUE){
-        	m_folder.setEnabled(false);
+        	m_folder.setEnabled(m_pval.getBooleanValue());
         }
     }
 
@@ -127,16 +130,20 @@ public class PhenomizerNodeModel extends NodeModel {
 //        		logger.info("Symptom "+j[0]+"\tFrequency "+j[1]);
 //        	}
 //        }
+        LinkedList<String[]> result = new LinkedList<String[]>();
         if(!m_pval.getBooleanValue()){
 	        AlgoPheno.setInput(query, symptoms, diseases, edges);
-	        LinkedList<String[]> result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
-	        logger.info("generate output");
-	        BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
-	        return new BufferedDataTable[]{out};
+	        result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
+
         }
         else{
-        	throw new Exception("P-value feature not implemented yet");
+        	PValueFolder.setPvalFoder(m_folder.getStringValue());
+        	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges);
         }
+        
+        logger.info("generate output");
+        BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
+        return new BufferedDataTable[]{out};
         
 //        for(String [] entry: result){
 //        	for(String s : entry){
@@ -180,7 +187,7 @@ public class PhenomizerNodeModel extends NodeModel {
     	//check port 3: query  
     	checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE,null);
 
-        return new DataTableSpec[]{generateOutputSpec()};
+        return new DataTableSpec[]{generateOutputSpec(m_pval.getBooleanValue())};
     }
     
     /**
@@ -213,17 +220,27 @@ public class PhenomizerNodeModel extends NodeModel {
     
 	/**
 	 * generates specifications for outport table
+	 * @param pvalue: pvalue = true -> displays p values in the out port table
 	 * col 0 : disease_id (int)
 	 * col 1 : disease_name (string)
 	 * col 2 : score (double)
+	 * if pvalue=true: 2 additional columns
 	 * col 3 : p-value (double)
+	 * col 4: significance (string)
 	 */
-    public static DataTableSpec generateOutputSpec(){
-    	DataColumnSpec [] colspecs = new DataColumnSpec [4];
+    public static DataTableSpec generateOutputSpec(boolean pvalue){
+    	
+    	DataColumnSpec [] colspecs = new DataColumnSpec[3];
+    	if(pvalue){
+    		colspecs= new DataColumnSpec[5];
+    	}
     	colspecs[0] = new DataColumnSpecCreator(DISEASE_ID, IntCell.TYPE).createSpec();
     	colspecs[1] = new DataColumnSpecCreator(DISEASE_NAME, StringCell.TYPE).createSpec();
     	colspecs[2] = new DataColumnSpecCreator(SCORE, DoubleCell.TYPE).createSpec();
-    	colspecs[3] = new DataColumnSpecCreator(P_VALUE, DoubleCell.TYPE).createSpec();
+    	if(pvalue){
+        	colspecs[3] = new DataColumnSpecCreator(P_VALUE, DoubleCell.TYPE).createSpec();
+        	colspecs[4] = new DataColumnSpecCreator(SIGNIFICANCE, StringCell.TYPE).createSpec();
+    	}
     	
     	return new DataTableSpec(colspecs);
     }
@@ -261,6 +278,17 @@ public class PhenomizerNodeModel extends NodeModel {
     	m_weight.validateSettings(settings);
     	m_pval.validateSettings(settings);
     	m_folder.validateSettings(settings);
+    	//checks if files length_*.txt are available
+    	if(settings.getBoolean(CFGKEY_PVALUE)){
+    		logger.info(settings.getString(CFGKEY_FOLDER));
+	    	PValueFolder.setPvalFoder(settings.getString(CFGKEY_FOLDER));
+	    	for(int i=1; i<=10; i++){
+	    		if(!PValueFolder.checkFile(i)){
+	    			throw new InvalidSettingsException("File "+
+	    		PValueFolder.PART1+i+PValueFolder.PART2+" is missing in p value folder");
+	    		}
+	    	}
+    	}
     }
     
     /**

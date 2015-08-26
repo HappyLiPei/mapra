@@ -56,15 +56,7 @@ public class TestAlgo {
 
 		FileUtilities.writeString(output, result.toString());*/
 
-		//generate distance matrix
-		String output = dataPath + "Clustering/allAgainstAll_complete.txt";
-		LinkedList<Integer>query = new LinkedList<Integer>();
-		query.add(1);
-		AlgoPheno.setInput(query, symptoms, ksz, ontology);
-		int[] keys = AlgoPheno.getKeys();
-		double[][]result = AlgoPheno.allAgainstAll();
-		String res = arrayToString(result,keys);
-		FileUtilities.writeString(output, res);
+		
 	}
 
 	public static String resultToString(LinkedList<String[]>res){
@@ -74,27 +66,6 @@ public class TestAlgo {
 		}
 		return sb.toString();
 	}
-
-	public static String arrayToString(double[][]array, int[] colNames){
-		StringBuilder sb = new StringBuilder();
-		sb.append("id,");
-		for(int i=0; i<colNames.length-1; i++){
-			sb.append(colNames[i]+",");
-		}
-		sb.append(colNames[colNames.length-1]);
-		sb.append("\n");
-		
-		for(int i=0;i<array.length; i++){
-			sb.append(colNames[i]+",");
-			for(int j=0; j<array[i].length-1; j++){
-				sb.append(array[i][j]+",");
-			}
-			sb.append(array[i][array[i].length-1]);
-			sb.append("\n");
-		}
-		return sb.toString();
-	}
-
 }
 
 

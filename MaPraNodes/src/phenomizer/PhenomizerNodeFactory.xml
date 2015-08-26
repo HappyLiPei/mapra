@@ -9,20 +9,30 @@
     <fullDescription>
         <intro>
 			This node implements the Phenomizer algorithm for the PhenoDis database at Helmholtz Zentrum. <br/>
-			The Phenomizer algorithm is an ontology-based similarity search algorithm. 
+			The Phenomizer method is an ontology-based similarity search algorithm. 
 			It compares a list of symptoms against a set of annotated diseases. 
-			The similarity measure of the algorithm makes use of a symptom ontology 
-			i.e a directed acyclic graph that represents a is-a hierarchy of the symptoms. 
-			The algorithm is described in detail in ... .  <br/>
-			Phenomizer requires several input tables. 
+			The similarity measure of the algorithm makes use of a symptom ontology, 
+			i.e. a directed acyclic graph that represents a is-a hierarchy of the symptoms. 
+			The algorithm is described in detail in the Phenomizer paper by Koehler et al. (2009).  <br/>
+			Phenomizer requires several input tables: 
 			Table 0 to 2 are directly extracted from PhenoDis. 
 			Table 3 contains the PhenoDis symptom_ids of the query symptoms. 
 			Note that the column names of the tables have to match the names specified in the ports section. 
-			For more information about the format of the input tables see example data from ... .
+			For more information about the format of the input tables see example data from ... . <br/>
+			The output of Phenomizer is a list of diseases with similarity score and p value.
+			The list is sorted according to p value (ascending) and score (descending).
+			The score of a disease indicates the similarity of the query symptoms and the symptoms annotated for the disease.
+			The p value of a disease (result?) helps to evaluate the significance of the score.
+			Phenomizer uses the following categories to classify the p values:
+			<ul>
+				<li> ns : not significant (p value &gt;= 0.05) </li>
+				<li> * : significant  (0.01 &lt;= p value &lt; 0.05) </li>
+				<li> ** : very significant ( 0.001 &lt;= p value &lt; 0.01) </li>
+				<li> *** : extremely significant (0.001 &gt; p value) </li>
+			</ul>
         </intro>
         
-        
-        <option name="Number of diseases in output">Limits the number of diseases passed to the outport table</option>
+        <option name="Number of diseases in output">Limits the number of diseases passed to the output table</option>
         <option name="Use frequency weights">
         	Phenomizer is able to use weights to calculate similarity scores. The weights depend on the frequency
         	of a symptom for a given disease (column frequency of ksz table).
@@ -30,8 +40,8 @@
     	</option>
     	<option name="Calculate p values">
     		Phenomizer with p values performs a significance test for the similarity score of each disease.
-    		The corresponding p values are part of the out port table.
-    		The p values are adjusted for multiple testing using the Bonferroni method.
+    		The corresponding p values are part of the output table.
+    		The p values are adjusted for multiple testing using the Bonferroni-Holm method.
     		The diseases are ranked according their p values.<br/>
     		Phenomizer without p values just reports similarity scores.
     		The diseases are ranked according to those scores.
@@ -39,27 +49,17 @@
     	<option name="Choose folder with p value files">
     		This option is required only if the calculate p values option is chosen.
     		Phenomizer with p values depends on files with pre-calculated score distributions for the PhenoDis database.
-    		TODO: explain content of folder...
+    		The provided folder should contain 10 files with empirical score distributions for the diseases in PhenoDis.
+    		The files are named <i>length_x.txt</i> with x ranging from 1 to 10.
+    		Note that you need different score distributions for Phenomizer with weights and Phenomizer without weights.
     	</option>
-        <!--<option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>-->
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
-    </fullDescription>
-    
+   </fullDescription>
+
     <ports>
         <inPort index="0" name="Symptoms">Symptom table from PhenoDis with columns symptom_id and symptom_name</inPort>
         <inPort index="1" name="ISA">ISA table from PhenoDis with columns parent_id and child_id</inPort>
         <inPort index="2" name="KSZ">KSZ table from PhenoDis with columns disease_id, disease, symptom_id and frequency</inPort>
-        <inPort index="3" name="Query">Query symptoms with colum symptom_id</inPort>
+        <inPort index="3" name="Query">Query symptoms with column symptom_id</inPort>
         <outPort index="0" name="Most Similar Diseases">Diseases with high similarity to the query symptoms</outPort>
     </ports>    
 </knimeNode>
