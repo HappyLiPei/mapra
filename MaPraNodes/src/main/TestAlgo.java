@@ -11,7 +11,7 @@ public class TestAlgo {
 
 		
 		
-		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/";
+		String dataPath = "C:/Users/Maria Schelling/Dropbox/Masterpraktikum/";
 
 		String dataIn = dataPath+"Datenbank/";
 		String ontoIn = dataIn + "isa_HPO_test.csv";

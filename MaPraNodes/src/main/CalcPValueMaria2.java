@@ -14,7 +14,7 @@ public class CalcPValueMaria2 {
 	public static void main(String[] args) {
 
 		int queryLength = 3;
-		int iterations = 100000;
+		int iterations = 10000;
 
 		String dataPath = "C:/Users/Maria Schelling/Dropbox/Masterpraktikum/";
 
