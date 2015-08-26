@@ -12,7 +12,7 @@
 			The Phenomizer method is an ontology-based similarity search algorithm. 
 			It compares a list of symptoms against a set of annotated diseases. 
 			The similarity measure of the algorithm makes use of a symptom ontology, 
-			i.e. a directed acyclic graph that represents a is-a hierarchy of the symptoms. 
+			i.e. a directed acyclic graph that represents an is-a hierarchy of the symptoms. 
 			The algorithm is described in detail in the Phenomizer paper by Koehler et al. (2009).  <br/>
 			Phenomizer requires several input tables: 
 			Table 0 to 2 are directly extracted from PhenoDis. 
@@ -42,13 +42,13 @@
     		Phenomizer with p values performs a significance test for the similarity score of each disease.
     		The corresponding p values are part of the output table.
     		The p values are adjusted for multiple testing using the Bonferroni-Holm method.
-    		The diseases are ranked according their p values.<br/>
+    		The diseases are ranked according to their p values.<br/>
     		Phenomizer without p values just reports similarity scores.
     		The diseases are ranked according to those scores.
     	</option>
     	<option name="Choose folder with p value files">
     		This option is required only if the calculate p values option is chosen.
-    		Phenomizer with p values depends on files with pre-calculated score distributions for the PhenoDis database.
+    		Phenomizer with p values depends on files with precalculated score distributions for the PhenoDis database.
     		The provided folder should contain 10 files with empirical score distributions for the diseases in PhenoDis.
     		The files are named <i>length_x.txt</i> with x ranging from 1 to 10.
     		Note that you need different score distributions for Phenomizer with weights and Phenomizer without weights.
