@@ -48,8 +48,8 @@ public class RunAllAgainstAll {
 		double[][]result = AlgoPheno.allAgainstAll();
 		String res = arrayToString(result,keys);
 		//System.out.println(outputSim);
-		FileUtilities.writeString(outputSim, res);
-		
+		//FileUtilities.writeString(outputSim, res);
+				
 		System.out.println("Asymmetric matrix...");
 		double[][] asymmetric = new double[result.length][result.length];
 		for(int i=0;i<result.length;i++){
@@ -61,7 +61,7 @@ public class RunAllAgainstAll {
 			asymmetric[i]=line;
 		}
 		
-		System.out.println("Minimum matrix...");
+		/*System.out.println("Minimum matrix...");
 		double[][]minMatrix = PValueGenerator.getMinimumMatrix(asymmetric);
 		String resMin = arrayToString(minMatrix,keys);
 		//System.out.println(outputMin);
@@ -71,7 +71,7 @@ public class RunAllAgainstAll {
 		double[][]maxMatrix = PValueGenerator.getMaximumMatrix(asymmetric);
 		String resMax = arrayToString(maxMatrix,keys);
 		//System.out.println(outputMax);
-		FileUtilities.writeString(outputMax, resMax);
+		FileUtilities.writeString(outputMax, resMax);*/
 		
 		System.out.println("Average matrix...");
 		double[][]avgMatrix = PValueGenerator.getAverageMatrix(asymmetric);
@@ -99,6 +99,16 @@ public class RunAllAgainstAll {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+	
+	public static double[][] getSimMatrix(String[][]tmp){
+		double[][]res = new double[tmp.length-1][tmp.length-1];
+		for(int i=0; i<res.length; i++){
+			for(int j=0; j<res.length; j++){
+				res[i][j] = Double.valueOf(tmp[i+1][j+1]);
+			}
+		}
+		return res;
 	}
 
 }

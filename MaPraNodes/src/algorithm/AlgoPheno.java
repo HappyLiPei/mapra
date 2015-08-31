@@ -358,8 +358,8 @@ public class AlgoPheno {
 					currMax = currSym;
 			}
 			//MAPRA: Don't use this line, use next line
-			sim2 = sim2+ currMax*(double)maxWeight/10;
-			//sim2 = sim2+currMax;
+			//sim2 = sim2+ currMax*(double)maxWeight/10;
+			sim2 = sim2+currMax;
 		}
 		sim2 = sim2/symptoms2.size();
 
