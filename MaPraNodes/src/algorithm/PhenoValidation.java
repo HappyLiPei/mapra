@@ -7,9 +7,8 @@ public class PhenoValidation {
 	
 	private static HashMap<Integer,LinkedList<Integer>> queries = new HashMap<Integer,LinkedList<Integer>>();
 	
-	public static LinkedList<String[]> validatePheno(LinkedList<Integer>symptoms,
-			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto){
-		LinkedList<String[]> result = new LinkedList<String[]>();
+	public static void validatePheno(LinkedList<Integer>symptoms,
+			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto,String path){
 		LinkedList<Integer>query = new LinkedList<Integer>();
 		
 		AlgoPheno.setInput(query, symptoms, ksz, onto);
@@ -17,20 +16,16 @@ public class PhenoValidation {
 		int num = 1;
 		for(Integer key : queries.keySet()){
 			System.out.println(num);
-			String[] arrayRes = new String[2];
 			
 			LinkedList<Integer> nextQuery = queries.get(key);
 			AlgoPheno.setQuery(nextQuery);
 			LinkedList<String[]>res = AlgoPheno.runPhenomizer(ksz.size());
-			String k = key+"";
-			double rank = calculateRank(k,res);
-			arrayRes[0] = k;
-			arrayRes[1] = rank+"";
-			result.add(arrayRes);
+			double rank = calculateRank(key.toString(),res);
+			String result = key+"\t"+rank+"\n";
+			main.FileUtilities.writeStringToExistingFile(path, result);
 			num++;
+			AlgoPheno.setCalculatedSim();
 		}
-			
-		return result;
 	}
 
 	public static void setQueries(HashMap<Integer,LinkedList<Integer[]>>ksz){
@@ -42,8 +37,12 @@ public class PhenoValidation {
 					nextQuery.add(el[0]);
 				}
 			}
-			queries.put(key, nextQuery);
+			if(nextQuery.size()>0){
+				queries.put(key, nextQuery);
+			}
+			
 		}
+		System.out.println(queries.size());
 	}
 	
 	private static double calculateRank(String disease_id, LinkedList<String []> pheno_res){
