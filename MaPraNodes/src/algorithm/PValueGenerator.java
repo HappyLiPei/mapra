@@ -251,7 +251,7 @@ public class PValueGenerator {
 		}
 		
 		double maxPValue = Double.MIN_VALUE;
-		double lastPValue = Double.MIN_VALUE;
+		double lastPValue = -1.0;
 		int currIndex = 1;
 		int currRank = 0;
 		
@@ -262,9 +262,12 @@ public class PValueGenerator {
 			res[0]=parts[2];
 			res[1]=parts[1];
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
+			System.out.println(res[0]+"\t"+res[1]+"\t"+pValue);
+			System.out.println(lastPValue);
 			if(Double.compare(lastPValue, pValue)<0){
 				lastPValue = pValue;
 				currRank += currIndex;
+				System.out.println(currRank);
 				currIndex = 0;
 			}
 			
