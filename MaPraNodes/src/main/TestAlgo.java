@@ -4,17 +4,19 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import algorithm.AlgoPheno;
 import algorithm.FrequencyConverter;
+import algorithm.PValueFolder;
+import algorithm.PValueGenerator;
 
 public class TestAlgo {
 
 	public static void main(String[]args){
 
-		String dataPath = "C:/Users/Maria Schelling/Dropbox/Masterpraktikum/";
+		String dataPath = "C:/Users/xxx/Dropbox/Masterpraktikum/";
 
-		String dataIn = dataPath+"Datenbank/";
+		/*String dataIn = dataPath+"Datenbank/";
 		String ontoIn = dataIn + "isa_HPO_test.csv";
 		String kszIn = dataIn + "ksz_HPO_test.csv";
-		String symptomsIn = dataIn + "symptoms_HPO_test.csv";
+		String symptomsIn = dataIn + "symptoms_HPO_test.csv";*/
 
 		//Test frequency converter
 		/*String diseasesFreqIn = dataPath+"ksz_HPO_frequency.csv";
@@ -22,10 +24,11 @@ public class TestAlgo {
 		FrequencyConverter.testConvert(ksz);*/
 
 		//Test phenomizer
-		/*String diseasesIn = dataPath + "Krankheiten.txt";
-		String symptomsIn = dataPath + "Symptome.txt";
-		String ontologyIn = dataPath + "Ontology.txt";
-		String queryIn = dataPath + "query7.txt";*/
+		String dataIn = dataPath + "Testdatensatz/";
+		String kszIn = dataIn + "Krankheiten.txt";
+		String symptomsIn = dataIn + "Symptome.txt";
+		String ontoIn = dataIn + "Ontology.txt";
+		String queryIn = dataIn + "query10.txt";
 
 		/*HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilities.readInKSZFrequency(diseasesIn);
 		HashMap<Integer,LinkedList<Integer[]>>ksz=FrequencyConverter.convertAll(kszTmp);*/
@@ -33,7 +36,11 @@ public class TestAlgo {
 		HashMap<Integer,LinkedList<Integer[]>>ksz= CalcPValueMaria.addWeights(kszTmp);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontoIn);
-		//LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
+		LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
+		PValueFolder.setPvalFoder(dataIn+"pvalues_binned/");
+		LinkedList<String[]> results = PValueGenerator.phenomizerWithPValues(11, query, symptoms, ksz, ontology);
+		String res = resultToString(results);
+		System.out.println(res);
 
 		/*AlgoPheno.setInput(query, symptoms, ksz, ontology);
 		LinkedList<String[]>res = AlgoPheno.runPhenomizer(11);
@@ -60,7 +67,7 @@ public class TestAlgo {
 	public static String resultToString(LinkedList<String[]>res){
 		StringBuilder sb = new StringBuilder();
 		for(String[]element : res){
-			sb.append(element[0]+"\t"+element[1]+"\n");
+			sb.append(element[0]+"\t"+element[1]+"\t"+element[2]+"\n");
 		}
 		return sb.toString();
 	}
