@@ -13,6 +13,20 @@ import java.util.List;
 
 public class FileUtilities {
 	
+	public static String[][] readInMatrix(String path){
+		List<String> content = readLines(path);
+		
+		int size = content.get(0).split(",").length;
+		String[][]result = new String[size][size];
+		
+		for(int i=0; i<result.length; i++){
+			System.out.println(i);
+			String [] parts = content.remove(0).split(",");
+			result[i] = parts;
+		}
+		return result;
+	}
+	
 	public static HashMap<Integer,LinkedList<String[]>>readInKSZFrequency(String path){
 		HashMap<Integer,LinkedList<String[]>> frequency = new HashMap<Integer,LinkedList<String[]>>();
 		

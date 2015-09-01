@@ -19,6 +19,7 @@ public class TestAlgoCaro {
 
 	public static void main(String[]args) throws IOException{
 		
+		/*
 		// aus case-study-output: ersten 30 disease-ids für netzwerk extrahieren (.noa files)
 		String file = "Systemic_lupus";
 		String pathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/OutputCaseStudiesValidation/output1_stupid/"+file+".csv";
@@ -39,8 +40,7 @@ public class TestAlgoCaro {
 			counter++;
 		}
 		bw.close();
-		
-		
+		*/
 		
 		
 		
@@ -100,10 +100,10 @@ public class TestAlgoCaro {
 		*/
 		
 		
-		/*
+		
 		// for parsing all-against-all (for disease network, use upper triangle from matrix):
-		String dataPathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/Clustering/allAgainstAll_complete.txt";
-		String pathOut = "C:/Users/Carolin/Downloads/allAgainstAll_complete_parsed2.txt";
+		String dataPathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/Clustering/allAgainstAll_sim.txt";
+		String pathOut = "C:/Users/Carolin/Downloads/allAgainstAll_simPvals_parsed.txt";
 		FileInputReader reader = new FileInputReader(dataPathIn);
 		FileWriter fw = new FileWriter(pathOut);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -112,6 +112,7 @@ public class TestAlgoCaro {
 		String line;
 		int counter = 2;
 		while((line=reader.read())!=null){
+			System.out.println(line);
 			if(line.startsWith("id")){
 				ids = line.split(",");//erste id in ids[1] usw... bis ids[7554] mit letzter disease-id
 				//System.out.println(ids[7554]);
@@ -120,7 +121,7 @@ public class TestAlgoCaro {
 				String[] l = line.split(",");
 				for(int i=counter; i<=7554; i++){
 					String lineOut = l[0]+"\t"+ids[i]+"\t"+l[i];
-					System.out.println(lineOut+"\t\t"+counter);
+					//System.out.println(lineOut+"\t\t"+counter);
 					bw.append(lineOut);
 					bw.newLine();
 				}
@@ -128,7 +129,7 @@ public class TestAlgoCaro {
 			}
 		}
 		bw.close();
-		*/
+		
 		
 		/*
 		String dataPath = "C:/Users/Carolin/Dropbox/Masterpraktikum/Testdatensatz/";

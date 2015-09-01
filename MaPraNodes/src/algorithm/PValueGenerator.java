@@ -272,10 +272,10 @@ public class PValueGenerator {
 			}
 			
 			//Bonferroni-Holm
-			//pValue = pValue*(numDiseases-currRank+1);
+			pValue = pValue*(numDiseases-currRank+1);
 			
 			//Benjamini-Hochberg
-			pValue = (numDiseases/currRank)*pValue;
+			//pValue = (numDiseases/currRank)*pValue;
 			
 			if(Double.compare(pValue, 1)>0){
 				pValue=1;
