@@ -130,6 +130,7 @@ public class PhenomizerNodeModel extends NodeModel {
 //        		logger.info("Symptom "+j[0]+"\tFrequency "+j[1]);
 //        	}
 //        }
+        //TODO:true/false
         LinkedList<String[]> result = new LinkedList<String[]>();
         if(!m_pval.getBooleanValue()){
 	        AlgoPheno.setInput(query, symptoms, diseases, edges);

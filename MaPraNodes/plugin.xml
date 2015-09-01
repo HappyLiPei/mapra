@@ -17,6 +17,8 @@
   		<!--<node category-path="/" factory-class="firstnode.FirstNodeNodeFactory" id="firstnode.FirstNodeNodeFactory"/>
 		<node category-path="/" factory-class="firstnode.FirstNodeNodeFactory" id="firstnode.FirstNodeNodeFactory"/>-->
 		<node category-path="/" factory-class="phenomizer.PhenomizerNodeFactory" id="phenomizer.PhenomizerNodeFactory"/>
+<node category-path="/" factory-class="phenomizertonetwork.PhenomizerToNetworkNodeFactory" id="phenomizertonetwork.PhenomizerToNetworkNodeFactory"/>
+<node category-path="/" factory-class="phenomizertoclustering.PhenomizerToClusteringNodeFactory" id="phenomizertoclustering.PhenomizerToClusteringNodeFactory"/>
 </extension>
    
 </plugin>
