@@ -19,7 +19,7 @@ public class PhenoValidation {
 			
 			LinkedList<Integer> nextQuery = queries.get(key);
 			AlgoPheno.setQuery(nextQuery);
-			LinkedList<String[]>res = AlgoPheno.runPhenomizer(ksz.size());
+			LinkedList<String[]>res = AlgoPheno.runPhenomizer(ksz.size(),true);
 			double rank = calculateRank(key.toString(),res);
 			String result = key+"\t"+rank+"\n";
 			main.FileUtilities.writeStringToExistingFile(path, result);

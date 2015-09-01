@@ -48,7 +48,7 @@ public class CalcPValueMaria {
 				
 				query = calculateQuery(ids,queryLength);
 				AlgoPheno.setQuery(query);
-				double score = AlgoPheno.calculateSymmetricSimilarity(query, ksz.get(disease));
+				double score = AlgoPheno.calculateSymmetricSimilarity(query, ksz.get(disease),true);
 				score = score * 1000;
 				score = Math.round(score);
 				score = (double)score/1000;

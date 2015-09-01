@@ -19,11 +19,11 @@ public class PValueGenerator {
 	 * @return top num results
 	 */
 	public static LinkedList<String[]>phenomizerWithPValues(int num, LinkedList<Integer> query, LinkedList<Integer>symptoms,
-			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto){
+			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto, boolean symmetric_weight){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
 		AlgoPheno.setInput(query, symptoms, ksz, onto);
-		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue();
+		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue(symmetric_weight);
 		
 		int queryLength = AlgoPheno.getQueryLength();
 		String path = PValueFolder.getPvalFile(queryLength);
@@ -262,12 +262,12 @@ public class PValueGenerator {
 			res[0]=parts[2];
 			res[1]=parts[1];
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
-			System.out.println(res[0]+"\t"+res[1]+"\t"+pValue);
-			System.out.println(lastPValue);
+			//System.out.println(res[0]+"\t"+res[1]+"\t"+pValue);
+			//System.out.println(lastPValue);
 			if(Double.compare(lastPValue, pValue)<0){
 				lastPValue = pValue;
 				currRank += currIndex;
-				System.out.println(currRank);
+				//System.out.println(currRank);
 				currIndex = 0;
 			}
 			

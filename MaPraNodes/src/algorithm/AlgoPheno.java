@@ -66,7 +66,7 @@ public class AlgoPheno {
 	 * @param num
 	 * @return diseases with the highest similarity score
 	 */
-	public static LinkedList<String[]> runPhenomizer(int num){
+	public static LinkedList<String[]> runPhenomizer(int num, boolean symmetric_weight){
 
 		if(num>kszD.size()){
 			num = kszD.size();
@@ -79,7 +79,7 @@ public class AlgoPheno {
 		PriorityQueue<String> minQueue = new PriorityQueue<String>();
 
 		for(int disease : kszD.keySet()){
-			double similarity = calculateSymmetricSimilarity(queryIds,kszD.get(disease));
+			double similarity = calculateSymmetricSimilarity(queryIds,kszD.get(disease),symmetric_weight);
 			similarity = similarity*1000;
 			similarity = Math.round(similarity);
 			similarity = similarity/1000;
@@ -127,12 +127,12 @@ public class AlgoPheno {
 	 * run phenomizer and use p values
 	 * @return
 	 */
-	public static HashMap<Integer,Double> runPhenomizerWithPValue(){
+	public static HashMap<Integer,Double> runPhenomizerWithPValue(boolean symmetric_weight){
 		HashMap<Integer,Double> result = new HashMap<Integer,Double>(kszD.size()*3);
 		
 		setIC();
 		for(int disease : kszD.keySet()){
-			double similarity = calculateSymmetricSimilarity(queryIds,kszD.get(disease));
+			double similarity = calculateSymmetricSimilarity(queryIds,kszD.get(disease), symmetric_weight);
 			similarity = similarity*1000;
 			similarity = Math.round(similarity);
 			similarity = similarity/1000;
@@ -170,7 +170,7 @@ public class AlgoPheno {
 					for(Integer[]element : kszD.get(element1)){
 						onlySymptoms.add(element[0]);
 					}
-					double sim = calculateSymmetricSimilarity(onlySymptoms,kszD.get(element2));
+					double sim = calculateSymmetricSimilarity(onlySymptoms,kszD.get(element2),true);
 					sim = sim*100;
 					int similarity = (int) Math.round(sim);
 					if(similarity>maximum){
@@ -293,7 +293,7 @@ public class AlgoPheno {
 	 * @param symptoms2
 	 * @return similarity score
 	 */
-	public static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer[]>symptoms2){
+	public static double calculateSymmetricSimilarity(LinkedList<Integer>symptoms1,LinkedList<Integer[]>symptoms2, boolean symmetric_weight){
 
 		//HashMap<String,Double> calculatedSim = new HashMap<String,Double>();
 		
@@ -357,9 +357,12 @@ public class AlgoPheno {
 				if(Double.compare(currMax, currSym)<0)
 					currMax = currSym;
 			}
-			//MAPRA: Don't use this line, use next line
-			sim2 = sim2+ currMax*(double)maxWeight/10;
-			//sim2 = sim2+currMax;
+			if(symmetric_weight){
+				sim2 = sim2+ currMax*(double)maxWeight/10;
+			}
+			else{
+				sim2 = sim2+currMax;
+			}
 		}
 		sim2 = sim2/symptoms2.size();
 

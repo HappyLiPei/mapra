@@ -53,7 +53,7 @@ public class CalcPValueSophie {
 				
 				query = calculateQuery(ids,queryLength);
 				AlgoPheno.setQuery(query);
-				double score = AlgoPheno.calculateSymmetricSimilarity(query, ksz.get(disease));
+				double score = AlgoPheno.calculateSymmetricSimilarity(query, ksz.get(disease),true);
 				score = score * 100;
 				score = Math.round(score);
 				score = (double)score/100;

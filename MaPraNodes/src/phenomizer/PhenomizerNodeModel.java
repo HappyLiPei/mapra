@@ -133,12 +133,12 @@ public class PhenomizerNodeModel extends NodeModel {
         LinkedList<String[]> result = new LinkedList<String[]>();
         if(!m_pval.getBooleanValue()){
 	        AlgoPheno.setInput(query, symptoms, diseases, edges);
-	        result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue());
+	        result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue(),true);
 
         }
         else{
         	PValueFolder.setPvalFoder(m_folder.getStringValue());
-        	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges);
+        	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges,true);
         }
         
         logger.info("generate output");
