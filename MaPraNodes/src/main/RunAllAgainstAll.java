@@ -33,10 +33,10 @@ public class RunAllAgainstAll {
 
 		//generate distance matrix
 		String dataOut = dataPath+"Clustering/allAgainstAll_";
-		String outputSim = dataOut+"sim.txt";
-		String outputMax = dataOut+"max.txt";
-		String outputMin = dataOut+"min.txt";
-		String outputAvg = dataOut+"avg.txt";
+		//String outputSim = dataOut+"sim.txt";
+		String outputMax = dataOut+"max_bh.txt";
+		String outputMin = dataOut+"min_bh.txt";
+		String outputAvg = dataOut+"avg_bh.txt";
 		
 		PValueFolder.setPvalFoder("D:/Dokumente/Studium/Master/Masterpraktikum 1. FS/pvalues/pval_big_noweight/");
 		
@@ -46,7 +46,7 @@ public class RunAllAgainstAll {
 		int[] keys = AlgoPheno.getKeys();
 		
 		double[][]result = AlgoPheno.allAgainstAll();
-		String res = arrayToString(result,keys);
+		//String res = arrayToString(result,keys);
 		//System.out.println(outputSim);
 		//FileUtilities.writeString(outputSim, res);
 				
@@ -61,23 +61,23 @@ public class RunAllAgainstAll {
 			asymmetric[i]=line;
 		}
 		
-		/*System.out.println("Minimum matrix...");
+		System.out.println("Minimum matrix...");
 		double[][]minMatrix = PValueGenerator.getMinimumMatrix(asymmetric);
-		String resMin = arrayToString(minMatrix,keys);
+		writeResult(minMatrix,keys,outputMin);
 		//System.out.println(outputMin);
-		FileUtilities.writeString(outputMin, resMin);
+		//FileUtilities.writeString(outputMin, resMin);
 		
 		System.out.println("Maximum matrix...");
 		double[][]maxMatrix = PValueGenerator.getMaximumMatrix(asymmetric);
-		String resMax = arrayToString(maxMatrix,keys);
+		writeResult(maxMatrix,keys,outputMax);
 		//System.out.println(outputMax);
-		FileUtilities.writeString(outputMax, resMax);*/
+		//FileUtilities.writeString(outputMax, resMax);
 		
 		System.out.println("Average matrix...");
 		double[][]avgMatrix = PValueGenerator.getAverageMatrix(asymmetric);
-		String resAvg = arrayToString(avgMatrix,keys);
+		writeResult(avgMatrix,keys,outputAvg);
 		//System.out.println(outputAvg);
-		FileUtilities.writeString(outputAvg, resAvg);
+		//FileUtilities.writeString(outputAvg, resAvg);
 
 	}
 	
@@ -101,14 +101,26 @@ public class RunAllAgainstAll {
 		return sb.toString();
 	}
 	
-	public static double[][] getSimMatrix(String[][]tmp){
-		double[][]res = new double[tmp.length-1][tmp.length-1];
-		for(int i=0; i<res.length; i++){
-			for(int j=0; j<res.length; j++){
-				res[i][j] = Double.valueOf(tmp[i+1][j+1]);
-			}
+	public static void writeResult(double[][]array, int[]colNames, String path){
+		StringBuilder sb = new StringBuilder();
+		sb.append("id,");
+		for(int i=0; i<colNames.length-1; i++){
+			sb.append(colNames[i]+",");
 		}
-		return res;
+		sb.append(colNames[colNames.length-1]);
+		sb.append("\n");
+		FileUtilities.writeStringToExistingFile(path, sb.toString());
+		
+		for(int i=0;i<array.length; i++){
+			sb = new StringBuilder();
+			sb.append(colNames[i]+",");
+			for(int j=0; j<array[i].length-1; j++){
+				sb.append(array[i][j]+",");
+			}
+			sb.append(array[i][array[i].length-1]);
+			sb.append("\n");
+			FileUtilities.writeStringToExistingFile(path, sb.toString());
+		}
 	}
 
 }
