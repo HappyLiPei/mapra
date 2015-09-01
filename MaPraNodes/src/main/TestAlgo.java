@@ -38,7 +38,7 @@ public class TestAlgo {
 		int[][]ontology = FileUtilities.readInOntology(ontoIn);
 		LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
 		PValueFolder.setPvalFoder(dataIn+"pvalues_binned/");
-		LinkedList<String[]> results = PValueGenerator.phenomizerWithPValues(11, query, symptoms, ksz, ontology);
+		LinkedList<String[]> results = PValueGenerator.phenomizerWithPValues(11, query, symptoms, ksz, ontology,true);
 		String res = resultToString(results);
 		System.out.println(res);
 

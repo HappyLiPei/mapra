@@ -262,20 +262,17 @@ public class PValueGenerator {
 			res[0]=parts[2];
 			res[1]=parts[1];
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
-			//System.out.println(res[0]+"\t"+res[1]+"\t"+pValue);
-			//System.out.println(lastPValue);
 			if(Double.compare(lastPValue, pValue)<0){
 				lastPValue = pValue;
 				currRank += currIndex;
-				//System.out.println(currRank);
 				currIndex = 0;
 			}
 			
 			//Bonferroni-Holm
-			pValue = pValue*(numDiseases-currRank+1);
+			//pValue = pValue*(numDiseases-currRank+1);
 			
 			//Benjamini-Hochberg
-			//pValue = (numDiseases/currRank)*pValue;
+			pValue = (numDiseases/currRank)*pValue;
 			
 			if(Double.compare(pValue, 1)>0){
 				pValue=1;
