@@ -146,7 +146,7 @@ public class AlgoPheno {
 	 * generate a distance matrix given the distances between all diseases in the database
 	 * @return distance matrix
 	 */
-	public static double[][] allAgainstAll(){
+	public static int[][] allAgainstAll(){
 		int[][]results = new int[kszD.size()][kszD.size()];
 
 		//calculate information content
@@ -155,10 +155,7 @@ public class AlgoPheno {
 		int[]keys = getKeys();
 		int maximum = Integer.MIN_VALUE;
 		
-		for(int i=0; i<keys.length; i++){
-			int num = i+1;
-			System.out.println(num);
-			
+		for(int i=0; i<keys.length; i++){		
 			for(int j=i; j<keys.length; j++){
 				if(i==j){
 					results[i][j]=0;
@@ -185,10 +182,7 @@ public class AlgoPheno {
 			setCalculatedSim();
 		}
 		
-		//double[][]distanceMatrix = convertAdjacencyToDistance(results,maximum);
-		double[][]distanceMatrix = convertIntToDouble(results);
-		
-		return distanceMatrix;
+		return results;
 	}
 	
 	/**
@@ -434,7 +428,7 @@ public class AlgoPheno {
 	 * @param maximum in the similarity matrix
 	 * @return distance matrix
 	 */
-	private static double[][] convertAdjacencyToDistance(int[][]adjacency, int maximum){
+	public static double[][] convertAdjacencyToDistance(int[][]adjacency, int maximum){
 		double[][]distance = new double[adjacency.length][adjacency.length];
 		for(int i=0;i<adjacency.length;i++){
 			for(int j=i; j<adjacency[i].length;j++){
@@ -457,7 +451,7 @@ public class AlgoPheno {
 	 * @param adjacency
 	 * @return
 	 */
-	private static double[][] convertIntToDouble(int[][]adjacency){
+	public static double[][] convertIntToDouble(int[][]adjacency){
 		double[][]adj = new double[adjacency.length][adjacency.length];
 		for(int i=0;i<adjacency.length;i++){
 			for(int j=i; j<adjacency[i].length;j++){

@@ -14,94 +14,67 @@ public class RunAllAgainstAll {
 	 */
 	public static void main(String[] args) {
 
-		String dataPath = "D:/Dropbox/Masterpraktikum/";
-
-		String dataIn = dataPath+"Datenbank/";
-		String ontoIn = dataIn + "isa_HPO_test.csv";
-		String kszIn = dataIn + "ksz_HPO_test.csv";
-		String symptomsIn = dataIn + "symptoms_HPO_test.csv";
+		String symptomsIn = args[0];
+		String ontoIn = args[1];
+		String kszIn = args[2];
+		String pvalueFolder = args[3];
+		String outputFolder = args[4];
 		
-		/*String dataIn = dataPath + "Testdatensatz/";
-		String ontoIn = dataIn + "Ontology.txt";
-		String kszIn = dataIn + "Krankheiten.txt";
-		String symptomsIn = dataIn + "Symptome.txt";*/		
-
 		HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilities.readInKSZ(kszIn);
 		HashMap<Integer,LinkedList<Integer[]>>ksz= CalcPValueMaria.addWeights(kszTmp);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontoIn);
 
-		//generate distance matrix
-		String dataOut = dataPath+"Clustering/allAgainstAll_";
-		//String outputSim = dataOut+"sim.txt";
-		String outputMax = dataOut+"max_bh.txt";
-		String outputMin = dataOut+"min_bh.txt";
-		String outputAvg = dataOut+"avg_bh.txt";
 		
-		PValueFolder.setPvalFoder("D:/Dokumente/Studium/Master/Masterpraktikum 1. FS/pvalues/pval_big_noweight/");
+		String dataOut = outputFolder+"allAgainstAll_";
+		
+		String outputDist = dataOut + "dist.txt";
+		String outputSim = dataOut+"sim.txt";
+		String outputMax = dataOut+"max.txt";
+		String outputMin = dataOut+"min.txt";
+		String outputAvg = dataOut+"avg.txt";
+		
+		PValueFolder.setPvalFoder(pvalueFolder);
 		
 		LinkedList<Integer>query = new LinkedList<Integer>();
 		query.add(1);
 		AlgoPheno.setInput(query, symptoms, ksz, ontology);
 		int[] keys = AlgoPheno.getKeys();
 		
-		double[][]result = AlgoPheno.allAgainstAll();
-		//String res = arrayToString(result,keys);
-		//System.out.println(outputSim);
-		//FileUtilities.writeString(outputSim, res);
-				
-		System.out.println("Asymmetric matrix...");
-		double[][] asymmetric = new double[result.length][result.length];
-		for(int i=0;i<result.length;i++){
-			System.out.println(i);
+		//calculate similarity matrix
+		int[][]simMatrixTmp = AlgoPheno.allAgainstAll();
+		double[][]simMatrix = AlgoPheno.convertIntToDouble(simMatrixTmp);
+		writeResult(simMatrix,keys,outputSim);
+
+		//calculate distance matrix
+		int maximum = getMaximum(simMatrixTmp);
+		double[][]distMatrix = AlgoPheno.convertAdjacencyToDistance(simMatrixTmp, maximum);
+		writeResult(distMatrix,keys,outputDist);
+			
+		//get asymmetric p value matrix
+		double[][] asymmetric = new double[simMatrix.length][simMatrix.length];
+		for(int i=0;i<simMatrix.length;i++){
 			int disease = keys[i];
 			int queryLength = ksz.get(disease).size();
-			double []tmp = result[i];
+			double []tmp = simMatrix[i];
 			double[]line = PValueGenerator.getNextOfAsymmetricMatrix(tmp, keys, queryLength);
 			asymmetric[i]=line;
 		}
 		
-		System.out.println("Minimum matrix...");
+		//get symmetric matrix containing in cell (i,j) always the minimum of (i,j) and (j,i)
 		double[][]minMatrix = PValueGenerator.getMinimumMatrix(asymmetric);
 		writeResult(minMatrix,keys,outputMin);
-		//System.out.println(outputMin);
-		//FileUtilities.writeString(outputMin, resMin);
 		
-		System.out.println("Maximum matrix...");
+		//get symmetric matrix containing in cell (i,j) always the maximum of (i,j) and (j,i)
 		double[][]maxMatrix = PValueGenerator.getMaximumMatrix(asymmetric);
 		writeResult(maxMatrix,keys,outputMax);
-		//System.out.println(outputMax);
-		//FileUtilities.writeString(outputMax, resMax);
 		
-		System.out.println("Average matrix...");
+		//get symmetric matrix containing in cell (i,j) always the average of (i,j) and (j,i)
 		double[][]avgMatrix = PValueGenerator.getAverageMatrix(asymmetric);
 		writeResult(avgMatrix,keys,outputAvg);
-		//System.out.println(outputAvg);
-		//FileUtilities.writeString(outputAvg, resAvg);
-
 	}
 	
-	public static String arrayToString(double[][]array, int[] colNames){
-		StringBuilder sb = new StringBuilder();
-		sb.append("id,");
-		for(int i=0; i<colNames.length-1; i++){
-			sb.append(colNames[i]+",");
-		}
-		sb.append(colNames[colNames.length-1]);
-		sb.append("\n");
-		
-		for(int i=0;i<array.length; i++){
-			sb.append(colNames[i]+",");
-			for(int j=0; j<array[i].length-1; j++){
-				sb.append(array[i][j]+",");
-			}
-			sb.append(array[i][array[i].length-1]);
-			sb.append("\n");
-		}
-		return sb.toString();
-	}
-	
-	public static void writeResult(double[][]array, int[]colNames, String path){
+	private static void writeResult(double[][]array, int[]colNames, String path){
 		StringBuilder sb = new StringBuilder();
 		sb.append("id,");
 		for(int i=0; i<colNames.length-1; i++){
@@ -121,6 +94,18 @@ public class RunAllAgainstAll {
 			sb.append("\n");
 			FileUtilities.writeStringToExistingFile(path, sb.toString());
 		}
+	}
+	
+	private static int getMaximum(int[][]matrix){
+		int maximum = -1;
+		for(int i=0; i<matrix.length-1; i++){
+			for(int j=(i+1); j<matrix[i].length;j++){
+				if(matrix[i][j]>maximum){
+					maximum=matrix[i][j];
+				}
+			}
+		}
+		return maximum;
 	}
 
 }
