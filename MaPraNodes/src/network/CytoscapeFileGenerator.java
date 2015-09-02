@@ -91,7 +91,7 @@ public class CytoscapeFileGenerator {
 	}
 	
 	public static void WriteScript(String networkfile, String scriptfile){
-		FileUtilities.writeString(scriptfile, "network load file file="+networkfile+"\n"+"layout force-directed");			
+		FileUtilities.writeString(scriptfile, "network load file file=\""+networkfile+"\"\n"+"layout force-directed");			
 	}
 
 }

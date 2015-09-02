@@ -122,7 +122,7 @@ public class PhenomizerNodeModel extends NodeModel {
         	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges,true);
         }
         
-        logger.info("generate output");
+        //logger.info("generate output");
         BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
         return new BufferedDataTable[]{out};      
 
