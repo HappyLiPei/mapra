@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import nodeutils.TableChecker;
+
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
@@ -108,28 +110,6 @@ public class PhenomizerNodeModel extends NodeModel {
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
         HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
         
-//        logger.info("Test generateQuery()");
-//        for(Integer i: query){
-//        	logger.info(""+i);
-//        }
-//        
-//        logger.info("Test generateQSymptomList()");
-//        for(Integer i: symptoms){
-//        	logger.info(""+i);
-//        }
-//        
-//        logger.info("Test generateEdges()");
-//        for(int [] edge:edges){
-//        	logger.info("child "+edge[0]+" parent "+edge[1]);
-//        }
-//        
-//        logger.info("Test generateKSZ()");
-//        for(Integer i: diseases.keySet()){
-//        	logger.info("Disease "+i);
-//        	for(Integer [] j: diseases.get(i)){
-//        		logger.info("Symptom "+j[0]+"\tFrequency "+j[1]);
-//        	}
-//        }
         //TODO:true/false
         LinkedList<String[]> result = new LinkedList<String[]>();
         if(!m_pval.getBooleanValue()){
@@ -144,14 +124,7 @@ public class PhenomizerNodeModel extends NodeModel {
         
         logger.info("generate output");
         BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
-        return new BufferedDataTable[]{out};
-        
-//        for(String [] entry: result){
-//        	for(String s : entry){
-//        		logger.info(s);
-//        	}
-//        }
-        
+        return new BufferedDataTable[]{out};      
 
     }
 
@@ -172,51 +145,23 @@ public class PhenomizerNodeModel extends NodeModel {
     	
     	logger.info("configure");
     	//check port 0: symptom table
-    	checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE, null);
-    	checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, StringCell.TYPE, null, null);
+    	TableChecker.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableChecker.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, new DataType[]{StringCell.TYPE}, null);
     	//check port 1: isa table
-    	checkColumn(inSpecs, INPORT_ISA, CHILD_ID, IntCell.TYPE, LongCell.TYPE, null);
-    	checkColumn(inSpecs, INPORT_ISA, PARENT_ID, IntCell.TYPE, LongCell.TYPE, null);
+    	TableChecker.checkColumn(inSpecs, INPORT_ISA, CHILD_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableChecker.checkColumn(inSpecs, INPORT_ISA, PARENT_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
     	//check port 2: ksz table
-    	checkColumn(inSpecs, INPORT_KSZ, DISEASE_ID, IntCell.TYPE, LongCell.TYPE, null);
-    	checkColumn(inSpecs, INPORT_KSZ, DISEASE_NAME, StringCell.TYPE, null, null);
-    	checkColumn(inSpecs, INPORT_KSZ, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE,null);
+    	TableChecker.checkColumn(inSpecs, INPORT_KSZ, DISEASE_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableChecker.checkColumn(inSpecs, INPORT_KSZ, DISEASE_NAME, new DataType[]{StringCell.TYPE}, null);
+    	TableChecker.checkColumn(inSpecs, INPORT_KSZ, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
     	if(m_weight.getBooleanValue()){
-    		checkColumn(inSpecs, INPORT_KSZ, FREQUENCY, StringCell.TYPE, null,
+    		TableChecker.checkColumn(inSpecs, INPORT_KSZ, FREQUENCY, new DataType[]{StringCell.TYPE},
 			"Please uncheck the option \"use frequency weights\" in the node dialog or use another input table with frequency values");
     	}
     	//check port 3: query  
-    	checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, IntCell.TYPE, LongCell.TYPE,null);
+    	TableChecker.checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE},null);
 
         return new DataTableSpec[]{generateOutputSpec(m_pval.getBooleanValue())};
-    }
-    
-    /**
-     * checks if input specifications from port port contains a column named colname and 
-     * if specifications match data type type1 oder type2
-     * @param inSpecs
-     * @param port
-     * @param colname
-     * @param type1
-     * @param type2
-     * @param message: error message
-     * @throws InvalidSettingsException
-     */
-    
-    private void checkColumn(DataTableSpec[] inSpecs, int port, String colname, DataType type1, DataType type2, String message) throws InvalidSettingsException{
-    	
-    	DataColumnSpec s =inSpecs[port].getColumnSpec(colname);
-    	if(s==null){
-    		if(message==null){
-    			throw new InvalidSettingsException("Table at port "+port+" requires column "+colname);
-    		}
-    		else{
-    			throw new InvalidSettingsException("Table at port "+port+" requires column "+colname+"\n"+message);
-    		}
-    	}
-    	if((s.getType() != type1 && s.getType() != type2)){
-    		throw new InvalidSettingsException("Table at port "+port+": Column "+colname+" is not the correct data type");
-    	}
     }
     
 	/**
