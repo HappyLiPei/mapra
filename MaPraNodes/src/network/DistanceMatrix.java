@@ -6,7 +6,7 @@ import main.FileInputReader;
 
 public class DistanceMatrix {
 	
-	private static final int MULTIPLICATOR=100;
+	private static final int MULTIPLICATOR=1000;
 	private int [][] matrix;
 	private HashMap<String, Integer> IdToPos;
 	String [] ids;
@@ -25,15 +25,16 @@ public class DistanceMatrix {
 		IdToPos=null;
 	}
 	
-	//TODO:use for buffered data table
-	public DistanceMatrix(String [] header, String [] rowIds, int [][] values){
+	//use for content of buffered data table
+	public DistanceMatrix(String [] header, String [] rowIds, double [][] values){
 		this(header);
 		for(int i=0; i<rowIds.length ;i++){
 			for(int j=0; j<header.length; j++){
-				set(rowIds[i],j,values[i][j]);
+				int entry = (int) Math.round(values[i][j]*MULTIPLICATOR);
+				set(rowIds[i],j,entry);
 			}
 		}
-		System.out.println(this);
+		//System.out.println(this);
 	}
 	
 	private void set(int i, int j, int value){

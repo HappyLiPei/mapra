@@ -1,5 +1,6 @@
 package network;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import main.FileUtilities;
@@ -24,7 +25,7 @@ public class CytoscapeFileGenerator {
 	public static void writeXGMML(String output, DistanceMatrix d, double cutoff){
 		FileUtilities.writeString(output, header);
 		for(int i=0; i<d.size();i++){
-			FileUtilities.writeStringToExistingFile(output,(NodeTag(d.IdAt(i),false)));
+			FileUtilities.writeStringToExistingFile(output,(NodeTag(d.IdAt(i),d.IdAt(i), false,null)));
 		}
 		for(int i=0; i<d.size(); i++){
 			for(int j=i+1; j<d.size(); j++){
@@ -36,7 +37,9 @@ public class CytoscapeFileGenerator {
 		FileUtilities.writeString(output, end);
 	}
 
-	public static void writeSelectedXGMML(String output, DistanceMatrix d, double cutoff, HashSet<String> selection){
+	public static void writeSelectedXGMML(String output, DistanceMatrix d, double cutoff,
+			HashSet<String> selection, PhenoResults res, HashMap<Integer, String> names){
+		
 		FileUtilities.writeString(output, header);
 		for(int i=0; i<d.size();i++){
 			//ignore singletons
@@ -50,8 +53,15 @@ public class CytoscapeFileGenerator {
 				}
 			}
 			if(selection.contains(d.IdAt(i))||!singleton){
-				FileUtilities.writeStringToExistingFile(output,NodeTag(d.IdAt(i), selection.contains(d.IdAt(i))));
-			}
+				if(names.containsKey(Integer.valueOf(d.IdAt(i)))){
+					FileUtilities.writeStringToExistingFile(output,
+							NodeTag(d.IdAt(i), names.get(Integer.valueOf(d.IdAt(i))),selection.contains(d.IdAt(i)),res.getResFor(d.IdAt(i))));
+				}
+				else{
+					FileUtilities.writeStringToExistingFile(output,
+							NodeTag(d.IdAt(i), d.IdAt(i),selection.contains(d.IdAt(i)),res.getResFor(d.IdAt(i))));
+				}
+			}	
 		}
 		for(int i=0; i<d.size(); i++){
 			for(int j=i+1; j<d.size(); j++){
@@ -64,22 +74,30 @@ public class CytoscapeFileGenerator {
 
 	}
 
-	private static String NodeTag (String nodeid, boolean selected){
+	private static String NodeTag (String nodeid, String nodename, boolean selected, String[] scores){
 		
+		String scoreinfo="";
 		String nodecolor="";
 		if(selected){
 			nodecolor=YELLOW;
+			if(scores!=null){
+				scoreinfo+="<att name=\"score\" value=\""+scores[0]+"\" type=\"real\"/>"+"\n";
+				if(scores.length==2){
+					scoreinfo+="<att name=\"pvalue\" value=\""+scores[1]+"\" type=\"real\"/>"+"\n";
+				}
+			}
 		}
 		else{
 			nodecolor=BLUE;
 		}
 
-		return "<node label=\""+nodeid+"\" id=\""+nodeid+"\">" + "\n" +
+		return "<node label=\""+nodename+"\" id=\""+nodeid+"\">" + "\n" +
 				"<att name=\"selected\" value=\"0\" type=\"boolean\"/>"+ "\n" +
 				"<graphics width=\"1.0\" w=\"70.0\" fill=\""+nodecolor+"\" type=\"ELLIPSE\" z=\"0.0\" outline=\"#323232\">"+"\n"+
 				"<att name=\"NODE_LABEL_COLOR\" value=\"#323232\" type=\"string\"/>"+"\n" +
 				"<att name=\"NODE_SELECTED_PAINT\" value=\""+PINK+"\" type=\"string\"/>"+"\n" +
 				"</graphics>"+"\n"+
+				scoreinfo+
 				"</node>"+"\n";
 	}
 

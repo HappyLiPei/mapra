@@ -37,7 +37,8 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     private static final NodeLogger logger = NodeLogger
             .getLogger(PhenomizerToNetworkNodeModel.class);
        
-    private static final int IN_PHENO=0;;
+    private static final int IN_PHENO=0;
+    private static final int IN_MATRIX=1;
     
     //file with distance matrix
     protected static final String CFGKEY_MATRIX ="matrix";
@@ -71,7 +72,8 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
      * Constructor for the node model.
      */
     protected PhenomizerToNetworkNodeModel(){
-        super(1, 0);
+        super(2,0);
+    	//super(1, 0);
         m_cyto_script.setEnabled(m_start_cyto.getBooleanValue());
     }
 
@@ -83,7 +85,6 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
             final ExecutionContext exec) throws Exception {
     	
     	//TODO: p value matrix instead of distance matrix
-    	//TODO: distance matrix/ p value matrix via input port
     	//TODO: node names = disease names  
     	//TODO: color manager compatibility 
     	
@@ -94,9 +95,17 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     		logger.info(m_cyto_script.getStringValue());
     	}
     	
+//    	RunPhenomizerToNetwork.runNetworkGenerator(
+//    			inData[IN_PHENO],
+//    			m_matrix.getStringValue(),
+//    			m_edge.getDoubleValue(),
+//    			m_out.getStringValue(),
+//    			m_start_cyto.getBooleanValue(),
+//    			m_cyto_script.getStringValue(), logger, exec);
+    	
     	RunPhenomizerToNetwork.runNetworkGenerator(
     			inData[IN_PHENO],
-    			m_matrix.getStringValue(),
+    			inData[IN_MATRIX],
     			m_edge.getDoubleValue(),
     			m_out.getStringValue(),
     			m_start_cyto.getBooleanValue(),
@@ -131,6 +140,7 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     	
     	//check disease_id from phenomizer node
     	TableChecker.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.DISEASE_ID, new DataType[]{IntCell.TYPE}, "");
+    	//TODO:check score from phenomizer node!!
     	
         return new DataTableSpec[0];
     }
