@@ -8,6 +8,7 @@ import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentFileChooser;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumberEdit;
+import org.knime.core.node.defaultnodesettings.DialogComponentStringSelection;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
@@ -26,9 +27,9 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 public class PhenomizerToNetworkNodeDialog extends DefaultNodeSettingsPane {
 	
-	final SettingsModelString matrix = new SettingsModelString(
-			PhenomizerToNetworkNodeModel.CFGKEY_MATRIX, 
-			PhenomizerToNetworkNodeModel.DEF_MATRIX);
+	final SettingsModelString comparator = new SettingsModelString(
+			PhenomizerToNetworkNodeModel.CFGKEY_COMPARATOR,
+			PhenomizerToNetworkNodeModel.DEF_COMPARATOR);
 	
 	final SettingsModelDoubleBounded edge = new SettingsModelDoubleBounded(
 			PhenomizerToNetworkNodeModel.CFGKEY_EDGE,
@@ -57,9 +58,11 @@ public class PhenomizerToNetworkNodeDialog extends DefaultNodeSettingsPane {
 	protected PhenomizerToNetworkNodeDialog() {
         super();
         
-        createNewGroup("Distance matrix");
-        addDialogComponent(new DialogComponentFileChooser(matrix, "dist_matrix", JFileChooser.OPEN_DIALOG, false));
+        createNewGroup("Edges");
+        setHorizontalPlacement(true);
+        addDialogComponent(new DialogComponentStringSelection(comparator, "comparator", PhenomizerToNetworkNodeModel.COMPARATOR_VALUES));
         addDialogComponent(new DialogComponentNumberEdit(edge, "Edge threshold"));
+        setHorizontalPlacement(false);
         createNewGroup("Output directory");
         addDialogComponent(new DialogComponentFileChooser(out, "network_out_folder", JFileChooser.OPEN_DIALOG, true));
         createNewGroup("Cytoscape");

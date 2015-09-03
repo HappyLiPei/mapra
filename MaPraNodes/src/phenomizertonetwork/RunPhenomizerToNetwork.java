@@ -22,33 +22,9 @@ import execprocess.Executor;
 
 public class RunPhenomizerToNetwork {
 	
-//	protected static void runNetworkGenerator(BufferedDataTable phenores, String matrix, double cutoff,
-//			String outfolder, boolean run, String cyto, NodeLogger logger, ExecutionContext exec){
-//		
-//    	//create HashSet of all nodes that get colored differently
-//		HashSet<String> hs = getIdsToColor(phenores);
-//    	
-//    	//generate output file paths
-//    	String xgmmlfile=Paths.get(outfolder,"disease_network.xgmml").toString();
-//    	String scriptfile = Paths.get(outfolder,"script.txt").toString();
-//    	
-//    	//generate network file
-//    	logger.info("Write network file to " +xgmmlfile);
-//    	CytoscapeFileGenerator.writeSelectedXGMML(xgmmlfile, DistanceMatrix.readDistMatrix(matrix),
-//    			cutoff, hs);
-//    	
-//    	//generate cytoscape script
-//    	logger.info("Write script file to " +scriptfile);
-//    	CytoscapeFileGenerator.WriteScript(xgmmlfile, scriptfile);
-//    	
-//    	//execute cytoscape
-//    	if(run){
-//    		executeCytoscape(scriptfile, outfolder, cyto, logger, exec);
-//    	}
-//	}
-	
-	protected static void runNetworkGenerator(BufferedDataTable phenores, BufferedDataTable matrix, double cutoff,
-			String outfolder, boolean run, String cyto, NodeLogger logger, ExecutionContext exec) throws Exception{
+	protected static void runNetworkGenerator(BufferedDataTable phenores, BufferedDataTable matrix,
+			String comparator, double cutoff, String outfolder, boolean run, String cyto,
+			NodeLogger logger, ExecutionContext exec) throws Exception{
 		
     	//read matrix from data table, checks format of matrix (throws exception if wrong format)
     	DistanceMatrix dm = generateDistMatrix(matrix, logger);
@@ -63,19 +39,19 @@ public class RunPhenomizerToNetwork {
     	String xgmmlfile=Paths.get(outfolder,"disease_network.xgmml").toString();
     	String scriptfile = Paths.get(outfolder,"script.txt").toString();
     	
-    	//TODO:disease names
+    	//disease names
     	HashMap<Integer,String> idstoname = new HashMap<Integer,String>();
     	if(matrix.getSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME)!=-1){
     		idstoname = getDiseaseNames(matrix);
     	}
-    	for(Integer i: idstoname.keySet()){
-    		logger.info(i+"\t"+idstoname.get(i));
-    	}
     	
     	//generate network file
     	logger.info("Write network file to " +xgmmlfile);
-    	//TODO: new write method
-    	CytoscapeFileGenerator.writeSelectedXGMML(xgmmlfile, dm, cutoff, hs ,res, idstoname);
+    	boolean smallerthan=false;
+    	if(comparator.equals(PhenomizerToNetworkNodeModel.COMPARATOR_VALUES[0])){
+    		smallerthan=true;
+    	}
+    	CytoscapeFileGenerator.writeSelectedXGMML(xgmmlfile, dm, cutoff, smallerthan, hs ,res, idstoname);
     	
     	//generate cytoscape script
     	logger.info("Write script file to " +scriptfile);

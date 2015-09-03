@@ -37,7 +37,7 @@ public class CytoscapeFileGenerator {
 		FileUtilities.writeString(output, end);
 	}
 
-	public static void writeSelectedXGMML(String output, DistanceMatrix d, double cutoff,
+	public static void writeSelectedXGMML(String output, DistanceMatrix d, double cutoff, boolean smallerthan,
 			HashSet<String> selection, PhenoResults res, HashMap<Integer, String> names){
 		
 		FileUtilities.writeString(output, header);
@@ -48,8 +48,15 @@ public class CytoscapeFileGenerator {
 				if(j==i){
 					continue;
 				}
-				if(d.get(i, j)<cutoff){
-					singleton = false;
+				if(smallerthan){
+					if(d.get(i, j)<cutoff){
+						singleton = false;
+					}
+				}
+				else{
+					if(d.get(i, j)>cutoff){
+						singleton = false;
+					}
 				}
 			}
 			if(selection.contains(d.IdAt(i))||!singleton){
@@ -65,8 +72,15 @@ public class CytoscapeFileGenerator {
 		}
 		for(int i=0; i<d.size(); i++){
 			for(int j=i+1; j<d.size(); j++){
-				if(d.get(i, j)<cutoff){
-					FileUtilities.writeStringToExistingFile(output, EdgeTag(d.IdAt(i), d.IdAt(j)));
+				if(smallerthan){
+					if(d.get(i, j)<cutoff){
+						FileUtilities.writeStringToExistingFile(output, EdgeTag(d.IdAt(i), d.IdAt(j)));
+					}
+				}
+				else{
+					if(d.get(i, j)>cutoff){
+						FileUtilities.writeStringToExistingFile(output, EdgeTag(d.IdAt(i), d.IdAt(j)));
+					}
 				}
 			}
 		}
@@ -109,7 +123,9 @@ public class CytoscapeFileGenerator {
 	}
 	
 	public static void WriteScript(String networkfile, String scriptfile){
-		FileUtilities.writeString(scriptfile, "network load file file=\""+networkfile+"\"\n"+"layout force-directed");			
+		FileUtilities.writeString(scriptfile, "network load file file=\""+networkfile+"\"\n"+
+				"view create"+"\n"+
+				"layout force-directed");			
 	}
 
 }

@@ -40,10 +40,11 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     private static final int IN_PHENO=0;
     private static final int IN_MATRIX=1;
     
-    //file with distance matrix
-    protected static final String CFGKEY_MATRIX ="matrix";
-    protected static final String DEF_MATRIX="";
-    private final SettingsModelString m_matrix = new SettingsModelString(CFGKEY_MATRIX, DEF_MATRIX);
+    //comparator for edge cutoff
+    protected static final String CFGKEY_COMPARATOR = "comparator";
+    protected static final String [] COMPARATOR_VALUES=new String[]{"<",">"};
+    protected static final String DEF_COMPARATOR=COMPARATOR_VALUES[0];
+    private final SettingsModelString m_comparator = new SettingsModelString(CFGKEY_COMPARATOR, DEF_COMPARATOR);    
     
     //distance cutoff for edge
     protected static final String CFGKEY_EDGE="edge";
@@ -85,27 +86,12 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
             final ExecutionContext exec) throws Exception {
     	
     	//TODO: p value matrix instead of distance matrix
-    	//TODO: node names = disease names  
     	//TODO: color manager compatibility 
-    	
-    	logger.info(m_matrix.getStringValue());
-    	logger.info(m_edge.getDoubleValue());
-    	logger.info(m_out.getStringValue());
-    	if(m_start_cyto.getBooleanValue()){
-    		logger.info(m_cyto_script.getStringValue());
-    	}
-    	
-//    	RunPhenomizerToNetwork.runNetworkGenerator(
-//    			inData[IN_PHENO],
-//    			m_matrix.getStringValue(),
-//    			m_edge.getDoubleValue(),
-//    			m_out.getStringValue(),
-//    			m_start_cyto.getBooleanValue(),
-//    			m_cyto_script.getStringValue(), logger, exec);
     	
     	RunPhenomizerToNetwork.runNetworkGenerator(
     			inData[IN_PHENO],
     			inData[IN_MATRIX],
+    			m_comparator.getStringValue(),
     			m_edge.getDoubleValue(),
     			m_out.getStringValue(),
     			m_start_cyto.getBooleanValue(),
@@ -129,8 +115,6 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
             throws InvalidSettingsException {
         
     	//check if node dialog was called
-    	SettingsChecker.checkFileModel(m_matrix, DEF_MATRIX,
-    			"Distance matrix file is missing\nPlease choose a file in the node dialog");
     	SettingsChecker.checkFileModel(m_out, DEF_OUT,
     			"Output folder is missing\nPlease choose a folder in the node dialog");
     	if(m_start_cyto.getBooleanValue()){
@@ -150,7 +134,7 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
      */
     @Override
     protected void saveSettingsTo(final NodeSettingsWO settings) {
-        m_matrix.saveSettingsTo(settings);
+        m_comparator.saveSettingsTo(settings);
         m_edge.saveSettingsTo(settings);
         m_out.saveSettingsTo(settings);
         m_start_cyto.saveSettingsTo(settings);
@@ -163,7 +147,7 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     @Override
     protected void loadValidatedSettingsFrom(final NodeSettingsRO settings)
             throws InvalidSettingsException {
-    	m_matrix.loadSettingsFrom(settings);
+    	m_comparator.loadSettingsFrom(settings);
     	m_edge.loadSettingsFrom(settings);
     	m_out.loadSettingsFrom(settings);
     	m_start_cyto.loadSettingsFrom(settings);
@@ -176,13 +160,12 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     @Override
     protected void validateSettings(final NodeSettingsRO settings)
             throws InvalidSettingsException {
-    	m_matrix.validateSettings(settings);
+    	m_comparator.validateSettings(settings);
     	m_edge.validateSettings(settings);
     	m_out.validateSettings(settings);
     	m_start_cyto.validateSettings(settings);
     	m_cyto_script.validateSettings(settings);
     	
-    	SettingsChecker.checkFileDialog(settings, CFGKEY_MATRIX, DEF_MATRIX, "Distance matrix file is missing");
     	SettingsChecker.checkFileDialog(settings, CFGKEY_OUT, DEF_OUT, "Output folder is missing");
     	if(settings.getBoolean(CFGKEY_START_CYTO)){
     		SettingsChecker.checkFileDialog(settings, CFGKEY_CYTO_SCRIPT, DEF_CYTO_SCRIPT, "Cytoscape script is missing");
