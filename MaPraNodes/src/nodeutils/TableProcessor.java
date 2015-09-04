@@ -1,4 +1,4 @@
-package algorithm;
+package nodeutils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +17,8 @@ import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
+
+import algorithm.FrequencyConverter;
 
 import phenomizer.PhenomizerNodeModel;
 

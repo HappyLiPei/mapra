@@ -31,7 +31,7 @@ import org.knime.core.node.NodeSettingsWO;
 import algorithm.AlgoPheno;
 import algorithm.PValueFolder;
 import algorithm.PValueGenerator;
-import algorithm.TableProcessor;
+import nodeutils.TableProcessor;
 
 
 /**
