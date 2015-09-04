@@ -22,7 +22,7 @@ public class PhenoValidation {
 			LinkedList<String[]>res = AlgoPheno.runPhenomizer(ksz.size(),true);
 			double rank = calculateRank(key.toString(),res);
 			String result = key+"\t"+rank+"\n";
-			main.FileUtilities.writeStringToExistingFile(path, result);
+			io.FileUtilities.writeStringToExistingFile(path, result);
 			num++;
 			AlgoPheno.setCalculatedSim();
 		}

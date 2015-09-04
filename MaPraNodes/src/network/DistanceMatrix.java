@@ -2,7 +2,7 @@ package network;
 
 import java.util.HashMap;
 
-import main.FileInputReader;
+import io.FileInputReader;
 
 public class DistanceMatrix {
 	

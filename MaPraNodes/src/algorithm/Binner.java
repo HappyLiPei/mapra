@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import main.FileInputReader;
-import main.FileUtilities;
+import io.FileInputReader;
+import io.FileUtilities;
 
 public class Binner {
 	

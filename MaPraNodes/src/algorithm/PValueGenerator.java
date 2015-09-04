@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
-import main.FileInputReader;
+import io.FileInputReader;
 
 public class PValueGenerator {
 

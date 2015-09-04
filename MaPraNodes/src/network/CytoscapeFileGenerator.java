@@ -3,7 +3,7 @@ package network;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import main.FileUtilities;
+import io.FileUtilities;
 
 public class CytoscapeFileGenerator {
 	
