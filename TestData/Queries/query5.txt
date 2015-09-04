@@ -1,0 +1,3 @@
+#query with 1 symptom
+symptom_id
+13

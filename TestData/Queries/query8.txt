@@ -1,0 +1,6 @@
+#random query
+symptom_id
+23
+34
+27
+40

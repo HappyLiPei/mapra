@@ -1,0 +1,4 @@
+#106G with imprecision
+symptom_id
+10
+9
