@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import algorithm.AlgoPheno;
+import algorithm.FrequencyConverter;
 import algorithm.PValueFolder;
 import algorithm.PValueGenerator;
 
@@ -21,7 +22,7 @@ public class RunAllAgainstAll {
 		String outputFolder = args[4];
 		
 		HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilities.readInKSZ(kszIn);
-		HashMap<Integer,LinkedList<Integer[]>>ksz= CalcPValueMaria.addWeights(kszTmp);
+		HashMap<Integer,LinkedList<Integer[]>>ksz= FrequencyConverter.addWeights(kszTmp);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontoIn);
 

@@ -33,7 +33,7 @@ public class TestAlgo {
 		/*HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilities.readInKSZFrequency(diseasesIn);
 		HashMap<Integer,LinkedList<Integer[]>>ksz=FrequencyConverter.convertAll(kszTmp);*/
 		HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilities.readInKSZ(kszIn);
-		HashMap<Integer,LinkedList<Integer[]>>ksz= CalcPValueMaria.addWeights(kszTmp);
+		HashMap<Integer,LinkedList<Integer[]>>ksz= FrequencyConverter.addWeights(kszTmp);
 		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
 		int[][]ontology = FileUtilities.readInOntology(ontoIn);
 		LinkedList<Integer> query = FileUtilities.readInQuery(queryIn);
