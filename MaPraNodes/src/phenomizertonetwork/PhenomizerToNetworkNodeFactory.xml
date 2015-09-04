@@ -3,7 +3,7 @@
     <name>PhenomizerToNetwork</name>
     
     <shortDescription>
-        
+        Cytoscape wrapper for displaying the results of Phenomizer
     </shortDescription>
     
     <fullDescription>

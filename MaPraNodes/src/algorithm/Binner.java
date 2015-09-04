@@ -27,10 +27,7 @@ public class Binner {
 		
 		FileInputReader reader = new FileInputReader(pathIn);
 		String line;
-		int disease = 1;
 		while((line=reader.read())!=null){
-			System.out.print("disease "+disease+":\t");
-			disease++;
 			String lineOut = createString(line.split("\t"));
 			FileUtilities.writeStringToExistingFile(pathOut, lineOut+"\n");
 		}
@@ -46,14 +43,9 @@ public class Binner {
 		LinkedList<String> stringList = new LinkedList<String>();
 		int[] bins = createBins(line);
 		int counter = 0;
-		boolean maxScore = true; // for printing the maximal score in a line
 		for(int i=bins.length; i>0; i--){
 			counter= counter+bins[i-1];
 			if (counter!=0){
-				if(maxScore){
-					System.out.println(counter+ " mal\t"+(i-1)/1000.0);
-					maxScore=false;
-				}
 				stringList.addFirst(counter+"");
 			}
 		}

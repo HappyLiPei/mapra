@@ -273,7 +273,6 @@ public class TableProcessor {
 	 * 			* if 0.01 <= pval < 0.05
 	 * 			** if 0.001 <= pval < 0.01
 	 * 			*** if 0.0001 <= pval < 0.001
-	 *			**** if pval <= 0.0001
 	 */
 	private static String getSignificance(Double pval){
 		if(pval >= 0.05){
@@ -288,12 +287,6 @@ public class TableProcessor {
 		if(pval<0.001){
 			return "***";
 		}
-//		if(pval >= 0.0001){
-//			return "***";
-//		}
-//		if(pval < 0.0001){
-//			return "****";
-//		}
 		return "";
 	}
 

@@ -8,6 +8,7 @@ import nodeutils.TableChecker;
 
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
+import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -85,9 +86,6 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
     	
-    	//TODO: p value matrix instead of distance matrix
-    	//TODO: color manager compatibility 
-    	
     	RunPhenomizerToNetwork.runNetworkGenerator(
     			inData[IN_PHENO],
     			inData[IN_MATRIX],
@@ -124,7 +122,7 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     	
     	//check disease_id from phenomizer node
     	TableChecker.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.DISEASE_ID, new DataType[]{IntCell.TYPE}, "");
-    	//TODO:check score from phenomizer node!!
+    	TableChecker.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.SCORE, new DataType[]{DoubleCell.TYPE}, "");
     	
         return new DataTableSpec[0];
     }
