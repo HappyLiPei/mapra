@@ -60,15 +60,18 @@ public class PhenomizerToNetworkNodeDialog extends DefaultNodeSettingsPane {
         
         createNewGroup("Edges");
         setHorizontalPlacement(true);
-        addDialogComponent(new DialogComponentStringSelection(comparator, "comparator", PhenomizerToNetworkNodeModel.COMPARATOR_VALUES));
+        addDialogComponent(new DialogComponentStringSelection(comparator, "Comparator", PhenomizerToNetworkNodeModel.COMPARATOR_VALUES));
         addDialogComponent(new DialogComponentNumberEdit(edge, "Edge threshold"));
         setHorizontalPlacement(false);
         createNewGroup("Output directory");
-        addDialogComponent(new DialogComponentFileChooser(out, "network_out_folder", JFileChooser.OPEN_DIALOG, true));
+        DialogComponentFileChooser fc = new DialogComponentFileChooser(out, "network_out_folder", JFileChooser.OPEN_DIALOG, true);
+        fc.setBorderTitle("Selected directory");
+        addDialogComponent(fc);
         createNewGroup("Cytoscape");
         addDialogComponent(new DialogComponentBoolean(start_cyto, "Run Cytoscape"));
         
         final DialogComponentFileChooser dcfc = new DialogComponentFileChooser(cyto_script, "cyto_script",JFileChooser.OPEN_DIALOG, false);
+        dcfc.setBorderTitle("Cytoscape executable");
         dcfc.setEnabled(start_cyto.getBooleanValue());
         cyto_script.setEnabled(start_cyto.getBooleanValue());
         addDialogComponent(dcfc);

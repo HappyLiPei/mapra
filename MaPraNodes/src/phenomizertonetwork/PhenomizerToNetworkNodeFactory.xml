@@ -7,31 +7,62 @@
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
+        <intro>
+        	PhenomizerToNetwork generates and displays a disease network for the diseases of PhenoDis.
+        	The aim of the node is to visualize the predictions of Phenomizer within this network.
+        	<br/>
+			The node requires the program Cytoscape (recommended version 3.2.1) to show the resulting network.
+			<br/><br/>
+        	The input of PhenomizerToNetwork consists of two different tables.
+        	The first table is the output of Phenomizer (including disease_ids and scores).
+        	The second table is a symmetric all-against-all matrix containing distance or similarity values for pairs of diseases.
+        	All column have to be named with PhenoDis disease_ids except for one optional column with disease names.
+        	Furthermore, the row ids of the table have to be PhenoDis disease_ids.
+        	An example for such a matrix table is provided at ... .
+        	<br/><br/>
+        	The node does not produce any output table but it writes 4 files into a specified output directory.
+        	<ul>
+        		<li> <i>disease_network.xgmml</i>: an xml-based representation of the disease network </li>
+        		<li> <i>script.txt</i>: a script using the Cytoscape scripting language </li>
+        		<li> <i>cytoscape_out.txt</i>: everything that Cytoscape writes to stdout </li>
+        		<li> <i>cytoscape_err.txt</i>: everything that Cytoscape writes to stderr (usually empty) </li>
+        	</ul>
+        </intro>
         
+        <option name="Comparator">
+        	The comparator defines a rule for generating the edges of the disease network.<br/>
+        	If the matrix at inport 1 is a distance matrix, use &lt;.
+        	If the matrix at inport 1 is a similarity matrix, use &gt;.
+    	</option>
+        <option name="Edge threshold">
+        	The option refers to the scores stored in the matrix at inport 1.
+        	If an entry of the table fulfills the threshold, the PhenomizerToNetwork creates an edge between the associated diseases.
+    	</option>
+        <option name="Output directory">
+        	PhenomizerToNetwork generates several text-based files.
+        	All these files are written to the specified directory.
+    	</option>
+        <option name="Run Cytoscape">
+        	The Run Cytoscape option allows to start Cytoscape during the execution of the node.
+        	Alternatively, you can run Cytoscape manually using the command:
+        	<br/>
+        	<i>cytoscape.sh -S script.txt</i>
+    	</option>
+        <option name="Cytoscape executable">
+        	The file chooser is active only if the <i>Run Cytoscape option</i> is ticked.
+        	The option requires a script called <i>cytoscape.sh</i> or <i>cytoscape.bat</i> (part of the Cytoscape installation).
+    	</option>
         
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="In-Port name">Description of first input port...</inPort>
-        <!-- possibly more input ports here-->
-        <outPort index="0" name="Out-Port name">Description of first output port...</outPort>
-        <!-- possibly more output ports here-->
+        <inPort index="0" name="Phenomizer Results">
+        	Output table of Phenomizer with columns disease_id and score
+    	</inPort>
+        <inPort index="1" name="All-Against-All Matrix">
+        	Symmetric matrix containing distance or similarity scores for all diseases in PhenoDis <br/>
+        	Optional: column disease with disease names 
+    	</inPort>
     </ports>    
-    <views>
-        <view index="0" name="name of first view">Description of first view...</view>
-        <!--view index="1" name="name of second view">Description of second view...</view-->
-    </views>
 </knimeNode>

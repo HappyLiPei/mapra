@@ -6,6 +6,7 @@ Bundle-Version: 1.3.1
 Bundle-ClassPath: phenomizer.jar
 Bundle-Activator: phenomizer.PhenomizerNodePlugin
 Bundle-Vendor: 
+ Marie-Sophie Friedl, Carolin Prexler, Maria Schelling
 Require-Bundle: org.eclipse.core.runtime,
  org.knime.workbench.core,
  org.knime.workbench.repository,

@@ -5,8 +5,7 @@
    <extension point="org.knime.workbench.repository.nodes">
 		<node category-path="/PhenoNodes" factory-class="phenomizer.PhenomizerNodeFactory" id="phenomizer.PhenomizerNodeFactory"/>
 		<node category-path="/PhenoNodes" factory-class="phenomizertonetwork.PhenomizerToNetworkNodeFactory" id="phenomizertonetwork.PhenomizerToNetworkNodeFactory"/>
-		<!--<node category-path="/PhenoNodes" factory-class="phenomizertoclustering.PhenomizerToClusteringNodeFactory" id="phenomizertoclustering.PhenomizerToClusteringNodeFactory"/>-->
-</extension>
+   </extension>
 
    <extension point="org.knime.workbench.repository.categories">
       <category description="Phenomizer Nodes" icon="icon/icon_pheno.png" level-id="PhenoNodes" locked="true" name="Phenomizer nodes" path="/"/>
