@@ -63,7 +63,7 @@ public class PhenomizerNodeModel extends NodeModel {
     public static final String P_VALUE = "p_value";
     public static final String SIGNIFICANCE = "significance";
     
-    //settingsmodels
+    //settingsmodels:
     //size of output
     protected static final String CFGKEY_OUTPUTSIZE="outputsize";
     protected static final int DEF_OUTPUTSIZE=20;
@@ -104,28 +104,28 @@ public class PhenomizerNodeModel extends NodeModel {
     @Override
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
-
+    	
+    	//read in tables from inports into phenomizer data structure
         LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
         LinkedList<Integer> symptoms = TableProcessor.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
         HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
         
         //TODO:true/false
+        //run Phenomizer algorithm
         LinkedList<String[]> result = new LinkedList<String[]>();
         if(!m_pval.getBooleanValue()){
 	        AlgoPheno.setInput(query, symptoms, diseases, edges);
 	        result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue(),true);
-
         }
         else{
         	PValueFolder.setPvalFoder(m_folder.getStringValue());
         	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges,true);
         }
         
-        //logger.info("generate output");
+        //generate table for outport
         BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
         return new BufferedDataTable[]{out};      
-
     }
 
     /**
@@ -133,7 +133,6 @@ public class PhenomizerNodeModel extends NodeModel {
      */
     @Override
     protected void reset() {
-
     }
 
     /**
@@ -143,7 +142,6 @@ public class PhenomizerNodeModel extends NodeModel {
     protected DataTableSpec[] configure(final DataTableSpec[] inSpecs)
             throws InvalidSettingsException {
     	
-    	logger.info("configure");
     	//check port 0: symptom table
     	TableChecker.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
     	TableChecker.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, new DataType[]{StringCell.TYPE}, null);
@@ -166,7 +164,8 @@ public class PhenomizerNodeModel extends NodeModel {
     
 	/**
 	 * generates specifications for outport table
-	 * @param pvalue: pvalue = true -> displays p values in the out port table
+	 * @param pvalue: pvalue = true -> displays p values and significance in the out port table
+	 * @return: column format of output table
 	 * col 0 : disease_id (int)
 	 * col 1 : disease_name (string)
 	 * col 2 : score (double)
@@ -244,7 +243,6 @@ public class PhenomizerNodeModel extends NodeModel {
     protected void loadInternals(final File internDir,
             final ExecutionMonitor exec) throws IOException,
             CanceledExecutionException {
-
     }
     
     /**
@@ -254,7 +252,6 @@ public class PhenomizerNodeModel extends NodeModel {
     protected void saveInternals(final File internDir,
             final ExecutionMonitor exec) throws IOException,
             CanceledExecutionException {
-       
     }
 
 }

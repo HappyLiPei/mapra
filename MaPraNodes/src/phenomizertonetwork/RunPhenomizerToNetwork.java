@@ -22,6 +22,20 @@ import execprocess.Executor;
 
 public class RunPhenomizerToNetwork {
 	
+	/**
+	 * method run in the execute procedure of the PhenomizerToNetwork node
+	 * @param phenores: input table from inport 0
+	 * @param matrix: input table from inport 1
+	 * @param comparator: value from node dialog (model m_comparator)
+	 * @param cutoff: value from node dialog (model m_edge)
+	 * @param outfolder: value from node dialog (model m_out)
+	 * @param run: value from node dialog (model m_start_cyto)
+	 * @param cyto: value from node dialog (model m_cyto_script)
+	 * @param logger: logger of the node
+	 * @param exec: execution context of the node 
+	 * @throws Exception: if format of table from inport 1 is incorrect
+	 */
+	
 	protected static void runNetworkGenerator(BufferedDataTable phenores, BufferedDataTable matrix,
 			String comparator, double cutoff, String outfolder, boolean run, String cyto,
 			NodeLogger logger, ExecutionContext exec) throws Exception{
@@ -39,7 +53,7 @@ public class RunPhenomizerToNetwork {
     	String xgmmlfile=Paths.get(outfolder,"disease_network.xgmml").toString();
     	String scriptfile = Paths.get(outfolder,"script.txt").toString();
     	
-    	//disease names
+    	//read in disease names, if they are provided in the matrix table, disease names will be displayed as node labels
     	HashMap<Integer,String> idstoname = new HashMap<Integer,String>();
     	if(matrix.getSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME)!=-1){
     		idstoname = getDiseaseNames(matrix);
@@ -47,6 +61,7 @@ public class RunPhenomizerToNetwork {
     	
     	//generate network file
     	logger.info("Write network file to " +xgmmlfile);
+    	//smallerthan = false -> use >, smallerthan = true -> use <
     	boolean smallerthan=false;
     	if(comparator.equals(PhenomizerToNetworkNodeModel.COMPARATOR_VALUES[0])){
     		smallerthan=true;
@@ -63,8 +78,13 @@ public class RunPhenomizerToNetwork {
     	}
 	}
 	
+	/**
+	 * transforms table with results of Phenomizer into data structure PhenoResults
+	 * @param table: table with results from Phenomizer node (inport 0)
+	 * @return: data structure representing the results of Phenomizer (ids, scores and p values (if available) 
+	 */
 	private static PhenoResults getPhenoRes(BufferedDataTable table){
-		
+		//read in data table
 		int length = table.getRowCount();
 		int [] ids = new int[length];
 		double [] scores = new double[length];
@@ -80,6 +100,7 @@ public class RunPhenomizerToNetwork {
 			index++;
 		}
 		
+		//generate data structure with or without p values
 		if(pval){
 			return new PhenoResults(ids, scores,pvalues);
 		}
@@ -88,6 +109,12 @@ public class RunPhenomizerToNetwork {
 		}
 	}
 	
+	/**
+	 * reads PhenoDis ids (column disease_id) from data table with results from Phenomizer,
+	 * nodes corresponding to those ids will be colored differently in the network
+	 * @param phenores: table from input port 0
+	 * @return: set of all PhenoDis ids from the table
+	 */
 	private static HashSet<String> getIdsToColor(BufferedDataTable phenores){
     	int index = phenores.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
     	HashSet<String> hs = new HashSet<String>(phenores.getRowCount()*3);
@@ -116,20 +143,27 @@ public class RunPhenomizerToNetwork {
 		}
 	}
 	
+	/**
+	 * method that generates a matrix data structure from the table at inport 1
+	 * @param matrix: table from inport 1
+	 * @param logger: logger of the node model
+	 * @return matrix data structure
+	 * @throws Exception: if format of matrix is incorrect
+	 */
 	private static DistanceMatrix generateDistMatrix(BufferedDataTable matrix, NodeLogger logger) throws Exception{
 		
+		//check format of matrix
 		//assume row ids == column names -> refer to PhenoDis Ids
 		int rows = matrix.getRowCount();
 		DataTableSpec s = matrix.getDataTableSpec();
 		String [] colnames=s.getColumnNames();
 		int pos_name = s.findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
-		//check if names available
+		//check if disease names are available
 		boolean name = true;
 		if(pos_name==-1){
 			name=false;
 		}
-		
-		//check if #cols == #rows
+		//check if #cols == #rows (exception: column name disease is not counted)
 		if(!name){
 			if(colnames.length!=rows){
 				throw new Exception("Invalid format of distance matrix table. The number of rows has to be equal to the number of columns");
@@ -141,7 +175,7 @@ public class RunPhenomizerToNetwork {
 			}
 		}
 		
-		//update colum names
+		//update column names: remove column name disease
 		if(name){
 			String[] copy = new String [colnames.length-1];
 			for(int i=0;i<colnames.length; i++){
@@ -158,6 +192,7 @@ public class RunPhenomizerToNetwork {
 			colnames=copy;
 		}
 		
+		//read rows from matrix and write score values into array
 		String [] rowids = new String [rows];
 		double [][] values = new double[rows][rows];
 		int index=0;
@@ -179,6 +214,11 @@ public class RunPhenomizerToNetwork {
 		return new DistanceMatrix(colnames, rowids, values);
 	}
 	
+	/**
+	 * reads in PhenoDis disease ids and corresponding names from all against all table to display them in the network
+	 * @param matrix: all against all matrix with distance/ similarity scores (inport 1)
+	 * @return: HashMap that maps PhenoDis id (row ids of matrix) to disease names (values of column disease) 
+	 */
 	private static HashMap<Integer,String> getDiseaseNames(BufferedDataTable matrix){
 		HashMap<Integer, String> res = new HashMap<Integer,String>(matrix.getRowCount()*3);
 		int index_name = matrix.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);

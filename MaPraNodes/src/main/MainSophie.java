@@ -22,6 +22,8 @@ public class MainSophie {
 	private static final int WEIGHT_NO_P_VALUE=2;
 	private static final int NO_WEIGHT_P_VALUE=3;
 	private static final int WEIGHT_P_VALUE=4;
+	private static final int AS_WEIGHT_NO_P_VALUE=5;
+	private static final int AS_WEIGHT_P_VALUE=6;
 	
 	/*
 	 * generates query lists from text mining results
@@ -271,7 +273,7 @@ public class MainSophie {
 				if(start){
 						AlgoPheno.setInput(queries.get(pair[1]),
 								symptom_struct,ksz_struct,isa_struct);
-						if(mode==NO_WEIGHT_P_VALUE|| mode ==WEIGHT_P_VALUE){
+						if(mode==NO_WEIGHT_P_VALUE|| mode ==WEIGHT_P_VALUE || mode==AS_WEIGHT_P_VALUE){
 							PValueFolder.setPvalFoder(folder_pval);
 						}
 						start = false;
@@ -280,16 +282,27 @@ public class MainSophie {
 					AlgoPheno.setQuery(queries.get(pair[1]));
 				}
 				
-				//TODO: true/false AS_WEIGHT
 				String line_out="";
-				if(mode==NO_WEIGHT_P_VALUE|| mode == WEIGHT_P_VALUE){
-					HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue(true);
+				if(mode==NO_WEIGHT_P_VALUE|| mode == WEIGHT_P_VALUE || mode==AS_WEIGHT_P_VALUE){
+					HashMap<Integer,Double> resPhenomizer = null;
+					if(mode==AS_WEIGHT_P_VALUE){
+						resPhenomizer = AlgoPheno.runPhenomizerWithPValue(false);
+					}
+					else{
+						resPhenomizer = AlgoPheno.runPhenomizerWithPValue(true);
+					}
 					LinkedList<String []> res=PValueGenerator.getResultsWithPvaluesForOMIM(resPhenomizer, 8000);
 					double [] rank = calculateRankANDPval(pair[0], res);
 					line_out=pair[0]+"\t"+pair[1]+"\t"+rank[0]+"\t"+rank[1];
 				}
 				else{
-					LinkedList<String []> res=AlgoPheno.runPhenomizer(8000,true);
+					LinkedList<String []> res=null;
+					if(mode ==AS_WEIGHT_NO_P_VALUE){
+						res=AlgoPheno.runPhenomizer(8000,false);
+					}
+					else{
+						res=AlgoPheno.runPhenomizer(8000,true);
+					}
 					double rank = calculateRankNoPval(pair[0], res);
 					line_out=pair[0]+"\t"+pair[1]+"\t"+rank;
 				}
@@ -416,11 +429,11 @@ public class MainSophie {
 		String ksz="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/ksz_HPO_frequency.csv";//"D:\\transfer\\Datenbank\\ksz_HPO_frequency.csv";//
 		String symptom="/home/marie-sophie/Uni/mapra/phenodis/Datenbank/symptoms_HPO_test.csv";//"D:\\transfer\\Datenbank\\symptoms_HPO_test.csv";//
 		String phenofile ="/home/marie-sophie/Uni/mapra/omim/phenodis_omimids.txt";//"D:\\transfer\\phenodis_omimids.txt";//
-		String outfile="/home/marie-sophie/Uni/mapra/omim/withweight_bh_pval.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
-		String pval="/home/marie-sophie/Uni/mapra/phenodis/pvalues_big_weight";
+		String outfile="/home/marie-sophie/Uni/mapra/omim/as_weight_p.txt";//"D:\\transfer\\weight_no_pval.txt";//"/home/marie-sophie/Uni/mapra/omim/res_no_weight_no_p.txt";
+		String pval="/home/marie-sophie/Uni/mapra/phenodis/pvalues_big_asweight";
 		
 		MainSophie ms = new MainSophie();
-		ms.runOMIMVal(WEIGHT_P_VALUE,outfile, phenofile,file, isa, symptom, ksz, pval);
+		ms.runOMIMVal(AS_WEIGHT_P_VALUE,outfile, phenofile,file, isa, symptom, ksz, pval);
 		
 		//String [] pair = new String []{"598","214800"};
 		//ms.showResultsFor(pair, WEIGHT_P_VALUE, file, isa, symptom, ksz, pval);

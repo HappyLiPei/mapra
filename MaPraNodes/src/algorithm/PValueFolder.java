@@ -44,7 +44,7 @@ public class PValueFolder {
 	/**
 	 * test if the file for a certain query length exists in the set folder
 	 * @param length
-	 * @return
+	 * @return true, if file exits; false if file does not exist
 	 */
 	public static boolean checkFile(int length){
 		if(!set|| length<=0||length>10){

@@ -32,10 +32,13 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
 	final SettingsModelIntegerBounded outputsize = new SettingsModelIntegerBounded(
 			PhenomizerNodeModel.CFGKEY_OUTPUTSIZE,	PhenomizerNodeModel.DEF_OUTPUTSIZE,
 			PhenomizerNodeModel.MIN_OUTPUTSIZE, PhenomizerNodeModel.MAX_OUTPUTSIZE);
+	
 	final SettingsModelBoolean weight = new SettingsModelBoolean(
 			PhenomizerNodeModel.CFGKEY_WEIGHT, PhenomizerNodeModel.DEF_WEIGHT);
+	
 	final SettingsModelBoolean pval = new SettingsModelBoolean(
 			PhenomizerNodeModel.CFGKEY_PVALUE, PhenomizerNodeModel.DEF_PVALUE);
+	
 	final SettingsModelString folder = new SettingsModelString(
 			PhenomizerNodeModel.CFGKEY_FOLDER, PhenomizerNodeModel.DEF_FOLDER);
 	

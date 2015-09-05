@@ -17,9 +17,6 @@ public class PhenomizerNodeView extends NodeView<PhenomizerNodeModel> {
      */
     protected PhenomizerNodeView(final PhenomizerNodeModel nodeModel) {
         super(nodeModel);
-
-        // TODO instantiate the components of the view here.
-
     }
 
     /**
@@ -27,16 +24,9 @@ public class PhenomizerNodeView extends NodeView<PhenomizerNodeModel> {
      */
     @Override
     protected void modelChanged() {
-
-        // TODO retrieve the new model from your nodemodel and 
-        // update the view.
         PhenomizerNodeModel nodeModel = 
             (PhenomizerNodeModel)getNodeModel();
         assert nodeModel != null;
-        
-        // be aware of a possibly not executed nodeModel! The data you retrieve
-        // from your nodemodel could be null, emtpy, or invalid in any kind.
-        
     }
 
     /**
@@ -44,8 +34,6 @@ public class PhenomizerNodeView extends NodeView<PhenomizerNodeModel> {
      */
     @Override
     protected void onClose() {
-    
-        // TODO things to do when closing the view
     }
 
     /**
@@ -53,8 +41,6 @@ public class PhenomizerNodeView extends NodeView<PhenomizerNodeModel> {
      */
     @Override
     protected void onOpen() {
-
-        // TODO things to do when opening the view
     }
 
 }

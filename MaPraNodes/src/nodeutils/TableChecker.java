@@ -19,7 +19,7 @@ public class TableChecker {
      */
     
     public static void checkColumn(DataTableSpec[] inSpecs, int port, String colname, DataType [] types, String message) throws InvalidSettingsException{
-    	
+    	//check column name
     	DataColumnSpec s =inSpecs[port].getColumnSpec(colname);
     	if(s==null){
     		if(message==null){
@@ -29,6 +29,7 @@ public class TableChecker {
     			throw new InvalidSettingsException("Table at port "+port+" requires column "+colname+"\n"+message);
     		}
     	}
+    	//check data type of column
     	boolean correct_type=false;
     	for(DataType t :types){
     		correct_type = correct_type || (s.getType()==t);

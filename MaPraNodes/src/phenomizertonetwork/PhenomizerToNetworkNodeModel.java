@@ -37,16 +37,17 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     // the logger instance
     private static final NodeLogger logger = NodeLogger
             .getLogger(PhenomizerToNetworkNodeModel.class);
-       
+    
+    // inport positions
     private static final int IN_PHENO=0;
     private static final int IN_MATRIX=1;
     
+    //settingsmodels:
     //comparator for edge cutoff
     protected static final String CFGKEY_COMPARATOR = "comparator";
     protected static final String [] COMPARATOR_VALUES=new String[]{"<",">"};
     protected static final String DEF_COMPARATOR=COMPARATOR_VALUES[0];
     private final SettingsModelString m_comparator = new SettingsModelString(CFGKEY_COMPARATOR, DEF_COMPARATOR);    
-    
     //distance cutoff for edge
     protected static final String CFGKEY_EDGE="edge";
     protected static final double DEF_EDGE=4;
@@ -54,17 +55,14 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     protected static final double MAX_EDGE = Double.MAX_VALUE;
     private final SettingsModelDoubleBounded m_edge = new SettingsModelDoubleBounded(CFGKEY_EDGE, DEF_EDGE,
     		MIN_EDGE, MAX_EDGE);
-    
     //output folder
     protected static final String CFGKEY_OUT="out";
     protected static final String DEF_OUT="";
     private final SettingsModelString m_out = new SettingsModelString(CFGKEY_OUT, DEF_OUT);
-    
     //start cytoscpe
     protected static final String CFGKEY_START_CYTO="start_cyto";
     protected static final boolean DEF_START_CYTO=false;
     private final SettingsModelBoolean m_start_cyto = new SettingsModelBoolean(CFGKEY_START_CYTO, DEF_START_CYTO);
-    
     //cytoscape script
     protected static final String CFGKEY_CYTO_SCRIPT = "cyto_script";
     protected static final String DEF_CYTO_SCRIPT = "";
@@ -72,10 +70,12 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
 
     /**
      * Constructor for the node model.
+     * 2 inports
+     *  -results from phenomizer(0)
+     * 	-all against all matrix (1)
      */
     protected PhenomizerToNetworkNodeModel(){
         super(2,0);
-    	//super(1, 0);
         m_cyto_script.setEnabled(m_start_cyto.getBooleanValue());
     }
 
@@ -120,9 +120,10 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     				"Cytoscape script is missing\nPlease choose a file in the node dialog");
     	}
     	
-    	//check disease_id from phenomizer node
+    	//check port 0: results from phenomizer
     	TableChecker.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.DISEASE_ID, new DataType[]{IntCell.TYPE}, "");
     	TableChecker.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.SCORE, new DataType[]{DoubleCell.TYPE}, "");
+    	//check of port 1: done in RunPhenomizerToNetwork -> format depends on number of rows
     	
         return new DataTableSpec[0];
     }
@@ -163,7 +164,7 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     	m_out.validateSettings(settings);
     	m_start_cyto.validateSettings(settings);
     	m_cyto_script.validateSettings(settings);
-    	
+    	//check if files are set (not empty default values anymore)
     	SettingsChecker.checkFileDialog(settings, CFGKEY_OUT, DEF_OUT, "Output folder is missing");
     	if(settings.getBoolean(CFGKEY_START_CYTO)){
     		SettingsChecker.checkFileDialog(settings, CFGKEY_CYTO_SCRIPT, DEF_CYTO_SCRIPT, "Cytoscape script is missing");

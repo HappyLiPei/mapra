@@ -11,6 +11,10 @@ public class FileInputReader {
 	private BufferedReader reader;
 	private String path;
 	
+	/**
+	 * creates BufferedReader reading a file from path path
+	 * @param path: path to file that should be read
+	 */
 	public FileInputReader(String path){
 		this.path=path;
 		Charset c = Charset.forName("UTF-8");
@@ -23,6 +27,10 @@ public class FileInputReader {
 		}
 	}
 	
+	/**
+	 * retrieves the next line of the file
+	 * @return: next line
+	 */
 	public String read(){
 
 			String res;
@@ -38,6 +46,9 @@ public class FileInputReader {
 		return "";
 	}
 	
+	/**
+	 * closes the reader
+	 */
 	public void closer(){
 		try{
 			reader.close();
