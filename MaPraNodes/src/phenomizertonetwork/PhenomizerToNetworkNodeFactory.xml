@@ -18,7 +18,7 @@
         	The second table is a symmetric all-against-all matrix containing distance or similarity values for pairs of diseases.
         	All columns have to be named with PhenoDis disease_ids except for one optional column with disease names.
         	Furthermore, the row ids of the table have to be PhenoDis disease_ids.
-        	An example for such a matrix table is provided at ... .
+        	An example for such a matrix table is provided at <a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
         	<br/><br/>
         	The node does not produce any output table, but writes 4 files into a specified output directory.
         	<ul>
@@ -37,6 +37,7 @@
         <option name="Edge threshold">
         	The option refers to the scores stored in the matrix at input port 1.
         	If an entry of the table fulfills the threshold, PhenomizerToNetwork creates an edge between the corresponding diseases.
+        </option>
         <option name="Output directory">
         	PhenomizerToNetwork generates several text-based files.
         	All these files are written to the specified directory.

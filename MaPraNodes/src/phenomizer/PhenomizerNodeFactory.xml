@@ -19,7 +19,7 @@
 			Table 0 to 2 are directly extracted from PhenoDis. 
 			Table 3 contains the PhenoDis symptom_ids of the query symptoms. 
 			Note that the column names of the tables have to match the names specified in the ports section. 
-			For more information about the format of the input tables see example data from ... .
+			For more information about the format of the input tables see example data from <a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
 			<br/><br/>
 			The output of Phenomizer is a list of diseases with similarity score and p value.
 			The list is sorted according to p value (ascending) and score (descending).
