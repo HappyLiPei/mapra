@@ -10,7 +10,7 @@ import algorithm.AlgoPheno;
 import algorithm.Binner;
 import algorithm.FrequencyConverter;
 
-public class CalcPValueSophieCMDL {
+public class CalcPValue {
 
 
 	/**
@@ -18,7 +18,7 @@ public class CalcPValueSophieCMDL {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-
+		
 		int queryLength = Integer.valueOf(args[0]);
 		int iterations = Integer.valueOf(args[1]);
 		String weight =args[2]; // noweight, weight, asymmweight
