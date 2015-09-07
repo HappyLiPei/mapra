@@ -8,7 +8,7 @@
     
     <fullDescription>
         <intro>
-        	PhenomizerToNetwork generates and displays a disease network for the diseases of PhenoDis.
+        	PhenomizerToNetwork generates and displays a (disease) network for the diseases of PhenoDis.
         	The aim of the node is to visualize the predictions of Phenomizer within this network.
         	<br/>
 			The node requires the program Cytoscape (recommended version 3.2.1) to show the resulting network.
@@ -20,7 +20,7 @@
         	Furthermore, the row ids of the table have to be PhenoDis disease_ids.
         	An example for such a matrix table is provided at ... .
         	<br/><br/>
-        	The node does not produce any output table but (it?) writes 4 (four?) files into a specified output directory.
+        	The node does not produce any output table, but writes 4 files into a specified output directory.
         	<ul>
         		<li> <i>disease_network.xgmml</i>: an xml-based representation of the disease network </li>
         		<li> <i>script.txt</i>: a script using the Cytoscape scripting language </li>
@@ -31,13 +31,12 @@
         
         <option name="Comparator">
         	The comparator defines a rule for generating the edges of the disease network.<br/>
-        	If the matrix at inport 1 is a distance matrix, use &lt;.
-        	If the matrix at inport 1 is a similarity matrix, use &gt;.
+        	If the matrix at input port 1 is a distance matrix, use &lt;.
+        	If the matrix at input port 1 is a similarity matrix, use &gt;.
     	</option>
         <option name="Edge threshold">
-        	The option refers to the scores stored in the matrix at inport 1.
-        	If an entry of the table fulfills the threshold, the PhenomizerToNetwork creates an edge between the associated diseases./ If an entry of the table fulfills the threshold, the corresponding diseases are associated by creating an edge between the nodes.
-    	</option>
+        	The option refers to the scores stored in the matrix at input port 1.
+        	If an entry of the table fulfills the threshold, PhenomizerToNetwork creates an edge between the corresponding diseases.
         <option name="Output directory">
         	PhenomizerToNetwork generates several text-based files.
         	All these files are written to the specified directory.
