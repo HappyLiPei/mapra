@@ -111,16 +111,15 @@ public class PhenomizerNodeModel extends NodeModel {
         int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
         HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
         
-        //TODO:true/false
         //run Phenomizer algorithm
         LinkedList<String[]> result = new LinkedList<String[]>();
         if(!m_pval.getBooleanValue()){
 	        AlgoPheno.setInput(query, symptoms, diseases, edges);
-	        result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue(),true);
+	        result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue(),false);
         }
         else{
         	PValueFolder.setPvalFoder(m_folder.getStringValue());
-        	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges,true);
+        	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges,false);
         }
         
         //generate table for outport
