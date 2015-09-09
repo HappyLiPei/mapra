@@ -21,6 +21,46 @@ public class TestAlgoCaro {
 
 	public static void main(String[]args) throws IOException{
 		
+		
+		// count number of symptoms for OMIM synopses
+		String pathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/omim/omim_tm_res.txt";
+		String pathOut = "C:/Users/Carolin/Dropbox/Masterpraktikum/omim/omim_tm_res_parsed.txt";
+		
+		FileInputReader reader = new FileInputReader(pathIn);
+		FileWriter fw = new FileWriter(pathOut);
+		BufferedWriter bw = new BufferedWriter(fw);
+		String line = reader.read();//erste zeile (symptom-ids )parsen und rausschreiben
+		//System.out.println(line);
+		String[] a = line.split("\t");
+		//System.out.println(a[1]);
+		//System.out.println(a[1].substring(5, 11));
+		for(int pos=1; pos<a.length;pos++){
+			String id = a[pos].substring(5, 11);
+			bw.append(id+"\t");
+		}
+		bw.newLine();
+		
+		//count number of symptoms
+		int[] numbers = new int[a.length-1];
+		while((line=reader.read())!=null){
+			String[] b = line.split("\t");
+			for(int pos=1; pos<b.length;pos++){
+				if(b[pos].equals("1.0")){
+					numbers[pos-1]++;
+				}
+			}
+		}
+		
+		//print numbers
+		for(int n: numbers){
+			bw.append(n+"\t");
+		}
+		bw.close();
+		
+		
+		
+		
+		
 		/*
 		// aus case-study-output: ersten 30 disease-ids für netzwerk extrahieren (.noa files)
 		String file = "Systemic_lupus";
@@ -102,7 +142,7 @@ public class TestAlgoCaro {
 		*/
 		
 		
-		
+		/*
 		// for parsing all-against-all (for disease network, use upper triangle from matrix):
 		String dataPathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/Clustering/allAgainstAll_sim.txt";
 		String pathOut = "C:/Users/Carolin/Downloads/allAgainstAll_simPvals_parsed.txt";
@@ -131,7 +171,7 @@ public class TestAlgoCaro {
 			}
 		}
 		bw.close();
-		
+		*/
 		
 		/*
 		String dataPath = "C:/Users/Carolin/Dropbox/Masterpraktikum/Testdatensatz/";
