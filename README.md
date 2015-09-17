@@ -9,4 +9,4 @@ Content:
 * MaPraNodes: source code of Phenomizer for PhenoDis
 * TestData: dummy data representing diseases, symptoms, disease-symptom association, queries, all-against-all matrices and score distributions
 * phenomizer_1.4.2.jar: compiled Phenomizer KNIME nodes, just copy this file into the dropins folder of your KNIME installation to use Phenomizer for PhenoDis
-* Paper: ...
+* DecisionSupportForRareDiseases.pdf: paper presenting Phenomizer for PhenoDis
