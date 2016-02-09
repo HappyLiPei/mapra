@@ -1,13 +1,9 @@
 package main;
 
+import io.FileInputReader;
+import io.FileOutputWriter;
 import io.FileUtilities;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -262,7 +258,7 @@ public class MainSophie {
 		
 		boolean start = true;
 		int count = 1;
-		Writer_Output w = new Writer_Output(outfile);
+		FileOutputWriter w = new FileOutputWriter(outfile);
 		
 		//pair[0]: pheno_dis pair[1]: omim
 		for(String[] pair :disease_pairs){
@@ -307,7 +303,7 @@ public class MainSophie {
 					line_out=pair[0]+"\t"+pair[1]+"\t"+rank;
 				}
 				System.out.println(line_out);
-				w.writeFileln(line_out);
+				w.writeFilelnAndFlush(line_out);
 			}
 			count++;
 		}
@@ -398,7 +394,7 @@ public class MainSophie {
 		//phenodis to symptom
 		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = convertFreqs(FileUtilities.readInKSZFrequency(ksz));
 		
-		Writer_Output w = new Writer_Output(out);
+		FileOutputWriter w = new FileOutputWriter(out);
 		int counter =0;
 		for(String[] pair :disease_pairs){
 			if(ksz_struct.containsKey(Integer.valueOf(pair[0]))){
@@ -410,7 +406,7 @@ public class MainSophie {
 					}
 				}
 				if(freq){
-					w.writeFileln(pair[0]+"\tunknown\t"+pair[1]);
+					w.writeFilelnAndFlush(pair[0]+"\tunknown\t"+pair[1]);
 					counter++;
 				}
 			}
@@ -433,7 +429,7 @@ public class MainSophie {
 		String pval="/home/marie-sophie/Uni/mapra/phenodis/pvalues_big_asweight";
 		
 		MainSophie ms = new MainSophie();
-		ms.runOMIMVal(AS_WEIGHT_P_VALUE,outfile, phenofile,file, isa, symptom, ksz, pval);
+		//ms.runOMIMVal(AS_WEIGHT_P_VALUE,outfile, phenofile,file, isa, symptom, ksz, pval);
 		
 		//String [] pair = new String []{"598","214800"};
 		//ms.showResultsFor(pair, WEIGHT_P_VALUE, file, isa, symptom, ksz, pval);
@@ -495,122 +491,4 @@ public class MainSophie {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	private class FileInputReader {
-		
-		private BufferedReader reader;
-		private String path;
-		
-		public FileInputReader(String path){
-			this.path=path;
-			Charset c = Charset.forName("UTF-8");
-			try{
-				reader = Files.newBufferedReader(Paths.get(path),c);
-			}
-			catch(IOException e){
-				System.out.println("Error while creating the reader for file "+path);
-				System.exit(1);
-			}
-		}
-		
-		public String read(){
-
-				String res;
-				try {
-					res = reader.readLine();
-					return res;
-				}
-				catch (IOException e) {
-					System.out.println("Error while reading from file "+path);
-					System.exit(1);
-				}
-
-			return "";
-		}
-		
-		public void closer(){
-			try{
-				reader.close();
-			}
-			catch(IOException e){
-				System.out.println("Error while closing reader for file "+path);
-				System.exit(1);
-			}
-		}
-
-
-	}
-	
-	
-	public class  Writer_Output {
-
-		public String path;
-		public BufferedWriter w;
-		
-		public Writer_Output (String path){
-			this.path=path;
-			initiateWriter(path);
-		}
-		
-		public void initiateWriter (String path){
-			try{
-				Charset c = Charset.forName("UTF-8");
-				w = Files.newBufferedWriter(Paths.get(path), c);
-			}
-			catch(IOException e){
-				System.out.println("Error creating the writer for file "+path);
-				System.exit(1);
-			}
-		}
-		
-		public void writeFile(String s){
-			try{
-				w.write(s);
-				w.flush();
-			}
-			catch(IOException e){
-				System.out.println("Error while writing to file "+path);
-				System.exit(1);
-			}
-		}
-		
-		public void writeFileln(String s){
-			writeFile(s+"\n");
-		}
-		
-		public void closew(){
-			try{
-				w.flush();
-				w.close();
-			}
-			catch(IOException e){
-				System.out.println("Error closing the writer for file "+path);
-			}
-		}
-		
-	}
-
-
 }
