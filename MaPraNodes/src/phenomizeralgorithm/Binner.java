@@ -1,4 +1,4 @@
-package algorithm;
+package phenomizeralgorithm;
 
 import java.io.File;
 import java.util.Iterator;

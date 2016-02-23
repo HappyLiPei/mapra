@@ -1,14 +1,13 @@
 package main;
 
 import io.FileUtilities;
+import phenomizeralgorithm.AlgoPheno;
+import phenomizeralgorithm.Binner;
+import phenomizeralgorithm.FrequencyConverter;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
-
-import algorithm.AlgoPheno;
-import algorithm.Binner;
-import algorithm.FrequencyConverter;
 
 public class CalcPValue {
 

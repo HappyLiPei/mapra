@@ -1,6 +1,11 @@
 package main;
 
 import io.FileInputReader;
+import phenomizeralgorithm.AlgoPheno;
+import phenomizeralgorithm.Binner;
+import phenomizeralgorithm.Ontology;
+import phenomizeralgorithm.PValueFolder;
+import phenomizeralgorithm.PValueGenerator;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -10,12 +15,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import algorithm.AlgoPheno;
-import algorithm.Binner;
-import algorithm.Ontology;
-import algorithm.PValueFolder;
-import algorithm.PValueGenerator;
 
 public class TestAlgoCaro {
 
@@ -62,7 +61,7 @@ public class TestAlgoCaro {
 		
 		
 		/*
-		// aus case-study-output: ersten 30 disease-ids für netzwerk extrahieren (.noa files)
+		// aus case-study-output: ersten 30 disease-ids fï¿½r netzwerk extrahieren (.noa files)
 		String file = "Systemic_lupus";
 		String pathIn = "C:/Users/Carolin/Dropbox/Masterpraktikum/OutputCaseStudiesValidation/output1_stupid/"+file+".csv";
 		String pathOut = "C:/Users/Carolin/Downloads/disease_network/01_cases_noa/"+file+".noa";

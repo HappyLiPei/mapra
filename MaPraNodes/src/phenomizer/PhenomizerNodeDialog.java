@@ -13,7 +13,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
-import algorithm.PValueFolder;
+import phenomizeralgorithm.PValueFolder;
 
 /**
  * <code>NodeDialog</code> for the "Phenomizer" Node.

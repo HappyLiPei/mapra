@@ -1,4 +1,4 @@
-package algorithm;
+package phenomizeralgorithm;
 
 import java.util.Comparator;
 import java.util.HashMap;

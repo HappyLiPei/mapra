@@ -28,10 +28,10 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
-import algorithm.AlgoPheno;
-import algorithm.PValueFolder;
-import algorithm.PValueGenerator;
 import nodeutils.TableProcessor;
+import phenomizeralgorithm.AlgoPheno;
+import phenomizeralgorithm.PValueFolder;
+import phenomizeralgorithm.PValueGenerator;
 
 
 /**

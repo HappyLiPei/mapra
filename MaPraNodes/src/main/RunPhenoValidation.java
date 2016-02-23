@@ -1,12 +1,11 @@
 package main;
 
 import io.FileUtilities;
+import phenomizeralgorithm.FrequencyConverter;
+import phenomizeralgorithm.PhenoValidation;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-
-import algorithm.FrequencyConverter;
-import algorithm.PhenoValidation;
 
 public class RunPhenoValidation {
 

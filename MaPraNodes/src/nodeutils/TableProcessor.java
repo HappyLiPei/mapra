@@ -18,9 +18,8 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
-import algorithm.FrequencyConverter;
-
 import phenomizer.PhenomizerNodeModel;
+import phenomizeralgorithm.FrequencyConverter;
 
 public class TableProcessor {
 	

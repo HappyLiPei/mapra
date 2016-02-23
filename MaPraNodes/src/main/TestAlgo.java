@@ -1,13 +1,13 @@
 package main;
 
 import io.FileUtilities;
+import phenomizeralgorithm.AlgoPheno;
+import phenomizeralgorithm.FrequencyConverter;
+import phenomizeralgorithm.PValueFolder;
+import phenomizeralgorithm.PValueGenerator;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import algorithm.AlgoPheno;
-import algorithm.FrequencyConverter;
-import algorithm.PValueFolder;
-import algorithm.PValueGenerator;
 
 public class TestAlgo {
 
