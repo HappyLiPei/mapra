@@ -26,6 +26,11 @@ public class AlgoPheno {
 	 */
 	public static void setInput(LinkedList<Integer> query, LinkedList<Integer>symptoms,
 			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto){
+		
+		kszD = new HashMap<Integer,LinkedList<Integer[]>>();
+		kszS = new HashMap<Integer,HashSet<Integer>>();
+		ic = new HashMap<Integer,Double>();
+		calculatedSim = new HashMap<String,Double>();
 
 		ontology = new Ontology(onto);
 		queryIds = removeAncestors(query);

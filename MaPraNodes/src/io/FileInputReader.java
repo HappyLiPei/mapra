@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 
 public class FileInputReader {
 	
@@ -57,6 +58,26 @@ public class FileInputReader {
 			System.out.println("Error while closing reader for file "+path);
 			System.exit(1);
 		}
+	}
+	
+	/**
+	 * Method to retrieve all lines of a file in a LinkedList
+	 * @param path to the file that should be read
+	 * @return List of Strings, each String corresponds to a line of the file
+	 */
+	public static LinkedList<String> readAllLinesFrom(String path){
+		
+		LinkedList<String> lineList = new LinkedList<String>();
+		
+		FileInputReader fir = new FileInputReader(path);
+		String line="";
+		
+		while ((line=fir.read())!=null){
+			lineList.add(line);
+		}
+		fir.closer();
+		
+		return lineList;
 	}
 
 
