@@ -93,7 +93,8 @@ public class CalcPValue {
 		}
 
 	}
-
+	
+	//TODO: move method to FrequencyConverter
 	public static HashMap<Integer, LinkedList<Integer []>> addWeights (HashMap<Integer, LinkedList<Integer>> ksz){
 
 		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer []>>(ksz.size()*3);
