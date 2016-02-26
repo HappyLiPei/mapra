@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+//TODO: remove this class
 public class AlgoPheno {
 
 	private static LinkedList<Integer> queryIds;

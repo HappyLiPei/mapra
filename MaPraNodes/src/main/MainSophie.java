@@ -204,37 +204,39 @@ public class MainSophie {
 		return res;
 	}
 	
-	private HashMap<Integer, LinkedList<Integer []>> addWeights (HashMap<Integer, LinkedList<Integer>> ksz){
-		
-		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer []>>(ksz.size()*3);
-		for(Integer k: ksz.keySet()){
-			LinkedList<Integer []> list = new LinkedList<Integer[]>();
-			res.put(k, list);
-			for(int i: ksz.get(k)){
-				Integer [] symp_and_weight = new Integer [2];
-				symp_and_weight[0]=i;
-				symp_and_weight[1]=10;
-				list.add(symp_and_weight);
-			}			
-		}
-		return res;
-	}
+	//TODO: already in frequency converter
+//	private HashMap<Integer, LinkedList<Integer []>> addWeights (HashMap<Integer, LinkedList<Integer>> ksz){
+//		
+//		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer []>>(ksz.size()*3);
+//		for(Integer k: ksz.keySet()){
+//			LinkedList<Integer []> list = new LinkedList<Integer[]>();
+//			res.put(k, list);
+//			for(int i: ksz.get(k)){
+//				Integer [] symp_and_weight = new Integer [2];
+//				symp_and_weight[0]=i;
+//				symp_and_weight[1]=10;
+//				list.add(symp_and_weight);
+//			}			
+//		}
+//		return res;
+//	}
 	
-	private HashMap<Integer, LinkedList<Integer[]>> convertFreqs (HashMap<Integer, LinkedList<String[]>> ksz){
-		
-		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(ksz.size()*3);
-		for(Integer k: ksz.keySet()){
-			LinkedList<Integer []> list = new LinkedList<Integer[]>();
-			res.put(k, list);
-			for(String [] s: ksz.get(k)){
-				Integer [] symp_and_weight = new Integer [2];
-				symp_and_weight[0]=Integer.valueOf(s[0]);
-				symp_and_weight[1]=FrequencyConverter.convertFrequency(s[1]);
-				list.add(symp_and_weight);
-			}
-		}
-		return res;
-	}
+	//TODO: check if method alread available in frequency converter
+//	private HashMap<Integer, LinkedList<Integer[]>> convertFreqs (HashMap<Integer, LinkedList<String[]>> ksz){
+//		
+//		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(ksz.size()*3);
+//		for(Integer k: ksz.keySet()){
+//			LinkedList<Integer []> list = new LinkedList<Integer[]>();
+//			res.put(k, list);
+//			for(String [] s: ksz.get(k)){
+//				Integer [] symp_and_weight = new Integer [2];
+//				symp_and_weight[0]=Integer.valueOf(s[0]);
+//				symp_and_weight[1]=FrequencyConverter.convertFrequency(s[1]);
+//				list.add(symp_and_weight);
+//			}
+//		}
+//		return res;
+//	}
 	
 	//TODO: adapt to new class structure
 	private void runOMIMVal(int mode, String outfile, String phenofile, String tmfile, String isa, String symptom, String ksz, String folder_pval){
@@ -387,32 +389,33 @@ public class MainSophie {
 //		}
 //	}
 	
+	//TODO: adapt to new frequency converter
 	private void extractDiseasesWithFreq(String phenofile, String ksz, String out){
 		
-		//phenodis to omim
-		LinkedList<String []> disease_pairs = readOMIMPheno(phenofile);
-		//phenodis to symptom
-		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = convertFreqs(FileUtilities.readInKSZFrequency(ksz));
-		
-		FileOutputWriter w = new FileOutputWriter(out);
-		int counter =0;
-		for(String[] pair :disease_pairs){
-			if(ksz_struct.containsKey(Integer.valueOf(pair[0]))){
-				boolean freq = false;
-				for(Integer[] symp: ksz_struct.get(Integer.valueOf(pair[0]))){
-					if(symp[1]!=10){
-						freq = true;
-						
-					}
-				}
-				if(freq){
-					w.writeFilelnAndFlush(pair[0]+"\tunknown\t"+pair[1]);
-					counter++;
-				}
-			}
-		}
-		System.out.println(counter);
-		w.closew();
+//		//phenodis to omim
+//		LinkedList<String []> disease_pairs = readOMIMPheno(phenofile);
+//		//phenodis to symptom
+//		HashMap<Integer, LinkedList<Integer[]>> ksz_struct = convertFreqs(FileUtilities.readInKSZFrequency(ksz));
+//		
+//		FileOutputWriter w = new FileOutputWriter(out);
+//		int counter =0;
+//		for(String[] pair :disease_pairs){
+//			if(ksz_struct.containsKey(Integer.valueOf(pair[0]))){
+//				boolean freq = false;
+//				for(Integer[] symp: ksz_struct.get(Integer.valueOf(pair[0]))){
+//					if(symp[1]!=10){
+//						freq = true;
+//						
+//					}
+//				}
+//				if(freq){
+//					w.writeFilelnAndFlush(pair[0]+"\tunknown\t"+pair[1]);
+//					counter++;
+//				}
+//			}
+//		}
+//		System.out.println(counter);
+//		w.closew();
 		
 	}
 	

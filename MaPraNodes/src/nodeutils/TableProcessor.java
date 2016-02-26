@@ -45,7 +45,7 @@ public class TableProcessor {
 	public static LinkedList<Integer> generateQuery(BufferedDataTable table_query, BufferedDataTable table_symptoms, NodeLogger l){
 		LinkedList<Integer> query_complete = generateQuery(table_query);
 		
-		HashSet<Integer> symptoms_in_dict = new HashSet<Integer>(table_symptoms.getRowCount()*3);
+		HashSet<Integer> symptoms_in_dict = new HashSet<Integer>(((int)table_symptoms.size())*3);
 		int index = table_symptoms.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
 		boolean is_int =false;
 		if(table_symptoms.getDataTableSpec().getColumnSpec(index).getType()==IntCell.TYPE){
@@ -104,7 +104,7 @@ public class TableProcessor {
 	 */
 	public static HashMap<Integer, LinkedList<Integer []>> generateKSZ(BufferedDataTable table, boolean weight){
 		
-		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(table.getRowCount()*3);
+		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(((int)table.size())*3);
 		int index_disease = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
 		int index_symptom = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
 		int index_frequency = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.FREQUENCY);
@@ -118,6 +118,7 @@ public class TableProcessor {
 			symptom_is_int = true;
 		}
 		
+		FrequencyConverter f = new FrequencyConverter();
 		for(DataRow r : table){
 			int disease_id=-1;
 			int symptom_id=-1;
@@ -137,14 +138,16 @@ public class TableProcessor {
 			Integer [] symptom_and_freq = new Integer [2];
 			symptom_and_freq[0]=symptom_id;
 			if(index_frequency==-1||!weight){
-				symptom_and_freq[1]=10;
+				symptom_and_freq[1]=FrequencyConverter.NO_WEIGHT;
 			}
 			else{
+				//missing value
 				if(r.getCell(index_frequency).getType()!=StringCell.TYPE){
-					symptom_and_freq[1]=10;
+					//symptom is weighted as frequent
+					symptom_and_freq[1]=f.convertFrequency("");
 				}
 				else{
-					symptom_and_freq[1]= FrequencyConverter.convertFrequency(
+					symptom_and_freq[1]= f.convertFrequency(
 						((StringCell) r.getCell(index_frequency)).getStringValue());
 				}
 			}
@@ -170,7 +173,7 @@ public class TableProcessor {
 	
 	public static int [][] generateEdges (BufferedDataTable table){
 		
-		int [][] res = new int [table.getRowCount()][2];
+		int [][] res = new int [(int)table.size()][2];
 		int index_child = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.CHILD_ID);
 		int index_parent = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.PARENT_ID);
 		boolean child_is_int=false;
@@ -210,7 +213,7 @@ public class TableProcessor {
 	 */
 	public static BufferedDataTable generateOutput(LinkedList<String[]> output, ExecutionContext exec, BufferedDataTable ksz){
 		
-		HashMap<Integer,String> IdToName = new HashMap<Integer,String>(ksz.getRowCount()*3);
+		HashMap<Integer,String> IdToName = new HashMap<Integer,String>(((int)ksz.size())*3);
 		int pos_disease_name = ksz.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
 		int pos_disease_id = ksz.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
 		boolean is_int = false;

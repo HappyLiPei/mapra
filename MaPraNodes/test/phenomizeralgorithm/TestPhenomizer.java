@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import io.FileInputReader;
 import io.FileUtilities;
-import main.CalcPValue;
 
 public class TestPhenomizer {
 	
@@ -25,9 +24,9 @@ public class TestPhenomizer {
 		symptoms = FileUtilities.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
 		ontology = FileUtilities.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
 		
-		ksz_no_freq= CalcPValue.addWeights(
+		ksz_no_freq= (new FrequencyConverter()).addWeights(
 				FileUtilities.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt"));
-		ksz_with_freq = FrequencyConverter.convertAll(
+		ksz_with_freq = (new FrequencyConverter()).convertAll(
 				FileUtilities.readInKSZFrequency("../TestData/DiseasesAndSymptoms/ksz_freq.txt"));	
 		
 		if(!weight){

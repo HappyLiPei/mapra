@@ -94,23 +94,7 @@ public class CalcPValue {
 //		}
 //
 //	}
-//	
-	//TODO: move method to FrequencyConverter
-	public static HashMap<Integer, LinkedList<Integer []>> addWeights (HashMap<Integer, LinkedList<Integer>> ksz){
-
-		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer []>>(ksz.size()*3);
-		for(Integer k: ksz.keySet()){
-			LinkedList<Integer []> list = new LinkedList<Integer[]>();
-			res.put(k, list);
-			for(int i: ksz.get(k)){
-				Integer [] symp_and_weight = new Integer [2];
-				symp_and_weight[0]=i;
-				symp_and_weight[1]=10;
-				list.add(symp_and_weight);
-			}			
-		}
-		return res;
-	}
+//
 //	
 //	private static LinkedList<Integer> calculateQuery(int [] ids, int length){
 //		LinkedList<Integer> query = new LinkedList<Integer>();
