@@ -29,9 +29,8 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
 import nodeutils.TableProcessor;
-import phenomizeralgorithm.AlgoPheno;
 import phenomizeralgorithm.PValueFolder;
-import phenomizeralgorithm.PValueGenerator;
+import phenomizeralgorithm.PhenomizerDriver;
 
 
 /**
@@ -112,16 +111,17 @@ public class PhenomizerNodeModel extends NodeModel {
         HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
         
         //run Phenomizer algorithm
-        LinkedList<String[]> result = new LinkedList<String[]>();
-        if(!m_pval.getBooleanValue()){
-	        AlgoPheno.setInput(query, symptoms, diseases, edges);
-	        result = AlgoPheno.runPhenomizer(m_outputsize.getIntValue(),false);
-        }
-        else{
-        	PValueFolder.setPvalFoder(m_folder.getStringValue());
-        	result =PValueGenerator.phenomizerWithPValues(m_outputsize.getIntValue(), query, symptoms, diseases, edges,false);
-        }
-        
+    	PhenomizerDriver d = new PhenomizerDriver(query, symptoms, diseases, edges);
+    	if(m_weight.getBooleanValue()){
+    		//use asymmetric weighting
+    		d.setPhenomizerAlgorithm(m_outputsize.getIntValue(), m_pval.getBooleanValue(), 1, m_folder.getStringValue());
+    	}
+		else{
+			//use symmetric weighting
+			d.setPhenomizerAlgorithm(m_outputsize.getIntValue(), m_pval.getBooleanValue(), 0, m_folder.getStringValue());
+		}
+    	LinkedList<String[]> result = d.runPhenomizer(); 
+    	
         //generate table for outport
         BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
         return new BufferedDataTable[]{out};      
@@ -225,9 +225,9 @@ public class PhenomizerNodeModel extends NodeModel {
     	//checks if files length_*.txt are available
     	if(settings.getBoolean(CFGKEY_PVALUE)){
     		logger.info(settings.getString(CFGKEY_FOLDER));
-	    	PValueFolder.setPvalFoder(settings.getString(CFGKEY_FOLDER));
+	    	PValueFolder p = new PValueFolder(settings.getString(CFGKEY_FOLDER));
 	    	for(int i=1; i<=10; i++){
-	    		if(!PValueFolder.checkFile(i)){
+	    		if(!p.checkFile(i)){
 	    			throw new InvalidSettingsException("File "+
 	    		PValueFolder.PART1+i+PValueFolder.PART2+" is missing in p value folder");
 	    		}

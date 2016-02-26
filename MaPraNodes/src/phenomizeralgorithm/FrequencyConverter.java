@@ -3,6 +3,7 @@ package phenomizeralgorithm;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+//TODO: remove static variables, adapt to new frequency terms
 public class FrequencyConverter {
 
 	//default values for weights

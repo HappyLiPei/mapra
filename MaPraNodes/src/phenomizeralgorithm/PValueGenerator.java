@@ -15,20 +15,21 @@ public class PValueGenerator {
 	 * @param query - query of symptoms
 	 * @param symptoms -list of symptoms in database
 	 * @param ksz - association between diseases and symptoms
-	 * @param onto - ontology
+	 * @param onto - ontologyc
 	 * @return top num results
 	 */
 	public static LinkedList<String[]>phenomizerWithPValues(int num, LinkedList<Integer> query, LinkedList<Integer>symptoms,
 			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto, boolean symmetric_weight){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
-		AlgoPheno.setInput(query, symptoms, ksz, onto);
-		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue(symmetric_weight);
-		
-		int queryLength = AlgoPheno.getQueryLength();
-		String path = PValueFolder.getPvalFile(queryLength);
-		//result = getValuesForGeneralFiles(path,resPhenomizer,num);
-		result = getValuesForCompressedFiles(path,resPhenomizer,num);
+		//TODO: remove
+//		AlgoPheno.setInput(query, symptoms, ksz, onto);
+//		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue(symmetric_weight);
+//		
+//		int queryLength = AlgoPheno.getQueryLength();
+//		String path = PValueFolder.getPvalFile(queryLength);
+//		//result = getValuesForGeneralFiles(path,resPhenomizer,num);
+//		result = getValuesForCompressedFiles(path,resPhenomizer,num);
 
 		return result;
 	}
@@ -39,12 +40,13 @@ public class PValueGenerator {
 	 * @param num
 	 * @return
 	 */
-	public static LinkedList<String[]> getResultsWithPvaluesForOMIM(HashMap<Integer,Double> resPhenomizer, int num){
-		int queryLength = AlgoPheno.getQueryLength();
-		String path = PValueFolder.getPvalFile(queryLength);
-		LinkedList<String []> result = getValuesForCompressedFiles(path,resPhenomizer,num);
-		return result;
-	}
+	//TODO: adapt to new structure
+//	public static LinkedList<String[]> getResultsWithPvaluesForOMIM(HashMap<Integer,Double> resPhenomizer, int num){
+//		int queryLength = AlgoPheno.getQueryLength();
+//		String path = PValueFolder.getPvalFile(queryLength);
+//		LinkedList<String []> result = getValuesForCompressedFiles(path,resPhenomizer,num);
+//		return result;
+//	}
 	
 	/**
 	 * get the p values for a certain result from Phenomizer to be a certain line in an asmmetric p value matrix
@@ -53,23 +55,24 @@ public class PValueGenerator {
 	 * @param queryLength
 	 * @return
 	 */
+	//TODO: adapt to new strucutre -> move somewhere else!!!
 	public static double[]getNextOfAsymmetricMatrix(double[]line,int[]keys,int queryLength){
 		double[]matrix = new double[line.length];
-		HashMap<Integer,Double> phenoRes = new HashMap<Integer,Double>();
-		HashMap<Integer,Integer>keyToIndex = new HashMap<Integer,Integer>();
-		for(int i=0;i <keys.length; i++){
-			phenoRes.put(keys[i], line[i]);
-			keyToIndex.put(keys[i], i);
-		}
-		int num= keys.length;
-		
-		String path = PValueFolder.getPvalFile(queryLength);
-		LinkedList<String[]> result = getValuesForCompressedFiles(path,phenoRes,num);
-		
-		for(String[] res : result){
-			int index = keyToIndex.get(Integer.valueOf(res[0]));
-			matrix[index]=Double.valueOf(res[2]);
-		}
+//		HashMap<Integer,Double> phenoRes = new HashMap<Integer,Double>();
+//		HashMap<Integer,Integer>keyToIndex = new HashMap<Integer,Integer>();
+//		for(int i=0;i <keys.length; i++){
+//			phenoRes.put(keys[i], line[i]);
+//			keyToIndex.put(keys[i], i);
+//		}
+//		int num= keys.length;
+//		
+//		String path = PValueFolder.getPvalFile(queryLength);
+//		LinkedList<String[]> result = getValuesForCompressedFiles(path,phenoRes,num);
+//		
+//		for(String[] res : result){
+//			int index = keyToIndex.get(Integer.valueOf(res[0]));
+//			matrix[index]=Double.valueOf(res[2]);
+//		}
 		
 		return matrix;
 	}

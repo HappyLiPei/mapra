@@ -73,14 +73,15 @@ public class PhenomizerNodeDialog extends DefaultNodeSettingsPane {
 				dcfc.setEnabled(pval.getBooleanValue());
 			}
 		});
+
         folder.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if(pval.getBooleanValue()){
-					PValueFolder.setPvalFoder(folder.getStringValue());
+					PValueFolder p = new PValueFolder(folder.getStringValue());
 					boolean loop_break = false;
 			    	for(int i=1; i<=10; i++){
-			    		if(!PValueFolder.checkFile(i)){
+			    		if(!p.checkFile(i)){
 			    			l.setText("File "+PValueFolder.PART1+i+PValueFolder.PART2+" is missing");
 			    			loop_break=true;
 			    			break;

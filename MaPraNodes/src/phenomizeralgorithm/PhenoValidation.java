@@ -9,23 +9,24 @@ public class PhenoValidation {
 	
 	public static void validatePheno(LinkedList<Integer>symptoms,
 			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto,String path){
-		LinkedList<Integer>query = new LinkedList<Integer>();
-		
-		AlgoPheno.setInput(query, symptoms, ksz, onto);
-		
-		int num = 1;
-		for(Integer key : queries.keySet()){
-			System.out.println(num);
-			
-			LinkedList<Integer> nextQuery = queries.get(key);
-			AlgoPheno.setQuery(nextQuery);
-			LinkedList<String[]>res = AlgoPheno.runPhenomizer(ksz.size(),true);
-			double rank = calculateRank(key.toString(),res);
-			String result = key+"\t"+rank+"\n";
-			io.FileUtilities.writeStringToExistingFile(path, result);
-			num++;
-			AlgoPheno.setCalculatedSim();
-		}
+		//TODO: adapt to new structure
+//		LinkedList<Integer>query = new LinkedList<Integer>();
+//		
+//		AlgoPheno.setInput(query, symptoms, ksz, onto);
+//		
+//		int num = 1;
+//		for(Integer key : queries.keySet()){
+//			System.out.println(num);
+//			
+//			LinkedList<Integer> nextQuery = queries.get(key);
+//			AlgoPheno.setQuery(nextQuery);
+//			LinkedList<String[]>res = AlgoPheno.runPhenomizer(ksz.size(),true);
+//			double rank = calculateRank(key.toString(),res);
+//			String result = key+"\t"+rank+"\n";
+//			io.FileUtilities.writeStringToExistingFile(path, result);
+//			num++;
+//			AlgoPheno.setCalculatedSim();
+//		}
 	}
 
 	public static void setQueries(HashMap<Integer,LinkedList<Integer[]>>ksz){

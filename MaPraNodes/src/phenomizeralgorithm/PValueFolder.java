@@ -5,36 +5,31 @@ import java.nio.file.Paths;
 
 public class PValueFolder {
 	
-	private static String pvalfolder;
-	private static boolean set = false;
-	public static String PART1 ="length_";
-	public static String PART2 =".txt";
+	public static final String PART1 ="length_";
+	public static final String PART2 =".txt";
+	
+	private String pvalfolder;
 	
 	/**
-	 * set path to the folder containing the files with the precalculated scores
-	 * @param folder
+	 * Constructor for object representing a folder with files length_x.txt with x in range of 1 to 10
+	 * each file contains a sampled score distribution for each PhenoDis disease
+	 * @param pvalfolder: path to the folder
 	 */
-	public static void setPvalFoder(String folder){
-			pvalfolder=folder;
-			set=true;
+	public PValueFolder(String pvalfolder){
+		this.pvalfolder=pvalfolder;
 	}
 	
 	/**
-	 * get the file with precalculated scores corresponding to a certain query length
-	 * @param query_length
-	 * @return file name
+	 * get the file with pre-calculated score distributions for a certain query length
+	 * @param query_length: length of the query
+	 * @return name of the file with the score distributions
 	 */
-	public static String getPvalFile(int query_length){
-		if(set){
-			if(0<query_length && query_length<=10){
-				return Paths.get(pvalfolder, PART1+query_length+PART2).toString();
-			}
-			else if(query_length>10){
-				return Paths.get(pvalfolder, PART1+10+PART2).toString();
-			}
-			else{
-				return "";
-			}
+	public String getPvalFile(int query_length){
+		if(0<query_length && query_length<=10){
+			return Paths.get(pvalfolder, PART1+query_length+PART2).toString();
+		}
+		else if(query_length>10){
+			return Paths.get(pvalfolder, PART1+10+PART2).toString();
 		}
 		else{
 			return "";
@@ -42,12 +37,12 @@ public class PValueFolder {
 	}
 	
 	/**
-	 * test if the file for a certain query length exists in the set folder
-	 * @param length
+	 * test if the file with score distributions for a certain query length exists in the p value folder
+	 * @param length: length of the query
 	 * @return true, if file exits; false if file does not exist
 	 */
-	public static boolean checkFile(int length){
-		if(!set|| length<=0||length>10){
+	public boolean checkFile(int length){
+		if(length<=0||length>10){
 			return false;
 		}
 		else{
