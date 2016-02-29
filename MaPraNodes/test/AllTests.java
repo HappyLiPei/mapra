@@ -7,13 +7,15 @@ import io.TestIOReaderWriter;
 import phenomizeralgorithm.TestFrequencyConverter;
 import phenomizeralgorithm.TestPValueFolder;
 import phenomizeralgorithm.TestPhenomizer;
+import phenomizeralgorithm.TestPvalueCorrection;
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestIOReaderWriter.class, 
 				TestFileUtilities.class,
 				TestPhenomizer.class,
 				TestFrequencyConverter.class,
-				TestPValueFolder.class })
+				TestPValueFolder.class,
+				TestPvalueCorrection.class })
 public class AllTests {
 
 }

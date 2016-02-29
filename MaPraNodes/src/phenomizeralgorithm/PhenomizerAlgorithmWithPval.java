@@ -51,7 +51,7 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		LinkedList<String[]>result = new LinkedList<String[]>();
 		
 		Comparator<String> comp = new MaxPValueComparator();
-		PriorityQueue<String> maxQueue = new PriorityQueue<String>(8000,comp);
+		PriorityQueue<String> maxQueue = new PriorityQueue<String>(sda.numberOfDiseases(),comp);
 		
 		FileInputReader reader = new FileInputReader(path);
 		String line ="";
@@ -84,14 +84,10 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		
 		String score = "";
 		String p = "";
+		
 		if(num>queue.size()){
 			num = queue.size();
 		}
-		
-		double maxPValue = Double.MIN_VALUE;
-		double lastPValue = -1.0;
-		int currIndex = 1;
-		int currRank = 0;
 		
 		for(int i=0; i<num; i++){
 			String currEl = queue.remove();
@@ -99,58 +95,48 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 			String[]res = new String[3];
 			res[0]=parts[2];
 			res[1]=parts[1];
+			
+			//uncorrected pvalue
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
-			if(Double.compare(lastPValue, pValue)<0){
-				lastPValue = pValue;
-				currRank += currIndex;
-				currIndex = 0;
-			}
-			
-//			//TODO: corrector object for different methods
-//			//Bonferroni-Holm
-//			//pValue = pValue*(numDiseases-currRank+1);
-//			
-//			//Benjamini-Hochberg
-//			pValue = (numDiseases/currRank)*pValue;
-			
-			pValue= corrector.correctPval(pValue, numDiseases, currRank);
-			
-			if(Double.compare(pValue, 1)>0){
-				pValue=1;
-			}
-			else if(Double.compare(pValue, maxPValue)<0){
-				pValue = maxPValue;
-			}
-			
-			if(Double.compare(pValue, maxPValue)>0){
-				maxPValue = pValue;
-			}
-			currIndex++;
-			
 			res[2]=pValue+"";
+			
 			result.add(res);
 			
+			//for entry into while loop
 			score=res[1];
 			p=res[2];
 		}
 		
+		//get elements with same pvalue and score than last element (num-th element)
 		while(!queue.isEmpty()&&queue.element().split(",")[1].equals(score)&&queue.element().split(",")[0].equals(p)){
 			String currEl = queue.remove();
 			String[]parts = currEl.split(",");
 			String[]res = new String[3];
 			res[0]=parts[2];
 			res[1]=parts[1];
+			
+			//uncorrected pvalue
 			double pValue = (double)Integer.valueOf(parts[0])/numScores;
-			pValue = pValue*(numDiseases-currRank+1);
-			if(Double.compare(pValue, 1)>0){
-				pValue=1;
-			}
-			else if(Double.compare(pValue, maxPValue)<0){
-				pValue = maxPValue;
-			}
-
 			res[2]=pValue+"";
+			
 			result.add(res);
+		}
+		
+		double [] pvals = new double[result.size()];
+		//current position in pvals array
+		int pos=0;
+		//iterate over all diseases in result
+		for(String[] r : result){
+			pvals[pos]=Double.valueOf(r[2]);
+			pos++;
+		}
+		//correct pvalues
+		double [] corrected_pvals = corrector.correctPVals(pvals,sda.numberOfDiseases());
+		//add corrected pvalues to the result
+		pos=0;
+		for(String[] r : result){
+			r[2]=String.valueOf(corrected_pvals[pos]);
+			pos++;
 		}
 		
 		return result;
