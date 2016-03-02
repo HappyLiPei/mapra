@@ -4,6 +4,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import io.TestFileUtilities;
 import io.TestIOReaderWriter;
+import phenomizeralgorithm.TestDataTransformer;
 import phenomizeralgorithm.TestFrequencyConverter;
 import phenomizeralgorithm.TestPValueFolder;
 import phenomizeralgorithm.TestPhenomizer;
@@ -15,7 +16,8 @@ import phenomizeralgorithm.TestPvalueCorrection;
 				TestPhenomizer.class,
 				TestFrequencyConverter.class,
 				TestPValueFolder.class,
-				TestPvalueCorrection.class })
+				TestPvalueCorrection.class,
+				TestDataTransformer.class })
 public class AllTests {
 
 }

@@ -9,7 +9,6 @@ public abstract class PhenomizerAlgorithm {
 	protected int num;
 	
 	//input data
-	//private Ontology ontology;
 	protected LinkedList<Integer> queryIds;
 	protected SymptomDiseaseAssociations sda;
 	
@@ -24,7 +23,6 @@ public abstract class PhenomizerAlgorithm {
 			SymptomDiseaseAssociations sda, SimilarityCalculator similarityCalculator){
 		
 		this.num=num;
-		//this.ontology=ontology;
 		this.queryIds=queryIds;
 		this.sda = sda;
 		this.ic=new HashMap<Integer,Double>();

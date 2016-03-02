@@ -65,17 +65,17 @@ public class TestPhenomizer {
 	@Test
 	public void testPhenomizer_Weight_NoPVal() {
 		
-		//TODO: calculate manually other queries (1,3,4,6,7,9,10)
-		int[] array = new int[] {2,5,8};
-//		for(int i=8; i<=8; i++){
-		for (int i: array){
+		//TODO: calculate manually other queries (1,3,4,6,7,9)
+		int[] array = new int[] {2,5,8,10};
+		for(int i=10; i<=10; i++){
+//		for (int i: array){
 			readData(i,true, false);
 			PhenomizerDriver d = new PhenomizerDriver(query, symptoms, ksz_with_freq, ontology);
 			d.setPhenomizerAlgorithm(11, false, 1, "");
 			LinkedList<String[]> result = d.runPhenomizer();
 			for(int j=0; j<=10; j++){
 				String[] elements = expected_res.get(j).split("\t");
-//				System.out.println(result.get(j)[0]+"\t"+result.get(j)[1]);
+				//System.out.println(result.get(j)[0]+"\t"+result.get(j)[1]);
 				assertEquals("Query "+i+" result "+j+" does not match expected disease id",
 						elements[0], result.get(j)[0]);
 				assertEquals("Query "+i+" result "+j+" does not match expected score",
