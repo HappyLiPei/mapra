@@ -23,7 +23,6 @@ public class PValueGenerator {
 			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto, boolean symmetric_weight){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
-		//TODO: remove
 //		AlgoPheno.setInput(query, symptoms, ksz, onto);
 //		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue(symmetric_weight);
 //		

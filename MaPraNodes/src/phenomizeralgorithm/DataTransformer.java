@@ -3,6 +3,7 @@ package phenomizeralgorithm;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class DataTransformer {
 	
@@ -125,7 +126,18 @@ public class DataTransformer {
 	}
 	
 	public LinkedList<Integer> getRandomQuery(int length, Ontology ontology, int[] symptoms){
-		return null;
+		
+		LinkedList<Integer> query = new LinkedList<Integer>();
+		
+		while(query.size()<length){
+			Random rnd = new Random();
+			int next = rnd.nextInt(symptoms.length);
+			int nextId = symptoms[next];
+			query.add(nextId);
+			query = prepareQuery(ontology, query);
+		}
+		return query;
+		
 	}
 	
 	

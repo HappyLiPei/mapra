@@ -9,6 +9,7 @@ import phenomizeralgorithm.TestFrequencyConverter;
 import phenomizeralgorithm.TestPValueFolder;
 import phenomizeralgorithm.TestPhenomizer;
 import phenomizeralgorithm.TestPvalueCorrection;
+import phenomizeralgorithm.TestSampling;
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestIOReaderWriter.class, 
@@ -17,7 +18,8 @@ import phenomizeralgorithm.TestPvalueCorrection;
 				TestFrequencyConverter.class,
 				TestPValueFolder.class,
 				TestPvalueCorrection.class,
-				TestDataTransformer.class })
+				TestDataTransformer.class,
+				TestSampling.class })
 public class AllTests {
 
 }

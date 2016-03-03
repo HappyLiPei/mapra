@@ -45,6 +45,14 @@ public class SymptomDiseaseAssociations {
 	}
 	
 	/**
+	 * returns the total number of symptoms (without duplicates)
+	 * @return number of symptoms 
+	 */
+	public int numberOfSymptoms(){
+		return symptomIds.size();
+	}
+	
+	/**
 	 * returns all symptom ids of PhenoDis
 	 * @return a list of all symptom ids
 	 */

@@ -34,6 +34,23 @@ public abstract class PhenomizerAlgorithm {
 		similarityCalculator.setCalculatedSim(calculatedSim);
 	}
 	
+	//constructor which allows to add ic and calculatedSim with initialized size or content
+	public PhenomizerAlgorithm(int num, Ontology ontology, LinkedList<Integer> queryIds,
+			SymptomDiseaseAssociations sda, SimilarityCalculator similarityCalculator,
+			HashMap<Integer, Double> ic, HashMap<String, Double> calculatedSim){
+		
+		this.num=num;
+		this.queryIds=queryIds;
+		this.sda = sda;
+		this.ic=ic;
+		this.calculatedSim=calculatedSim;
+		
+		this.similarityCalculator = similarityCalculator;
+		similarityCalculator.setOntology(ontology);
+		similarityCalculator.setICValues(ic);
+		similarityCalculator.setCalculatedSim(calculatedSim);
+	}
+	
 	public abstract LinkedList<String[]> runPhenomizer();
 	
 	/**
