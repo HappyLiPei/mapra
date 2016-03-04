@@ -115,6 +115,11 @@ public class DataTransformer {
 		return result;
 	}
 	
+	/**
+	 * method to remove duplicates from a list of symptom ids
+	 * @param list_with_dupl: list of symptom ids that contains duplicates
+	 * @return list of symptom ids without duplicates
+	 */
 	private LinkedList<Integer> removeDuplicates(LinkedList<Integer> list_with_dupl){
 		LinkedList<Integer> result = new LinkedList<Integer>();
 		for(int element : list_with_dupl){

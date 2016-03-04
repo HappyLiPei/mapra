@@ -80,6 +80,7 @@ public class ScoreDistributionSampling {
 		for(int disease:symptoms_and_diseases.getDiseases()){
 			
 			fow_log.writeFilelnAndFlush("disease "+counter+" of "+symptoms_and_diseases.numberOfDiseases());
+			System.out.println("disease "+counter+" of "+symptoms_and_diseases.numberOfDiseases());
 			
 			//data structure for saving all scores of a disease
 			String[] scores = new String[iterations+1];
@@ -90,7 +91,6 @@ public class ScoreDistributionSampling {
 				LinkedList<Integer> query = dt.getRandomQuery(queryLength, ontology, allSymptoms);
 				double score = similarityCalculator.calculateSymmetricSimilarity(
 						query, symptoms_and_diseases.getSymptoms(disease));
-				//*100??
 				score = score * 1000;
 				score = Math.round(score);
 				score = (double)score/1000;
