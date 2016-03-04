@@ -47,6 +47,16 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		return result;
 	}
 	
+	//TODO: get correct sorting order!!
+	/*
+	 * MaxPVAlueComparator for for String []
+	 * store result as String[][] with uncorrected pvalues
+	 * sort array for the first time
+	 * correct pvalues
+	 * sort array for second time -> perhaps skip!
+	 * transform array into LinkedList<String[]>
+	 * reduce the output size to num (including equal pval+equal score!)
+	 */
 	private LinkedList<String[]> getValuesForCompressedFiles(String path, HashMap<Integer,Double> resPhenomizer){
 		LinkedList<String[]>result = new LinkedList<String[]>();
 		

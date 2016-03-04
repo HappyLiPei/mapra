@@ -130,6 +130,14 @@ public class DataTransformer {
 		return result;
 	}
 	
+	/**
+	 * generates a random query of a given length
+	 * method applied for score distribution sampling
+	 * @param length: length of the query
+	 * @param ontology: Ontology object representing a symptom ontology
+	 * @param symptoms: array of all symptoms without duplicates (from SymptomDiseaseAssociations)
+	 * @return: list of PhenoDis ids with the given length (ancestors removed)
+	 */
 	public LinkedList<Integer> getRandomQuery(int length, Ontology ontology, int[] symptoms){
 		
 		LinkedList<Integer> query = new LinkedList<Integer>();
