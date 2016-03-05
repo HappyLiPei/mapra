@@ -3,7 +3,7 @@ package network;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import io.FileUtilities;
+import io.FileOutputWriter;
 
 public class CytoscapeFileGenerator {
 	
@@ -40,7 +40,8 @@ public class CytoscapeFileGenerator {
 	public static void writeSelectedXGMML(String output, DistanceMatrix d, double cutoff, boolean smallerthan,
 			HashSet<String> selection, PhenoResults res, HashMap<Integer, String> names){
 		
-		FileUtilities.writeString(output, header);
+		FileOutputWriter fow = new FileOutputWriter(output);
+		fow.writeFile(header);
 		
 		//iterate over all nodes = diseases
 		for(int i=0; i<d.size();i++){
@@ -68,13 +69,12 @@ public class CytoscapeFileGenerator {
 			if(selection.contains(d.IdAt(i))||!singleton){
 				//disease name is available -> name as node label
 				if(names.containsKey(Integer.valueOf(d.IdAt(i)))){
-					FileUtilities.writeStringToExistingFile(output,
-							NodeTag(d.IdAt(i), names.get(Integer.valueOf(d.IdAt(i))),selection.contains(d.IdAt(i)),res.getResFor(d.IdAt(i))));
+					fow.writeFile(NodeTag(d.IdAt(i), names.get(Integer.valueOf(d.IdAt(i))),
+										selection.contains(d.IdAt(i)),res.getResFor(d.IdAt(i))));
 				}
 				//disease name not available -> id as node label
 				else{
-					FileUtilities.writeStringToExistingFile(output,
-							NodeTag(d.IdAt(i), d.IdAt(i),selection.contains(d.IdAt(i)),res.getResFor(d.IdAt(i))));
+					fow.writeFile(NodeTag(d.IdAt(i), d.IdAt(i),selection.contains(d.IdAt(i)),res.getResFor(d.IdAt(i))));
 				}
 			}	
 		}
@@ -85,19 +85,20 @@ public class CytoscapeFileGenerator {
 				//edge rule for distance matrix
 				if(smallerthan){
 					if(d.get(i, j)<cutoff){
-						FileUtilities.writeStringToExistingFile(output, EdgeTag(d.IdAt(i), d.IdAt(j)));
+						fow.writeFile(EdgeTag(d.IdAt(i), d.IdAt(j)));
 					}
 				}
 				//edge rule for similarity matric
 				else{
 					if(d.get(i, j)>cutoff){
-						FileUtilities.writeStringToExistingFile(output, EdgeTag(d.IdAt(i), d.IdAt(j)));
+						fow.writeFile(EdgeTag(d.IdAt(i), d.IdAt(j)));
 					}
 				}
 			}
 		}
 		
-		FileUtilities.writeStringToExistingFile(output, end);
+		fow.writeFile(end);
+		fow.closew();
 	}
 	
 	/**
@@ -156,9 +157,12 @@ public class CytoscapeFileGenerator {
 	 * @param scriptfile: file which is written by this method
 	 */
 	public static void WriteScript(String networkfile, String scriptfile){
-		FileUtilities.writeString(scriptfile, "network load file file=\""+networkfile+"\"\n"+
+		
+		FileOutputWriter fow = new FileOutputWriter(scriptfile);
+		fow.writeFile("network load file file=\""+networkfile+"\"\n"+
 				"view create"+"\n"+
-				"layout force-directed");			
+				"layout force-directed");
+		fow.closew();	
 	}
 
 }

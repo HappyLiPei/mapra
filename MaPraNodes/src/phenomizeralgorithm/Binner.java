@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import io.FileInputReader;
-import io.FileUtilities;
+import io.FileOutputWriter;
 
 public class Binner {
 	
@@ -27,11 +27,14 @@ public class Binner {
 		}
 		
 		FileInputReader reader = new FileInputReader(pathIn);
+		FileOutputWriter writer = new FileOutputWriter(pathOut);
 		String line;
 		while((line=reader.read())!=null){
 			String lineOut = createString(line.split("\t"));
-			FileUtilities.writeStringToExistingFile(pathOut, lineOut+"\n");
+			writer.writeFileln(lineOut);
 		}
+		reader.closer();
+		writer.closew();
 	}
 	
 	

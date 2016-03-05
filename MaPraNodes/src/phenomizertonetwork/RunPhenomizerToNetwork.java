@@ -85,7 +85,7 @@ public class RunPhenomizerToNetwork {
 	 */
 	private static PhenoResults getPhenoRes(BufferedDataTable table){
 		//read in data table
-		int length = table.getRowCount();
+		int length = (int)table.size();
 		int [] ids = new int[length];
 		double [] scores = new double[length];
 		double [] pvalues = new double[length];
@@ -117,7 +117,7 @@ public class RunPhenomizerToNetwork {
 	 */
 	private static HashSet<String> getIdsToColor(BufferedDataTable phenores){
     	int index = phenores.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
-    	HashSet<String> hs = new HashSet<String>(phenores.getRowCount()*3);
+    	HashSet<String> hs = new HashSet<String>((int) phenores.size()*3);
     	if(index!=-1){
     		for(DataRow r: phenores){
     			hs.add( ((IntCell) r.getCell(index)).getIntValue()+"");
@@ -154,7 +154,7 @@ public class RunPhenomizerToNetwork {
 		
 		//check format of matrix
 		//assume row ids == column names -> refer to PhenoDis Ids
-		int rows = matrix.getRowCount();
+		int rows = (int) matrix.size();
 		DataTableSpec s = matrix.getDataTableSpec();
 		String [] colnames=s.getColumnNames();
 		int pos_name = s.findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
@@ -220,7 +220,7 @@ public class RunPhenomizerToNetwork {
 	 * @return: HashMap that maps PhenoDis id (row ids of matrix) to disease names (values of column disease) 
 	 */
 	private static HashMap<Integer,String> getDiseaseNames(BufferedDataTable matrix){
-		HashMap<Integer, String> res = new HashMap<Integer,String>(matrix.getRowCount()*3);
+		HashMap<Integer, String> res = new HashMap<Integer,String>((int) (matrix.size()*3));
 		int index_name = matrix.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
 		for(DataRow r: matrix){
 			res.put(Integer.valueOf(r.getKey().getString()), ((StringCell) r.getCell(index_name)).getStringValue());

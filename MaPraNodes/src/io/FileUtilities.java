@@ -1,8 +1,5 @@
 package io;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -199,95 +196,6 @@ public class FileUtilities {
 			position++;
 		}
 		return ontologyArray;
-
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//TODO: remove all references and replace by FileOutputWriter
-	/**
-	 * to write content into a given file
-	 * @param path
-	 * @param content
-	 */
-	public static void writeString(String path, String content) {
-		//Open file
-		File file = new File(path);
-
-		//Create File if necessary
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException ex) {
-				System.err.println(ex);
-				System.exit(1);
-			}
-		}
-
-		//Error if not writable
-		if (!file.canWrite()) {
-			System.err.println(file + " could not be written to!");
-			System.exit(1);
-		}
-
-		//Write lines
-		try {
-			FileWriter writer = new FileWriter(file);
-			writer.write(content);
-			writer.close();
-		} catch (IOException ex) {
-			System.err.println(ex);
-			System.exit(1);
-		}
-
-	}
-	
-	//TODO: remove all references and replace by FileOutputWriter
-	/**
-	 * to write content into a given file without deleting its current content
-	 * @param path
-	 * @param content
-	 */
-	public static void writeStringToExistingFile(String path, String content) {
-		//Open file
-		File file = new File(path);
-
-		//Create File if necessary
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException ex) {
-				System.err.println(ex);
-				System.exit(1);
-			}
-		}
-
-		//Error if not writable
-		if (!file.canWrite()) {
-			System.err.println(file + " could not be written to!");
-			System.exit(1);
-		}
-
-		//Write lines
-		try {
-			FileWriter writer = new FileWriter(file,true);
-			writer.write(content);
-			writer.close();
-		} catch (IOException ex) {
-			System.err.println(ex);
-			System.exit(1);
-		}
-
 	}
 
 }
