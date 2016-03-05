@@ -6,6 +6,7 @@ import io.TestFileUtilities;
 import io.TestIOReaderWriter;
 import phenomizeralgorithm.TestDataTransformer;
 import phenomizeralgorithm.TestFrequencyConverter;
+import phenomizeralgorithm.TestOntology;
 import phenomizeralgorithm.TestPValueFolder;
 import phenomizeralgorithm.TestPhenomizer;
 import phenomizeralgorithm.TestPvalueCorrection;
@@ -19,7 +20,8 @@ import phenomizeralgorithm.TestSampling;
 				TestPValueFolder.class,
 				TestPvalueCorrection.class,
 				TestDataTransformer.class,
-				TestSampling.class })
+				TestSampling.class,
+				TestOntology.class })
 public class AllTests {
 
 }
