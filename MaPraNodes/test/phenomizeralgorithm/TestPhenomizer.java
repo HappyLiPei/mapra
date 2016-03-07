@@ -142,7 +142,7 @@ public class TestPhenomizer {
 					elements[2], result.get(j)[1]);
 		}
 		
-		//limited to 4, expected 4 elements, does not consider if last elements have same pvalue
+		//limited to 4, expected 5 elements because last two elements have the same pvalue and the same score
 		readData(5, false, true);
 		expected_res=FileInputReader.readAllLinesFrom(
 				"../TestData/ExpectedResults/ResultSizeLimited/res_q5_noweight_pval.txt");
@@ -153,7 +153,7 @@ public class TestPhenomizer {
 		result = d.runPhenomizer();
 		
 		assertEquals("Output size (query 5 imited to 4, no weight, pvalue) does not match expected output",
-				4, result.size());
+				5, result.size());
 		for(int j=0; j<=3; j++){
 			String[] elements = expected_res.get(j).split("\t");
 			assertEquals("Query 5 (limited to 4, no weight, pvalue) result "+j+" does not match expected disease id",

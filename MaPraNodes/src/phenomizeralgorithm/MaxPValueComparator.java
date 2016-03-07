@@ -2,6 +2,8 @@ package phenomizeralgorithm;
 
 import java.util.Comparator;
 
+//TODO:remove!
+
 public class MaxPValueComparator implements Comparator<String> {
 
 	@Override

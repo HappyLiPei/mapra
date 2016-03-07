@@ -6,7 +6,7 @@ disease_id	disease	score	p_value	significance
 109	109J	0.861	0.7461667	ns
 101	101B	0.799	0.7461667	ns
 103	103D	0.569	0.9153571	ns
+107	107H	0.512	1.0	ns
 104	104E	0.362	1.0	ns
 102	102C	0.221	1.0	ns
-107	107H	0.512	1.0	ns
 100	100A	0.0	1.0	ns

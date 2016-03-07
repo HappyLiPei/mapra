@@ -9,6 +9,7 @@ import phenomizeralgorithm.TestFrequencyConverter;
 import phenomizeralgorithm.TestOntology;
 import phenomizeralgorithm.TestPValueFolder;
 import phenomizeralgorithm.TestPhenomizer;
+import phenomizeralgorithm.TestPhenomizerPVal;
 import phenomizeralgorithm.TestPvalueCorrection;
 import phenomizeralgorithm.TestSampling;
 
@@ -21,7 +22,8 @@ import phenomizeralgorithm.TestSampling;
 				TestPvalueCorrection.class,
 				TestDataTransformer.class,
 				TestSampling.class,
-				TestOntology.class })
+				TestOntology.class,
+				TestPhenomizerPVal.class })
 public class AllTests {
 
 }
