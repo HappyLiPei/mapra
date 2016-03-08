@@ -1,12 +1,8 @@
-package phenomizertonetwork;
+package phenomizertonetwork.node;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import network.CytoscapeFileGenerator;
-import network.DistanceMatrix;
-import network.PhenoResults;
 
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
@@ -18,6 +14,9 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
 import phenomizer.PhenomizerNodeModel;
+import phenomizertonetwork.network.CytoscapeFileGenerator;
+import phenomizertonetwork.network.DistanceMatrix;
+import phenomizertonetwork.network.PhenoResults;
 import execprocess.Executor;
 
 public class RunPhenomizerToNetwork {

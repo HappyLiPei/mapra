@@ -1,4 +1,4 @@
-package network;
+package phenomizertonetwork.network;
 
 import java.util.HashMap;
 import java.util.HashSet;

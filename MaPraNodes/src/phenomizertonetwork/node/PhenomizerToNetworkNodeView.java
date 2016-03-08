@@ -1,4 +1,4 @@
-package phenomizertonetwork;
+package phenomizertonetwork.node;
 
 import org.knime.core.node.NodeView;
 

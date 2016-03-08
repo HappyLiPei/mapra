@@ -1,4 +1,4 @@
-package phenomizertonetwork;
+package phenomizertonetwork.node;
 
 import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
