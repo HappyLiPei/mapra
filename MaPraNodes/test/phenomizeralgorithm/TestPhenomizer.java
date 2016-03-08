@@ -8,7 +8,10 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import io.FileInputReader;
-import io.FileUtilities;
+import phenomizer.algorithm.AlgoPheno;
+import phenomizer.algorithm.FrequencyConverter;
+import phenomizer.algorithm.PhenomizerDriver;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 public class TestPhenomizer {
 	
@@ -20,14 +23,14 @@ public class TestPhenomizer {
 	private LinkedList<String> expected_res;
 	
 	private void readData(int i, boolean weight, boolean pval){
-		query = FileUtilities.readInQuery("../TestData/Queries/query"+i+".txt");
-		symptoms = FileUtilities.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
-		ontology = FileUtilities.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		query = FileUtilitiesPhenomizer.readInQuery("../TestData/Queries/query"+i+".txt");
+		symptoms = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		ontology = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
 		
 		ksz_no_freq= (new FrequencyConverter()).addWeights(
-				FileUtilities.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt"));
+				FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt"));
 		ksz_with_freq = (new FrequencyConverter()).convertAll(
-				FileUtilities.readInKSZFrequency("../TestData/DiseasesAndSymptoms/ksz_freq.txt"));	
+				FileUtilitiesPhenomizer.readInKSZFrequency("../TestData/DiseasesAndSymptoms/ksz_freq.txt"));	
 		
 		if(!weight){
 			if(!pval){

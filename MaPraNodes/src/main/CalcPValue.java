@@ -1,8 +1,8 @@
 package main;
 
-import io.FileUtilities;
-import phenomizeralgorithm.FrequencyConverter;
-import phenomizeralgorithm.ScoreDistributionSampling;
+import phenomizer.algorithm.FrequencyConverter;
+import phenomizer.algorithm.ScoreDistributionSampling;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -43,18 +43,18 @@ public class CalcPValue {
 		}
 		
 		//read in files
-		int[][]ontology = FileUtilities.readInOntology(ontoIn);
-		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms(symptomsIn);
+		int[][]ontology = FileUtilitiesPhenomizer.readInOntology(ontoIn);
+		LinkedList<Integer> symptoms = FileUtilitiesPhenomizer.readInSymptoms(symptomsIn);
 		HashMap<Integer, LinkedList<Integer[]>> ksz = new HashMap<Integer, LinkedList<Integer[]>>();
 		
 		//prepare data
 		FrequencyConverter f = new FrequencyConverter();
 		if(weighting==0){
-			HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilities.readInKSZ(kszIn);
+			HashMap<Integer,LinkedList<Integer>>kszTmp = FileUtilitiesPhenomizer.readInKSZ(kszIn);
 			ksz= f.addWeights(kszTmp);
 		}
 		else{
-			HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilities.readInKSZFrequency(kszIn);
+			HashMap<Integer,LinkedList<String[]>>kszTmp = FileUtilitiesPhenomizer.readInKSZFrequency(kszIn);
 			ksz=f.convertAll(kszTmp);
 		}
 		

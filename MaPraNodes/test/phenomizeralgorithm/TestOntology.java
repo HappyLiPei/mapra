@@ -7,7 +7,8 @@ import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.FileUtilities;
+import phenomizer.algorithm.Ontology;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 public class TestOntology {
 	
@@ -15,7 +16,7 @@ public class TestOntology {
 	
 	@Before
 	public void prepareTest(){
-		int [][] edges = FileUtilities.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		int [][] edges = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
 		this.ontology = new Ontology(edges);
 	}
 

@@ -12,7 +12,14 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import io.FileInputReader;
-import io.FileUtilities;
+import phenomizer.algorithm.DataTransformer;
+import phenomizer.algorithm.FrequencyConverter;
+import phenomizer.algorithm.Ontology;
+import phenomizer.algorithm.PhenomizerAlgorithm;
+import phenomizer.algorithm.PhenomizerAlgorithmSampling;
+import phenomizer.algorithm.ScoreDistributionSampling;
+import phenomizer.algorithm.SimilarityCalculatorNoWeight;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 public class TestSampling {
 
@@ -20,9 +27,9 @@ public class TestSampling {
 	public void testICCalculation()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
-		LinkedList<Integer> s = FileUtilities.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
-		int [][] o = FileUtilities.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
-		HashMap<Integer, LinkedList<Integer> > k = FileUtilities.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt");
+		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		HashMap<Integer, LinkedList<Integer> > k = FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt");
 		HashMap<Integer, LinkedList<Integer[]> > ksz = (new FrequencyConverter()).addWeights(k);
 		
 		DataTransformer dt = new DataTransformer();
@@ -61,9 +68,9 @@ public class TestSampling {
 		
 		String out = folder.newFile().getAbsolutePath();
 		
-		LinkedList<Integer> s = FileUtilities.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
-		int [][] o = FileUtilities.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
-		HashMap<Integer, LinkedList<Integer> > k = FileUtilities.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt");
+		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		HashMap<Integer, LinkedList<Integer> > k = FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt");
 		HashMap<Integer, LinkedList<Integer[]> > ksz = (new FrequencyConverter()).addWeights(k);
 		
 		ScoreDistributionSampling sds = new ScoreDistributionSampling(1, 10, 0,
@@ -96,7 +103,7 @@ public class TestSampling {
 		public MockDatatTransformer(){
 			queries = new LinkedList[10];
 			for(int i=1; i<=10; i++){
-				queries[i-1]=FileUtilities.readInQuery("../TestData/Queries/query"+i+".txt");
+				queries[i-1]=FileUtilitiesPhenomizer.readInQuery("../TestData/Queries/query"+i+".txt");
 			}
 			
 			

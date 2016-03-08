@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import phenomizer.algorithm.PValueFolder;
+
 public class TestPValueFolder {
 
 	@Test

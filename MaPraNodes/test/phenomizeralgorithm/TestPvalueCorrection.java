@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import phenomizer.algorithm.BenjaminiHochbergCorrector;
+import phenomizer.algorithm.BonferroniHolmCorrector;
+
 public class TestPvalueCorrection {
 
 	@Test

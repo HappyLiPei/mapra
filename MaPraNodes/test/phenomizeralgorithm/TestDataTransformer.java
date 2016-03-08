@@ -8,7 +8,10 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.FileUtilities;
+import phenomizer.algorithm.DataTransformer;
+import phenomizer.algorithm.Ontology;
+import phenomizer.algorithm.SymptomDiseaseAssociations;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 public class TestDataTransformer {
 	
@@ -18,8 +21,8 @@ public class TestDataTransformer {
 	
 	@Before
 	public void prepareTest(){
-		onto=new Ontology(FileUtilities.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt"));
-		symptoms=FileUtilities.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		onto=new Ontology(FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt"));
+		symptoms=FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
 		dt=new DataTransformer();	
 	}
 

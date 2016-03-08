@@ -13,11 +13,11 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
-import phenomizer.PhenomizerNodeModel;
 import phenomizertonetwork.network.CytoscapeFileGenerator;
 import phenomizertonetwork.network.DistanceMatrix;
 import phenomizertonetwork.network.PhenoResults;
 import execprocess.Executor;
+import phenomizer.node.PhenomizerNodeModel;
 
 public class RunPhenomizerToNetwork {
 	

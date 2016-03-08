@@ -1,8 +1,8 @@
 package main;
 
-import io.FileUtilities;
-import phenomizeralgorithm.FrequencyConverter;
-import phenomizeralgorithm.PhenoValidation;
+import phenomizer.algorithm.FrequencyConverter;
+import phenomizer.algorithm.PhenoValidation;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 import java.util.HashMap;
 import java.util.LinkedList;

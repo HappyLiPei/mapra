@@ -2,11 +2,11 @@ package main;
 
 import io.FileInputReader;
 import io.FileOutputWriter;
-import io.FileUtilities;
-import phenomizeralgorithm.AlgoPheno;
-import phenomizeralgorithm.FrequencyConverter;
-import phenomizeralgorithm.PValueFolder;
-import phenomizeralgorithm.PValueGenerator;
+import phenomizer.algorithm.AlgoPheno;
+import phenomizer.algorithm.FrequencyConverter;
+import phenomizer.algorithm.PValueFolder;
+import phenomizer.algorithm.PValueGenerator;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 import java.util.HashMap;
 import java.util.LinkedList;

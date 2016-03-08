@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import nodeutils.SettingsChecker;
 import nodeutils.TableChecker;
+import phenomizer.node.PhenomizerNodeModel;
 
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
@@ -22,8 +23,6 @@ import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-
-import phenomizer.PhenomizerNodeModel;
 
 
 /**

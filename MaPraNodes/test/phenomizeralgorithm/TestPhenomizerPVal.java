@@ -15,7 +15,15 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import io.FileOutputWriter;
-import io.FileUtilities;
+import phenomizer.algorithm.BenjaminiHochbergCorrector;
+import phenomizer.algorithm.ComparatorPhenoPval;
+import phenomizer.algorithm.DataTransformer;
+import phenomizer.algorithm.FrequencyConverter;
+import phenomizer.algorithm.Ontology;
+import phenomizer.algorithm.PhenomizerAlgorithmWithPval;
+import phenomizer.algorithm.SimilarityCalculatorNoWeight;
+import phenomizer.algorithm.SymptomDiseaseAssociations;
+import phenomizer.io.FileUtilitiesPhenomizer;
 
 public class TestPhenomizerPVal {
 
@@ -106,11 +114,11 @@ public class TestPhenomizerPVal {
 		NoSuchMethodException, SecurityException, IllegalAccessException,
 		IllegalArgumentException, InvocationTargetException{
 		
-		int [][] onto = FileUtilities.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		int [][] onto = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
 		Ontology o = new Ontology(onto);
-		LinkedList<Integer> symptoms = FileUtilities.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		LinkedList<Integer> symptoms = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
 		HashMap<Integer, LinkedList<Integer[]>> ksz = (new FrequencyConverter()).addWeights(
-				FileUtilities.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt"));
+				FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt"));
 		SymptomDiseaseAssociations sda = (new DataTransformer()).generateSymptomDiseaseAssociation(o, symptoms, ksz);
 		
 		
