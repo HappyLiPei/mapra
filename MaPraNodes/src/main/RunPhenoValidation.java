@@ -12,8 +12,10 @@ public class RunPhenoValidation {
 	/**
 	 * @param args
 	 */
-	//TODO: find out what Pheno Validation does an remove it if necessary
+	//TODO: write command line interface for  PhenomizerWithFrequentSymptoms!!!
 	public static void main(String[] args) {
+		
+		//input :isa, ksz, symptoms, output, weighting
 
 //		String dataPath = "D:/Dropbox/Masterpraktikum/";
 //

@@ -12,6 +12,7 @@ import phenomizeralgorithm.TestPhenomizer;
 import phenomizeralgorithm.TestPhenomizerPVal;
 import phenomizeralgorithm.TestPvalueCorrection;
 import phenomizeralgorithm.TestSampling;
+import phenomizeralgorithm.TestValidationWithFrequentWeights;
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestIOReaderWriter.class, 
@@ -23,7 +24,8 @@ import phenomizeralgorithm.TestSampling;
 				TestDataTransformer.class,
 				TestSampling.class,
 				TestOntology.class,
-				TestPhenomizerPVal.class })
+				TestPhenomizerPVal.class,
+				TestValidationWithFrequentWeights.class })
 public class AllTests {
 
 }
