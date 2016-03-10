@@ -27,11 +27,11 @@ public class TestValidationWithFrequentWeights {
 	public void readInFiles(){
 		
 		onto = FileUtilitiesPhenomizer.readInOntology(
-				"../TestData/DiseasesAndSymptoms/Ontology.txt");
+				"../TestData/Phenomizer/DiseasesAndSymptoms/Ontology.txt");
 		symptoms = FileUtilitiesPhenomizer.readInSymptoms(
-				"../TestData/DiseasesAndSymptoms/symptoms.txt");
+				"../TestData/Phenomizer/DiseasesAndSymptoms/symptoms.txt");
 		HashMap<Integer, LinkedList<String[]>> ksz= FileUtilitiesPhenomizer.readInKSZFrequency(
-				"../TestData/DiseasesAndSymptoms/ksz_freq.txt");
+				"../TestData/Phenomizer/DiseasesAndSymptoms/ksz_freq.txt");
 		ksz_freq = (new FrequencyConverter()).convertAll(ksz);
 		
 	}

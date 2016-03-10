@@ -13,7 +13,7 @@ public class TestFileUtilities {
 
 	@Test
 	public void TestQueryParser() {
-		LinkedList<Integer> q = FileUtilitiesPhenomizer.readInQuery("../TestData/Queries/query1.txt");
+		LinkedList<Integer> q = FileUtilitiesPhenomizer.readInQuery("../TestData/Phenomizer/Queries/query1.txt");
 		assertEquals("Query Element 0 ist not parsed correctly", new Integer(23), q.get(0));
 		assertEquals("Query Element 1 ist not parsed correctly", new Integer(24), q.get(1));
 		assertEquals("Query Element 2 ist not parsed correctly", new Integer(11), q.get(2));
@@ -27,7 +27,7 @@ public class TestFileUtilities {
 	
 	@Test
 	public void TestOntologyParser(){
-		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/Phenomizer/DiseasesAndSymptoms/Ontology.txt");
 		assertArrayEquals("Ontology entry 0 is not parsed correctly", new int[]{2,1}, o[0]);
 		assertArrayEquals("Ontology entry 23 is not parsed correctly", new int[]{22,16}, o[23]);
 		assertArrayEquals("Ontology entry 45 is not parsed correctly", new int[]{40,14}, o[45]);
@@ -36,7 +36,7 @@ public class TestFileUtilities {
 	
 	@Test
 	public void TestSymptomParser(){
-		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/Phenomizer/DiseasesAndSymptoms/symptoms.txt");
 		assertEquals("Symptom 0 is not parsed correctly", new Integer(1), s.get(0));
 		assertEquals("Symptom 1 is not parsed correctly", new Integer(2), s.get(1));
 		assertEquals("Symptom 2 is not parsed correctly", new Integer(2), s.get(2));
@@ -47,7 +47,7 @@ public class TestFileUtilities {
 	
 	@Test
 	public void TestKszParserWithoutFrequency(){
-		HashMap<Integer,LinkedList<Integer>> k = FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt");
+		HashMap<Integer,LinkedList<Integer>> k = FileUtilitiesPhenomizer.readInKSZ("../TestData/Phenomizer/DiseasesAndSymptoms/ksz.txt");
 		assertEquals("Ksz hashmap size does not match disease number",11 ,k.size());
 		assertEquals("Symptom of disease 100 is not parsed correctly", new Integer(1), k.get(100).get(0));
 		
@@ -64,7 +64,7 @@ public class TestFileUtilities {
 	@Test
 	public void TestKszParserWithFrequency(){
 		HashMap<Integer,LinkedList<String[]>> k = FileUtilitiesPhenomizer.readInKSZFrequency
-				("../TestData/DiseasesAndSymptoms/ksz_freq.txt");
+				("../TestData/Phenomizer/DiseasesAndSymptoms/ksz_freq.txt");
 		assertEquals("Ksz hashmap size does not match disease number",11 ,k.size());
 		
 		assertEquals("Symptom of disease 100 is not parsed correctly", "1", k.get(100).get(0)[0]);
@@ -93,7 +93,7 @@ public class TestFileUtilities {
 	
 	@Test
 	public void TestMatrixParser(){
-		String [][] m = FileUtilitiesPhenomizer.readInMatrix("../TestData/Clustering/allAgainstAll_avg.txt");
+		String [][] m = FileUtilitiesPhenomizer.readInMatrix("../TestData/Phenomizer/Clustering/allAgainstAll_avg.txt");
 		assertArrayEquals("Matrix header is not parsed correctly", 
 				new String[]{"id","102","103","100","101","110","108","109","106","107","104","105"}, m[0]);
 		assertArrayEquals("Row 0 of matrix is not parsed correctly", 

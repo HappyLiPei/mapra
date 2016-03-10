@@ -21,8 +21,8 @@ public class TestDataTransformer {
 	
 	@Before
 	public void prepareTest(){
-		onto=new Ontology(FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt"));
-		symptoms=FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		onto=new Ontology(FileUtilitiesPhenomizer.readInOntology("../TestData/Phenomizer/DiseasesAndSymptoms/Ontology.txt"));
+		symptoms=FileUtilitiesPhenomizer.readInSymptoms("../TestData/Phenomizer/DiseasesAndSymptoms/symptoms.txt");
 		dt=new DataTransformer();	
 	}
 

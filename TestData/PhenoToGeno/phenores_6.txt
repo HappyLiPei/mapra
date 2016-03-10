@@ -1,0 +1,2 @@
+disease_id	disease	score	p_value	significance
+109	109J	1.288	0.001	**

@@ -1,0 +1,5 @@
+disease_id	disease	score	p_value	significance
+105	105F	2.5	1.0	ns
+107	107H	2.4	1.0	ns
+102	102C	2.3	1.0	ns
+109	109J	2.2	1.0	*

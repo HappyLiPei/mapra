@@ -11,13 +11,13 @@ public class TestPValueFolder {
 	@Test
 	public void testGetFile() {
 		
-		String folder = "../TestData/PValues";
+		String folder = "../TestData/Phenomizer/PValues";
 		PValueFolder p = new PValueFolder(folder);
 		
 		assertEquals("Incorrect pvalue file for query length 1",
-				"../TestData/PValues/length_1.txt", p.getPvalFile(1));
+				"../TestData/Phenomizer/PValues/length_1.txt", p.getPvalFile(1));
 		assertEquals("Incorrect pvalue file for query length 11",
-				"../TestData/PValues/length_10.txt", p.getPvalFile(11));
+				"../TestData/Phenomizer/PValues/length_10.txt", p.getPvalFile(11));
 		assertEquals("Incorrect pvalue file for query length 0",
 				"", p.getPvalFile(0));
 		assertEquals("Incorrect pvalue file for query length -42",
@@ -26,8 +26,8 @@ public class TestPValueFolder {
 	
 	@Test
 	public void testCheckFile(){
-		String folder1="../TestData/PValues";
-		String folder2="../TestData/Queries";
+		String folder1="../TestData/Phenomizer/PValues";
+		String folder2="../TestData/Phenomizer/Queries";
 		PValueFolder p = new PValueFolder(folder1);
 		PValueFolder p2 = new PValueFolder(folder2);
 		

@@ -27,9 +27,9 @@ public class TestSampling {
 	public void testICCalculation()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
-		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
-		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
-		HashMap<Integer, LinkedList<Integer> > k = FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt");
+		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/Phenomizer/DiseasesAndSymptoms/symptoms.txt");
+		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/Phenomizer/DiseasesAndSymptoms/Ontology.txt");
+		HashMap<Integer, LinkedList<Integer> > k = FileUtilitiesPhenomizer.readInKSZ("../TestData/Phenomizer/DiseasesAndSymptoms/ksz.txt");
 		HashMap<Integer, LinkedList<Integer[]> > ksz = (new FrequencyConverter()).addWeights(k);
 		
 		DataTransformer dt = new DataTransformer();
@@ -68,9 +68,9 @@ public class TestSampling {
 		
 		String out = folder.newFile().getAbsolutePath();
 		
-		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
-		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
-		HashMap<Integer, LinkedList<Integer> > k = FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt");
+		LinkedList<Integer> s = FileUtilitiesPhenomizer.readInSymptoms("../TestData/Phenomizer/DiseasesAndSymptoms/symptoms.txt");
+		int [][] o = FileUtilitiesPhenomizer.readInOntology("../TestData/Phenomizer/DiseasesAndSymptoms/Ontology.txt");
+		HashMap<Integer, LinkedList<Integer> > k = FileUtilitiesPhenomizer.readInKSZ("../TestData/Phenomizer/DiseasesAndSymptoms/ksz.txt");
 		HashMap<Integer, LinkedList<Integer[]> > ksz = (new FrequencyConverter()).addWeights(k);
 		
 		ScoreDistributionSampling sds = new ScoreDistributionSampling(1, 10, 0,
@@ -86,7 +86,7 @@ public class TestSampling {
 		
 		LinkedList<String> res = FileInputReader.readAllLinesFrom(out);
 		LinkedList<String> expected = FileInputReader.readAllLinesFrom(
-				"../TestData/ExpectedResults/sampling.txt");
+				"../TestData/Phenomizer/ExpectedResults/sampling.txt");
 		
 		for(int i=0; i<11; i++){
 			assertEquals("Line "+(i+1)+" is not correct", expected.get(i), res.get(i));
@@ -103,7 +103,7 @@ public class TestSampling {
 		public MockDatatTransformer(){
 			queries = new LinkedList[10];
 			for(int i=1; i<=10; i++){
-				queries[i-1]=FileUtilitiesPhenomizer.readInQuery("../TestData/Queries/query"+i+".txt");
+				queries[i-1]=FileUtilitiesPhenomizer.readInQuery("../TestData/Phenomizer/Queries/query"+i+".txt");
 			}
 			
 			

@@ -16,7 +16,7 @@ public class TestOntology {
 	
 	@Before
 	public void prepareTest(){
-		int [][] edges = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		int [][] edges = FileUtilitiesPhenomizer.readInOntology("../TestData/Phenomizer/DiseasesAndSymptoms/Ontology.txt");
 		this.ontology = new Ontology(edges);
 	}
 

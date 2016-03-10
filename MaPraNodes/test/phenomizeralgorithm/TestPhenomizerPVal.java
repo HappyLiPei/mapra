@@ -114,11 +114,11 @@ public class TestPhenomizerPVal {
 		NoSuchMethodException, SecurityException, IllegalAccessException,
 		IllegalArgumentException, InvocationTargetException{
 		
-		int [][] onto = FileUtilitiesPhenomizer.readInOntology("../TestData/DiseasesAndSymptoms/Ontology.txt");
+		int [][] onto = FileUtilitiesPhenomizer.readInOntology("../TestData/Phenomizer/DiseasesAndSymptoms/Ontology.txt");
 		Ontology o = new Ontology(onto);
-		LinkedList<Integer> symptoms = FileUtilitiesPhenomizer.readInSymptoms("../TestData/DiseasesAndSymptoms/symptoms.txt");
+		LinkedList<Integer> symptoms = FileUtilitiesPhenomizer.readInSymptoms("../TestData/Phenomizer/DiseasesAndSymptoms/symptoms.txt");
 		HashMap<Integer, LinkedList<Integer[]>> ksz = (new FrequencyConverter()).addWeights(
-				FileUtilitiesPhenomizer.readInKSZ("../TestData/DiseasesAndSymptoms/ksz.txt"));
+				FileUtilitiesPhenomizer.readInKSZ("../TestData/Phenomizer/DiseasesAndSymptoms/ksz.txt"));
 		SymptomDiseaseAssociations sda = (new DataTransformer()).generateSymptomDiseaseAssociation(o, symptoms, ksz);
 		
 		

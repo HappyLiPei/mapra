@@ -15,7 +15,7 @@ public class TestFrequencyConverter {
 	@Test
 	public void testConversionOfAllFrequencies() {
 		HashMap<Integer,LinkedList<String[]>> ksz_with_freq_text = FileUtilitiesPhenomizer.readInKSZFrequency(
-				"../TestData/DiseasesAndSymptoms/ksz_freq.txt");
+				"../TestData/Phenomizer/DiseasesAndSymptoms/ksz_freq.txt");
 		HashMap<Integer,LinkedList<Integer[]>> ksz_with_freq = (new FrequencyConverter()).convertAll(ksz_with_freq_text);
 		
 		int[] expected= new int[]{5, 15, 15, 5, 10, 10, 5, 5, 15, 5, 15, 5, 5, 10, 15, 10, 5, 10, 10, 15,
@@ -36,7 +36,7 @@ public class TestFrequencyConverter {
 	@Test
 	public void testConversionwithDifferentWeights() {
 		HashMap<Integer,LinkedList<String[]>> ksz_with_freq_text = FileUtilitiesPhenomizer.readInKSZFrequency(
-				"../TestData/DiseasesAndSymptoms/ksz_freq.txt");
+				"../TestData/Phenomizer/DiseasesAndSymptoms/ksz_freq.txt");
 		FrequencyConverter f = new FrequencyConverter(2,8,42);
 		HashMap<Integer,LinkedList<Integer[]>> ksz_with_freq = f.convertAll(ksz_with_freq_text);
 		
