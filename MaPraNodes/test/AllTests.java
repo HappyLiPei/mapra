@@ -13,6 +13,7 @@ import phenomizeralgorithm.TestPhenomizerPVal;
 import phenomizeralgorithm.TestPvalueCorrection;
 import phenomizeralgorithm.TestSampling;
 import phenomizeralgorithm.TestValidationWithFrequentWeights;
+import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
 
 @RunWith(Suite.class)
@@ -27,7 +28,8 @@ import phenotogeno.TestPhenoToGenoFileIO;
 				TestOntology.class,
 				TestPhenomizerPVal.class,
 				TestValidationWithFrequentWeights.class,
-				TestPhenoToGenoFileIO.class })
+				TestPhenoToGenoFileIO.class,
+				TestPhenoToGenoDataStructures.class })
 public class AllTests {
 
 }

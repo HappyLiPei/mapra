@@ -68,8 +68,8 @@ public class TestPhenomizer {
 	@Test
 	public void testPhenomizer_Weight_NoPVal() {
 		
-		//TODO: calculate manually other queries (1,3,4,6)
-		int[] array = new int[] {2,5,6,7,8,9,10};
+		//TODO: calculate manually other queries (1,3)
+		int[] array = new int[] {2,4,5,6,7,8,9,10};
 //		for(int i=1; i<=1; i++){
 		for (int i: array){
 			readData(i,true, false);
