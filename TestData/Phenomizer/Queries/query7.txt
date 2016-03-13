@@ -1,4 +1,5 @@
 #106G with imprecision
 symptom_id
 10
+1
 9
