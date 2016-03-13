@@ -4,6 +4,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import io.TestFileUtilities;
 import io.TestIOReaderWriter;
+import phenomizeralgorithm.TestComparatorPheno;
 import phenomizeralgorithm.TestDataTransformer;
 import phenomizeralgorithm.TestFrequencyConverter;
 import phenomizeralgorithm.TestOntology;
@@ -29,7 +30,8 @@ import phenotogeno.TestPhenoToGenoFileIO;
 				TestPhenomizerPVal.class,
 				TestValidationWithFrequentWeights.class,
 				TestPhenoToGenoFileIO.class,
-				TestPhenoToGenoDataStructures.class })
+				TestPhenoToGenoDataStructures.class,
+				TestComparatorPheno.class })
 public class AllTests {
 
 }
