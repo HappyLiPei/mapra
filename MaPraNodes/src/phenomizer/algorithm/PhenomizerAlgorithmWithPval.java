@@ -127,7 +127,8 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 	}
 	
 	/**
-	 * corrects the pvalues stored in column 2 of the 2d array results, the old pvalues are overwritten
+	 * corrects the pvalues stored in column 2 of the 2d array results, the old pvalues are overwritten,
+	 * the new p values are rounded to 5 decimal places
 	 * @param results: 2d array 
 	 * 	each row corresponds to a disease in PhenoDis
 	 * 	columns: array[][0] disease id, array[][1] similariy score, array[][2] pvalue
@@ -150,7 +151,9 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		//replace pvalues in results with the corrected pvalues to the result
 		pos=0;
 		for(String[] r : results){
-			r[2]=String.valueOf(corrected_pvals[pos]);
+			//round p value to 5 decimal places
+			double current_pval = (double) Math.round(corrected_pvals[pos]*100000)/100000;
+			r[2]=String.valueOf(current_pval);
 			pos++;
 		}
 		
