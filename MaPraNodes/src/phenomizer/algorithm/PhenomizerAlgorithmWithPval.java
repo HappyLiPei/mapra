@@ -29,11 +29,16 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		super(num, ontology, queryIds, sda, similarityCalculator);
 		this.folder=folder;
 		this.corrector = corrector;
+		this.comparator = new ComparatorPhenoPval();
 	}
 
 	@Override
 	/**
 	 * executes the Phenomizer algorithm
+	 * @return: prediction results of Phenomizer for the current query
+	 * 		the results are stored in a linked list of String arrays
+	 * 		each list entry is an array corresponding to a disease
+	 * 		array elements: array[0] disease id, array[1] similariy score, array[2] pvalue
 	 */
 	public LinkedList<String[]> runPhenomizer() {
 		
@@ -48,7 +53,7 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		correctPvalues(array_result);
 		
 		//generate output data structure with defined number of entries
-		return getResult(array_result);
+		return generateResult(array_result);
 	}
 	
 	/**
@@ -116,7 +121,7 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		fir.closer();
 		
 		//sort result according to pvalue, score and disease id
-		Arrays.sort(phenoResult, new ComparatorPhenoPval());
+		Arrays.sort(phenoResult, comparator);
 		
 		return phenoResult;
 	}
@@ -149,43 +154,7 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 			pos++;
 		}
 		
-		Arrays.sort(results, new ComparatorPhenoPval());
-	}
-	
-	/**
-	 * transforms the 2d array into the standard output data structure of PhenomizerAlgorithm and 
-	 * reduces the number of diseases in the output to a fixed number
-	 * @param scores_pvals: 2d array 
-	 * 	each row corresponds to a disease in PhenoDis
-	 * 	columns: array[][0] disease id, array[][1] similariy score, array[][2] pvalue
-	 * @return: a list of String arrays with a fixed length
-	 * 	array[0] disease id, array[1] similariy score, array[2] pvalue
-	 */
-	private LinkedList<String[]> getResult(String [][] scores_pvals){
-		LinkedList<String[]> res = new LinkedList<String[]>();
-		
-		//num: output size, cannot be larger than the total number of diseases
-		if(num>scores_pvals.length){
-			num=scores_pvals.length;
-		}
-		
-		//generate output of desired size num
-		for(int i=0; i<num; i++){
-			res.add(scores_pvals[i]);
-		}
-		
-		//add additional results if they have the same pvalue and the same score as the last result (num-th result)
-		String last_score = scores_pvals[num-1][1];
-		String last_pval = scores_pvals[num-1][2];
-		int pos=num;
-		while(pos < scores_pvals.length &&
-			scores_pvals[pos][2].equals(last_pval) && scores_pvals[pos][1].equals(last_score)){
-			
-			res.add(scores_pvals[pos]);
-			pos++;
-		}
-		
-		return res;
+		Arrays.sort(results, comparator);
 	}
 	
 }

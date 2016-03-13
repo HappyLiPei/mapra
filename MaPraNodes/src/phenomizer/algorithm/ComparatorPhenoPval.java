@@ -1,8 +1,6 @@
 package phenomizer.algorithm;
 
-import java.util.Comparator;
-
-public class ComparatorPhenoPval implements Comparator<String[]> {
+public class ComparatorPhenoPval extends ComparatorPheno {
 
 	@Override
 	/**
@@ -33,6 +31,29 @@ public class ComparatorPhenoPval implements Comparator<String[]> {
 			else{
 				return Integer.compare(Integer.valueOf(arg0[0]), Integer.valueOf(arg1[0]));
 			}
+		}
+	}
+
+	@Override
+	/**
+	 * Method to compare the results of PhenomizerAlgorithmWithPval for two diseases
+	 * @param arg0: array with id (pos 0), score (pos 1) and p value (pos 2) of a disease
+	 * @param arg1: array with id (pos 0), score (pos 1) and p value (pos 2) of a second disease
+	 * @return: returns a positive value if arg0 has a higher rank than arg1
+	 * 	returns a negative value if arg0 has a lower rank than arg1
+	 *  returns 0 ar0 and arg1 have the same rank
+	 */
+	public int compareWithoutID(String[] arg0, String[] arg1) {
+		
+		//compare pvalues -> ascending order
+		int comparison_pval = Double.compare(Double.valueOf(arg0[2]), Double.valueOf(arg1[2]));
+		if(comparison_pval!=0){
+			return comparison_pval;
+		}
+		
+		//equal pvalues -> compare scores in descending order
+		else{
+			return -Double.compare(Double.valueOf(arg0[1]), Double.valueOf(arg1[1]));
 		}
 	}
 	

@@ -20,6 +20,7 @@ import phenomizer.algorithm.ComparatorPhenoPval;
 import phenomizer.algorithm.DataTransformer;
 import phenomizer.algorithm.FrequencyConverter;
 import phenomizer.algorithm.Ontology;
+import phenomizer.algorithm.PhenomizerAlgorithm;
 import phenomizer.algorithm.PhenomizerAlgorithmWithPval;
 import phenomizer.algorithm.SimilarityCalculatorNoWeight;
 import phenomizer.algorithm.SymptomDiseaseAssociations;
@@ -202,7 +203,7 @@ public class TestPhenomizerPVal {
 				new SimilarityCalculatorNoWeight(), null, new BenjaminiHochbergCorrector());
 		
 		//reflection to execute private method of PhenomizerAlgorithmWithPVal
-		Method target = PhenomizerAlgorithmWithPval.class.getDeclaredMethod("getResult", String[][].class);
+		Method target = PhenomizerAlgorithm.class.getDeclaredMethod("generateResult", String[][].class);
 		target.setAccessible(true);
 		
 		@SuppressWarnings("all")
