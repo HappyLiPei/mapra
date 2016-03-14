@@ -1,4 +1,4 @@
-package phenomizeralgorithm;
+package phenomizeralgorithm.validation;
 
 import static org.junit.Assert.*;
 
@@ -16,8 +16,8 @@ import phenomizer.validation.PhenomizerWithFrequentSymptoms;
 import phenomizer.validation.PhenomizerWithFrequentSymptomsNoPval;
 
 
-//TODO: test for calculation of the rank, test overall method with injected queries!
-public class TestValidationWithFrequentWeights {
+//TODO: test overall method with injected queries!
+public class TestValidationWithFrequentWeightsPreparation {
 	
 	private int [][] onto;
 	private LinkedList<Integer> symptoms;
@@ -43,6 +43,7 @@ public class TestValidationWithFrequentWeights {
 		PhenomizerWithFrequentSymptomsNoPval p = new PhenomizerWithFrequentSymptomsNoPval(1, onto, symptoms, ksz_freq, "");
 		p.prepareData();
 		
+		checkDiseaseIds(p);
 		checkQueries(p);
 		checkSDA(p, new Integer[][]{{20,15},{34,5},{8,5},{14,10}});
 	}
@@ -54,6 +55,7 @@ public class TestValidationWithFrequentWeights {
 		PhenomizerWithFrequentSymptomsNoPval p = new PhenomizerWithFrequentSymptomsNoPval(0, onto, symptoms, ksz_freq, "");
 		p.prepareData();
 		
+		checkDiseaseIds(p);
 		checkQueries(p);
 		checkSDA(p, new Integer[][]{{20,10}, {34,10}, {8,10}, {14,10}});
 	}
@@ -95,6 +97,15 @@ public class TestValidationWithFrequentWeights {
 		assertArrayEquals("Query 10 (disease 109J) is incorrect", new int []{11,34,2,30}, listToArray(queries[9]));
 		//13 also frequent symptom of 110K but 13 is ancestor of 34 -> gets removed
 		assertArrayEquals("Query 11 (disease 110K) is incorrect", new int []{20,14}, listToArray(queries[10]));
+	}
+	
+	private void checkDiseaseIds(PhenomizerWithFrequentSymptoms p)
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
+		
+		Field f = PhenomizerWithFrequentSymptoms.class.getDeclaredField("query_ids");
+		f.setAccessible(true);
+		int [] ids = (int[]) f.get(p);
+		assertArrayEquals("query ids are incorrect", new int[]{100,101,102,103,104,105,106,107,108,109,110}, ids );
 	}
 	
 	private int [] listToArray(LinkedList<Integer> list){

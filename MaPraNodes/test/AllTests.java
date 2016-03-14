@@ -13,7 +13,8 @@ import phenomizeralgorithm.TestPhenomizer;
 import phenomizeralgorithm.TestPhenomizerPVal;
 import phenomizeralgorithm.TestPvalueCorrection;
 import phenomizeralgorithm.TestSampling;
-import phenomizeralgorithm.TestValidationWithFrequentWeights;
+import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsPreparation;
+import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsRanking;
 import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
 
@@ -28,10 +29,11 @@ import phenotogeno.TestPhenoToGenoFileIO;
 				TestSampling.class,
 				TestOntology.class,
 				TestPhenomizerPVal.class,
-				TestValidationWithFrequentWeights.class,
+				TestValidationWithFrequentWeightsPreparation.class,
 				TestPhenoToGenoFileIO.class,
 				TestPhenoToGenoDataStructures.class,
-				TestComparatorPheno.class })
+				TestComparatorPheno.class,
+				TestValidationWithFrequentWeightsRanking.class })
 public class AllTests {
 
 }
