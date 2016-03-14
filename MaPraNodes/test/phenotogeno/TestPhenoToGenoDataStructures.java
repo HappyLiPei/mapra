@@ -2,9 +2,6 @@ package phenotogeno;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -13,19 +10,17 @@ import org.junit.Test;
 
 import phenotogeno.algo.AnnotatedGene;
 import phenotogeno.algo.DiseaseGeneAssociation;
-import phenotogeno.algo.PhenoToGenoDriver;
+import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.algo.ScoredDisease;
 import phenotogeno.io.FileUtilitiesPTG;
 
 public class TestPhenoToGenoDataStructures {
 	
-	private PhenoToGenoDriver driver;
+	private LinkedList<ScoredDisease> pheno_res;
+	private DiseaseGeneAssociation dga;
 	
 	@Before
-	@SuppressWarnings("all")
-	public void initializeDriver()
-			throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException{
+	public void runDataTransform(){
 		
 		LinkedList<String[]> phenomizer_raw =
 				FileUtilitiesPTG.readPhenomizerResult("../TestData/PhenoToGeno/phenores_8.txt");
@@ -34,22 +29,14 @@ public class TestPhenoToGenoDataStructures {
 		HashMap<Integer, LinkedList<String>> mapping =
 				FileUtilitiesPTG.readDiseaseGeneAssociation("../TestData/PhenoToGeno/gene_diseases.txt");
 		
-		//call private prepareData method of driver to generate the data structures
-		driver = new PhenoToGenoDriver(phenomizer_raw, genes_raw, mapping);
-		Method m = PhenoToGenoDriver.class.getDeclaredMethod("prepareData", null);
-		m.setAccessible(true);
-		m.invoke(driver,null);	
+		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
+		pheno_res=dt.getPhenomizerResult(phenomizer_raw);
+		dga =dt.getDiseaseGeneAssociation(genes_raw, mapping);
+		
 	}
 
 	@Test
-	public void testPhenomizerResult()
-			throws NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException {
-		
-		Field f =PhenoToGenoDriver.class.getDeclaredField("phenomizer");
-		f.setAccessible(true);
-		@SuppressWarnings("unchecked")
-		LinkedList<ScoredDisease> pheno_res = (LinkedList<ScoredDisease>) f.get(driver);
+	public void testPhenomizerResult() {
 		
 		int[] expected_ids=new int[]{109,108,103,106,105,107,102,101,104};
 		double [] expected_scores = new double[]{0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8};
@@ -64,14 +51,8 @@ public class TestPhenoToGenoDataStructures {
 	}
 	
 	@Test
-	public void testDiseaseGeneAssociation()
-			throws NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException{
-		
-		Field f =PhenoToGenoDriver.class.getDeclaredField("dga");
-		f.setAccessible(true);
-		DiseaseGeneAssociation dga = (DiseaseGeneAssociation) f.get(driver);
-		
+	public void testDiseaseGeneAssociation(){
+				
 		//test all genes
 		AnnotatedGene [] all = dga.getAllGenes();
 		for(int i=0; i<50; i++){
@@ -107,6 +88,9 @@ public class TestPhenoToGenoDataStructures {
 		
 		//object in genes and allgenes() identical
 		assertTrue("Pointers are not set correctly",genes[0]==all[14]);
+		
+		//disease number
+		assertEquals("Disease number is incorrect", 11,dga.numberOfDiseases());
 	}
 	
 	private String [] getIds(AnnotatedGene[] genes){

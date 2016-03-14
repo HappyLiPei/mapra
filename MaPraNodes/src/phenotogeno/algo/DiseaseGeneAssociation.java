@@ -89,5 +89,13 @@ public class DiseaseGeneAssociation {
 		return allGenes;
 	}
 	
+	/**
+	 * gets the number of diseases stored in this object
+	 * @return: number of diseases in PhenoDis
+	 */
+	public int numberOfDiseases(){
+		return diseaseID_genesID.size();
+	}
+	
 
 }

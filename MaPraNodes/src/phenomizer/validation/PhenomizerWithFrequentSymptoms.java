@@ -150,6 +150,7 @@ public abstract class PhenomizerWithFrequentSymptoms {
 	}
 	
 	//TODO: implement!, test, reuse ic hashmap and calculated similarities
+	// add check if ic empty in Phenomizer algorithm + add conśtructors for the PhenomizerWith/NoPval
 	public void runValidation(){
 		
 		FileOutputWriter fow = new FileOutputWriter(output_path);

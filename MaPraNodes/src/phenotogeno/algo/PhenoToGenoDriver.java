@@ -21,37 +21,20 @@ public class PhenoToGenoDriver {
 		this.mapping = mapping;
 	}
 	
-	/*
-	 * prepare data structures
-	 * generate PhenoToGeno object
-	 * start algorithm
-	 */
 	public LinkedList<ScoredGene> runPhenoToGeno(){
 		prepareData();
-		
-		return null;
+		PhenoToGenoAlgo ptg = new PhenoToGenoAlgo(phenomizer, dga);
+		return ptg.runPhenoToGene();
 	}
 	
 
 	private void prepareData(){
 		
+		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
 		// list of scored diseases
-		phenomizer = new LinkedList<ScoredDisease>();
-		for(String[] disease_pval: phenomizer_raw){
-			ScoredDisease d = new ScoredDisease(Integer.valueOf(disease_pval[0]),
-												Double.valueOf(disease_pval[1]));
-			phenomizer.add(d);
-		}
-		
-		//array of genes
-		AnnotatedGene [] genes = new AnnotatedGene [genes_raw.size()];
-		int pos=0;
-		for(String s: genes_raw){
-			genes[pos]=new AnnotatedGene(s);
-			pos++;
-		}
+		phenomizer = dt.getPhenomizerResult(phenomizer_raw);
 		// association disease - gene
-		dga = new DiseaseGeneAssociation(genes, mapping);	
+		dga = dt.getDiseaseGeneAssociation(genes_raw, mapping);
 	}
 
 }
