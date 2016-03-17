@@ -26,8 +26,8 @@ public abstract class PhenomizerWithFrequentSymptoms {
 	
 	private String output_path;
 	
-	private Ontology ontology;
-	private SymptomDiseaseAssociations sda;
+	protected Ontology ontology;
+	protected SymptomDiseaseAssociations sda;
 	protected SimilarityCalculator sc;
 	protected ComparatorPheno comparator;
 	
@@ -101,7 +101,8 @@ public abstract class PhenomizerWithFrequentSymptoms {
 		}
 	}
 
-	protected abstract PhenomizerAlgorithm initPhenomizer(LinkedList<Integer> query);
+	protected abstract PhenomizerAlgorithm initPhenomizer(LinkedList<Integer> query,
+			HashMap<Integer, Double> ic, HashMap<String, Double> sim);
 	
 	protected double calculateRank(int disease, LinkedList<String[]> pheno_result){
 		
@@ -149,29 +150,37 @@ public abstract class PhenomizerWithFrequentSymptoms {
 		
 	}
 	
-	//TODO: implement!, test, reuse ic hashmap and calculated similarities
-	// add check if ic empty in Phenomizer algorithm + add conśtructors for the PhenomizerWith/NoPval
 	public void runValidation(){
 		
 		FileOutputWriter fow = new FileOutputWriter(output_path);
 		
-//		HashMap<String, Double> allSimilarities = new HashMap<String, Double>
-//			(sda.numberOfSymptoms()*sda.numberOfSymptoms());
+		//reuse ic values and similarity scores
+		HashMap<Integer, Double> ic = new HashMap<Integer, Double> (sda.numberOfSymptoms()*3);
+		HashMap<String, Double> allSimilarities = new HashMap<String, Double>
+			(sda.numberOfSymptoms()*sda.numberOfSymptoms());
 		
 		for(int pos=0; pos<query_ids.length; pos++){
-			
+			System.out.println((pos+1)+" out of "+query_ids.length+" queries");
+			//skip queries without any symptoms
 			if(queries[pos].size()==0){
+				System.out.println(query_ids[pos]+"\t\t"+"no frequent symptoms");
 				fow.writeFileln(query_ids[pos]+"\t\t"+"no frequent symptoms");
 			}
 			else{
-				PhenomizerAlgorithm algo = initPhenomizer(queries[pos]);
+				//get current query and disease
+				LinkedList<Integer> cur_query = queries[pos];
+				int cur_disease=query_ids[pos];
+				//run Phenomizer
+				PhenomizerAlgorithm algo = initPhenomizer(cur_query, ic, allSimilarities);
 				LinkedList<String[]> predictions = algo.runPhenomizer();
-				double rank = calculateRank(query_ids[pos], predictions);
-				
-				if(queries[pos].size()==sda.getSymptoms(query_ids[pos]).size()){
+				//calculate and write rank
+				double rank = calculateRank(cur_disease, predictions);
+				if(cur_query.size()==sda.getSymptoms(cur_disease).size()){
+					System.out.println(query_ids[pos]+"\t"+rank+"\t"+"all symptoms frequent");
 					fow.writeFileln(query_ids[pos]+"\t"+rank+"\t"+"all symptoms frequent");
 				}
 				else{
+					System.out.println(query_ids[pos]+"\t"+rank+"\t");
 					fow.writeFileln(query_ids[pos]+"\t"+rank+"\t");
 				}
 			}

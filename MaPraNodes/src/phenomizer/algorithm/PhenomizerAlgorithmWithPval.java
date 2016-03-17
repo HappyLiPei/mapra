@@ -31,6 +31,29 @@ public class PhenomizerAlgorithmWithPval extends PhenomizerAlgorithm {
 		this.corrector = corrector;
 		this.comparator = new ComparatorPhenoPval();
 	}
+	
+	/**
+	 * creates a PhenomizerAlgorithmWithPval object with reusable ic and similarity hashmap
+	 * runs the PhenomizerAlgorithm and calculates pvalues from pre-determined score distributions
+	 * @param num: number of diseases in the output of Phenomizer
+	 * @param ontology: Ontology object representing is-a relationship between PhenoDis symptoms
+	 * @param queryIds: contains PhenoDis ids of the query symptoms
+	 * @param sda: associations between diseases and symptoms annotated in PhenoDis
+	 * @param similarityCalculator: calculates the similarity score between a query and a disease
+	 * @param folder: PValueFolder object for managing access to the pre-determined score distributions
+	 * @param corrector: PValue corrector object
+	 * @param ic: HashMap mapping symptom ids to ic values
+	 * @param sim: HashMap mapping pairs of symptoms to their similarity score
+	 */
+	public PhenomizerAlgorithmWithPval(int num, Ontology ontology, LinkedList<Integer> queryIds,
+			SymptomDiseaseAssociations sda, SimilarityCalculator similarityCalculator, PValueFolder folder,
+			PValueCorrector corrector, HashMap<Integer, Double> ic, HashMap<String, Double> sim) {
+		
+		super(num, ontology, queryIds, sda, similarityCalculator, ic, sim);
+		this.folder=folder;
+		this.corrector = corrector;
+		this.comparator = new ComparatorPhenoPval();
+	}
 
 	@Override
 	/**

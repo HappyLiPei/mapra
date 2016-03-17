@@ -1,6 +1,7 @@
 package phenomizer.algorithm;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class PhenomizerAlgorithmNoPvalue extends PhenomizerAlgorithm{
@@ -16,10 +17,29 @@ public class PhenomizerAlgorithmNoPvalue extends PhenomizerAlgorithm{
 	 */
 	public PhenomizerAlgorithmNoPvalue(int num, Ontology ontology, LinkedList<Integer> queryIds,
 			SymptomDiseaseAssociations sda, SimilarityCalculator similarityCalculator) {
-		super(num, ontology, queryIds, sda, similarityCalculator);
 		
+		super(num, ontology, queryIds, sda, similarityCalculator);
 		this.comparator = new ComparatorPhenoScore();
 
+	}
+	
+	/**
+	 * creates a PhenomizerAlgorithmNoPval object with reusable ic and similarity hashmap
+	 * runs the PhenomizerAlgorithm without calculating pvalues
+	 * @param num: number of diseases in the output of Phenomizer
+	 * @param ontology: Ontology object representing is-a relationship between PhenoDis symptoms
+	 * @param queryIds: contains PhenoDis ids of the query symptoms
+	 * @param sda: associations between diseases and symptoms annotated in PhenoDis
+	 * @param similarityCalculator: calculates the similarity score between a query and a disease
+	 * @param ic: HashMap mapping symptom ids to ic values
+	 * @param sim: HashMap mapping pairs of symptoms to their similarity score
+	 */
+	public PhenomizerAlgorithmNoPvalue(int num, Ontology ontology, LinkedList<Integer> queryIds,
+			SymptomDiseaseAssociations sda, SimilarityCalculator similarityCalculator,
+			HashMap<Integer, Double> ic, HashMap<String, Double> sim) {
+		
+		super(num, ontology, queryIds, sda, similarityCalculator, ic, sim);
+		this.comparator = new ComparatorPhenoScore();
 	}
 
 	@Override

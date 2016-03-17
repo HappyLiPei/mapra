@@ -49,7 +49,7 @@ public class TestValidationWithFrequentWeightsRanking {
 		LinkedList<String[]> pheno_list = arrayToList(pheno_result);
 		
 		PhenomizerWithFrequentSymptomsWithPval p = new PhenomizerWithFrequentSymptomsWithPval
-				(0, null, null, null, "");
+				(0, null, null, null, "", "");
 		
 		Method m = PhenomizerWithFrequentSymptoms.class.getDeclaredMethod
 				("calculateRank", int.class, LinkedList.class);

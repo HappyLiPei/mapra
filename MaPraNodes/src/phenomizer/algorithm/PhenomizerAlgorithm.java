@@ -45,7 +45,7 @@ public abstract class PhenomizerAlgorithm {
 	}
 	
 	/**
-	 * constructor for generating a PhenomizerAlgorithm
+	 * constructor for generating a PhenomizerAlgorithm with reusable ic and similarity hashmap
 	 * @param num: desired output size (limits the result to the num top scoring diseases)
 	 * @param ontology: representing the is-a hierarchy of PhenoDis symptoms
 	 * @param queryIds: list of PhenoDis symptom ids representing the query for the algorithm
@@ -75,8 +75,14 @@ public abstract class PhenomizerAlgorithm {
 	
 	/**
 	 * calculates the information content of all symptoms and stores them in an internal HashMap
+	 * if the internal HashMap is already filled it does nothing
 	 */
 	protected void setIC(){
+		
+		//skip ic calculation if ic HashMap is already filled with values (for repeated Phenomizer in validation)
+		if(ic.size()==sda.numberOfSymptoms()){
+			return;
+		}
 		
 		//iteratre over all symptom ids
 		for(int symptom : sda.getSymptoms()){
