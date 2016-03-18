@@ -186,18 +186,7 @@ public abstract class PhenomizerWithFrequentSymptoms {
 			}
 			
 		}
-		
 		fow.closew();
-		
-		/*  global hash map with pairwise similarities
-		 *  iterate over all queries
-		 *  	check if query is empty! -> skip if empty
-		 *  	generate Phenomizer object -> init method
-		 *  	overwrite calculatedSim of SimilarityCalclator -> reuse existing similarities
-		 * 		run Phenomizer
-		 * 		get rank of the disease -> calculateRank method
-		 * 		write disease and rank to file
-		 */
 	}
 	
 	
