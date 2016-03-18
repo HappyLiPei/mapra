@@ -16,7 +16,6 @@ import phenomizer.validation.PhenomizerWithFrequentSymptoms;
 import phenomizer.validation.PhenomizerWithFrequentSymptomsNoPval;
 
 
-//TODO: test overall method with injected queries!
 public class TestValidationWithFrequentWeightsPreparation {
 	
 	private int [][] onto;
@@ -86,17 +85,17 @@ public class TestValidationWithFrequentWeightsPreparation {
 		
 		assertEquals("Number of queries is incorrect", 11, queries.length);
 		assertArrayEquals("Query 1 (disease 100A) is incorrect", new int []{}, listToArray(queries[0]));
-		assertArrayEquals("Query 2 (disease 101B) is incorrect", new int []{35,8,19,24,12}, listToArray(queries[1]));
+		assertArrayEquals("Query 2 (disease 101B) is incorrect", new int []{35,8,12}, listToArray(queries[1]));
 		assertArrayEquals("Query 3 (disease 102C) is incorrect", new int []{}, listToArray(queries[2]));
-		assertArrayEquals("Query 4 (disease 103D) is incorrect", new int []{23,34}, listToArray(queries[3]));
-		assertArrayEquals("Query 5 (disease 104E) is incorrect", new int []{28,2,6}, listToArray(queries[4]));
-		assertArrayEquals("Query 6 (disease 105F) is incorrect", new int []{6,40}, listToArray(queries[5]));
-		assertArrayEquals("Query 7 (disease 106G) is incorrect", new int []{11}, listToArray(queries[6]));
-		assertArrayEquals("Query 8 (disease 107H) is incorrect", new int []{37,38,25,15}, listToArray(queries[7]));
-		assertArrayEquals("Query 9 (disease 108I) is incorrect", new int []{14,39}, listToArray(queries[8]));
-		assertArrayEquals("Query 10 (disease 109J) is incorrect", new int []{11,34,2,30}, listToArray(queries[9]));
+		assertArrayEquals("Query 4 (disease 103D) is incorrect", new int []{23}, listToArray(queries[3]));
+		assertArrayEquals("Query 5 (disease 104E) is incorrect", new int []{28}, listToArray(queries[4]));
+		assertArrayEquals("Query 6 (disease 105F) is incorrect", new int []{40}, listToArray(queries[5]));
+		assertArrayEquals("Query 7 (disease 106G) is incorrect", new int []{}, listToArray(queries[6]));
+		assertArrayEquals("Query 8 (disease 107H) is incorrect", new int []{37,15}, listToArray(queries[7]));
+		assertArrayEquals("Query 9 (disease 108I) is incorrect", new int []{39}, listToArray(queries[8]));
+		assertArrayEquals("Query 10 (disease 109J) is incorrect", new int []{34}, listToArray(queries[9]));
 		//13 also frequent symptom of 110K but 13 is ancestor of 34 -> gets removed
-		assertArrayEquals("Query 11 (disease 110K) is incorrect", new int []{20,14}, listToArray(queries[10]));
+		assertArrayEquals("Query 11 (disease 110K) is incorrect", new int []{20}, listToArray(queries[10]));
 	}
 	
 	private void checkDiseaseIds(PhenomizerWithFrequentSymptoms p)

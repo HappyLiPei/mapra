@@ -75,7 +75,7 @@ public abstract class PhenomizerWithFrequentSymptoms {
 			LinkedList<Integer[]> symp = temp.getSymptoms(disease);
 			//anno[0]: disease id	anno[1] weight
 			for(Integer[] anno:symp){
-				if(anno[1]>=10){
+				if(anno[1]>=15){
 					query.add(new Integer(anno[0]));
 				}
 			}
