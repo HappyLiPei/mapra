@@ -67,8 +67,7 @@ public class TestPhenomizer {
 	
 	@Test
 	public void testPhenomizer_Weight_NoPVal() {
-		//TODO: calculate manually other queries (1)
-		for(int i=2; i<=10; i++){
+		for(int i=1; i<=10; i++){
 			readData(i,true, false);
 			PhenomizerDriver d = new PhenomizerDriver(query, symptoms, ksz_with_freq, ontology);
 			d.setPhenomizerAlgorithm(11, false, 1, "");
