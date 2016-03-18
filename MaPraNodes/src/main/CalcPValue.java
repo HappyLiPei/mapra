@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 public class CalcPValue {
 
-	/**
+	/** main method to run sampling of the score distribution 
 	 * @param args
 	 * @throws Exception 
 	 */

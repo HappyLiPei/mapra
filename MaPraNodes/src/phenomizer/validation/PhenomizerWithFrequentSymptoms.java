@@ -35,6 +35,16 @@ public abstract class PhenomizerWithFrequentSymptoms {
 	private LinkedList<Integer>[] queries;
 	private int [] query_ids;
 	
+	/**
+	 * constructor of abstract class PhenomizerWithFrequentSymptoms
+	 * @param weighting integer indicating if weighted similarity scores are calculated
+	 * 		0: unweighted	1: one-sided weighting	2: double-sided weighting
+	 * @param onto matrix of PhenoDis symptom ids representing a is-a hierarchy
+	 * @param symptoms list of all PhenoDis symptom ids
+	 * @param ksz Mapping between PhenoDis disease ids and associated symptoms (list of integer arrays, containing
+	 * 			PhenoDis symptom id and a frequency annotation)
+	 * @param file file to which the resulting ranks are written
+	 */
 	public PhenomizerWithFrequentSymptoms(int weighting, int [][] onto,
 			LinkedList<Integer> symptoms, HashMap<Integer, LinkedList<Integer[]>> ksz,
 			String file){
@@ -46,6 +56,12 @@ public abstract class PhenomizerWithFrequentSymptoms {
 		this.output_path = file;
 	}
 	
+	/**
+	 * method to prepare all data structures used for the validation
+	 * the method is used to generate the queries with very frequent symptoms (weight >=15) from the associations
+	 * between diseases and symptoms
+	 * the method has to be called before running the validation!
+	 */
 	@SuppressWarnings("unchecked")
 	public void prepareData(){
 		
@@ -75,6 +91,7 @@ public abstract class PhenomizerWithFrequentSymptoms {
 			LinkedList<Integer[]> symp = temp.getSymptoms(disease);
 			//anno[0]: disease id	anno[1] weight
 			for(Integer[] anno:symp){
+				//get only very frequent symptoms -> weight 15!!!!
 				if(anno[1]>=15){
 					query.add(new Integer(anno[0]));
 				}
@@ -100,10 +117,24 @@ public abstract class PhenomizerWithFrequentSymptoms {
 			this.sda = t.generateSymptomDiseaseAssociation(ontology, symptoms_raw, ksz_raw);
 		}
 	}
-
+	
+	/**
+	 * method to generate a PhenomizerAlgorithm (with or without p values)
+	 * @param query query symptoms as a list of PhenoDis symptom ids without ancestors
+	 * @param ic Mapping of symptom id to information content (reusable Hashmap to save computing time)
+	 * @param sim Mapping of pairs of symptom id to similarity score (reusable Hashmap to save computing time)
+	 * @return a PhenomizerAlgorithm ready for execution
+	 */
 	protected abstract PhenomizerAlgorithm initPhenomizer(LinkedList<Integer> query,
 			HashMap<Integer, Double> ic, HashMap<String, Double> sim);
 	
+	/**
+	 * method to calculuate the rank of a given disease in a result of Phenomizer
+	 * @param disease PhenoDis disease id of the disease of interest
+	 * @param pheno_result list of scored diseases returned by PhenomizerAlgorithm
+	 * @return the rank of the disease (according to pvalue and/or score), if there are diseases with the same score
+	 * 		each disease obtains their average rank
+	 */
 	protected double calculateRank(int disease, LinkedList<String[]> pheno_result){
 		
 		//saves result for previous disease
@@ -150,6 +181,10 @@ public abstract class PhenomizerWithFrequentSymptoms {
 		
 	}
 	
+	/**
+	 * method to start the validation using frequent symptoms as queries
+	 * note that one has to call prepareData() before running this method!
+	 */
 	public void runValidation(){
 		
 		FileOutputWriter fow = new FileOutputWriter(output_path);

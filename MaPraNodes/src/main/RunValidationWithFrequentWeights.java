@@ -11,6 +11,13 @@ import phenomizer.validation.PhenomizerWithFrequentSymptomsWithPval;
 
 public class RunValidationWithFrequentWeights {
 	
+	/**
+	 * main method to run validation with frequent weights
+	 * the program extracts very frequent symptoms (weight = 15) of the diseases and uses them as query
+	 * finally the rank of the disease for the corresponding query is recorded
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String args[]) throws Exception{
 		
 		//read commandline
