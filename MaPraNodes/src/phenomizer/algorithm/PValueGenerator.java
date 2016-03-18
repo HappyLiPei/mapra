@@ -23,13 +23,13 @@ public class PValueGenerator {
 			HashMap<Integer,LinkedList<Integer[]>> ksz,int[][]onto, boolean symmetric_weight){
 		LinkedList<String[]> result = new LinkedList<String[]>();
 		
-//		AlgoPheno.setInput(query, symptoms, ksz, onto);
-//		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue(symmetric_weight);
-//		
-//		int queryLength = AlgoPheno.getQueryLength();
-//		String path = PValueFolder.getPvalFile(queryLength);
-//		//result = getValuesForGeneralFiles(path,resPhenomizer,num);
-//		result = getValuesForCompressedFiles(path,resPhenomizer,num);
+		AlgoPheno.setInput(query, symptoms, ksz, onto);
+		HashMap<Integer,Double> resPhenomizer = AlgoPheno.runPhenomizerWithPValue(symmetric_weight);
+		
+		int queryLength = AlgoPheno.getQueryLength();
+		String path = (new PValueFolder("")).getPvalFile(queryLength);
+		//result = getValuesForGeneralFiles(path,resPhenomizer,num);
+		result = getValuesForCompressedFiles(path,resPhenomizer,num);
 
 		return result;
 	}
