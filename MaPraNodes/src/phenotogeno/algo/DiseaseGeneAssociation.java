@@ -28,7 +28,7 @@ public class DiseaseGeneAssociation {
 	 * method is used in the constructor
 	 */
 	private void buildGeneIDMap(){
-		geneID_gene = new HashMap<String, AnnotatedGene>(allGenes.length);
+		geneID_gene = new HashMap<String, AnnotatedGene>(allGenes.length*3);
 		for(AnnotatedGene g: allGenes){
 			geneID_gene.put(g.getId(), g);
 		}
