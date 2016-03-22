@@ -27,10 +27,10 @@ public class TestPhenoToGeno {
 	
 
 	@Test
-	//TODO: case 1,3,4,5,6,7,8
+	//TODO: case 3,4,5,6,7,8
 	public void test() {
 		//iterate over 8 test cases
-		for(int num :new int[] {2}){
+		for(int num=1; num<=2; num++){
 			
 			//get phenoToGeno result
 			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
@@ -51,14 +51,16 @@ public class TestPhenoToGeno {
 			for(int i=0; i<genes_raw.size(); i++){
 				ScoredGene gActual = ig.next();
 				String[] gExpected = is.next().split("\t");
-				assertEquals("Gene id at row "+(i+1)+" is incorrect",gExpected[0],gActual.getId());
-				assertEquals("Gene score at row "+(i+1)+" is incorrect", gExpected[1], gActual.getScore()+"");
+				assertEquals("Gene id at row "+(i+1)+" of result "+num+" is incorrect",
+						gExpected[0],gActual.getId());
+				assertEquals("Gene score at row "+(i+1)+" of result "+num+" is incorrect",
+						gExpected[1], gActual.getScore()+"");
 				if(gExpected.length==2){
-					assertEquals("Disease annotation at row "+(i+1)+" is incorrect",
+					assertEquals("Disease annotation at row "+(i+1)+" of result "+num+" is incorrect",
 							"",gActual.getImportantDiseases());
 				}
 				else{
-					assertEquals("Disease annotation at row "+(i+1)+" is incorrect",
+					assertEquals("Disease annotation at row "+(i+1)+" of result "+num+" is incorrect",
 							gExpected[2],gActual.getImportantDiseases());
 				}
 			}

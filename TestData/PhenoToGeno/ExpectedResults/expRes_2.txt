@@ -1,4 +1,4 @@
-ene_id	score	importantDiseases
+gene_id	score	importantDiseases
 MTG15	0.22975	105,107,109
 MTG17	0.15972	105,107
 MTG21	0.15972	107,109
