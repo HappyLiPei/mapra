@@ -19,6 +19,7 @@ import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsRanking;
 import phenotogeno.TestPhenoToGenoAlgo;
 import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
+import phenotogeno.TestScoredGeneComparator;
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestIOReaderWriter.class, 
@@ -37,7 +38,9 @@ import phenotogeno.TestPhenoToGenoFileIO;
 				TestValidationWithFrequentWeights.class,
 				TestPhenoToGenoFileIO.class,
 				TestPhenoToGenoDataStructures.class,
-				TestPhenoToGenoAlgo.class})
+				TestPhenoToGenoAlgo.class,
+				TestScoredGeneComparator.class,
+				TestPhenoToGenoAlgo.class })
 public class AllTests {
 
 }

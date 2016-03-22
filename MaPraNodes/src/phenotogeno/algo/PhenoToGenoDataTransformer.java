@@ -7,9 +7,9 @@ public class PhenoToGenoDataTransformer {
 	
 	/**
 	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer
-	 * @param phenomizer_input: list of String arrays containing PhenoDis disease id (pos 0) and
+	 * @param phenomizer_input list of String arrays containing PhenoDis disease id (pos 0) and
 	 * 			p value of Phenomizer(pos 1)
-	 * @return: List of ScoredDiseases required for PhenoToGeno Algo
+	 * @return List of ScoredDiseases required for PhenoToGeno Algo
 	 */
 	public LinkedList<ScoredDisease> getPhenomizerResult(LinkedList<String[]> phenomizer_input){
 		
@@ -23,8 +23,8 @@ public class PhenoToGenoDataTransformer {
 	
 	/**
 	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes
-	 * @param gene_list: LinkedList of gene ids (e.g. ensembl identifier), should not contain any duplicates!
-	 * @param association: hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
+	 * @param gene_list LinkedList of gene ids (e.g. ensembl identifier), should not contain any duplicates!
+	 * @param association hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
 	 * @return a DiseaseGeneAssociation object require for PhenoToGeno algo
 	 */
 	public DiseaseGeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,

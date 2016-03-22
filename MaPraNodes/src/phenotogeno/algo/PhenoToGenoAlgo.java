@@ -8,11 +8,20 @@ public class PhenoToGenoAlgo {
 	private LinkedList<ScoredDisease> pheno_res;
 	private DiseaseGeneAssociation dga;
 	
+	/**
+	 * generates a PhenoToGenoAlgo for transferring Phenomizer p values to genes
+	 * @param pheno_res result of Phenomizer als list of scored diseases (disease id + p value)
+	 * @param dga DiseaseGeneAssociation stores associations between diseases and genes
+	 */
 	public PhenoToGenoAlgo (LinkedList<ScoredDisease> pheno_res, DiseaseGeneAssociation dga){
 		this.pheno_res = pheno_res;
 		this.dga = dga;
 	}
 	
+	/**
+	 * method to execute the PhenoToGenoAlgorithm
+	 * @return a sorted list of ScoredGenes (sorted in descending order according to score)
+	 */
 	public LinkedList<ScoredGene> runPhenoToGene(){
 		annotateGenes();
 		LinkedList<ScoredGene> result= scoreGenes(dga.getAllGenes());
@@ -21,6 +30,10 @@ public class PhenoToGenoAlgo {
 		return result;
 	}
 	
+	/**
+	 * method to transfer the Phenomizer p values to all associated genes of the corresponding disease,
+	 * the method used by runPhenoToGene()
+	 */
 	private void annotateGenes(){
 		
 		for (ScoredDisease scoredDisease: pheno_res){
@@ -30,7 +43,7 @@ public class PhenoToGenoAlgo {
 			//get gene annotations for the current diseases
 			AnnotatedGene [] genes = dga.getGenesForDiseaseWithID(scoredDisease.getId());
 			
-			//no genes known for the current disease
+			//no genes known for the current disease -> distribute score equally on all genes
 			if(genes.length==0){
 				score=(double) score/dga.numberOfDiseases();
 				genes =dga.getAllGenes();
@@ -43,6 +56,11 @@ public class PhenoToGenoAlgo {
 		}
 	}
 	
+	/**
+	 * method to summarize the scores of a gene obtained from different diseases
+	 * @param annotatedGenes array of AnnotatedGenes
+	 * @return list of ScoredGenes containing the final score of each gene
+	 */
 	private LinkedList<ScoredGene> scoreGenes(AnnotatedGene [] annotatedGenes){
 		
 		LinkedList<ScoredGene> result = new LinkedList<ScoredGene>();
@@ -56,32 +74,32 @@ public class PhenoToGenoAlgo {
 			}
 			
 			else{
-				//TODO: better calculation of the score ?!
 				//calculate combined score
 				double combined_score = 1;
 				for(double s:scores){
-					combined_score*=(1-s);
-					//check if a pvalue is 0
-					if(Math.round(s*1000)==1){
+					//check if s==1 (pval=0) -> combined score =0 -> final score =1
+					if(Math.abs(1-s)<1E-5){
 						combined_score=0;
 						break;
 					}
+					combined_score*=(1-s);
 				}
 				combined_score=1-combined_score;
 				//round to 5 decimal places
 				combined_score = (double) Math.round(combined_score*100000)/100000;
 				
-				//find maximum
-				int max=-1;
+				//find maximum disease score
+				double max =-1;
 				String important_dis="";
 				for(int i=0; i<scores.length; i++){
-					int scoreInt = (int) Math.round(scores[i]*1000000000);
-					if(scoreInt>max){
-						max=scoreInt;
-						important_dis=Integer.toString(ids[i]);
-					}
-					else if(scoreInt==max){
+					//consider to scores as equal if the differ in less than 1E-5 -> more than one max
+					if(Math.abs(max-scores[i])<1E-5){
 						important_dis+=","+ids[i];
+					}
+					//new max is found
+					else if(scores[i]>max){
+						max=scores[i];
+						important_dis=Integer.toString(ids[i]);
 					}
 				}
 				

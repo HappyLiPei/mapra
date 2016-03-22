@@ -10,11 +10,11 @@ public class DiseaseGeneAssociation {
 	private AnnotatedGene[] allGenes;
 	
 	/**
-	 * creates object that represents association of diseases and genes
+	 * creates object that represents association of diseases and genes,
 	 * the object allows to add Phenomizer scores to the genes
-	 * @param genes: array of all genes to consider
-	 * @param mapping: mapping disease -> genes
-	 * 	the disease is represented as a PhenoDis disease id (integer)
+	 * @param genes array of all genes to consider
+	 * @param mapping mapping disease -> genes,
+	 * 	the disease is represented as a PhenoDis disease id (integer),
 	 * 	the genes are a list of ids (e.g. ensembl) (String)
 	 */
 	public DiseaseGeneAssociation(AnnotatedGene[] genes, HashMap<Integer, LinkedList<String>> mapping) {
@@ -24,7 +24,7 @@ public class DiseaseGeneAssociation {
 	}
 	
 	/**
-	 * method to build the map gene id-> gene object
+	 * method to build the map gene id-> gene object,
 	 * method is used in the constructor
 	 */
 	private void buildGeneIDMap(){
@@ -36,9 +36,9 @@ public class DiseaseGeneAssociation {
 	
 	/**
 	 * gets all annotated gene objects that are associated with a disease
-	 * @param disease_id: PhenoDis id of the disease
-	 * @return: array of all gene objects annotated to the disease
-	 * 	array is empty if no genes are annotated
+	 * @param disease_id PhenoDis id of the disease
+	 * @return array of all gene objects annotated to the disease,
+	 * 	array is empty if no genes are annotated,
 	 * 	array is null if the disease id is invalid 
 	 */
 	public AnnotatedGene[] getGenesForDiseaseWithID(int disease_id){
@@ -68,8 +68,8 @@ public class DiseaseGeneAssociation {
 	
 	/**
 	 * retrieves the gene object corresponding to a id
-	 * @param id: id of the gene
-	 * @return: the gene object with the corresponding id,
+	 * @param id id of the gene
+	 * @return the gene object with the corresponding id,
 	 * 	if there is no gene with the given id, the method returns null
 	 */
 	public AnnotatedGene getGeneWithID(String id){
@@ -83,7 +83,7 @@ public class DiseaseGeneAssociation {
 	
 	/**
 	 * retrieves all genes managed by this object
-	 * @return: array of all annotated genes
+	 * @return array of all annotated genes
 	 */
 	public AnnotatedGene[] getAllGenes(){
 		return allGenes;
@@ -91,7 +91,7 @@ public class DiseaseGeneAssociation {
 	
 	/**
 	 * gets the number of diseases stored in this object
-	 * @return: number of diseases in PhenoDis
+	 * @return number of diseases in PhenoDis
 	 */
 	public int numberOfDiseases(){
 		return diseaseID_genesID.size();

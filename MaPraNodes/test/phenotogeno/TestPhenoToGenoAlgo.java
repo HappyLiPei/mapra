@@ -41,6 +41,7 @@ public class TestPhenoToGenoAlgo {
 	@SuppressWarnings("all")
 	public void testAnnotationOfGenes() throws NoSuchMethodException, SecurityException,
 	IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		
 		LinkedList<ScoredDisease> pred = new LinkedList<ScoredDisease>();
 		pred.add(new ScoredDisease(100, 0.0));
 		pred.add(new ScoredDisease(101, 1.0));
@@ -95,7 +96,7 @@ public class TestPhenoToGenoAlgo {
 		g5.add(108, 0.1);
 		AnnotatedGene g6= new AnnotatedGene("G6");
 		g6.add(111, 0.05);
-		g6.add(1112, 0.05);
+		g6.add(112, 0.05);
 		AnnotatedGene[] genes = new AnnotatedGene[]{g1,g2,g3,g4,g5,g6};
 		
 		PhenoToGenoAlgo algo = new PhenoToGenoAlgo(null, dga);
@@ -105,7 +106,7 @@ public class TestPhenoToGenoAlgo {
 		
 		double[] expected_scores = new double[]{0,0.1, 1, 0.0975, 0.35695639, 0.0975};
 		String[] expected_origin = new String[]{"", "100", "101", "103,104", "105,106,107,108", "111,112"};
-		for(int i=0;i<5; i++){
+		for(int i=0;i<6; i++){
 			assertEquals("Score for gene "+(i+1)+" is incorrect",
 					expected_scores[i], res.get(i).getScore(), 1E-5);
 			assertEquals("Annotation for gene "+(i+1)+" is incorrect",
@@ -116,7 +117,7 @@ public class TestPhenoToGenoAlgo {
 		Collections.sort(res, new ScoredGeneComparator());
 		double[] sorted_scores = new double[] {1, 0.35695639, 0.1, 0.0975, 0.0975, 0.0};
 		String[] sorted_ids = new String []{"G3", "G5", "G2", "G4", "G6", "G1"};
-		for(int i=0;i<5; i++){
+		for(int i=0;i<6; i++){
 			assertEquals("Id for position "+i+" is incorrect",
 					sorted_ids[i], res.get(i).getId());
 			assertEquals("Score for gene "+i+" is incorrect",

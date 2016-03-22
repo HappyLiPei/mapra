@@ -9,7 +9,7 @@ public class AnnotatedGene extends Gene {
 	
 	/**
 	 * generates a gene object that can be annotated with results from Phenomizer
-	 * @param id: id of the gene (e.g. ensembl id)
+	 * @param id id of the gene (e.g. ensembl id)
 	 */
 	public AnnotatedGene(String id) {
 		super(id);
@@ -19,8 +19,8 @@ public class AnnotatedGene extends Gene {
 	
 	/**
 	 * adds a result from Phenomizer to the gene
-	 * @param disease_id: PhenoDis disease id
-	 * @param score: gene score resulting from Phenomizer prediction for the disease with id disease_id
+	 * @param disease_id PhenoDis disease id
+	 * @param score gene score resulting from Phenomizer prediction for the disease with id disease_id
 	 */
 	public void add(int disease_id, double score) {
 		disease_ids.add(disease_id);
@@ -28,9 +28,9 @@ public class AnnotatedGene extends Gene {
 	}
 	
 	/**
-	 * retrieves all diseases added to the gene
+	 * retrieves all diseases added to the gene,
 	 * should be called together with getScores
-	 * @return: array of all disease_ids (PhenoDis)
+	 * @return array of all disease_ids (PhenoDis),
 	 * position in array returned by getScores corresponds to the position within this array
 	 */
 	public int [] getDiseaseIds(){
@@ -44,9 +44,9 @@ public class AnnotatedGene extends Gene {
 	}
 	
 	/**
-	 * retrieves all scores added to the gene
+	 * retrieves all scores added to the gene,
 	 * should be called together with getDiseaseIds
-	 * @return: array of all scores
+	 * @return array of all scores,
 	 * position in array returned by getDiseaseIds corresponds to the position within this array
 	 */
 	public double [] getScores(){

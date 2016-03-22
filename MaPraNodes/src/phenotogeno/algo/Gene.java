@@ -6,7 +6,7 @@ public class Gene {
 	
 	/**
 	 * generates an object representing a gene
-	 * @param id: id (e.g Ensembl) of the gene
+	 * @param id id (e.g Ensembl) of the gene
 	 */
 	public Gene(String id){
 		this.id=id;
