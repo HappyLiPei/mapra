@@ -90,8 +90,10 @@ public class FileUtilitiesPTG {
 			String[] split = line.split("\t");
 			int id = Integer.valueOf(split[0]);
 			if(disease_to_gene.containsKey(id)){
-				LinkedList<String> genes =disease_to_gene.get(id);
-				genes.add(split[1]);
+				if(split.length>1){
+					LinkedList<String> genes =disease_to_gene.get(id);
+					genes.add(split[1]);
+				}
 			}
 			else{
 				LinkedList<String> genes = new LinkedList<String>();

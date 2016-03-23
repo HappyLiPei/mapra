@@ -50,14 +50,15 @@ public class PhenoToGenoDataTransformer {
 			pos++;
 		}
 		
-		//remove all genes from association map that are not in the gene list
+		//remove all genes from association map that are not in the gene list and remove all duplicates
 		HashMap<Integer, LinkedList<String>> associationsCorrected =
 				new HashMap<Integer, LinkedList<String>>(association.size()*3);
 		for(int id:association.keySet()){
 			LinkedList<String> genesCorrected = new LinkedList<String>();
 			associationsCorrected.put(id, genesCorrected);
 			for(String entry_gene:association.get(id)){
-				if(dedup_gene_list.contains(entry_gene)){
+				// gene is in gene list && gene is no duplicate 
+				if(dedup_gene_list.contains(entry_gene) && !genesCorrected.contains(entry_gene)){
 					genesCorrected.add(entry_gene);
 				}
 			}

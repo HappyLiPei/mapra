@@ -37,8 +37,10 @@ public class TestPhenoToGenoDataStructures {
 		}
 		HashMap<Integer, LinkedList<String>> mapping =
 				FileUtilitiesPTG.readDiseaseGeneAssociation("../TestData/PhenoToGeno/gene_diseases.txt");
+		//add gene that is not in the gene list and add one duplicate entry
 		if(testRobustness){
 			mapping.get(100).add("MTG51");
+			mapping.get(108).add("MTG24");
 		}
 		
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
