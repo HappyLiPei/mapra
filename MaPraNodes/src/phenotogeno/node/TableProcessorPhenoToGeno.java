@@ -3,20 +3,27 @@ package phenotogeno.node;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.RowKey;
+import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
+import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
+import org.knime.core.node.ExecutionContext;
 
 import phenomizer.node.PhenomizerNodeModel;
+import phenotogeno.algo.ScoredGene;
 
 public class TableProcessorPhenoToGeno {
 	
+	//TODO: test if Phenomizer result matches disease in disease - gene annotation -> logger output
 	public static  LinkedList<String []> getPhenomizerResult(BufferedDataTable tablePheno){
 		
 		LinkedList<String []> phenoRes = new LinkedList<String[]>();
@@ -52,6 +59,7 @@ public class TableProcessorPhenoToGeno {
 		return phenoRes;
 	}
 	
+	//TODO: test for duplicates -> logger info
 	public static LinkedList<String> getGeneList(BufferedDataTable tableGenes){
 		
 		LinkedList<String> geneList = new LinkedList<String>();
@@ -67,11 +75,55 @@ public class TableProcessorPhenoToGeno {
 		return geneList;
 	}
 	
+	//TODO: test for genes without entry in gene list, test for duplicate genes for one disease
 	public static HashMap<Integer, LinkedList<String>> getAssociations(BufferedDataTable tableDiseaseGene){
-		//map id -> list (empty if gene_id is missing cell)
-		//check if gene is also part of the gene list?
 		
-		return null;
+		HashMap<Integer, LinkedList<String>> mapping = new HashMap<Integer, LinkedList<String>> (
+				(int) tableDiseaseGene.size()*3);
+		
+		//get index and type of columns
+		DataTableSpec spec = tableDiseaseGene.getSpec();
+		int indexGene = spec.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_ID);
+		int indexDis = spec.findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
+		boolean is_int =false;
+		if(spec.getColumnSpec(indexDis).getType()==IntCell.TYPE){
+			is_int=true;
+		}
+		
+		for(DataRow r : tableDiseaseGene){
+			//get disease and gene id of current row
+			int disease_id = -1;
+			if(is_int){
+				IntCell c = (IntCell) r.getCell(indexDis);
+				disease_id = c.getIntValue();
+			}
+			else{
+				LongCell c = (LongCell) r.getCell(indexDis);
+				disease_id = (int) c.getLongValue();
+			}
+			String gene_id=null;
+			DataCell geneCell = r.getCell(indexGene);
+			//otherwise it is a MissingCell
+			if(geneCell instanceof StringCell){
+				gene_id =((StringCell) geneCell).getStringValue();
+			}
+			//add gene id and disease id to hashmap
+			if(mapping.containsKey(disease_id)){
+				if(gene_id!=null){
+					LinkedList<String> genes = mapping.get(disease_id);
+					genes.add(gene_id);
+				}
+			}
+			else{
+				LinkedList<String> genes = new LinkedList<String>();
+				mapping.put(disease_id, genes);
+				if(gene_id!=null){
+					genes.add(gene_id);
+				}
+			}
+		}
+		
+		return mapping;
 	}
 	
 	//for output generation
@@ -85,8 +137,29 @@ public class TableProcessorPhenoToGeno {
 		return new DataTableSpec(specs);	
 	}
 	
-	public static BufferedDataTable generateOutput(){
-		return null;
+	//TODO: add disease names
+	public static BufferedDataTable generateOutput(ExecutionContext exec, LinkedList<ScoredGene> genes){
+		
+        DataTableSpec spec = TableProcessorPhenoToGeno.generateOutputSpec();
+        int indexGID = spec.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_ID);
+        int indexProb = spec.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_PROBABILITY);
+        int indexCon = spec.findColumnIndex(PhenoToGenoNodeNodeModel.CONTRIBUTION);
+        
+        BufferedDataContainer c = exec.createDataContainer(spec);
+        int counter =1;
+        for(ScoredGene g : genes){
+        	RowKey key = new RowKey("Row "+counter);
+        	DataCell[] data = new DataCell[spec.getNumColumns()];
+        	data[indexGID] = new StringCell(g.getId());
+        	data[indexProb] = new DoubleCell(g.getScore());
+        	data[indexCon] = new StringCell(g.getImportantDiseases());
+        	DataRow row = new DefaultRow(key, data);
+        	c.addRowToTable(row);
+        	counter++;
+        }
+        c.close();
+		
+		return c.getTable();
 	}
 
 }

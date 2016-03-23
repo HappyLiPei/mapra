@@ -2,17 +2,15 @@ package phenotogeno.node;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -25,6 +23,8 @@ import org.knime.core.node.NodeSettingsWO;
 
 import nodeutils.TableChecker;
 import phenomizer.node.PhenomizerNodeModel;
+import phenotogeno.algo.PhenoToGenoDriver;
+import phenotogeno.algo.ScoredGene;
 
 
 /**
@@ -74,12 +74,14 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
         
         LinkedList<String []> phenoRes = TableProcessorPhenoToGeno.getPhenomizerResult(inData[INPORT_PHENOMIZER]);
         LinkedList<String> geneList = TableProcessorPhenoToGeno.getGeneList(inData[INPORT_ALL_GENES]);
+        HashMap<Integer, LinkedList<String>> associations =
+        		TableProcessorPhenoToGeno.getAssociations(inData[INPORT_GENE_DISEASE]);
         
-        DataTableSpec spec = TableProcessorPhenoToGeno.generateOutputSpec();
-        BufferedDataContainer c = exec.createDataContainer(spec);
-        c.close();
+        PhenoToGenoDriver d = new PhenoToGenoDriver(phenoRes, geneList, associations);
+        LinkedList<ScoredGene> res = d.runPhenoToGeno();
+        BufferedDataTable tab = TableProcessorPhenoToGeno.generateOutput(exec, res);
         
-        return new BufferedDataTable[]{c.getTable()};
+        return new BufferedDataTable[]{tab};
     }
 
     /**
