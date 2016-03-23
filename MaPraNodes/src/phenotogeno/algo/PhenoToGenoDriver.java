@@ -45,10 +45,10 @@ public class PhenoToGenoDriver {
 	private void prepareData(){
 		
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
-		// list of scored diseases
-		phenomizer = dt.getPhenomizerResult(phenomizer_raw);
 		// association disease - gene
 		dga = dt.getDiseaseGeneAssociation(genes_raw, mapping);
+		// list of scored diseases
+		phenomizer = dt.getPhenomizerResult(phenomizer_raw, dga);
 	}
 
 }

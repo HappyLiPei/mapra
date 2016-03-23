@@ -105,5 +105,15 @@ public class DiseaseGeneAssociation {
 		return allGenes.length;
 	}
 	
+	/**
+	 * checks if a certain disease is part of this object
+	 * @param disease_id PhenoDis id of the disease
+	 * @return true if there is an entry for the disease in this object, 
+	 * 			false if there is no entry for the disease
+	 */
+	public boolean containsDisease(int disease_id) {
+		return diseaseID_genesID.containsKey(disease_id);
+	}
+	
 
 }

@@ -17,8 +17,8 @@ public class FileUtilitiesPTG {
 	 * 	pos 2: score
 	 * 	pos 3: pvalue
 	 * 	pos 4: significance
-	 * @param path: file containing the result of Phenomizer
-	 * @return: a list of String arrays
+	 * @param path file containing the result of Phenomizer
+	 * @return a list of String arrays
 	 * 	each array has length 2: array[0] disease id, array[1] pvalue 
 	 */
 	public static LinkedList<String[]> readPhenomizerResult(String path){
@@ -47,10 +47,10 @@ public class FileUtilitiesPTG {
 	
 	/**
 	 * reads a list of genes from a file, each line of the file contains one gene ID
-	 * assumption: each gene ID occurs exactly once in the file
+	 * (assumption: each gene ID occurs exactly once in the file, assumption is assured by DataTransformer)
 	 * the file starts with several comment lines (marked by #) and a table header
-	 * @param path: file with gene IDs
-	 * @return: a list of all genes IDs 
+	 * @param path file with gene IDs
+	 * @return a list of all genes IDs 
 	 */
 	public static LinkedList<String> readGeneList(String path){
 		
@@ -71,7 +71,7 @@ public class FileUtilitiesPTG {
 	 * 	pos: 0 PhenoDis disease id
 	 * 	pos: 1 gene id (optional)
 	 * assumption: each PhenoDis disease is listed in the file (even if without known gene association)
-	 * @param path: file with associations between diseases and genes
+	 * @param path file with associations between diseases and genes
 	 * @return HashMap that maps each disease id to a list of gene ids
 	 * 	if the disease has no genes, it is mapped to an empty list
 	 */

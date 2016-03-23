@@ -32,9 +32,6 @@ public class TestPhenoToGenoAlgo {
 		HashMap<Integer, LinkedList<String>> mapping =
 				FileUtilitiesPTG.readDiseaseGeneAssociation("../TestData/PhenoToGeno/gene_diseases.txt");
 		
-		//TODO: handle genes in dga that are not in gene list
-		//mapping.get(100).add("MTG51");
-		
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
 		dga =dt.getDiseaseGeneAssociation(genes_raw, mapping);
 		
