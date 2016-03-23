@@ -97,5 +97,13 @@ public class DiseaseGeneAssociation {
 		return diseaseID_genesID.size();
 	}
 	
+	/**
+	 * gets the number of genes stored in this object
+	 * @return total number of genes
+	 */
+	public int numberOfGenes(){
+		return allGenes.length;
+	}
+	
 
 }

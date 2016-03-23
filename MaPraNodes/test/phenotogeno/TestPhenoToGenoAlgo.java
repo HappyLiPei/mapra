@@ -65,13 +65,13 @@ public class TestPhenoToGenoAlgo {
 				assertArrayEquals("Disease annotation for "+g.getId()+" is incorrect"
 						,new int[]{100,101} ,g.getDiseaseIds());
 				assertArrayEquals("Probabilities incorrect for "+g.getId()+" is incorrect",
-						new double[]{(double) 1/11, (double) 1/12}, g.getScores(), 1E-10);
+						new double[]{(double) 1/50, (double) 1/12}, g.getScores(), 1E-10);
 			}
 			else{
 				assertArrayEquals("Disease annotation for "+g.getId()+" is incorrect"
 						,new int[]{100} ,g.getDiseaseIds());
 				assertArrayEquals("Probabilities incorrect for "+g.getId()+" is incorrect",
-						new double[]{(double) 1/11}, g.getScores(), 1E-10);
+						new double[]{(double) 1/50}, g.getScores(), 1E-10);
 			}
 		}
 	}

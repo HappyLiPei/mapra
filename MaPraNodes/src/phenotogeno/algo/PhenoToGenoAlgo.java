@@ -45,7 +45,7 @@ public class PhenoToGenoAlgo {
 			
 			//no genes known for the current disease -> distribute score equally on all genes
 			if(genes.length==0){
-				score=(double) score/dga.numberOfDiseases();
+				score=(double) score/dga.numberOfGenes();
 				genes =dga.getAllGenes();
 			}
 			

@@ -16,6 +16,7 @@ import phenomizeralgorithm.TestSampling;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeights;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsPreparation;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsRanking;
+import phenotogeno.TestPhenoToGeno;
 import phenotogeno.TestPhenoToGenoAlgo;
 import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
@@ -40,7 +41,7 @@ import phenotogeno.TestScoredGeneComparator;
 				TestPhenoToGenoDataStructures.class,
 				TestPhenoToGenoAlgo.class,
 				TestScoredGeneComparator.class,
-				TestPhenoToGenoAlgo.class })
+				TestPhenoToGeno.class })
 public class AllTests {
 
 }

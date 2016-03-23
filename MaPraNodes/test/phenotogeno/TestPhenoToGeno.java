@@ -27,10 +27,10 @@ public class TestPhenoToGeno {
 	
 
 	@Test
-	//TODO: case 3,4,5,6,7,8
+	//TODO: case 4,5,6,7,8
 	public void test() {
 		//iterate over 8 test cases
-		for(int num=1; num<=2; num++){
+		for(int num=1; num<=3; num++){
 			
 			//get phenoToGeno result
 			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
