@@ -35,9 +35,7 @@ public class PhenoToGenoAlgo {
 	 * the method used by runPhenoToGene()
 	 */
 	private void annotateGenes(){
-		
 		for (ScoredDisease scoredDisease: pheno_res){
-			
 			//calculate score from p value
 			double score = (double) 1/(1+dga.numberOfDiseases()*scoredDisease.getPval());
 			//get gene annotations for the current diseases
@@ -57,55 +55,34 @@ public class PhenoToGenoAlgo {
 	}
 	
 	/**
-	 * method to summarize the scores of a gene obtained from different diseases
+	 * method to generate a final score for each gene
 	 * @param annotatedGenes array of AnnotatedGenes
 	 * @return list of ScoredGenes containing the final score of each gene
 	 */
 	private LinkedList<ScoredGene> scoreGenes(AnnotatedGene [] annotatedGenes){
 		
 		LinkedList<ScoredGene> result = new LinkedList<ScoredGene>();
+		
 		for(AnnotatedGene g: annotatedGenes){
+			//get final score, rounded to 5 decimal places
+			double combined_score = g.getFinalScore();
+			combined_score =(double) Math.round(combined_score*100000)/100000;
+			//get diseases with maximum contribution to the gene (at most 3 diseases)
 			int [] ids = g.getDiseaseIds();
-			double [] scores = g.getScores();
-			
-			//gene without annotation
-			if(ids.length==0){
-				result.add(new ScoredGene(g.getId(), 0, ""));
-			}
-			
-			else{
-				//calculate combined score
-				double combined_score = 1;
-				for(double s:scores){
-					//check if s==1 (pval=0) -> combined score =0 -> final score =1
-					if(Math.abs(1-s)<1E-5){
-						combined_score=0;
-						break;
-					}
-					combined_score*=(1-s);
+			String important_dis ="";
+			for(int id:ids){
+				if(important_dis.length()==0){
+					important_dis=""+id;
 				}
-				combined_score=1-combined_score;
-				//round to 5 decimal places
-				combined_score = (double) Math.round(combined_score*100000)/100000;
-				
-				//find maximum disease score
-				double max =-1;
-				String important_dis="";
-				for(int i=0; i<scores.length; i++){
-					//consider to scores as equal if the differ in less than 1E-5 -> more than one max
-					if(Math.abs(max-scores[i])<1E-5){
-						important_dis+=","+ids[i];
-					}
-					//new max is found
-					else if(scores[i]>max){
-						max=scores[i];
-						important_dis=Integer.toString(ids[i]);
-					}
+				else{
+					important_dis+=","+id;
 				}
-				
-				//add new gene
-				result.add(new ScoredGene(g.getId(), combined_score, important_dis));
 			}
+			if(g.moreMaxThanListed()){
+				important_dis+="...";
+			}
+			//add new gene
+			result.add(new ScoredGene(g.getId(), combined_score, important_dis));
 		}
 		return result;
 	}

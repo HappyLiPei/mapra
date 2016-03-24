@@ -4,8 +4,15 @@ import java.util.LinkedList;
 
 public class AnnotatedGene extends Gene {
 	
-	private LinkedList<Integer> disease_ids;
-	private LinkedList<Double> scores;
+	//product of (1-s) with s: score for disease annotated to this gene
+	private double currentScore;
+	//saves maximum score
+	private double currentMax;
+	//saves list of at most 3 disease ids 
+	private LinkedList<Integer> currentMaxIds;
+	//indicates if currentMax is a truncated list, moreMax = true -> there are more than 3 ids with max score
+	private boolean moreMax;
+	
 	
 	/**
 	 * generates a gene object that can be annotated with results from Phenomizer
@@ -13,8 +20,10 @@ public class AnnotatedGene extends Gene {
 	 */
 	public AnnotatedGene(String id) {
 		super(id);
-		disease_ids = new LinkedList<Integer>();
-		scores = new LinkedList<Double>();
+		currentScore = 1;
+		currentMax =-1;
+		currentMaxIds = new LinkedList<Integer>();
+		moreMax=false;
 	}
 	
 	/**
@@ -23,20 +32,32 @@ public class AnnotatedGene extends Gene {
 	 * @param score gene score resulting from Phenomizer prediction for the disease with id disease_id
 	 */
 	public void add(int disease_id, double score) {
-		disease_ids.add(disease_id);
-		scores.add(score);
+		currentScore = currentScore*(1-score);
+		//new score is equal to max
+		if(Math.abs(currentMax-score)<1E-5){
+			//do not save more than 3 ids with max contribution
+			if(currentMaxIds.size()<3){
+				currentMaxIds.add(disease_id);
+			}
+			else{
+				moreMax=true;
+			}
+		} else if(score>currentMax){
+			currentMax=score;
+			currentMaxIds=new LinkedList<Integer>();
+			currentMaxIds.add(disease_id);
+			moreMax=false;
+		}
 	}
 	
 	/**
-	 * retrieves all diseases added to the gene,
-	 * should be called together with getScores
-	 * @return array of all disease_ids (PhenoDis),
-	 * position in array returned by getScores corresponds to the position within this array
+	 * retrieves at most 3 disease ids with maximum score annotated to this gene -> important disease annotation
+	 * @return array of disease_ids (PhenoDis) with maximum score
 	 */
 	public int [] getDiseaseIds(){
-		int [] ids_return = new int [disease_ids.size()];
+		int [] ids_return = new int [currentMaxIds.size()];
 		int position=0;
-		for(int disease_id:disease_ids){
+		for(int disease_id:currentMaxIds){
 			ids_return[position] = disease_id;
 			position++;
 		}
@@ -44,19 +65,23 @@ public class AnnotatedGene extends Gene {
 	}
 	
 	/**
-	 * retrieves all scores added to the gene,
-	 * should be called together with getDiseaseIds
-	 * @return array of all scores,
-	 * position in array returned by getDiseaseIds corresponds to the position within this array
+	 * retrieves the current score summarizing all annotations to this gene (1-product of (1-s) for all annotated scores s)
+	 * @return current score of the gene
 	 */
-	public double [] getScores(){
-		double [] scores_return = new double[scores.size()];
-		int position=0;
-		for(double s:scores){
-			scores_return[position]=s;
-			position++;
+	public double getFinalScore(){
+		//no annotations -> final score = 0
+		if(currentMaxIds.size()==0){
+			return 0;
 		}
-		return scores_return;
+		return 1-currentScore;
+	}
+	
+	/**
+	 * indicates if there are more disease ids leading to the maximum score than saved in this object
+	 * @return true if the array of getDiseaseIds() does not contain all disease with maximum score
+	 */
+	public boolean moreMaxThanListed(){
+		return moreMax;
 	}
 	
 }

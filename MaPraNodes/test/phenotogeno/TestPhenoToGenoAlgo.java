@@ -60,15 +60,15 @@ public class TestPhenoToGenoAlgo {
 		for (AnnotatedGene g: genes){
 			if(anno.contains(g.getId())){
 				assertArrayEquals("Disease annotation for "+g.getId()+" is incorrect"
-						,new int[]{100,101} ,g.getDiseaseIds());
-				assertArrayEquals("Probabilities incorrect for "+g.getId()+" is incorrect",
-						new double[]{(double) 1/50, (double) 1/12}, g.getScores(), 1E-10);
+						,new int[]{101} ,g.getDiseaseIds());
+				assertEquals("Probability for "+g.getId()+" is incorrect",
+						1-(1-1d/50)*(1-1d/12), g.getFinalScore(), 1E-10);
 			}
 			else{
 				assertArrayEquals("Disease annotation for "+g.getId()+" is incorrect"
 						,new int[]{100} ,g.getDiseaseIds());
-				assertArrayEquals("Probabilities incorrect for "+g.getId()+" is incorrect",
-						new double[]{(double) 1/50}, g.getScores(), 1E-10);
+				assertEquals("Probability for "+g.getId()+" is incorrect",
+						1d/50, g.getFinalScore(), 1E-10);
 			}
 		}
 	}
@@ -105,7 +105,7 @@ public class TestPhenoToGenoAlgo {
 		LinkedList<ScoredGene> res =(LinkedList<ScoredGene>) m.invoke(algo, (Object) genes);
 		
 		double[] expected_scores = new double[]{0,0.1, 1, 0.0975, 0.35695639, 0.0975};
-		String[] expected_origin = new String[]{"", "100", "101", "103,104", "105,106,107,108", "111,112"};
+		String[] expected_origin = new String[]{"", "100", "101", "103,104", "105,106,107...", "111,112"};
 		for(int i=0;i<6; i++){
 			assertEquals("Score for gene "+(i+1)+" is incorrect",
 					expected_scores[i], res.get(i).getScore(), 1E-5);
