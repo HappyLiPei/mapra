@@ -72,10 +72,10 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
         // TODO do something here
         logger.info("Node Model Stub... this is not yet implemented !");
         
-        LinkedList<String []> phenoRes = TableProcessorPhenoToGeno.getPhenomizerResult(inData[INPORT_PHENOMIZER]);
-        LinkedList<String> geneList = TableProcessorPhenoToGeno.getGeneList(inData[INPORT_ALL_GENES]);
+        LinkedList<String> geneList = TableProcessorPhenoToGeno.getGeneList(inData[INPORT_ALL_GENES], logger);
         HashMap<Integer, LinkedList<String>> associations =
         		TableProcessorPhenoToGeno.getAssociations(inData[INPORT_GENE_DISEASE]);
+        LinkedList<String []> phenoRes = TableProcessorPhenoToGeno.getPhenomizerResult(inData[INPORT_PHENOMIZER]);
         
         PhenoToGenoDriver d = new PhenoToGenoDriver(phenoRes, geneList, associations);
         LinkedList<ScoredGene> res = d.runPhenoToGeno();

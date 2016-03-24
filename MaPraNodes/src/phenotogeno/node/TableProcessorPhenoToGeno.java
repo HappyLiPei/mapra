@@ -1,6 +1,7 @@
 package phenotogeno.node;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import org.knime.core.data.DataCell;
@@ -17,6 +18,7 @@ import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
+import org.knime.core.node.NodeLogger;
 
 import phenomizer.node.PhenomizerNodeModel;
 import phenotogeno.algo.ScoredGene;
@@ -59,16 +61,32 @@ public class TableProcessorPhenoToGeno {
 		return phenoRes;
 	}
 	
-	//TODO: test for duplicates -> logger info
-	public static LinkedList<String> getGeneList(BufferedDataTable tableGenes){
+	/**
+	 * method to transform table with gene ids into data structure required for PhenoToGeno,
+	 * the method checks for duplicates and outputs a warning if a duplicate is found
+	 * the duplicates are removed automatically by PhenoToGenoDriver
+	 * @param tableGenes
+	 * 		table containing a column with gene ids
+	 * @param logger
+	 * 		logger of PhenoToGeno node to produce warnings
+	 * @return
+	 * 		list of gene ids (may contain duplicates!)
+	 */
+	public static LinkedList<String> getGeneList(BufferedDataTable tableGenes, NodeLogger logger){
 		
 		LinkedList<String> geneList = new LinkedList<String>();
+		HashSet<String> testForDuplicates = new HashSet<String>((int) tableGenes.size()*3);
+		
 		//get index and type of columns
 		DataTableSpec spec = tableGenes.getSpec();
 		int indexGene = spec.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_ID);
 		for(DataRow r: tableGenes){
 			StringCell geneCell = (StringCell) r.getCell(indexGene);
 			String gene_id= geneCell.getStringValue();
+			//check for duplicate
+			if(!testForDuplicates.add(gene_id)){
+				logger.warn("Duplicate gene id \'"+gene_id+"\' in gene list. This node will remove it!");
+			}
 			geneList.add(gene_id);
 		}
 		

@@ -6,9 +6,11 @@ import java.util.LinkedList;
 public class PhenoToGenoDataTransformer {
 	
 	/**
-	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer
+	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer,
+	 * removes diseases that are not managed in the diseaes - gene annotation
 	 * @param phenomizer_input list of String arrays containing PhenoDis disease id (pos 0) and
 	 * 			p value of Phenomizer(pos 1)
+	 * @param dga DiseaseGeneAssocation object representing disease - gene assocaitions
 	 * @return List of ScoredDiseases required for PhenoToGeno Algo
 	 */
 	public LinkedList<ScoredDisease> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
@@ -17,6 +19,7 @@ public class PhenoToGenoDataTransformer {
 		LinkedList<ScoredDisease> result = new LinkedList<ScoredDisease>();
 		for(String[] disease_pval: phenomizer_input){
 			int disease_id = Integer.valueOf(disease_pval[0]);
+			//test if disease is part of disease - gene annotation
 			if(dga.containsDisease(disease_id)){
 				ScoredDisease d = new ScoredDisease(disease_id, Double.valueOf(disease_pval[1]));
 				result.add(d);
