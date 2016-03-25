@@ -93,7 +93,8 @@ public class TableProcessorPhenoToGeno {
 			int diseaseID = Integer.valueOf(entry[0]);
 			if(!allDiseases.contains(diseaseID)){
 				logger.warn("Disease with id "+diseaseID+" from Phenomizer result "
-						+ "is not part of the disease - gene associations. This node will remove it");
+						+ "is not part of the disease - gene associations. "
+						+ "This node will remove it from the result of Phenomizer!");
 			}
 			
 			phenoRes.add(entry);
@@ -136,8 +137,32 @@ public class TableProcessorPhenoToGeno {
 		return geneList;
 	}
 	
-	//TODO: test for genes without entry in gene list, test for duplicate genes for one disease
-	public static HashMap<Integer, LinkedList<String>> getAssociations(BufferedDataTable tableDiseaseGene){
+	/**
+	 * method to transform table with associations between gene ids  and disease ids
+	 * into the data structure required for PhenoToGeno,
+	 * the method checks for duplicates and for genes that are not part of the gene list,
+	 * the method outputs a warning if a duplicate or a gene without list entry is found
+	 * the duplicates and genes without list entry are removed automatically by PhenoToGenoDriver
+	 * @param tableDiseaseGene
+	 * 			table with disease ids and gene ids representing disease - gene associations
+	 * @param tableGenes
+	 * 			table containing gene ids of all genes to score
+	 * @param logger
+	 * 			logger of PhenoToGeno node to produce warnings
+	 * @return
+	 * 			mapping disease id -> list of gene ids representing associations between genes and diseases
+	 */
+	public static HashMap<Integer, LinkedList<String>> getAssociations(BufferedDataTable tableDiseaseGene,
+			BufferedDataTable tableGenes, NodeLogger logger){
+		
+		//build hasmap with all gene ids
+		HashSet<String> allGenes = new HashSet<String>((int)tableGenes.size()*3);
+		DataTableSpec spec2 = tableGenes.getDataTableSpec();
+		int colPos = spec2.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_ID);
+		for(DataRow r: tableGenes){
+			StringCell cell = (StringCell) r.getCell(colPos);
+			allGenes.add(cell.getStringValue());
+		}
 		
 		HashMap<Integer, LinkedList<String>> mapping = new HashMap<Integer, LinkedList<String>> (
 				(int) tableDiseaseGene.size()*3);
@@ -167,11 +192,25 @@ public class TableProcessorPhenoToGeno {
 			//otherwise it is a MissingCell
 			if(geneCell instanceof StringCell){
 				gene_id =((StringCell) geneCell).getStringValue();
+				
+				//if gene id is part of the gene list
+				if(!allGenes.contains(gene_id)){
+					logger.warn("Gene "+gene_id+" is not part of the gene list. "
+							+ "This node will remove it from the disease - gene associations!");
+				}
+				
 			}
 			//add gene id and disease id to hashmap
 			if(mapping.containsKey(disease_id)){
 				if(gene_id!=null){
 					LinkedList<String> genes = mapping.get(disease_id);
+					
+					//check for duplicate gene-disease association
+					if(genes.contains(gene_id)){
+						logger.warn("Duplicate association between disease "+disease_id+" and gene "+gene_id+
+								". This node will remove it!");
+					}
+					
 					genes.add(gene_id);
 				}
 			}

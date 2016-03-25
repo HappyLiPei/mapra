@@ -74,7 +74,7 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
         
         LinkedList<String> geneList = TableProcessorPhenoToGeno.getGeneList(inData[INPORT_ALL_GENES], logger);
         HashMap<Integer, LinkedList<String>> associations =
-        		TableProcessorPhenoToGeno.getAssociations(inData[INPORT_GENE_DISEASE]);
+        		TableProcessorPhenoToGeno.getAssociations(inData[INPORT_GENE_DISEASE], inData[INPORT_ALL_GENES], logger);
         LinkedList<String []> phenoRes = TableProcessorPhenoToGeno.getPhenomizerResult(inData[INPORT_PHENOMIZER],
         		inData[INPORT_GENE_DISEASE], logger);
         
