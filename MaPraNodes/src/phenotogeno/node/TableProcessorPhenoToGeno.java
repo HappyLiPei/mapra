@@ -25,8 +25,43 @@ import phenotogeno.algo.ScoredGene;
 
 public class TableProcessorPhenoToGeno {
 	
-	//TODO: test if Phenomizer result matches disease in disease - gene annotation -> logger output
-	public static  LinkedList<String []> getPhenomizerResult(BufferedDataTable tablePheno){
+	/**
+	 * method to transform table with results from Phenomizer into the data structure required for PhenoToGeno,
+	 * the method checks for diseases without annotations in the disease - gene associations
+	 * and outputs a warning if such a disease is found,
+	 * the diseases without annotations are removed automatically by PhenoToGenoDriver
+	 * @param tablePheno
+	 * 		table containing the results of Phenomizer (column with disease ids and column with pvalues)
+	 * @param tableAssociations
+	 * 		table with the mapping between diseases and genes
+	 * @param logger
+	 * 		logger of PhenoToGeno node to produce warnings
+	 * @return
+	 * 		list of String arrays with disease ids (pos 0) and pvalues (pos 1)
+	 */
+	public static  LinkedList<String []> getPhenomizerResult(BufferedDataTable tablePheno,
+			BufferedDataTable tableAssociations, NodeLogger logger){
+		
+		//build hashset of all diseases in the disease - gene association
+		HashSet<Integer> allDiseases = new HashSet<Integer>((int)tableAssociations.size()*3);
+		DataTableSpec spec2 = tableAssociations.getDataTableSpec();
+		int colPos= spec2.findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
+		boolean is_int2 =false;
+		if(spec2.getColumnSpec(colPos).getType()==IntCell.TYPE){
+			is_int2=true;
+		}
+		for(DataRow r: tableAssociations){
+			int currId =-1;
+			if(is_int2){
+				IntCell cell = (IntCell) r.getCell(colPos);
+				currId = cell.getIntValue();
+			}
+			else{
+				LongCell cell = (LongCell) r.getCell(colPos);
+				currId = (int) cell.getLongValue();
+			}
+			allDiseases.add(currId);			
+		}
 		
 		LinkedList<String []> phenoRes = new LinkedList<String[]>();
 		
@@ -38,7 +73,6 @@ public class TableProcessorPhenoToGeno {
 			is_int=true;
 		}
 		int indexPV = spec.findColumnIndex(PhenomizerNodeModel.P_VALUE);
-		
 		//iterate over rows
 		for(DataRow r: tablePheno){
 			
@@ -54,6 +88,13 @@ public class TableProcessorPhenoToGeno {
 			//get pvalue
 			DoubleCell pvalCell = (DoubleCell) r.getCell(indexPV);
 			entry[1] = String.valueOf(pvalCell.getDoubleValue());
+			
+			//check if current disease is part of disease - gene associations
+			int diseaseID = Integer.valueOf(entry[0]);
+			if(!allDiseases.contains(diseaseID)){
+				logger.warn("Disease with id "+diseaseID+" from Phenomizer result "
+						+ "is not part of the disease - gene associations. This node will remove it");
+			}
 			
 			phenoRes.add(entry);
 		}
@@ -83,10 +124,12 @@ public class TableProcessorPhenoToGeno {
 		for(DataRow r: tableGenes){
 			StringCell geneCell = (StringCell) r.getCell(indexGene);
 			String gene_id= geneCell.getStringValue();
+			
 			//check for duplicate
 			if(!testForDuplicates.add(gene_id)){
 				logger.warn("Duplicate gene id \'"+gene_id+"\' in gene list. This node will remove it!");
 			}
+			
 			geneList.add(gene_id);
 		}
 		

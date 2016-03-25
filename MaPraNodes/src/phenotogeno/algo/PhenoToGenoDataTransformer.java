@@ -10,8 +10,8 @@ public class PhenoToGenoDataTransformer {
 	 * removes diseases that are not managed in the diseaes - gene annotation
 	 * @param phenomizer_input list of String arrays containing PhenoDis disease id (pos 0) and
 	 * 			p value of Phenomizer(pos 1)
-	 * @param dga DiseaseGeneAssocation object representing disease - gene assocaitions
-	 * @return List of ScoredDiseases required for PhenoToGeno Algo
+	 * @param dga DiseaseGeneAssocation object representing disease - gene associations
+	 * @return List of ScoredDiseases required for PhenoToGenoAlgo
 	 */
 	public LinkedList<ScoredDisease> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
 			DiseaseGeneAssociation dga){
@@ -29,7 +29,9 @@ public class PhenoToGenoDataTransformer {
 	}
 	
 	/**
-	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes
+	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes,
+	 * removes duplicates from the gene list and from the associations and
+	 * removes genes from the associations that are not listed in the gene list
 	 * @param gene_list LinkedList of gene ids (e.g. ensembl identifier)
 	 * @param association hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
 	 * @return a DiseaseGeneAssociation object require for PhenoToGeno algo
