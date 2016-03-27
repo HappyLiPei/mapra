@@ -226,7 +226,11 @@ public class TableProcessorPhenoToGeno {
 		return mapping;
 	}
 	
-	//for output generation
+	/**
+	 * method to generate the specification for the table returned by PhenoToGeno
+	 * (3 columns: gene id, probability, contribution)
+	 * @return DataTable specification for the table returned by PhenoToGeno
+	 */
 	public static DataTableSpec generateOutputSpec(){
 		
     	DataColumnSpec [] specs = new DataColumnSpec[3];
@@ -237,8 +241,46 @@ public class TableProcessorPhenoToGeno {
 		return new DataTableSpec(specs);	
 	}
 	
-	//TODO: add disease names
-	public static BufferedDataTable generateOutput(ExecutionContext exec, LinkedList<ScoredGene> genes){
+	/**
+	 * method to transform the result of PhenoToGeno into a DataTable for the PhenoToGeno node
+	 * @param exec
+	 * 			Execution Context of the calling node model (execute method)
+	 * @param genes
+	 * 			List of ScoredGenes return by PhenoToGenoAlgo
+	 * @param tablePhenomizer
+	 * 			Table with the prediction results of Phenomizer (required for extracting disease names)
+	 * @return
+	 * 			DataTable with a row for each gene containing gene id, gene score and diseases (ids and names)
+	 * 			contributing to the score
+	 */
+	public static BufferedDataTable generateOutput(ExecutionContext exec, LinkedList<ScoredGene> genes,
+			BufferedDataTable tablePhenomizer){
+		
+		//map disease id to disease name
+		HashMap<Integer, String> idToName = new HashMap<Integer, String>((int) tablePhenomizer.size());
+		DataTableSpec specPheno = tablePhenomizer.getDataTableSpec();
+		int indexDiseaseName = specPheno.findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
+		//build mapping disease id -> name if name is available
+		if(indexDiseaseName!=-1){
+			int indexDiseaseID = specPheno.findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
+			boolean is_int =false;
+			if(specPheno.getColumnSpec(indexDiseaseID).getType()==IntCell.TYPE){
+				is_int=true;
+			}
+			for(DataRow r: tablePhenomizer){
+				DataCell cell = r.getCell(indexDiseaseName);
+				String diseaseName=((StringCell) cell).getStringValue();
+				DataCell cell2 = r.getCell(indexDiseaseID);
+				int diseaseId = -1;
+				if(is_int){
+					diseaseId = ((IntCell) cell2).getIntValue();
+				}
+				else{
+					diseaseId = (int) ((LongCell) cell2).getLongValue();
+				}
+				idToName.put(diseaseId, diseaseName);
+			}
+		}
 		
         DataTableSpec spec = TableProcessorPhenoToGeno.generateOutputSpec();
         int indexGID = spec.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_ID);
@@ -252,7 +294,35 @@ public class TableProcessorPhenoToGeno {
         	DataCell[] data = new DataCell[spec.getNumColumns()];
         	data[indexGID] = new StringCell(g.getId());
         	data[indexProb] = new DoubleCell(g.getScore());
-        	data[indexCon] = new StringCell(g.getImportantDiseases());
+        	
+        	//add major contribution to score either as list of ids or list of disease names
+        	String importantDiseases = g.getImportantDiseases();
+        	//list of disease names and ids
+        	if(idToName.size()!=0 && !importantDiseases.equals("")){
+        		String [] components = importantDiseases.split(",");
+        		String annotation="";
+        		for(int i=0; i<components.length; i++){
+        			if(i!=0){
+        				annotation+=",";
+        			}
+        			String currId = components[i];
+        			boolean addDots =false;
+        			if(components[i].endsWith("...")){
+        				currId =currId.substring(0, currId.length()-3);
+        				addDots=true;
+        			}
+        			annotation+=idToName.get(Integer.valueOf(currId))+" ("+currId+")";
+        			if(addDots){
+        				annotation+="...";
+        			}
+        		}
+        		data[indexCon] = new StringCell(annotation);
+        	}
+        	//just list of ids or no contribution at all
+        	else{
+        		data[indexCon] = new StringCell(importantDiseases);
+        	}
+        	
         	DataRow row = new DefaultRow(key, data);
         	c.addRowToTable(row);
         	counter++;

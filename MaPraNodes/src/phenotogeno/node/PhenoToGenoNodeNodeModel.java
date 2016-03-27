@@ -68,9 +68,6 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
     @Override
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
-
-        // TODO do something here
-        logger.info("Node Model Stub... this is not yet implemented !");
         
         LinkedList<String> geneList = TableProcessorPhenoToGeno.getGeneList(inData[INPORT_ALL_GENES], logger);
         HashMap<Integer, LinkedList<String>> associations =
@@ -80,7 +77,7 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
         
         PhenoToGenoDriver d = new PhenoToGenoDriver(phenoRes, geneList, associations);
         LinkedList<ScoredGene> res = d.runPhenoToGeno();
-        BufferedDataTable tab = TableProcessorPhenoToGeno.generateOutput(exec, res);
+        BufferedDataTable tab = TableProcessorPhenoToGeno.generateOutput(exec, res, inData[INPORT_PHENOMIZER]);
         
         return new BufferedDataTable[]{tab};
     }
