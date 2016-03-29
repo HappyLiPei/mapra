@@ -27,10 +27,9 @@ public class TestPhenoToGeno {
 	
 
 	@Test
-	//TODO: case 6,7,8
 	public void test() {
 		//iterate over 8 test cases
-		for(int num=1; num<=5; num++){
+		for(int num=1; num<=8; num++){
 			
 			//get phenoToGeno result
 			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
@@ -45,7 +44,7 @@ public class TestPhenoToGeno {
 			expected.remove(0);
 			
 			//compare
-			assertEquals("Result size is incorrect", expected.size(), actual.size());
+			assertEquals("Result size for result "+num+" is incorrect", expected.size(), actual.size());
 			Iterator<ScoredGene> ig = actual.iterator();
 			Iterator<String> is = expected.iterator();
 			for(int i=0; i<genes_raw.size(); i++){
