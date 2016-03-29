@@ -10,11 +10,11 @@ public class TableChecker {
     /**
      * checks if input specifications from port port contains a column named colname and 
      * if specifications match data type type1 oder type2
-     * @param inSpecs: specifications of incoming table
-     * @param port: input port to use
-     * @param colname: name of the column to check
-     * @param types: allowed types for the column to check
-     * @param message: error message
+     * @param inSpecs specifications of incoming table
+     * @param port input port to use
+     * @param colname name of the column to check
+     * @param types allowed types for the column to check
+     * @param message error message
      * @throws InvalidSettingsException
      */
     

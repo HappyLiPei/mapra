@@ -17,16 +17,18 @@ public class ScoredGeneComparator implements Comparator<ScoredGene>{
 	 */
 	public int compare(ScoredGene o1, ScoredGene o2) {
 		
-		double score1 = o1.getScore();
-		double score2 = o2.getScore();
+		//consider 5 decimal places of the socres
+		int score1 = (int) Math.round(o1.getScore()*1E5);
+		int score2 = (int) Math.round(o2.getScore()*1E5);
 		
 		//if scores differ in less than 5 decimal places -> consider them as equal
-		if(Math.abs(score1-score2)<1E-5){
+		if(score1==score2){
+		//if(Math.abs(score1-score2)<1E-5){
 			//compare ids
 			return o1.getId().compareTo(o2.getId());
 		}
 		//else -> compare scores
-		return -Double.compare(score1, score2);
+		return -Integer.compare(score1, score2);
 	}
 
 }
