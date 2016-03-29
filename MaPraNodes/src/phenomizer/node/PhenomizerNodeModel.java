@@ -28,7 +28,6 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
-import nodeutils.TableProcessor;
 import phenomizer.algorithm.PValueFolder;
 import phenomizer.algorithm.PhenomizerDriver;
 
@@ -105,10 +104,10 @@ public class PhenomizerNodeModel extends NodeModel {
             final ExecutionContext exec) throws Exception {
     	
     	//read in tables from inports into phenomizer data structure
-        LinkedList<Integer> query = TableProcessor.generateQuery(inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
-        LinkedList<Integer> symptoms = TableProcessor.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
-        int [][] edges = TableProcessor.generateEdges(inData[INPORT_ISA]);
-        HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessor.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
+        LinkedList<Integer> query = TableProcessorPhenomizer.generateQuery(inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
+        LinkedList<Integer> symptoms = TableProcessorPhenomizer.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
+        int [][] edges = TableProcessorPhenomizer.generateEdges(inData[INPORT_ISA]);
+        HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessorPhenomizer.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
         
         //run Phenomizer algorithm
     	PhenomizerDriver d = new PhenomizerDriver(query, symptoms, diseases, edges);
@@ -123,7 +122,7 @@ public class PhenomizerNodeModel extends NodeModel {
     	LinkedList<String[]> result = d.runPhenomizer(); 
     	
         //generate table for outport
-        BufferedDataTable out = TableProcessor.generateOutput(result, exec, inData[INPORT_KSZ]);
+        BufferedDataTable out = TableProcessorPhenomizer.generateOutput(result, exec, inData[INPORT_KSZ]);
         return new BufferedDataTable[]{out};      
     }
 

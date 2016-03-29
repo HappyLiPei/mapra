@@ -1,4 +1,4 @@
-package nodeutils;
+package phenomizer.node;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,9 +19,8 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
 import phenomizer.algorithm.FrequencyConverter;
-import phenomizer.node.PhenomizerNodeModel;
 
-public class TableProcessor {
+public class TableProcessorPhenomizer {
 	
 	/**
 	 * converts BufferedDataTable with query symptoms to phenomizer data structure
