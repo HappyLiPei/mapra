@@ -93,7 +93,7 @@ public class TestFileUtilities {
 	
 	@Test
 	public void TestMatrixParser(){
-		String [][] m = FileUtilitiesPhenomizer.readInMatrix("../TestData/Phenomizer/Clustering/allAgainstAll_avg.txt");
+		String [][] m = FileUtilitiesPhenomizer.readInMatrix("../TestData/Phenomizer/Network/allAgainstAll_avg.txt");
 		assertArrayEquals("Matrix header is not parsed correctly", 
 				new String[]{"id","102","103","100","101","110","108","109","106","107","104","105"}, m[0]);
 		assertArrayEquals("Row 0 of matrix is not parsed correctly", 

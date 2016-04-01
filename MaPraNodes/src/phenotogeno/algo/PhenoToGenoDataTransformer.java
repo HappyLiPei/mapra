@@ -7,7 +7,8 @@ public class PhenoToGenoDataTransformer {
 	
 	/**
 	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer,
-	 * removes diseases that are not managed in the diseaes - gene annotation
+	 * removes diseases that are not managed in the diseaes - gene annotation,
+	 * replaces the p values 0.0 by the minimum p value 0.001
 	 * @param phenomizer_input list of String arrays containing PhenoDis disease id (pos 0) and
 	 * 			p value of Phenomizer(pos 1)
 	 * @param dga DiseaseGeneAssocation object representing disease - gene associations
@@ -21,7 +22,12 @@ public class PhenoToGenoDataTransformer {
 			int disease_id = Integer.valueOf(disease_pval[0]);
 			//test if disease is part of disease - gene annotation
 			if(dga.containsDisease(disease_id)){
-				ScoredDisease d = new ScoredDisease(disease_id, Double.valueOf(disease_pval[1]));
+				double pvalue = Double.valueOf(disease_pval[1]);
+				//test if pvalue is 0, if yes -> replace it by 0.001
+				if(pvalue<1E-3){
+					pvalue =0.001;
+				}
+				ScoredDisease d = new ScoredDisease(disease_id, pvalue);
 				result.add(d);
 			}
 		}

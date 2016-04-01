@@ -60,7 +60,8 @@ public class TestPhenoToGenoDataStructures {
 			runDataTransform(runMode);
 			
 			int[] expected_ids=new int[]{109,108,103,106,105,107,102,101,104};
-			double [] expected_scores = new double[]{0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8};
+			//position 0: replace p value 0.0 by 0.001
+			double [] expected_scores = new double[]{0.001, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8};
 			
 			assertEquals("Size of Phenomizer Result is incorrect"+mode, 9, pheno_res.size());
 			int pos=0;
