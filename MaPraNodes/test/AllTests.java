@@ -13,6 +13,7 @@ import phenomizeralgorithm.TestPhenomizer;
 import phenomizeralgorithm.TestPhenomizerPVal;
 import phenomizeralgorithm.TestPvalueCorrection;
 import phenomizeralgorithm.TestSampling;
+import phenomizeralgorithm.TestSimMatrixCalculator;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeights;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsPreparation;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsRanking;
@@ -30,10 +31,11 @@ import phenotogeno.TestScoredGeneComparator;
 				TestPValueFolder.class,
 				TestPvalueCorrection.class,
 				TestDataTransformer.class,
-				TestSampling.class,
 				TestOntology.class,
 				TestPhenomizerPVal.class,
 				TestComparatorPheno.class,
+				TestSampling.class,
+				TestSimMatrixCalculator.class,
 				TestValidationWithFrequentWeightsPreparation.class,
 				TestValidationWithFrequentWeightsRanking.class,
 				TestValidationWithFrequentWeights.class,
