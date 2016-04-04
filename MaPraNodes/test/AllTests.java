@@ -45,6 +45,7 @@ import phenotogeno.TestScoredGeneComparator;
 				TestPhenoToGenoAlgo.class,
 				TestScoredGeneComparator.class,
 				TestPhenoToGeno.class,
+				TestFileUtilitiesMetabolites.class,
 				TestFileUtilitiesMetabolites.class })
 public class AllTests {
 

@@ -1,0 +1,16 @@
+metabolite_id	concentration	group
+M01	0.4	2
+M02		2
+M03		2
+M04		2
+M05	1.0	2
+M06		2
+M07	0.0	2
+M08		2
+M09	0.8	2
+M10		2
+M11	1.1	2
+M12		2
+M13	4.2	2
+M14		2
+M15	-1.0	2
