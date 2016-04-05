@@ -12,6 +12,7 @@ import org.junit.Test;
 import phenomizer.algorithm.FrequencyConverter;
 import phenomizer.algorithm.SymptomDiseaseAssociations;
 import phenomizer.io.FileUtilitiesPhenomizer;
+import phenomizer.validation.PhenomizerValidation;
 import phenomizer.validation.PhenomizerWithFrequentSymptoms;
 import phenomizer.validation.PhenomizerWithFrequentSymptomsNoPval;
 
@@ -62,7 +63,7 @@ public class TestValidationWithFrequentWeightsPreparation {
 	private void checkSDA(PhenomizerWithFrequentSymptoms p, Integer [][] expected)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
 		
-		Field g = PhenomizerWithFrequentSymptoms.class.getDeclaredField("sda");
+		Field g = PhenomizerValidation.class.getDeclaredField("sda");
 		g.setAccessible(true);
 		SymptomDiseaseAssociations sda = (SymptomDiseaseAssociations) g.get(p);
 		LinkedList<Integer[]> s = sda.getSymptoms(110);
@@ -78,7 +79,7 @@ public class TestValidationWithFrequentWeightsPreparation {
 	private void checkQueries(PhenomizerWithFrequentSymptoms p) throws NoSuchFieldException, SecurityException,
 		IllegalArgumentException, IllegalAccessException{
 		
-		Field f = PhenomizerWithFrequentSymptoms.class.getDeclaredField("queries");
+		Field f = PhenomizerValidation.class.getDeclaredField("queries");
 		f.setAccessible(true);
 		@SuppressWarnings("unchecked")
 		LinkedList<Integer> [] queries = (LinkedList<Integer>[]) f.get(p);
@@ -101,7 +102,7 @@ public class TestValidationWithFrequentWeightsPreparation {
 	private void checkDiseaseIds(PhenomizerWithFrequentSymptoms p)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
 		
-		Field f = PhenomizerWithFrequentSymptoms.class.getDeclaredField("query_ids");
+		Field f = PhenomizerValidation.class.getDeclaredField("query_ids");
 		f.setAccessible(true);
 		int [] ids = (int[]) f.get(p);
 		assertArrayEquals("query ids are incorrect", new int[]{100,101,102,103,104,105,106,107,108,109,110}, ids );

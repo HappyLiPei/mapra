@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import phenomizer.validation.PhenomizerValidation;
 import phenomizer.validation.PhenomizerWithFrequentSymptoms;
 import phenomizer.validation.PhenomizerWithFrequentSymptomsNoPval;
 import phenomizer.validation.PhenomizerWithFrequentSymptomsWithPval;
@@ -28,7 +29,7 @@ public class TestValidationWithFrequentWeightsRanking {
 		PhenomizerWithFrequentSymptomsNoPval p = new PhenomizerWithFrequentSymptomsNoPval
 				(0, null, null, null, "");
 		
-		Method m = PhenomizerWithFrequentSymptoms.class.getDeclaredMethod
+		Method m = PhenomizerValidation.class.getDeclaredMethod
 				("calculateRank", int.class, LinkedList.class);
 		m.setAccessible(true);
 		
@@ -51,7 +52,7 @@ public class TestValidationWithFrequentWeightsRanking {
 		PhenomizerWithFrequentSymptomsWithPval p = new PhenomizerWithFrequentSymptomsWithPval
 				(0, null, null, null, "", "");
 		
-		Method m = PhenomizerWithFrequentSymptoms.class.getDeclaredMethod
+		Method m = PhenomizerValidation.class.getDeclaredMethod
 				("calculateRank", int.class, LinkedList.class);
 		m.setAccessible(true);
 		

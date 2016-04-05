@@ -19,6 +19,7 @@ import phenomizer.algorithm.DataTransformer;
 import phenomizer.algorithm.FrequencyConverter;
 import phenomizer.algorithm.Ontology;
 import phenomizer.io.FileUtilitiesPhenomizer;
+import phenomizer.validation.PhenomizerValidation;
 import phenomizer.validation.PhenomizerWithFrequentSymptoms;
 import phenomizer.validation.PhenomizerWithFrequentSymptomsNoPval;
 import phenomizer.validation.PhenomizerWithFrequentSymptomsWithPval;
@@ -103,10 +104,10 @@ public class TestValidationWithFrequentWeights {
 	private void injectQueries(PhenomizerWithFrequentSymptoms p)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
 		
-		Field f_q = PhenomizerWithFrequentSymptoms.class.getDeclaredField("queries");
+		Field f_q = PhenomizerValidation.class.getDeclaredField("queries");
 		f_q.setAccessible(true);
 		f_q.set(p, queries);
-		Field f_d = PhenomizerWithFrequentSymptoms.class.getDeclaredField("query_ids");
+		Field f_d = PhenomizerValidation.class.getDeclaredField("query_ids");
 		f_d.setAccessible(true);
 		f_d.set(p, query_ids);
 	}
