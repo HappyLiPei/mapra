@@ -17,7 +17,24 @@ public abstract class PhenomizerWithOMIMSymptoms extends PhenomizerValidation {
 	/** maps omim ids to lists of PhenoDis symptom ids*/
 	protected HashMap<Integer, LinkedList<Integer>> omimToSymptoms;
 	
-
+	/**
+	 * generates an abstract object for running the validation of Phenomizer with symptoms from OMIM
+	 * @param weighting
+	 * 		if 0: unweighted similarity score, if 1: one-sided weighting, if 2: two-sided weighting
+	 * @param onto
+	 * 		ontology of PhenoDis symptom ids as array of edges
+	 * @param symptoms
+	 * 		list of all PhenoDis symptom ids
+	 * @param ksz
+	 * 		mapping PhenoDis disease id to a list of PhenoDis symptom id, represents the associations
+	 * 		between diseases and symptoms
+	 * @param file
+	 * 		file to which the results are written
+	 * @param omimToPhenoDis
+	 * 		mapping OMIM id -> PhenoDis id
+	 * @param omimToSymptoms
+	 * 		mapping OMIM id -> list of PhenoDis symptom id
+	 */
 	public PhenomizerWithOMIMSymptoms(int weighting, int[][] onto, LinkedList<Integer> symptoms,
 			HashMap<Integer, LinkedList<Integer[]>> ksz, String file,
 			HashMap<Integer, Integer> omimToPhenoDis, HashMap<Integer, LinkedList<Integer>> omimToSymptoms) {
