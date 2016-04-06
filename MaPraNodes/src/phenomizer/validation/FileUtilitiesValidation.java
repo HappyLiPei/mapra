@@ -7,6 +7,16 @@ import io.FileInputReader;
 
 public class FileUtilitiesValidation {
 	
+	/**
+	 * reads in a file containing a mapping from PhenoDis ids to OMIM ids,
+	 * the file is a tab-separated table with the PhenoDis id at column 0 and OMIM id at column 2
+	 * some PhenoDis ids do not have an omim id and some have more than one omim id, those PhenoDis ids are 
+	 * not parsed by this method
+	 * @param path
+	 * 			path to the file with the table mapping PhenoDis and OMIM disease ids
+	 * @return
+	 * 			a map mapping OMIM -> PhenoDis id, the map contains only those ids with a 1-1 mapping
+	 */
 	public static HashMap<Integer, Integer> readOMIMIdMapping(String path){
 		
 		LinkedList<String> content = FileInputReader.readAllLinesFrom(path);
@@ -37,6 +47,15 @@ public class FileUtilitiesValidation {
 		return omim_to_pheno;
 	}
 	
+	/**
+	 * reads in a file with results from text mining for OMIM entrys produced by KNIME, the file is a tab-separated table,
+	 * each line corresponds to a symptom and each column to a OMIM entry, a cell containing 1.0 indicates that the
+	 * the symptom is associated with the OMIM disease
+	 * @param path
+	 * 			path to the table with the results from text mining
+	 * @return
+	 * 			map OMIM id-> list of PhenDis symptom ids associated with the OMIM disease, the list might be empty
+	 */
 	public static HashMap<Integer, LinkedList<Integer>> readQueriesFromTM(String path){
 		
 		//generate file handle
@@ -95,7 +114,13 @@ public class FileUtilitiesValidation {
 		return queries;
 	}
 	
-	// extract omim id from header and checks correct formatting
+	/**
+	 * extracts omim id from header of text mining result and checks correct formatting
+	 * @param header
+	 * 			column name in the header of the table containing the text mining results
+	 * @return
+	 * 			omim id contained in the column name
+	 */
 	private static int extractId(String header){
 		if(header.startsWith("Max*(")){
 			String tmp = header.substring(5);
