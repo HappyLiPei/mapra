@@ -16,7 +16,15 @@ public class RunValidationWithFrequentWeights {
 	 * the program extracts very frequent symptoms (weight = 15) of the diseases and uses them as query
 	 * finally the rank of the disease for the corresponding query is recorded
 	 * @param args
+	 *		command line arguments, array of 6 Strings,
+	 * 		position 0: mode for calculating the similarity score (noweight, asymmweight, weight)
+	 * 		position 1: isa table of PhenoDis
+	 * 		position 2: ksz table of PhenoDis
+	 * 		position 3: symptom table of PhenoDis
+	 * 		position 4: file to write output to
+	 * 		position 5: folder containing empirically sampled score distributions for p value calculation
 	 * @throws Exception
+	 * 		if argument at position 0 is incorrect
 	 */
 	public static void main(String args[]) throws Exception{
 		
@@ -54,7 +62,7 @@ public class RunValidationWithFrequentWeights {
 			weighting=1;
 		}
 		else{
-			throw new Exception("Incorrect argument at pos 2!");
+			throw new Exception("Incorrect argument at pos 0!");
 		}
 		
 		//read in files
