@@ -7,6 +7,7 @@ import io.TestIOReaderWriter;
 import metabolites.TestDataTransformerMetabolites;
 import metabolites.TestFileUtilitiesMetabolites;
 import metabolites.TestMetaboliteScoringInReference;
+import metabolites.TestScoreMetabolites;
 import phenomizeralgorithm.TestComparatorPheno;
 import phenomizeralgorithm.TestDataTransformer;
 import phenomizeralgorithm.TestFrequencyConverter;
@@ -55,7 +56,8 @@ import phenotogeno.TestScoredGeneComparator;
 				TestPhenoToGeno.class,
 				TestFileUtilitiesMetabolites.class,
 				TestDataTransformerMetabolites.class,
-				TestMetaboliteScoringInReference.class})
+				TestMetaboliteScoringInReference.class,
+				TestScoreMetabolites.class})
 public class AllTests {
 
 }

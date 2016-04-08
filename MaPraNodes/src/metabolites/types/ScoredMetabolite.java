@@ -50,9 +50,9 @@ public abstract class ScoredMetabolite extends Metabolite {
 	
 	/**
 	 * returns a String representing this scored metabolite
-	 * the String contains the id, score and probability of the score
+	 * the String contains the id, type, score and probability of the score
 	 */
 	public String toString(){
-		return getId()+"\t"+getScore()+"\t"+getProbability();
+		return getId()+"\t"+getType()+"\t"+getScore()+"\t"+getProbability();
 	}
 }
