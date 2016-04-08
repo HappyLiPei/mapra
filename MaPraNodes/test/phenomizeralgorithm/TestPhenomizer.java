@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import io.FileInputReader;
-import phenomizer.algorithm.AlgoPheno;
 import phenomizer.algorithm.FrequencyConverter;
 import phenomizer.algorithm.PhenomizerDriver;
 import phenomizer.io.FileUtilitiesPhenomizer;
@@ -129,9 +128,10 @@ public class TestPhenomizer {
 		expected_res=FileInputReader.readAllLinesFrom(
 				"../TestData/Phenomizer/ExpectedResults/ResultSizeLimited/res_q5_weight_nopval.txt");
 		expected_res.remove(0);
-		AlgoPheno.setInput(query, symptoms, ksz_with_freq, ontology);
-		result = AlgoPheno.runPhenomizer(4,false);
-		assertEquals("Output size (query 5 imited to 4, weight, no pvalue) does not match expected output",
+		d = new PhenomizerDriver(query, symptoms, ksz_with_freq, ontology);
+		d.setPhenomizerAlgorithm(4, false, 1, "");
+		result = d.runPhenomizer();
+		assertEquals("Output size (query 5 limited to 4, weight, no pvalue) does not match expected output",
 				4, result.size());
 		for(int j=0; j<=3; j++){
 			String[] elements = expected_res.get(j).split("\t");
