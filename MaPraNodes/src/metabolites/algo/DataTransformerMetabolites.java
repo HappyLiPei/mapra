@@ -11,11 +11,24 @@ import metabolites.types.ReferenceMetaboliteConcentration;
 
 public class DataTransformerMetabolites {
 	
-	//TODO: comment
-	//checks for duplicate metabolite id -> remove duplicated (second appearance)
-	//check if there is a reference for the measured metabolite -> remove metabolite without reference
-	//check group: group identical for all metabolites -> set to majority group id found
-	//check if group for reference metabolite available -> else remove metabolite
+	/**
+	 * method to transform the data read from the table with measured metabolites from a patient into a data structure
+	 * for metabolite scoring,
+	 * the method checks for duplicate metabolite ids and keeps only the first measurement of the metabolite,
+	 * the method compares the measured metabolite and the group to the ReferenceMetabolites and removes the measurement
+	 * if the group or the metabolite is not part of the references,
+	 * the method checks if all measurements are annotated with the same group, if not the measurements are set to the
+	 * majority group
+	 * @param caseMetabol
+	 * 		list of String arrays read from a file or KNIME table containing the information about the measured
+	 * 		metabolite:
+	 * 		position 0: metabolite id, position 1: measured concentration or empty String if missing,
+	 * 		position 2: group number of case (should be identical for each array in the list)
+	 * @param reference
+	 * 		mapping metabolite id -> ReferenceMetabolite object, required for checking the data for consistency
+	 * @return
+	 * 		a list of MeasuredMetabolite objects ready for scoring
+	 */
 	public LinkedList<MeasuredMetabolite> getListOfMeasuredMetabolites (LinkedList<String[]> caseMetabol,
 			HashMap<String,ReferenceMetabolite> reference){
 		
@@ -79,10 +92,20 @@ public class DataTransformerMetabolites {
 		return list;
 	}
 
-	//TODO: Comment!!!
-	//check type binary/ concentration -> annotation of first row of the metabolite
-	//check for duplicates id+group -> ignore duplicate, take first values
-	//check uniform minimum
+	/**
+	 * method to transform the data read from the table with reference metabolites into a data structure for metabolite
+	 * scoring,
+	 * the method checks the type annotation of each metabolite (binary vs. concentration), it uses the annotation
+	 * of the first row of the metabolite,
+	 * the method checks for duplicate rows with identical metabolite id and group number, only the first row is kept
+	 * @param controlMetabol
+	 * 		map metabolite id-> list of String arrays of length 5 with the following elements
+	 * 		position 0: id, position 1: type, position 2: group, position 3: mean, position 4: standard deviation,
+	 * 		position 5: missingness in %
+	 * 		the map is either read from a file or a KNIME table
+	 * @return
+	 * 		map metabolite id -> referenceMetabolite object required for metabolite scoring
+	 */
 	public HashMap<String, ReferenceMetabolite> getMapOfReferenceMetabolites(
 			HashMap<String, LinkedList<String[]>> controlMetabol){
 		
@@ -92,7 +115,7 @@ public class DataTransformerMetabolites {
 			String [] firstRow = list.getFirst();
 			//binary metabolite
 			if(firstRow[1].equals("binary")){
-				ReferenceMetaboliteBinary bin = new ReferenceMetaboliteBinary(key, Double.parseDouble(firstRow[6]));
+				ReferenceMetaboliteBinary bin = new ReferenceMetaboliteBinary(key, Double.parseDouble(firstRow[5]));
 				map.put(key, bin);
 			}
 			//concentration metabolite
@@ -107,23 +130,20 @@ public class DataTransformerMetabolites {
 					}
 				}
 				
+				//get relevant data from each list entry
 				int [] group = new int [list.size()];
 				double[] mean = new double[list.size()];
 				double[] std = new double[list.size()];
-				double min = Double.parseDouble(firstRow[5]);
+				double missing = Double.parseDouble(firstRow[5]);
 				int position=0;
 				for(String[] array: list){
 					group[position]=Integer.parseInt(array[2]);
 					mean[position]=Double.parseDouble(array[3]);
 					std[position]=Double.parseDouble(array[4]);
-					//check if current minimum is global min for the group
-					double curMin = Double.parseDouble(array[5]);
-					if(curMin<min){
-						min=curMin;
-					}
 					position++;
 				}
-				ReferenceMetaboliteConcentration conc = new ReferenceMetaboliteConcentration(key, group, mean, std, min);
+				ReferenceMetaboliteConcentration conc = new ReferenceMetaboliteConcentration(
+						key, missing, group, mean, std);
 				map.put(key, conc);
 			}
 			//incorrect type annotation

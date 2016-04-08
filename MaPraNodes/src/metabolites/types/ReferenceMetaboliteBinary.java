@@ -1,29 +1,16 @@
 package metabolites.types;
 
 public class ReferenceMetaboliteBinary extends ReferenceMetabolite {
-	
-	/** fraction of missing values in the controls for that metabolite*/
-	private double missingness;
-	
+		
 	/**
-	 * generates binary reference metabolie
+	 * generates binary reference metabolite
 	 * @param id
 	 * 		metabolite id
 	 * @param missingness
 	 * 		missingness in % (fraction of missing values in all controls)
 	 */
 	public ReferenceMetaboliteBinary(String id, double missingness) {
-		super(id);
-		this.missingness = missingness;
-	}
-	
-	/**
-	 * retrieves the missingness associated for the binary reference metabolite
-	 * @return
-	 * 		missingness as fraction of missing values in %
-	 */
-	public double getMissingness(){
-		return missingness;
+		super(id, missingness);
 	}
 	
 	//TODO: implement scoring method

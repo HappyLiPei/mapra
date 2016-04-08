@@ -50,20 +50,20 @@ public class TestFileUtilitiesMetabolites {
 			LinkedList<String[]> l1 = controlMetabol.get(binId[p]);
 			assertEquals("Reference Metabolite "+binId[p]+" is not parsed correctly", 1, l1.size());
 			assertArrayEquals("Binary Metabolite data of "+binId[p]+" is not parsed correctly",
-					new String[]{binId[p], "binary", "","","","", miss[p]}, l1.get(0));
+					new String[]{binId[p], "binary", "","","", miss[p]}, l1.get(0));
 		}
 		
 		//M06 + M10 + M15
 		String[][][] concData = new String [][][]{
-			{{"M06", "concentration", "1", "-1.0", "0.2", "-1.5", "0.0"},
-				{"M06", "concentration", "2", "0.0", "0.5", "-1.5", "0.0"},
-				{"M06", "concentration", "3", "1.0", "0.2", "-1.5", "0.0"}},
-			{{"M10", "concentration", "1", "0.2", "1.4", "-4.0", "0.0"},	
-				{"M10", "concentration", "2", "-2.0", "1.3", "-4.0", "0.0"},
-				{"M10", "concentration", "3", "2.5", "1.2", "-4.0", "0.0"}},
-			{{"M15", "concentration", "1", "-1.8", "0.2", "-2.8", "0.0"},
-				{"M15", "concentration", "2", "-1.2", "0.1", "-2.8", "0.0"},
-				{"M15", "concentration", "3", "-1.4", "0.2", "-2.8", "0.0"}}}; 
+			{{"M06", "concentration", "1", "-1.0", "0.2", "10.0"},
+				{"M06", "concentration", "2", "0.0", "0.5", "10.0"},
+				{"M06", "concentration", "3", "1.0", "0.2", "10.0"}},
+			{{"M10", "concentration", "1", "0.2", "1.4", "1.7"},	
+				{"M10", "concentration", "2", "-2.0", "1.3", "1.7"},
+				{"M10", "concentration", "3", "2.5", "1.2", "1.7"}},
+			{{"M15", "concentration", "1", "-1.8", "0.2", "4.0"},
+				{"M15", "concentration", "2", "-1.2", "0.1", "4.0"},
+				{"M15", "concentration", "3", "-1.4", "0.2", "4.0"}}}; 
 		
 		for(int q=0; q<3; q++){
 			LinkedList<String []> l2 = controlMetabol.get(concData[q][0][0]);

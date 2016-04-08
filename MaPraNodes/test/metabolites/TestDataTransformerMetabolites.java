@@ -63,8 +63,8 @@ public class TestDataTransformerMetabolites {
 		
 		String[] IdExp = new String[]{"M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08", "M09",
 				"M10","M11", "M12", "M13", "M14", "M15"};
-		double[] missingnessExp= new double[]{97.2, 77.7, 82.3, 95.5, 100.0};
-		double[] minValues = new double[]{-1.5, -0.1, -0.8, -0.5, -4.0, 0.2, -2.2, -5.0, -0.9, -2.8};
+		double[] missingnessExp= new double[]{97.2, 77.7, 82.3, 95.5, 100.0, 10.0, 2.2, 0.0, 5.3,
+				1.7, 25.0, 40.0, 8.5, 16.6, 4.0};
 		double[][] stats = new double[][]{{0.0, 0.5}, {0.2, 0.1}, {-0.4, 0.1}, {0.7, 1.0}, {-2.0, 1.3},
 			{0.9, 0.6}, {-0.8, 0.9}, {3.1, 0.7}, {-0.6, 1.4}, {-1.2, 0.1}};
 		
@@ -80,19 +80,17 @@ public class TestDataTransformerMetabolites {
 				String curId = IdExp[i];
 				assertTrue("Reference metabolite "+curId +" is missing"+mode,
 						reference.containsKey(curId));
+				ReferenceMetabolite m = reference.get(curId);
+				assertEquals("Missingness of metabolite "+curId+" is incorrect"+mode, missingnessExp[i],
+						m.getMissingness(), 1E-10);
 				if(i<=4){
 					assertTrue("Type of metabolite "+curId+" is incorrect"+mode, 
-							reference.get(curId) instanceof ReferenceMetaboliteBinary);
-					ReferenceMetaboliteBinary b = (ReferenceMetaboliteBinary) reference.get(curId);
-					assertEquals("Missingness of metabolite "+curId+" is incorrect"+mode, missingnessExp[i],
-							b.getMissingness(), 1E-10);
+							m instanceof ReferenceMetaboliteBinary);
 				}
 				else{
 					assertTrue("Type of metabolite "+curId+" is incorrect"+mode, 
-							reference.get(curId) instanceof ReferenceMetaboliteConcentration);
-					ReferenceMetaboliteConcentration c = (ReferenceMetaboliteConcentration) reference.get(curId);
-					assertEquals("Minimum of metabolite "+curId+" is incorrect"+mode, minValues[i-5],
-							c.getMin(), 1E-10);
+							m instanceof ReferenceMetaboliteConcentration);
+					ReferenceMetaboliteConcentration c = (ReferenceMetaboliteConcentration) m;
 					assertArrayEquals("Statistics of metabolite "+curId+" are incorrect"+mode, stats[i-5],
 							c.getMeanAndStdDevForGroup(2), 1E-10);
 				}
@@ -110,9 +108,6 @@ public class TestDataTransformerMetabolites {
 			LinkedList<String[]> l16 = new LinkedList<String[]>();
 			l16.add(new String[]{"M16", "abcd"});
 			controlMetabol.put("M16", l16);
-			//minimum of metabolite is not global
-			LinkedList<String[]> l13 = controlMetabol.get("M13");
-			l13.get(0)[5]="1.0";
 			// duplicate
 			LinkedList<String[]> l10 = controlMetabol.get("M10");
 			l10.add(new String[]{"M10", "concentration", "3", "-4.2", "-4.2", "-4.2"});

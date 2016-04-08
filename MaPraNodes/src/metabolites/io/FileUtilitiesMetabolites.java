@@ -57,8 +57,8 @@ public class FileUtilitiesMetabolites {
 	 * 		path to the file with the reference metabolites
 	 * @return
 	 * 		HashMap mapping metabolite ids to lists of String arrays with 7 elements, position 0: metabolite id,
-	 * 		position 1: type, position 2: group, position 3: mean, position 4: standard deviation, position 5: minimum,
-	 * 		position 6: missingness
+	 * 		position 1: type, position 2: group, position 3: mean, position 4: standard deviation,
+	 * 		position 5: missingness
 	 */
 	public static HashMap<String, LinkedList<String[]>> readReferences(String path){
 		
@@ -77,12 +77,12 @@ public class FileUtilitiesMetabolites {
 		for(String line:input){
 			String [] split = line.split("\t");
 			
-			//assumption: required information in first 3 columns
-			if(split.length<7){
+			//assumption: required information in first 6 columns
+			if(split.length<6){
 				continue;
 			}
-			String [] entry = new String[7];
-			for(int i=0; i<7; i++){
+			String [] entry = new String[6];
+			for(int i=0; i<6; i++){
 				entry[i] = split[i];
 			}
 			

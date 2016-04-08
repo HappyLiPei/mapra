@@ -7,23 +7,22 @@ public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 	private HashMap<Integer, Integer> groupToPosition;
 	private double [] mean;
 	private double [] standardDeviation;
-	private double minimum;
 	
 	/**
 	 * generates concentration reference metabolite
 	 * @param id
 	 * 		metabolite id
+	 * @param missingness
+	 * 		missingness as fraction of missing values in % before the missing concentrations were imputed
 	 * @param group
 	 * 		array of all groups
 	 * @param mean
 	 * 		array of mean values for all groups, position in group corresponds to position in mean
 	 * @param std
 	 * 		array of standard deviation values for all groups, position in group corresponds to position in std
-	 * @param min
-	 * 		minimum concentration
 	 */
-	public ReferenceMetaboliteConcentration(String id, int[] group, double[] mean, double[] std, double min) {
-		super(id);
+	public ReferenceMetaboliteConcentration(String id, double missingness, int[] group, double[] mean, double[] std) {
+		super(id,missingness);
 		
 		groupToPosition = new HashMap<>(group.length*3);
 		for(int i=0; i<group.length; i++){
@@ -31,16 +30,6 @@ public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 		}
 		this.mean = mean;
 		this.standardDeviation = std;
-		this.minimum = min;
-	}
-	
-	/**
-	 * retrieves the minimum concentration for the metabolite
-	 * @return
-	 * 		minimum concentration value (corresponding to LOD)
-	 */
-	public double getMin(){
-		return minimum;
 	}
 	
 	/**
