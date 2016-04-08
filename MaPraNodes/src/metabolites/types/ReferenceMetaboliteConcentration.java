@@ -2,6 +2,8 @@ package metabolites.types;
 
 import java.util.HashMap;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
+
 public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 	
 	private HashMap<Integer, Integer> groupToPosition;
@@ -52,11 +54,47 @@ public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 		}
 	}
 	
-	//TODO: implement scoring for concentration
+	public double getMean(int group){
+		if(groupToPosition.containsKey(group)){
+			int position=groupToPosition.get(group);
+			return mean[position];
+		}
+		else{
+			return Double.NaN;
+		}
+	}
+	
+	public double getStandardDeviation(int group){
+		if(groupToPosition.containsKey(group)){
+			int position=groupToPosition.get(group);
+			return standardDeviation[position];
+		}
+		else{
+			return Double.NaN;
+		}
+	}
+	
+	//TODO: round probability and score !!!
 	@Override
-	public ScoredMetabolite scoreMeasurement(double measurement) {
-		// TODO Auto-generated method stub
-		return new ScoredMetaboliteConcentration(getId(), 0.0, 0.0);
+	public ScoredMetabolite scoreMeasurement(double measurement, int group) {
+		if(Double.isNaN(measurement)){
+			return new ScoredMetaboliteBinary(getId(), 0, getMissingness()/100d);
+		}
+		else{
+			//get mean and standard deviation for group if available
+			double [] distribution = getMeanAndStdDevForGroup(group);
+			//should not happen if data is prepared correctly!
+			if(distribution == null){
+				return null;
+			}
+			//calculate Z score
+			double zScoreSigned = (double) (measurement-distribution[0])/distribution[1];
+			double zScoreUnsigned = Math.abs(zScoreSigned);
+			NormalDistribution nd = new NormalDistribution(0, 1);
+			//calculate probability of observing the Z score
+			double probability = 1-nd.cumulativeProbability(zScoreUnsigned);
+			return new ScoredMetaboliteConcentration(getId(), zScoreSigned, probability);
+		}
 	}
 	
 }

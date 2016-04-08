@@ -29,10 +29,12 @@ public abstract class ReferenceMetabolite extends Metabolite {
 	/**
 	 * scores a measurement on the basis of this reference metabolite
 	 * @param measurement
-	 * 		measured concentration of the metabolites, is null if the metabolite is missing
+	 * 		measured concentration of the metabolites, is naN if the metabolite is missing
+	 * @param group
+	 * 		group of the measured patient
 	 * @return
 	 * 		a ScoredMetabolite object representing score and probability of the measurement
 	 */
-	public abstract ScoredMetabolite scoreMeasurement(double measurement);
+	public abstract ScoredMetabolite scoreMeasurement(double measurement, int group);
 	
 }
