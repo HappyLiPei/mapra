@@ -47,4 +47,12 @@ public abstract class ScoredMetabolite extends Metabolite {
 	 * 		"binary" if the object is of type Binary
 	 */
 	public abstract String getType();
+	
+	/**
+	 * returns a String representing this scored metabolite
+	 * the String contains the id, score and probability of the score
+	 */
+	public String toString(){
+		return getId()+"\t"+getScore()+"\t"+getProbability();
+	}
 }

@@ -1,3 +1,6 @@
 MaPraNodes/bin/
 *.directory
 MaPraNodes/libs/commons-math3-3.6.1.jar
+MaPraNodes/model_new*
+MaPraNodes/model_test*
+MaPraNodes/src/main/MainSophieMaster.java
