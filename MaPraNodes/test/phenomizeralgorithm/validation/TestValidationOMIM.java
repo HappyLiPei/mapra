@@ -98,7 +98,7 @@ public class TestValidationOMIM {
 		String path = folder.newFile().getAbsolutePath();
 		
 		PhenomizerWithOMIMSymptomsWithPval pwos = new PhenomizerWithOMIMSymptomsWithPval(0, onto, symptoms, ksz,
-				path, omimPhenoDis, queries, "/home/marie-sophie/Uni/master/mapra/TestData/Phenomizer/PValues");
+				path, omimPhenoDis, queries, "../TestData/Phenomizer/PValues");
 		pwos.prepareData();
 		pwos.runValidation();
 		
