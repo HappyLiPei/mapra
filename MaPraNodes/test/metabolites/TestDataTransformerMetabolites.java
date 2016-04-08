@@ -101,7 +101,7 @@ public class TestDataTransformerMetabolites {
 	private void prepareControls(boolean robust){
 		
 		HashMap<String, LinkedList<String[]>> controlMetabol = FileUtilitiesMetabolites.readReferences(
-				"/home/marie-sophie/Uni/master/mapra/TestData/Metabolites/reference.txt");
+				"../TestData/Metabolites/reference.txt");
 		
 		if(robust){
 			//add metabolite with unknown type -> is ignored
@@ -120,9 +120,9 @@ public class TestDataTransformerMetabolites {
 	private void prepareCases(int mode){
 		
 		HashMap<String, LinkedList<String[]>> controlMetabol = FileUtilitiesMetabolites.readReferences(
-				"/home/marie-sophie/Uni/master/mapra/TestData/Metabolites/reference.txt");
+				"../TestData/Metabolites/reference.txt");
 		LinkedList<String[]> caseMetabol = FileUtilitiesMetabolites.readMeasurements(
-				"/home/marie-sophie/Uni/master/mapra/TestData/Metabolites/case2.txt");
+				"../TestData/Metabolites/case2.txt");
 		//manipulate ids and groups
 		if(mode==1){
 			//duplicate id

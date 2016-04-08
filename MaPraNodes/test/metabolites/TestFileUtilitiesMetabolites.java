@@ -16,7 +16,7 @@ public class TestFileUtilitiesMetabolites {
 	public void testCaseReader() {
 		
 		LinkedList<String[]> caseMetabol = FileUtilitiesMetabolites.readMeasurements(
-				"/home/marie-sophie/Uni/master/mapra/TestData/Metabolites/case1.txt");
+				"../TestData/Metabolites/case1.txt");
 		
 		assertEquals("Number of measured metabolites is incorrect", 15, caseMetabol.size());
 		assertArrayEquals("Line 2 of measured metabolites is not parsed correctly",
@@ -33,7 +33,7 @@ public class TestFileUtilitiesMetabolites {
 	public void testControlReader() {
 		
 		HashMap<String, LinkedList<String[]>> controlMetabol = FileUtilitiesMetabolites.readReferences(
-				"/home/marie-sophie/Uni/master/mapra/TestData/Metabolites/reference.txt");
+				"../TestData/Metabolites/reference.txt");
 		
 		Set<String> mids = controlMetabol.keySet();
 		assertEquals("Number of reference metabolites is incorrect", 15, mids.size());
