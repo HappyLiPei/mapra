@@ -6,7 +6,8 @@ import java.util.LinkedList;
 public class PhenoToGenoDataTransformer {
 	
 	/**
-	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer,
+	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer that was read
+	 * form a file or a KNIME table,
 	 * removes diseases that are not managed in the diseaes - gene annotation,
 	 * replaces the p values 0.0 by the minimum p value 0.001
 	 * @param phenomizer_input list of String arrays containing PhenoDis disease id (pos 0) and
@@ -17,12 +18,45 @@ public class PhenoToGenoDataTransformer {
 	public LinkedList<ScoredDisease> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
 			DiseaseGeneAssociation dga){
 		
+		return getPhenomizerResult(phenomizer_input, dga, 0, 1);
+	}
+	
+	/**
+	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer that is directly
+	 * taken from the PhenomizerAlgorithmWithPval class
+	 * removes diseases that are not managed in the diseaes - gene annotation,
+	 * replaces the p values 0.0 by the minimum p value 0.001
+	 * @param phenomizer_input list of String arrays containing PhenoDis disease id (pos 0) and
+	 * 			p value of Phenomizer(pos 2)
+	 * @param dga DiseaseGeneAssocation object representing disease - gene associations
+	 * @return List of ScoredDiseases required for PhenoToGenoAlgo
+	 */
+	public LinkedList<ScoredDisease> getPhenomizerResultFromAlgo(LinkedList<String[]> phenomizer_input,
+			DiseaseGeneAssociation dga){
+		
+		return getPhenomizerResult(phenomizer_input, dga, 0, 2);
+	} 
+	
+	/**
+	 * Generates a list of ScoredDiseases from a prediction result of Phenomizer
+	 * removes diseases that are not managed in the diseaes - gene annotation,
+	 * replaces the p values 0.0 by the minimum p value 0.001
+	 * @param phenomizer_input list of String arrays containing PhenoDis disease id (pos posID) and
+	 * 			p value of Phenomizer(pos posPval)
+	 * @param dga DiseaseGeneAssocation object representing disease - gene associations
+	 * @param posId position of the disease id within the arrays of phenomizer_input
+	 * @param posPval position of the pvalue within the arrays of phenomizer_input
+	 * @return List of ScoredDiseases required for PhenoToGenoAlgo
+	 */
+	private LinkedList<ScoredDisease> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
+			DiseaseGeneAssociation dga, int posId, int posPval){
+		
 		LinkedList<ScoredDisease> result = new LinkedList<ScoredDisease>();
 		for(String[] disease_pval: phenomizer_input){
-			int disease_id = Integer.valueOf(disease_pval[0]);
+			int disease_id = Integer.parseInt(disease_pval[posId]);
 			//test if disease is part of disease - gene annotation
 			if(dga.containsDisease(disease_id)){
-				double pvalue = Double.valueOf(disease_pval[1]);
+				double pvalue = Double.parseDouble(disease_pval[posPval]);
 				//test if pvalue is 0, if yes -> replace it by 0.001
 				if(pvalue<1E-3){
 					pvalue =0.001;
@@ -33,6 +67,7 @@ public class PhenoToGenoDataTransformer {
 		}
 		return result;
 	}
+	
 	
 	/**
 	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes,

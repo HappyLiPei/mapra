@@ -24,6 +24,7 @@ import phenomizeralgorithm.validation.TestValidationOMIMPreparation;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeights;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsPreparation;
 import phenomizeralgorithm.validation.TestValidationWithFrequentWeightsRanking;
+import phenotogeno.TestCombinationWithPhenomizer;
 import phenotogeno.TestPhenoToGeno;
 import phenotogeno.TestPhenoToGenoAlgo;
 import phenotogeno.TestPhenoToGenoDataStructures;
@@ -54,6 +55,7 @@ import phenotogeno.TestScoredGeneComparator;
 				TestPhenoToGenoAlgo.class,
 				TestScoredGeneComparator.class,
 				TestPhenoToGeno.class,
+				TestCombinationWithPhenomizer.class,
 				TestFileUtilitiesMetabolites.class,
 				TestDataTransformerMetabolites.class,
 				TestMetaboliteScoringInReference.class,
