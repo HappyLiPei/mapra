@@ -13,10 +13,12 @@ import nodeutils.TableFunctions;
 
 public class TableProcessorScoreMetabolites {
 	
+	//TODO: implement!
 	public static LinkedList<String[]> getMeasurements(BufferedDataTable table){
 		return null;
 	}
 	
+	//TODO: implement!
 	public static HashMap<String, LinkedList<String[]>> getReferences(BufferedDataTable table){
 		return null;
 	}
@@ -36,6 +38,7 @@ public class TableProcessorScoreMetabolites {
 		return new DataTableSpec(spec);
 	}
 	
+	//TODO: implement!
 	public static BufferedDataTable generateOutTable(){
 		return null;
 	}

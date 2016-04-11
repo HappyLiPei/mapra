@@ -115,5 +115,15 @@ public class DiseaseGeneAssociation {
 		return diseaseID_genesID.containsKey(disease_id);
 	}
 	
+	/**
+	 * clears all disease scores that were annotated so far to the genes of this object
+	 * method allows reuse of DiseaseGeneAssociations for several runs of PhenoToGeno
+	 */
+	public void resetDiseaseScores(){
+		for(AnnotatedGene ag: allGenes){
+			ag.resetAnnotation();
+		}
+	}
+	
 
 }

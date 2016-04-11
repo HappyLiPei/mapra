@@ -84,4 +84,15 @@ public class AnnotatedGene extends Gene {
 		return moreMax;
 	}
 	
+	/**
+	 * clears all disease scores that were annotated so far to the gene
+	 * method allows reuse of DiseaseGeneAssociations for several runs of PhenoToGeno
+	 */
+	public void resetAnnotation(){
+		currentScore = 1;
+		currentMax =-1;
+		currentMaxIds = new LinkedList<Integer>();
+		moreMax=false;
+	}
+	
 }
