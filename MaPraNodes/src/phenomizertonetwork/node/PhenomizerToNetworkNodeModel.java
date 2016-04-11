@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import nodeutils.SettingsChecker;
-import nodeutils.TableChecker;
+import nodeutils.TableFunctions;
 import phenomizer.node.PhenomizerNodeModel;
 
 import org.knime.core.data.DataTableSpec;
@@ -120,8 +120,8 @@ public class PhenomizerToNetworkNodeModel extends NodeModel {
     	}
     	
     	//check port 0: results from phenomizer
-    	TableChecker.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.DISEASE_ID, new DataType[]{IntCell.TYPE}, "");
-    	TableChecker.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.SCORE, new DataType[]{DoubleCell.TYPE}, "");
+    	TableFunctions.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.DISEASE_ID, new DataType[]{IntCell.TYPE}, "");
+    	TableFunctions.checkColumn(inSpecs, IN_PHENO, PhenomizerNodeModel.SCORE, new DataType[]{DoubleCell.TYPE}, "");
     	//check of port 1: done in RunPhenomizerToNetwork -> format depends on number of rows
     	
         return new DataTableSpec[0];

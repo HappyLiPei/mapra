@@ -21,7 +21,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
-import nodeutils.TableChecker;
+import nodeutils.TableFunctions;
 import phenomizer.node.PhenomizerNodeModel;
 import phenotogeno.algo.PhenoToGenoDriver;
 import phenotogeno.algo.ScoredGene;
@@ -35,7 +35,7 @@ import phenotogeno.algo.ScoredGene;
  */
 public class PhenoToGenoNodeNodeModel extends NodeModel {
     
-    // the logger instance
+	/** the logger instance for writing to KNIME console and log*/
     private static final NodeLogger logger = NodeLogger
             .getLogger(PhenoToGenoNodeNodeModel.class);
     
@@ -97,18 +97,18 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
             throws InvalidSettingsException {
         
     	//check Phenomizer table: requires disease id and p value
-    	TableChecker.checkColumn(inSpecs, INPORT_PHENOMIZER, PhenomizerNodeModel.DISEASE_ID,
+    	TableFunctions.checkColumn(inSpecs, INPORT_PHENOMIZER, PhenomizerNodeModel.DISEASE_ID,
     			new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
-    	TableChecker.checkColumn(inSpecs, INPORT_PHENOMIZER, PhenomizerNodeModel.P_VALUE,
+    	TableFunctions.checkColumn(inSpecs, INPORT_PHENOMIZER, PhenomizerNodeModel.P_VALUE,
     			new DataType[]{DoubleCell.TYPE}, null);
     	
     	//check disease - gene table
-    	TableChecker.checkColumn(inSpecs, INPORT_GENE_DISEASE, GENE_ID, new DataType[]{StringCell.TYPE}, null);
-    	TableChecker.checkColumn(inSpecs, INPORT_GENE_DISEASE, PhenomizerNodeModel.DISEASE_ID,
+    	TableFunctions.checkColumn(inSpecs, INPORT_GENE_DISEASE, GENE_ID, new DataType[]{StringCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_GENE_DISEASE, PhenomizerNodeModel.DISEASE_ID,
     			new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
     	
     	//check gene table: requires gene id
-    	TableChecker.checkColumn(inSpecs, INPORT_ALL_GENES, GENE_ID, new DataType[]{StringCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_ALL_GENES, GENE_ID, new DataType[]{StringCell.TYPE}, null);
     	
     	//create table spec for output
         return new DataTableSpec[]{TableProcessorPhenoToGeno.generateOutputSpec()};

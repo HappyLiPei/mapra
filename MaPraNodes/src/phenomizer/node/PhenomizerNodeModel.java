@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import nodeutils.TableChecker;
+import nodeutils.TableFunctions;
 
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
@@ -141,21 +141,21 @@ public class PhenomizerNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	
     	//check port 0: symptom table
-    	TableChecker.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
-    	TableChecker.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, new DataType[]{StringCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, new DataType[]{StringCell.TYPE}, null);
     	//check port 1: isa table
-    	TableChecker.checkColumn(inSpecs, INPORT_ISA, CHILD_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
-    	TableChecker.checkColumn(inSpecs, INPORT_ISA, PARENT_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_ISA, CHILD_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_ISA, PARENT_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
     	//check port 2: ksz table
-    	TableChecker.checkColumn(inSpecs, INPORT_KSZ, DISEASE_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
-    	TableChecker.checkColumn(inSpecs, INPORT_KSZ, DISEASE_NAME, new DataType[]{StringCell.TYPE}, null);
-    	TableChecker.checkColumn(inSpecs, INPORT_KSZ, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, DISEASE_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, DISEASE_NAME, new DataType[]{StringCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
     	if(m_weight.getBooleanValue()){
-    		TableChecker.checkColumn(inSpecs, INPORT_KSZ, FREQUENCY, new DataType[]{StringCell.TYPE},
+    		TableFunctions.checkColumn(inSpecs, INPORT_KSZ, FREQUENCY, new DataType[]{StringCell.TYPE},
 			"Please uncheck the option \"use frequency weights\" in the node dialog or use another input table with frequency values");
     	}
     	//check port 3: query  
-    	TableChecker.checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE},null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE},null);
 
         return new DataTableSpec[]{generateOutputSpec(m_pval.getBooleanValue())};
     }
