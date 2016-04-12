@@ -91,7 +91,7 @@ public class DataTransformerMetabolites {
 		}
 		return list;
 	}
-
+	
 	/**
 	 * method to transform the data read from the table with reference metabolites into a data structure for metabolite
 	 * scoring,
@@ -111,8 +111,20 @@ public class DataTransformerMetabolites {
 		
 		HashMap<String, ReferenceMetabolite> map = new HashMap<String, ReferenceMetabolite>(controlMetabol.size()*3);
 		for(String key: controlMetabol.keySet()){
-			LinkedList<String[]> list =controlMetabol.get(key);
-			String [] firstRow = list.getFirst();
+			LinkedList<String[]> oldList =controlMetabol.get(key);
+			
+			//keep only metabolites with matching type
+			LinkedList<String[]> newList = new LinkedList<String[]>();
+			for(String [] array: oldList){
+				if(array[1].equals("concentration") || array[1].equals("binary")){
+					newList.add(array);
+				}
+			}
+			if(newList.isEmpty()){
+				continue;
+			}
+			
+			String [] firstRow = newList.getFirst();
 			//binary metabolite
 			if(firstRow[1].equals("binary")){
 				ReferenceMetaboliteBinary bin = new ReferenceMetaboliteBinary(key, Double.parseDouble(firstRow[5]));
@@ -123,20 +135,20 @@ public class DataTransformerMetabolites {
 				
 				//build hashset to remove duplicate entries (duplicate group numbers)
 				HashSet<Integer> groups = new HashSet<Integer>();
-				for(String[] array:list){
+				for(String[] array:newList){
 					int group = Integer.parseInt(array[2]);
 					if(!groups.add(group)){
-						list.remove(array);
+						newList.remove(array);
 					}
 				}
 				
 				//get relevant data from each list entry
-				int [] group = new int [list.size()];
-				double[] mean = new double[list.size()];
-				double[] std = new double[list.size()];
+				int [] group = new int [newList.size()];
+				double[] mean = new double[newList.size()];
+				double[] std = new double[newList.size()];
 				double missing = Double.parseDouble(firstRow[5]);
 				int position=0;
-				for(String[] array: list){
+				for(String[] array: newList){
 					group[position]=Integer.parseInt(array[2]);
 					mean[position]=Double.parseDouble(array[3]);
 					std[position]=Double.parseDouble(array[4]);
@@ -145,10 +157,6 @@ public class DataTransformerMetabolites {
 				ReferenceMetaboliteConcentration conc = new ReferenceMetaboliteConcentration(
 						key, missing, group, mean, std);
 				map.put(key, conc);
-			}
-			//incorrect type annotation
-			else{
-				continue;
 			}
 		}
 		

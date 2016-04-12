@@ -111,6 +111,7 @@ public class TestDataTransformerMetabolites {
 			// duplicate
 			LinkedList<String[]> l10 = controlMetabol.get("M10");
 			l10.add(new String[]{"M10", "concentration", "3", "-4.2", "-4.2", "-4.2"});
+			l10.add(new String[]{"M10", "huch", "4", "-4.2", "-4.2", "-4.2"});
 		}
 		
 		DataTransformerMetabolites dtm = new DataTransformerMetabolites();

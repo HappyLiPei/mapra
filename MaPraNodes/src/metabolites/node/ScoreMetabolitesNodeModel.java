@@ -2,6 +2,8 @@ package metabolites.node;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
@@ -76,6 +78,12 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
 
         // TODO read inports, call driver, generate output
         logger.info("Node Model Stub... this is not yet implemented !");
+        
+        HashMap<String, LinkedList<String[]>> referenceControls =
+        		TableProcessorScoreMetabolites.getReferences(inData[INPORT_REFERENCE], logger);
+        LinkedList<String[]> measuredCase = TableProcessorScoreMetabolites.getMeasurements(inData[INPORT_MEASUREMENT]);
+        
+        
 
 
         DataTableSpec outputSpec = TableProcessorScoreMetabolites.generateOutSpec();
