@@ -21,6 +21,8 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
+import metabolites.algo.ScoreMetabolitesDriver;
+import metabolites.types.ScoredMetabolite;
 import nodeutils.TableFunctions;
 
 
@@ -76,14 +78,20 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
 
-        // TODO read inports, call driver, generate output
+        // TODO generate output
         logger.info("Node Model Stub... this is not yet implemented !");
         
         HashMap<String, LinkedList<String[]>> referenceControls =
         		TableProcessorScoreMetabolites.getReferences(inData[INPORT_REFERENCE], logger);
-        LinkedList<String[]> measuredCase = TableProcessorScoreMetabolites.getMeasurements(inData[INPORT_MEASUREMENT]);
+        LinkedList<String[]> measuredCase = TableProcessorScoreMetabolites.getMeasurements(
+        		inData[INPORT_MEASUREMENT], logger, referenceControls);
         
+        ScoreMetabolitesDriver driver = new ScoreMetabolitesDriver(measuredCase, referenceControls);
+        LinkedList<ScoredMetabolite> result = driver.runMetaboliteScoring();
         
+        for(ScoredMetabolite m: result){
+        	System.out.println(m);
+        }
 
 
         DataTableSpec outputSpec = TableProcessorScoreMetabolites.generateOutSpec();
