@@ -243,6 +243,19 @@ public class TableProcessorScoreMetabolites {
 		return new DataTableSpec(spec);
 	}
 	
+	/**
+	 * method to transform a list of scored metabolites into a KNIME table
+	 * @param result
+	 * 		list of ScoredMetabolite objects returned by ScoreMetabolitesDriver or Algo
+	 * @param exec
+	 * 		ExecutionContext of ScoreMetabolitesNodeModel
+	 * @param tableReference
+	 * 		KNIME table containing the reference metabolites (this method requires 2 columns of the table:
+	 * 		metabolite id and metabolite name)
+	 * @return
+	 * 		KNIME table with scores for metabolites with 4 columns: metabolite id, type of the metabolite,
+	 * 		score, probability indicating the significance of the score + 1 optional column with metabolite names
+	 */
 	public static BufferedDataTable generateOutTable(LinkedList<ScoredMetabolite> result, ExecutionContext exec,
 			DataTable tableReference){
 		

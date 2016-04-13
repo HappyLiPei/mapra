@@ -9,8 +9,8 @@ M07	concentration	-2.0	0.02275
 M08	binary	0.0	0.0
 M09	concentration	0.1	0.46017
 M10	binary	0.0	0.017
-M11	concentration	0.33333	0.36944
+M11	concentration	0.33	0.36944
 M12	binary	0.0	0.4
-M13	concentration	1.57143	0.05804
+M13	concentration	1.57	0.05804
 M14	binary	0.0	0.166
 M15	concentration	2.0	0.02275

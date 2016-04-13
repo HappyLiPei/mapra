@@ -13,17 +13,20 @@ public class ReferenceMetaboliteBinary extends ReferenceMetabolite {
 		super(id, missingness);
 	}
 	
-	//TODO: round probability! -> 5 places
 	@Override
 	public ScoredMetabolite scoreMeasurement(double measurement, int group) {
 		//group does not matter for a binary metabolite
 		//measured metabolite is missing
 		if(Double.isNaN(measurement)){
-			return new ScoredMetaboliteBinary(getId(), 0, getMissingness()/100d);
+			double probability = getMissingness()/100d;
+			probability = Math.round(probability*100000)/100000d;
+			return new ScoredMetaboliteBinary(getId(), 0, probability);
 		}
 		//measured metabolite is present
 		else{
-			return new ScoredMetaboliteBinary(getId(), 1, 1-getMissingness()/100d);
+			double probability = 1-getMissingness()/100d;
+			probability = Math.round(probability*100000)/100000d;
+			return new ScoredMetaboliteBinary(getId(), 1, probability);
 		}
 	}
 

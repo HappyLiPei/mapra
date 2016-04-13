@@ -74,11 +74,12 @@ public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 		}
 	}
 	
-	//TODO: round probability and score !!! -> probability 5 place, score 2 places
 	@Override
 	public ScoredMetabolite scoreMeasurement(double measurement, int group) {
 		if(Double.isNaN(measurement)){
-			return new ScoredMetaboliteBinary(getId(), 0, getMissingness()/100d);
+			double probability = getMissingness()/100d;
+			probability = Math.round(probability*100000)/100000d;
+			return new ScoredMetaboliteBinary(getId(), 0, probability);
 		}
 		else{
 			//get mean and standard deviation for group if available
@@ -93,6 +94,13 @@ public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 			NormalDistribution nd = new NormalDistribution(0, 1);
 			//calculate probability of observing the Z score
 			double probability = 1-nd.cumulativeProbability(zScoreUnsigned);
+			//round score and probability
+			if(Double.isFinite(zScoreSigned) && !Double.isNaN(zScoreSigned)){
+				zScoreSigned = Math.round(zScoreSigned*100)/100d;
+			}
+			if(!Double.isNaN(probability)){
+				probability = Math.round(probability*100000)/100000d;
+			}
 			return new ScoredMetaboliteConcentration(getId(), zScoreSigned, probability);
 		}
 	}
