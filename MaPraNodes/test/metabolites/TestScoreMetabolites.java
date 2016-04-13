@@ -41,11 +41,11 @@ public class TestScoreMetabolites {
 			while(iter_exp.hasNext()){
 				ScoredMetabolite metabo = iter_actual.next();
 				String [] line = iter_exp.next().split("\t");
-				assertEquals("Id of metabolite "+line[0]+ "in test case "+i+" is incorrect", line[0], metabo.getId());
-				assertEquals("Type of metabolite "+line[0]+ "in test case "+i+" is incorrect", line[1], metabo.getType());
-				assertEquals("Score of metabolite "+line[0]+ "in test case "+i+" is incorrect",
+				assertEquals("Id of metabolite "+line[0]+ " in test case "+i+" is incorrect", line[0], metabo.getId());
+				assertEquals("Type of metabolite "+line[0]+ " in test case "+i+" is incorrect", line[1], metabo.getType());
+				assertEquals("Score of metabolite "+line[0]+ " in test case "+i+" is incorrect",
 						Double.parseDouble(line[2]), metabo.getScore(), 1E-10);
-				assertEquals("Probability of metabolite "+line[0]+ "in test case "+i+" is incorrect",
+				assertEquals("Probability of metabolite "+line[0]+ " in test case "+i+" is incorrect",
 						Double.parseDouble(line[3]), metabo.getProbability(), 1E-10);
 			}
 		}
