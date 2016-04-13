@@ -74,7 +74,7 @@ public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 		}
 	}
 	
-	//TODO: round probability and score !!!
+	//TODO: round probability and score !!! -> probability 5 place, score 2 places
 	@Override
 	public ScoredMetabolite scoreMeasurement(double measurement, int group) {
 		if(Double.isNaN(measurement)){

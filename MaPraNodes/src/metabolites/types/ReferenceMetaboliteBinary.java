@@ -13,7 +13,7 @@ public class ReferenceMetaboliteBinary extends ReferenceMetabolite {
 		super(id, missingness);
 	}
 	
-	//TODO: round probability!
+	//TODO: round probability! -> 5 places
 	@Override
 	public ScoredMetabolite scoreMeasurement(double measurement, int group) {
 		//group does not matter for a binary metabolite

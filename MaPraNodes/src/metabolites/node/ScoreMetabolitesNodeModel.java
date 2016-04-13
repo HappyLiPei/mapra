@@ -10,7 +10,6 @@ import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -57,6 +56,8 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
     public static final String METABOLITE_STDEV="stdev";
     /** column name for the column with the missingness of the reference metabolites*/
     public static final String METABOLITE_MISSINGNESS="missingness";
+    /** column name for the column with metabolite names, this column is optional */
+    public static final String METABOLITE_NAME="metabolite_name";
     /** column name for the column with metabolite scores*/
     public static final String METABOLITE_SCORE ="metabolite_score";
     /** column name for the column with probabilities indicating the significance of the scores*/
@@ -66,7 +67,6 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
     /**
      * Constructor for the node model, generates a node with 2 incoming ports and 1 outgoing port
      */
-    //TODO: 2 outports ?!
     protected ScoreMetabolitesNodeModel() {
         super(2, 1);
     }
@@ -77,9 +77,6 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
     @Override
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
-
-        // TODO generate output
-        logger.info("Node Model Stub... this is not yet implemented !");
         
         HashMap<String, LinkedList<String[]>> referenceControls =
         		TableProcessorScoreMetabolites.getReferences(inData[INPORT_REFERENCE], logger);
@@ -89,16 +86,10 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
         ScoreMetabolitesDriver driver = new ScoreMetabolitesDriver(measuredCase, referenceControls);
         LinkedList<ScoredMetabolite> result = driver.runMetaboliteScoring();
         
-        for(ScoredMetabolite m: result){
-        	System.out.println(m);
-        }
-
-
-        DataTableSpec outputSpec = TableProcessorScoreMetabolites.generateOutSpec();
-        BufferedDataContainer container = exec.createDataContainer(outputSpec);
-        container.close();
-        BufferedDataTable out = container.getTable();
-        return new BufferedDataTable[]{out};
+        BufferedDataTable returnTable = TableProcessorScoreMetabolites.generateOutTable(
+        		result, exec, inData[INPORT_REFERENCE]);
+        
+        return new BufferedDataTable[]{returnTable};
     }
 
     /**
@@ -123,13 +114,18 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
     	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_STDEV, new DataType[]{DoubleCell.TYPE}, null);
     	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_MISSINGNESS, new DataType[]{DoubleCell.TYPE}, null);
     	
+    	//check column for metabolite names
+    	if(inSpecs[INPORT_REFERENCE].findColumnIndex(METABOLITE_NAME)!=-1){
+    		TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_NAME, new DataType[]{StringCell.TYPE}, null);
+    	}
+    	
     	//check measurements: 3 columns id, measured concentration, group
     	TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, METABOLITE_ID, new DataType[]{StringCell.TYPE}, null);
     	TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, METABOLITE_CONCENTRATION, new DataType[]{DoubleCell.TYPE}, null);
         TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, PHENOTYPE_GROUP, new DataType[]{IntCell.TYPE}, null);
         
         //generate specification for the table to return
-        return new DataTableSpec[]{TableProcessorScoreMetabolites.generateOutSpec()};
+        return new DataTableSpec[]{TableProcessorScoreMetabolites.generateOutSpec(inSpecs[INPORT_REFERENCE])};
     }
 
     /**

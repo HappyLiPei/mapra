@@ -7,13 +7,19 @@ import java.util.LinkedList;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataRow;
+import org.knime.core.data.DataTable;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.RowKey;
+import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.StringCell;
+import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
+import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
+import metabolites.types.ScoredMetabolite;
 import nodeutils.TableFunctions;
 
 public class TableProcessorScoreMetabolites {
@@ -207,22 +213,84 @@ public class TableProcessorScoreMetabolites {
 	
 	/**
 	 * method to generate the specification for the table returned by ScoreMetabolites
-	 * (3 columns: metabolite id, score, significance)
+	 * (4 columns: metabolite id, type, score, significance + 1 optional column: metabolite name)
 	 * @return DataTable specification for the table returned by ScoreMetabolites
 	 */
-	public static DataTableSpec generateOutSpec(){
+	public static DataTableSpec generateOutSpec(DataTableSpec specReference){
 		
-		DataColumnSpec [] spec = new DataColumnSpec[3]; 
-		spec[0]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_ID, StringCell.TYPE);
-		spec[1]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_SCORE, DoubleCell.TYPE);
-		spec[2]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_SIGNIFICANCE, DoubleCell.TYPE);
+		boolean hasNameColumn =false;
+		if(specReference.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_NAME)!=-1){
+			hasNameColumn = true;
+		}
+		
+		DataColumnSpec [] spec = null;
+		if(hasNameColumn){
+			spec = new DataColumnSpec[5]; 
+			spec[0]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_ID, StringCell.TYPE);
+			spec[1]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_NAME, StringCell.TYPE);
+			spec[2]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_TYPE, StringCell.TYPE);
+			spec[3]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_SCORE, DoubleCell.TYPE);
+			spec[4]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_SIGNIFICANCE, DoubleCell.TYPE);
+		}
+		else{
+			spec = new DataColumnSpec[4]; 
+			spec[0]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_ID, StringCell.TYPE);
+			spec[1]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_TYPE, StringCell.TYPE);
+			spec[2]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_SCORE, DoubleCell.TYPE);
+			spec[3]=TableFunctions.makeDataColSpec(ScoreMetabolitesNodeModel.METABOLITE_SIGNIFICANCE, DoubleCell.TYPE);
+		}
 		
 		return new DataTableSpec(spec);
 	}
 	
-	//TODO: implement!
-	public static BufferedDataTable generateOutTable(){
-		return null;
+	public static BufferedDataTable generateOutTable(LinkedList<ScoredMetabolite> result, ExecutionContext exec,
+			DataTable tableReference){
+		
+		//generate specification of output table
+		DataTableSpec refSpec = tableReference.getDataTableSpec();
+		DataTableSpec spec = generateOutSpec(refSpec);
+		int indexId = spec.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_ID);
+		int indexType = spec.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_TYPE);
+		int indexScore = spec.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_SCORE);
+		int indexSign = spec.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_SIGNIFICANCE);
+		int indexName = spec.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_NAME);
+		
+		//build hashmap id-> name from reference table
+		HashMap<String,String> idToName = new HashMap<String, String>();
+		if(indexName!=-1){
+			int indexRefId = refSpec.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_ID);
+			int indexRefName = refSpec.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_NAME);
+			for(DataRow r: tableReference){
+				String id = ((StringCell) r.getCell(indexRefId)).getStringValue();
+				String name =((StringCell) r.getCell(indexRefName)).getStringValue();
+				idToName.put(id, name);
+			}
+		}
+		
+		//generate output table
+		BufferedDataContainer c = exec.createDataContainer(spec);
+		int counter=0;
+		for(ScoredMetabolite m: result){
+        	RowKey key = new RowKey("Row "+counter);
+        	DataCell[] data = new DataCell[spec.getNumColumns()];
+        	//fill in data
+        	data[indexId]= new StringCell(m.getId());
+        	data[indexType] = new StringCell(m.getType());
+        	data[indexScore]= new DoubleCell(m.getScore());
+        	data[indexSign]= new DoubleCell(m.getProbability());
+        	//check for name
+        	if(indexName!=-1){
+        		String name = idToName.get(m.getId());
+        		data[indexName] = new StringCell(name);
+        	}
+        	//add row to table
+        	DataRow r = new DefaultRow(key, data);
+        	c.addRowToTable(r);
+        	counter++;
+		}
+		c.close();
+		
+		return c.getTable();
 	}
 
 }
