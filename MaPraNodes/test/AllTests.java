@@ -31,6 +31,7 @@ import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
 import phenotogeno.TestScoredGeneComparator;
 import phenotogeno.validation.TestRankCalculation;
+import phenotogeno.validation.TestValidationProcedure;
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestIOReaderWriter.class, 
@@ -58,6 +59,7 @@ import phenotogeno.validation.TestRankCalculation;
 				TestPhenoToGeno.class,
 				TestCombinationWithPhenomizer.class,
 				TestRankCalculation.class,
+				TestValidationProcedure.class,
 				TestFileUtilitiesMetabolites.class,
 				TestDataTransformerMetabolites.class,
 				TestMetaboliteScoringInReference.class,
