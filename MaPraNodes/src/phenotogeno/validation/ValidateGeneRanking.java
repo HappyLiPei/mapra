@@ -83,11 +83,14 @@ public class ValidateGeneRanking {
 			System.out.println(counter+" out of "+iter.totalIterations()+" diseases");
 			AnnotatedGene[] currentGenes = dga.getGenesForDiseaseWithID(currentDiseaseId);
 			if(currentGenes.length==0){
-				System.out.println("skip "+currentDiseaseId);
+				System.out.println("skip "+currentDiseaseId+": no genes");
 				counter++;
 				continue;
 			}
 			SimulatedPatient patient =simulator.simulatePatient(currentDiseaseId, sda.getSymptoms(currentDiseaseId));
+			if(patient==null){
+				System.out.println("skip "+currentDiseaseId+": empty query");
+			}
 			
 			PhenomizerAlgorithmWithPval phenomizer = new PhenomizerAlgorithmWithPval(
 					sda.numberOfDiseases(), ontology, patient.getSymptoms(), sda, 
@@ -140,7 +143,6 @@ public class ValidateGeneRanking {
 	
 	//TODO: different patient simulators, write patients to file, one simulator reads from file
 	//TODO: disease iterator -> chooses disease to simulate, e.g. random, all disease, only mito diseases
-	//TODO: test!
 
 
 }

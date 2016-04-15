@@ -39,8 +39,9 @@ public class TestValidationProcedure {
 				"../TestData/PhenoToGeno/gene_diseases.txt");
 		String outfile = folder.newFile().getAbsolutePath();
 		
+		MockSimulator s = new MockSimulator();
 		ValidateGeneRanking val = new ValidateGeneRanking(ontology, symptoms, ksz_with_freq, genes_raw, map_raw,
-				Pvalfolder, new MockSimulator(), new MockSimulator(), outfile);
+				Pvalfolder, s, s, outfile);
 		val.prepareData();
 		val.simulateAndRank();
 		
@@ -58,6 +59,7 @@ class MockSimulator implements DiseaseIterator, PatientSimulator{
 	
 	private int [] diseaseIds=new int[]{100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110};
 	private int position = 0;
+	private int id =0;
 	private int [] query4 = new int []{37,38,33,25,15,2};
 
 	@Override
@@ -66,7 +68,7 @@ class MockSimulator implements DiseaseIterator, PatientSimulator{
 		for(int i: query4){
 			symp.add(i);
 		}
-		int pId = position++;
+		int pId = id++;
 		return new SimulatedPatient(pId+"", diseaseId, symp);
 	}
 
