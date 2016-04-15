@@ -18,32 +18,53 @@ import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.algo.ScoredDisease;
 import phenotogeno.algo.ScoredGene;
 
+/** structure for running a validation with simulated data on PhenoToGeno*/
 public class ValidateGeneRanking {
 	
-	//data read from files for Phenomizer
+	/** ontology of symptoms read from a file read by FileUtilitiesPhenomizer*/
 	private int [][] onto_raw;
+	/** list of symptoms read from a file read by FileUtilitiesPhenomizer*/
 	private LinkedList<Integer> symptoms_raw;
+	/** associations between diseases and symptoms from a file read by FileUtilitiesPhenomizer*/
 	private HashMap<Integer, LinkedList<Integer[]>> ksz_raw;
-	//data read from files for PhenoToGeno
+	/** list of gene ids read from a file read by FileUtilitiesPTG*/
 	private LinkedList<String> genes_raw;
+	/** associations between diseases and genes from a file read by FileUtilitesPTG*/
 	private HashMap<Integer, LinkedList<String>> associations_raw;
 	
-	//data structures for running tools
+	/** pvalue folder object for PhenomizerWithPvalues*/
 	private PValueFolder folder;
+	/** data transformer for generating input for Phenomizer*/
 	private DataTransformer dtPheno;
+	/** data transformer for generating input for PhenoToGeno*/
 	private PhenoToGenoDataTransformer dtPTG;
+	/** Ontology object for Phenomizer*/
 	private Ontology ontology;
+	/** SymptomDiseaseAssociations object for Phenomizer*/
 	private SymptomDiseaseAssociations sda;
+	/** DiseaseGeneassociation object for PhenoToGeno*/
 	private DiseaseGeneAssociation dga;
 
-	//output location
+	/** file to write output to*/
 	private String outFile;
 	
-	//settings
+	/** Simulator for generating patients*/
 	private PatientSimulator simulator;
+	/** iterator determining which disease is simulated next*/
 	private DiseaseIterator iter;
 	
-	
+	/**
+	 * generates a object for validation PhenoToGenoe
+	 * @param onto_raw ontology of symptoms read from a file read by FileUtilitiesPhenomizer
+	 * @param symptoms_raw list of symptoms read from a file read by FileUtilitiesPhenomizer
+	 * @param ksz_raw associations between diseases and symptoms from a file read by FileUtilitiesPhenomizer
+	 * @param genes_raw list of gene ids read from a file read by FileUtilitiesPTG
+	 * @param associations_raw associations between diseases and genes from a file read by FileUtilitesPTG
+	 * @param pvalFolder path to folder with sampled score distributions for p value calculation
+	 * @param simulator Simulator for generating patients
+	 * @param iter iterator determining which disease is simulated next 
+	 * @param outfile path to file to which all output is written
+	 */
 	public ValidateGeneRanking(int [][] onto_raw, LinkedList<Integer> symptoms_raw,
 			HashMap<Integer, LinkedList<Integer[]>> ksz_raw, LinkedList<String> genes_raw,
 			HashMap<Integer, LinkedList<String>> associations_raw, String pvalFolder,
@@ -64,13 +85,19 @@ public class ValidateGeneRanking {
 		this.outFile = outfile;
 	}
 	
+	/** 
+	 * initializes the validation by preparing all data structures for Phenomizer and PhenoToGeno 
+	 */
 	public void prepareData(){
 		this.ontology = new Ontology(onto_raw);
 		sda = dtPheno.generateSymptomDiseaseAssociation(ontology, symptoms_raw, ksz_raw);
 		dga = dtPTG.getDiseaseGeneAssociation(genes_raw, associations_raw);
 		iter.setSDA(sda);
 	}
-
+	
+	/** 
+	 * method to run the validation with simulated patients
+	 */
 	public void simulateAndRank(){
 		
 		HashMap<Integer,Double> ic = new HashMap<Integer,Double>(sda.numberOfSymptoms()*3);
