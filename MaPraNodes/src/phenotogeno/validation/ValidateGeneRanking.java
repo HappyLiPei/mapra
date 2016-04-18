@@ -117,6 +117,8 @@ public class ValidateGeneRanking {
 			SimulatedPatient patient =simulator.simulatePatient(currentDiseaseId, sda.getSymptoms(currentDiseaseId));
 			if(patient==null){
 				System.out.println("skip "+currentDiseaseId+": empty query");
+				counter++;
+				continue;
 			}
 			
 			PhenomizerAlgorithmWithPval phenomizer = new PhenomizerAlgorithmWithPval(
