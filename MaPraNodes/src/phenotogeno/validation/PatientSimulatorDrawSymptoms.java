@@ -4,10 +4,16 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
 
+/** patient simulator that simulates patients with choosing symptoms independtly using the frequency information*/
 public class PatientSimulatorDrawSymptoms extends PatientSimulatorWriteToFile{
 	
+	/** pseudo random number generator */
 	private Random randomNumberGenerator;
-
+	
+	/**
+	 * generates a patient simulator that chooses symptoms according to their frequency
+	 * @param path path to a file to which the patients are written
+	 */
 	public PatientSimulatorDrawSymptoms(String path) {
 		super(path);
 		randomNumberGenerator = new Random();

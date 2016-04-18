@@ -9,6 +9,7 @@ import phenotogeno.io.FileUtilitiesPTG;
 import phenotogeno.validation.DiseaseIterator;
 import phenotogeno.validation.DiseaseIteratorAll;
 import phenotogeno.validation.PatientSimulator;
+import phenotogeno.validation.PatientSimulatorDrawSymptoms;
 import phenotogeno.validation.PatientSimulatorVeryFrequentSymptoms;
 import phenotogeno.validation.PatientSimulatorWriteToFile;
 import phenotogeno.validation.ValidateGeneRanking;
@@ -43,6 +44,10 @@ public class RunValidationPTG {
 		if(mode.equals("veryFreq")){
 			i = new DiseaseIteratorAll();
 			s = new PatientSimulatorVeryFrequentSymptoms(outPatient);
+		}
+		else if(mode.equals("draw")){
+			i = new DiseaseIteratorAll();
+			s = new PatientSimulatorDrawSymptoms(outPatient);
 		}
 		else{
 			throw new Exception("Invalide mode: "+mode+" !" );
