@@ -10,6 +10,7 @@ import phenotogeno.validation.DiseaseIterator;
 import phenotogeno.validation.DiseaseIteratorAll;
 import phenotogeno.validation.PatientSimulator;
 import phenotogeno.validation.PatientSimulatorVeryFrequentSymptoms;
+import phenotogeno.validation.PatientSimulatorWriteToFile;
 import phenotogeno.validation.ValidateGeneRanking;
 
 public class RunValidationPTG {
@@ -53,8 +54,8 @@ public class RunValidationPTG {
 		vgr.simulateAndRank();
 		
 		//end + close simulation -> file handle!!
-		if(s instanceof PatientSimulatorVeryFrequentSymptoms){
-			((PatientSimulatorVeryFrequentSymptoms) s).endSimulation();
+		if(s instanceof PatientSimulatorWriteToFile){
+			((PatientSimulatorWriteToFile) s).endSimulation();
 		}
 	}
 

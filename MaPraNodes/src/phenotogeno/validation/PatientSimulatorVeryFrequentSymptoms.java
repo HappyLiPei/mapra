@@ -2,28 +2,15 @@ package phenotogeno.validation;
 
 import java.util.LinkedList;
 
-import io.FileOutputWriter;
-
 /** does simulation of patients by extracting the very frequent symptoms of a disease as a query*/
-public class PatientSimulatorVeryFrequentSymptoms implements PatientSimulator{
-	
-	/** counter for generating the id of the current patient*/
-	private int currentId;
-	/** writer for file of all generated patients */
-	private FileOutputWriter patientWriter;
+public class PatientSimulatorVeryFrequentSymptoms extends PatientSimulatorWriteToFile{
 	
 	/** 
 	 * generates a PatientSimulator that simulates patients as collection of very frequent weights
 	 * @param path path to the file to which the patients are written
 	 */
 	public PatientSimulatorVeryFrequentSymptoms(String path) {
-		currentId = 0;
-		patientWriter = new FileOutputWriter(path);
-	}
-	
-	/** ends the simulation by closing the writer for the patient file*/
-	public void endSimulation(){
-		patientWriter.closew();
+		super(path);
 	}
 
 	@Override
@@ -39,9 +26,8 @@ public class PatientSimulatorVeryFrequentSymptoms implements PatientSimulator{
 			return null;
 		}
 		
-		SimulatedPatient patient = new SimulatedPatient(currentId+"", diseaseId, query);
-		currentId++;
-		patientWriter.writeFileln(patient.toString());
+		SimulatedPatient patient = new SimulatedPatient(getCurrentId()+"", diseaseId, query);
+		writePatient(patient);
 		
 		return patient;
 	}
