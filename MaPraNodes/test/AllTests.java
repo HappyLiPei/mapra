@@ -2,6 +2,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import geneticnetwork.TestFileParserNetworkScore;
 import io.TestFileUtilities;
 import io.TestIOReaderWriter;
 import metabolites.TestDataTransformerMetabolites;
@@ -67,7 +68,8 @@ import phenotogeno.validation.TestValidationProcedure;
 				TestFileUtilitiesMetabolites.class,
 				TestDataTransformerMetabolites.class,
 				TestMetaboliteScoringInReference.class,
-				TestScoreMetabolites.class})
+				TestScoreMetabolites.class,
+				TestFileParserNetworkScore.class })
 public class AllTests {
 
 }
