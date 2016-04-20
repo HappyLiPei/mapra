@@ -48,10 +48,6 @@ public class FileUtilitiesGeneticNetwork {
 		return geneToScore;
 	}
 	
-	//reads in gene network as collection of edges (with or without weight)
-	//column 0: gene0, column 1: gene1, column 2: weight (optional)
-	//return array of arrays of length 2 or 3 depending if edges are used
-	
 	/**
 	 * reads in an unweighted or weighted, undirected genetic network as a collection of edges,
 	 * the file is tab-separated, has several comment lines at the beginning (#) and one table header,
@@ -62,7 +58,7 @@ public class FileUtilitiesGeneticNetwork {
 	 * @param weightedEdges
 	 * 		flag to indicate if the network is weighted, if true the method reads in the weights of the network
 	 * @return
-	 * 		Stirng array of arrays with 2 ( if !weightedEdges) or 3 (if weightedEdges) containing node1 (position 0),
+	 * 		String array of arrays with 2 ( if !weightedEdges) or 3 (if weightedEdges) containing node1 (position 0),
 	 * 		node 2 (position 1) and weight (optional position 2) of each edge
 	 */
 	public static String[][] readEdges(String path, boolean weightedEdges){
