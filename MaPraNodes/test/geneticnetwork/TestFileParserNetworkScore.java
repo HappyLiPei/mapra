@@ -59,7 +59,7 @@ public class TestFileParserNetworkScore {
 		String[] node2 = new String []{"MTG2", "MTG3", "MTG4", "MTG5", "MTG3", "MTG6", "MTG10", "MTG11", "MTG11",
 				"MTG14", "MTG15", "MTG16", "MTG12", "MTG13", "MTG17", "MTG60", "MTG18", "MTG61", "MTG20", "MTG61"};
 		
-		assertEquals("Number of edges in "+mode+" netowrk is incorrect", node1.length, edges.length);
+		assertEquals("Number of edges in "+mode+" network is incorrect", node1.length, edges.length);
 		for(int i=0; i<node1.length; i++){
 			assertEquals("Edge "+(i+1)+" node 1 of "+mode+" network is incorrect", node1[i], edges[i][0]);
 			assertEquals("Edge "+(i+1)+" node 2 of "+mode+" network is incorrect", node2[i], edges[i][1]);
