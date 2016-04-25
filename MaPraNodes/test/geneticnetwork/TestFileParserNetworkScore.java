@@ -43,8 +43,8 @@ public class TestFileParserNetworkScore {
 				"../TestData/GeneticNetwork/MTGNetwork.txt", true);
 		checkTopology(edgesWeighted, "weighted");
 		
-		String [] weights = new String []{"2", "2", "2", "2", "2", "2", "2", "4", "1", "1", "1", "1",
-				"3", "2", "10", "5", "4", "1", "7", "4"};
+		String [] weights = new String []{"2", "2", "2", "2", "2", "2", "4", "4", "1", "1", "1", "1",
+				"3", "2", "7", "6", "3", "1", "7", "4"};
 		for(int i=0; i<weights.length; i++){
 			assertEquals("Edge "+(i+1)+" has wrong weight", weights[i], edgesWeighted[i][2]);
 		}

@@ -17,7 +17,7 @@ public class TestEdges {
 			"MTG60"};
 	private String[] node2 = new String []{"MTG2", "MTG3", "MTG4", "MTG5", "MTG3", "MTG6", "MTG10", "MTG11", "MTG11",
 			"MTG14", "MTG15", "MTG16", "MTG12", "MTG13", "MTG17", "MTG60", "MTG18", "MTG61", "MTG20", "MTG61"};
-	private int [] weights = new int []{2, 2, 2, 2, 2, 2, 2, 4, 1, 1, 1, 1, 3, 2, 10, 5, 4, 1, 7, 4};
+	private int [] weights = new int []{2, 2, 2, 2, 2, 2, 4, 4, 1, 1, 1, 1, 3, 2, 7, 6, 3, 1, 7, 4};
 	
 	private Edge [] array;
 	

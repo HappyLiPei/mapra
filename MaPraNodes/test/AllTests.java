@@ -4,6 +4,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import geneticnetwork.TestEdges;
 import geneticnetwork.TestFileParserNetworkScore;
+import geneticnetwork.TestMatrixVectorBuilder;
 import io.TestFileUtilities;
 import io.TestIOReaderWriter;
 import metabolites.TestDataTransformerMetabolites;
@@ -71,7 +72,8 @@ import phenotogeno.validation.TestValidationProcedure;
 				TestMetaboliteScoringInReference.class,
 				TestScoreMetabolites.class,
 				TestFileParserNetworkScore.class,
-				TestEdges.class })
+				TestEdges.class,
+				TestMatrixVectorBuilder.class })
 public class AllTests {
 
 }
