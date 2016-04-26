@@ -3,6 +3,25 @@ package phenotogeno.algo;
 import java.util.Comparator;
 
 public class ScoredGeneComparator implements Comparator<ScoredGene>{
+	
+	/** number of decimal places to consider for equality -> assume data is rounded to that number of decimal places*/
+	private int decimalplaces;
+	
+	/**
+	 * generates a comparator for scored genes considering 5 decimal places of the score
+	 */
+	public ScoredGeneComparator() {
+		decimalplaces=5;
+	}
+	
+	/**
+	 * generates a comparator for scored genes considering a defined number decimal places of the score
+	 * @param decimalplaces decimal places of the score to consider
+	 */
+	public ScoredGeneComparator(int decimalplaces){
+		this.decimalplaces = decimalplaces;
+	}
+	
 
 	@Override
 	/**
@@ -17,9 +36,9 @@ public class ScoredGeneComparator implements Comparator<ScoredGene>{
 	 */
 	public int compare(ScoredGene o1, ScoredGene o2) {
 		
-		//consider 5 decimal places of the socres
-		int score1 = (int) Math.round(o1.getScore()*1E5);
-		int score2 = (int) Math.round(o2.getScore()*1E5);
+		//consider 5 decimal places of the scores
+		int score1 = (int) Math.round(o1.getScore()*Math.pow(10,decimalplaces));
+		int score2 = (int) Math.round(o2.getScore()*Math.pow(10,decimalplaces));
 		
 		//if scores differ in less than 5 decimal places -> consider them as equal
 		if(score1==score2){
@@ -42,8 +61,8 @@ public class ScoredGeneComparator implements Comparator<ScoredGene>{
 	public int compareWithoutID(ScoredGene g1, ScoredGene g2){
 		
 		//consider 5 decimal places of the socres
-		int score1 = (int) Math.round(g1.getScore()*1E5);
-		int score2 = (int) Math.round(g2.getScore()*1E5);
+		int score1 = (int) Math.round(g1.getScore()*Math.pow(10,decimalplaces));
+		int score2 = (int) Math.round(g2.getScore()*Math.pow(10,decimalplaces));
 		
 		//if scores differ in less than 5 decimal places -> consider them as equal
 		return -Integer.compare(score1, score2);
