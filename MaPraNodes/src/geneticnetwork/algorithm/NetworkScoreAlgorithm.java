@@ -42,7 +42,8 @@ public class NetworkScoreAlgorithm {
 	
 	//TODO: rounding?!
 	/**
-	 * auxiliary method for transforming the output of RandomWalkWithRestart into a list of scored genes
+	 * auxiliary method for transforming the output of RandomWalkWithRestart into a list of scored genes,
+	 * the method rounds the scores up to 10 decimal places and sorts the genes according to score
 	 * @param res vector returned by the RandomWalkWithRestart
 	 * @return list of ScoredGene objects sorted according to the score within the vector res
 	 */

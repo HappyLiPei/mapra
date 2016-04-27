@@ -10,12 +10,12 @@ import org.junit.Test;
 import geneticnetwork.algorithm.DataTransformerGeneticNetwork;
 import geneticnetwork.algorithm.MatrixVectorBuilder;
 import geneticnetwork.algorithm.NetworkScoreAlgorithm;
+import geneticnetwork.algorithm.NetworkScoreDriver;
 import geneticnetwork.algorithm.RandomWalkWithRestart;
 import geneticnetwork.io.FileUtilitiesGeneticNetwork;
 import io.FileInputReader;
 import phenotogeno.algo.ScoredGene;
 
-//TODO: run tests with driver!
 public class TestGeneticNetworkScore {
 	
 	private String [][] networkFromFile;
@@ -45,6 +45,33 @@ public class TestGeneticNetworkScore {
 	public void testCase3WithoutDriver() {
 		prepareDataForCase(3);
 		NetworkScoreAlgorithm n3= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestart(2, 0.2));
+		LinkedList<ScoredGene> res3 = n3.runNetworkScoreAlgorithm();
+		compareToExpected(res3);
+	}
+	
+	@Test
+	public void testCase1WithDriver(){
+		prepareDataForCase(1);
+		NetworkScoreDriver n1= new NetworkScoreDriver(networkFromFile, scoresFromFile);
+		n1.SetNetworkScoreAlgorithm(0.9, 3);
+		LinkedList<ScoredGene> res1 = n1.runNetworkScoreAlgorithm();
+		compareToExpected(res1);
+	}
+	
+	@Test
+	public void testCase2WithDriver(){
+		prepareDataForCase(2);
+		NetworkScoreDriver n2= new NetworkScoreDriver(networkFromFile, scoresFromFile);
+		n2.SetNetworkScoreAlgorithm(0.5, 1);
+		LinkedList<ScoredGene> res2 = n2.runNetworkScoreAlgorithm();
+		compareToExpected(res2);
+	}
+	
+	@Test
+	public void testCase3WithDriver(){
+		prepareDataForCase(3);
+		NetworkScoreDriver n3= new NetworkScoreDriver(networkFromFile, scoresFromFile);
+		n3.SetNetworkScoreAlgorithm(0.2, 2);
 		LinkedList<ScoredGene> res3 = n3.runNetworkScoreAlgorithm();
 		compareToExpected(res3);
 	}
