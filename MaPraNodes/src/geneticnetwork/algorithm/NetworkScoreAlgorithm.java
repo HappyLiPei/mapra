@@ -11,18 +11,26 @@ import phenotogeno.algo.ScoredGeneComparator;
 
 public class NetworkScoreAlgorithm {
 	
+	/** matrix vector builder object that provides the data structures for the random walk with restart*/
 	private MatrixVectorBuilder mvb;
+	/** random walk with restart object that performs the actual calculations*/
 	private RandomWalkWithRestart rwwr;
 	
-	//pass onto mvb and rwwr
+	/**
+	 * generates a NetworkScoreAlgorithm
+	 * @param mvb MatrixVectorBuilder that generates matrix and vector
+	 * @param rwwr RandwomWalkWithRestart for the actual calculations
+	 */
 	public NetworkScoreAlgorithm(MatrixVectorBuilder mvb, RandomWalkWithRestart rwwr){
 		this.mvb = mvb;
 		this.rwwr=rwwr;
 	}
 	
-	//TODO: implement and test
-	//coordinate action of mvb and rwwr
-	public LinkedList<ScoredGene> runNetowrkScoreAlgorithm(){
+	/**
+	 * method to run the whole network score procedure
+	 * @return a list of ScoredGene objects
+	 */
+	public LinkedList<ScoredGene> runNetworkScoreAlgorithm(){
 		
 		rwwr.setVector(mvb.getRestartVector());
 		rwwr.setMatrix(mvb.getStochasticMatrix());
@@ -32,7 +40,12 @@ public class NetworkScoreAlgorithm {
 		return generateResult(res);
 	}
 	
-	//TODO: rounding of decimal places->10??! encoding as integer??
+	//TODO: rounding?!
+	/**
+	 * auxiliary method for transforming the output of RandomWalkWithRestart into a list of scored genes
+	 * @param res vector returned by the RandomWalkWithRestart
+	 * @return list of ScoredGene objects sorted according to the score within the vector res
+	 */
 	private LinkedList<ScoredGene> generateResult(ArrayRealVector res){
 		
 		LinkedList<ScoredGene> geneList = new LinkedList<ScoredGene>();
