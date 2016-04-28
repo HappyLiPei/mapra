@@ -7,6 +7,7 @@ import geneticnetwork.TestFileParserNetworkScore;
 import geneticnetwork.TestGeneticNetworkScore;
 import geneticnetwork.TestMatrixVectorBuilder;
 import geneticnetwork.TestRandomWalk;
+import geneticnetwork.TestVector;
 import io.TestFileUtilities;
 import io.TestIOReaderWriter;
 import metabolites.TestDataTransformerMetabolites;
@@ -75,6 +76,7 @@ import phenotogeno.validation.TestValidationProcedure;
 				TestScoreMetabolites.class,
 				TestFileParserNetworkScore.class,
 				TestEdges.class,
+				TestVector.class, 
 				TestMatrixVectorBuilder.class,
 				TestRandomWalk.class,
 				TestGeneticNetworkScore.class })
