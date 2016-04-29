@@ -4,8 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
-
+import geneticnetwork.datastructures.Vector;
 import phenotogeno.algo.ScoredGene;
 import phenotogeno.algo.ScoredGeneComparator;
 
@@ -35,7 +34,7 @@ public class NetworkScoreAlgorithm {
 		rwwr.setVector(mvb.getRestartVector());
 		rwwr.setMatrix(mvb.getStochasticMatrix());
 		
-		ArrayRealVector res = rwwr.doRandomWalkWithRestart();
+		Vector res = rwwr.doRandomWalkWithRestart();
 		
 		return generateResult(res);
 	}
@@ -47,7 +46,7 @@ public class NetworkScoreAlgorithm {
 	 * @param res vector returned by the RandomWalkWithRestart
 	 * @return list of ScoredGene objects sorted according to the score within the vector res
 	 */
-	private LinkedList<ScoredGene> generateResult(ArrayRealVector res){
+	private LinkedList<ScoredGene> generateResult(Vector res){
 		
 		LinkedList<ScoredGene> geneList = new LinkedList<ScoredGene>();
 		HashMap<String, Integer> idsToPos = mvb.getIdPositionMap();

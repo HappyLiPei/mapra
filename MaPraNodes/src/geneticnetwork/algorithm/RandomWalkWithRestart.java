@@ -1,14 +1,14 @@
 package geneticnetwork.algorithm;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.OpenMapRealMatrix;
+import geneticnetwork.datastructures.SparseMatrix;
+import geneticnetwork.datastructures.Vector;
 
 public class RandomWalkWithRestart {
 	
-	/** transition matrix */
-	private OpenMapRealMatrix matrix;
+	/** transition matrix (sparse format) */
+	private SparseMatrix matrix;
 	/** intial probability distribution and restart vector */
-	private ArrayRealVector start;
+	private Vector start;
 	/** number of iterations = steps within the networks*/
 	private int numberOfIterations;
 	/** probability of restart = part of the original score that is kept*/
@@ -28,7 +28,7 @@ public class RandomWalkWithRestart {
 	 * adds a transition matrix to this RandomWalkWithRestart, the matrix specified the network structure and edge weights
 	 * @param matrix column-normalized (stochastic) transition matrix for the random walk with restart
 	 */
-	public void setMatrix(OpenMapRealMatrix matrix){
+	public void setMatrix(SparseMatrix matrix){
 		this.matrix = matrix;
 	}
 	
@@ -37,7 +37,7 @@ public class RandomWalkWithRestart {
 	 * each gene
 	 * @param vector normalized vector representing a probability distribution
 	 */
-	public void setVector(ArrayRealVector vector){
+	public void setVector(Vector vector){
 		this.start=vector;
 	}
 	
@@ -45,23 +45,25 @@ public class RandomWalkWithRestart {
 	 * performs the random walk with restart on the specified matrix and restart vector	
 	 * @return a vector representing the final probability distribution after the walk (final gene scores)
 	 */
-	public ArrayRealVector doRandomWalkWithRestart(){
+	public Vector doRandomWalkWithRestart(){
 		
-		//restartTerm = copy of start *(r-1)
-		ArrayRealVector restartTerm = (ArrayRealVector) start.mapMultiply(restartProbability);
-		ArrayRealVector current = start;
+		//formula: v(t+1)=(r-1)*Matrix*v(t)+r*v(0)
 		
-		//TODO: iterate until convergence??
+		//restartTerm = r*v(0) -> no modification of v(0)
+		Vector restartTerm = start.multiplyScalar(restartProbability);
+		//current = v(t) -> init with v(0)
+		Vector current = start;
+		
+		//TODO: iterate until convergence?? 
 		for(int iteration=1; iteration<=numberOfIterations; iteration++){
-			//matrix*vector -> new copy of the vector
-			current = (ArrayRealVector) matrix.operate(current);
-			//do multiplication in places
-			current.mapMultiplyToSelf(1-restartProbability);
-			//TODO: addition in place
-			current=current.add(restartTerm);
+			//matrix*vector -> new copy of the vector : Matrix*v(t)
+			current = matrix.multiply(current);
+			//do multiplication in place: (1-r)*Matrix*v(t)
+			current.multiplyScalarInPlace(1-restartProbability);
+			//do addition in place: (1-r)*Matrix*v(t)+r*v(0)
+			current.addVectorInPlace(restartTerm);
 		}
 		return current;
-		
 	}
 
 }

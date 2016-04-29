@@ -2,13 +2,14 @@ package geneticnetwork.algorithm;
 
 import java.util.HashMap;
 
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.OpenMapRealMatrix;
+
 import geneticnetwork.datastructures.Edge;
 import geneticnetwork.datastructures.ScoredGenes;
-import geneticnetwork.datastructures.SparseMatrix;
-import geneticnetwork.datastructures.Vector;
 
-/** MatrixVectorBuilder using data structures that are optimized for random walk with restart*/
-public class MatrixVectorBuilder {
+/** MatrixVectorBuilder using data structures from apache maths library*/
+public class MatrixVectorBuilderOld {
 	
 	/** array of edge objects representing a genetic network */
 	private Edge[] network;
@@ -21,16 +22,16 @@ public class MatrixVectorBuilder {
 	/** mapping gene_id -> position (0-based) in matrix and restartVector for all nodes in the network and the scored genes (union) */
 	private HashMap<String, Integer> positionMap;
 	/** stochastic matrix representing transition probabilities within the network*/
-	private SparseMatrix matrix;
+	private OpenMapRealMatrix matrix;
 	/** probability vector with initial probabilities for each gene */
-	private Vector restartVector;
+	private ArrayRealVector restartVector;
 	
 	/**
 	 * generates a MatrixVectorBuilder object that produces the matrix and the vector for the random walk with restart
 	 * @param network array of edge objects representing an undirected weighted network
 	 * @param scores ScoredGenes object storing the scores obtained from PhenoToGeno
 	 */
-	public MatrixVectorBuilder(Edge [] network, ScoredGenes scores){
+	public MatrixVectorBuilderOld(Edge [] network, ScoredGenes scores){
 		this.network =network;
 		this.scores = scores;
 		this.criticalPosition =-1;
@@ -47,8 +48,8 @@ public class MatrixVectorBuilder {
 	 * @param positionMap position map (gene id->position in matrix) for the precalculated matrix
 	 * @param matrix matrix calculated by a different MatrixVectorBuilder object
 	 */
-	public MatrixVectorBuilder(ScoredGenes scores, int criticalPosition, HashMap<String, Integer> positionMap,
-				SparseMatrix matrix){
+	public MatrixVectorBuilderOld(ScoredGenes scores, int criticalPosition, HashMap<String, Integer> positionMap,
+				OpenMapRealMatrix matrix){
 		//network is not needed
 		this.network =null;
 		// data calculated by previous object
@@ -86,7 +87,7 @@ public class MatrixVectorBuilder {
 	 * retrieves the stochastic matrix (transition matrix) for the random walk with restart
 	 * @return matrix object with transition probabilites
 	 */
-	public SparseMatrix getStochasticMatrix(){
+	public OpenMapRealMatrix getStochasticMatrix(){
 		if(positionMap==null){
 			buildPositionMap();
 		}
@@ -100,7 +101,7 @@ public class MatrixVectorBuilder {
 	 * retrieves the vector with initial probabilities (elements sum up to 1)
 	 * @return vector with the initial probabilites
 	 */
-	public Vector getRestartVector(){
+	public ArrayRealVector getRestartVector(){
 		if(positionMap==null){
 			buildPositionMap();
 		}
@@ -144,14 +145,12 @@ public class MatrixVectorBuilder {
 	
 	/**
 	 * builds the transition matrix for the random walk with restart,
-	 * matrix is column-normalized (columns sum up to one) and represents transition probabilities within
+	 * matrix is column-normlized (columns sum up to one) and represents transition probabilities within
 	 * the network
 	 */
 	private void buildStochasticMatrix(){
 		
-		//number of entries in matrix= 2*#edges + #singletons
-		int nonzeroEntries = 2*network.length+positionMap.size()-criticalPosition;
-		matrix = new SparseMatrix(positionMap.size(), positionMap.size(), nonzeroEntries);
+		matrix = new OpenMapRealMatrix(positionMap.size(), positionMap.size());
 		
 		//get weight sum for each column
 		int [] weightSumPerCol = new int [criticalPosition];
@@ -168,25 +167,25 @@ public class MatrixVectorBuilder {
 			int weight = e.getWeight();
 			int pos1 = positionMap.get(e.getStartNode());
 			int pos2 = positionMap.get(e.getEndNode());
-			matrix.addEntry(pos1, pos2, (double) weight/weightSumPerCol[pos2]);
-			matrix.addEntry(pos2, pos1, (double) weight/weightSumPerCol[pos1]);
+			matrix.setEntry(pos1, pos2, (double) weight/weightSumPerCol[pos2]);
+			matrix.setEntry(pos2, pos1, (double) weight/weightSumPerCol[pos1]);
 		}
 		
 		//add singleton nodes with self loop
 		for(int i=criticalPosition; i<positionMap.size(); i++){
-			matrix.addEntry(i, i, 1);
+			matrix.setEntry(i, i, 1);
 		}
 
 	}
 	
 	/**
-	 * method to generate the vector with the initial probabilities for the random walk with restart,
+	 * method to generate the vector with the initial probabilites for the random walk with restart,
 	 * the entries of the vectors sum up to one, the entries are the normalized scores from ScoredGenes
 	 */
 	private void buildStartVector(){
 		
 		//initializes vector with all 0 entries
-		restartVector = new Vector(positionMap.size());
+		restartVector = new ArrayRealVector(positionMap.size());
 		
 		//calculate sum of scores
 		double sum = 0;

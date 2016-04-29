@@ -96,7 +96,7 @@ public class TestMatrixVectorBuilder {
 	}
 	
 	private void checkRestartVector(MatrixVectorBuilder mvb){
-		assertArrayEquals("Restart vector is incorrect", restartVec ,mvb.getRestartVector().toArray(), 1E-10);
+		assertArrayEquals("Restart vector is incorrect", restartVec ,mvb.getRestartVector().getData(), 1E-10);
 	}
 	
 	private void checkMatrix(MatrixVectorBuilder mvb){
