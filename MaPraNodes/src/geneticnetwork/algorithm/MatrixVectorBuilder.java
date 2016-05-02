@@ -43,8 +43,8 @@ public class MatrixVectorBuilder {
 	 * constructor for generating a MatrixVectorBuilder using a pre-calculated matrix (from another MatrixVectorBuilder)
 	 * with a different scoring result from PhenoToGeno (on the same set of genes!!!) 
 	 * @param scores ScoredGenes object storing the scores obtained from PhenoToGeno
-	 * @param criticalPosition critical position within the precalculated matrix (position of the first singleton node)
-	 * @param positionMap position map (gene id->position in matrix) for the precalculated matrix
+	 * @param criticalPosition critical position within the pre-calculated matrix (position of the first singleton node)
+	 * @param positionMap position map (gene id->position in matrix) for the pre-calculated matrix
 	 * @param matrix matrix calculated by a different MatrixVectorBuilder object
 	 */
 	public MatrixVectorBuilder(ScoredGenes scores, int criticalPosition, HashMap<String, Integer> positionMap,
@@ -61,7 +61,7 @@ public class MatrixVectorBuilder {
 	}
 	
 	/**
-	 * retrieves the cricital position (position of first singleton node within the restart vector / transition matrix) 
+	 * retrieves the critical position (position of first singleton node within the restart vector / transition matrix) 
 	 * @return critical position
 	 */
 	public int getCriticalPosition(){
@@ -84,7 +84,7 @@ public class MatrixVectorBuilder {
 	
 	/**
 	 * retrieves the stochastic matrix (transition matrix) for the random walk with restart
-	 * @return matrix object with transition probabilites
+	 * @return matrix object with transition probabilities
 	 */
 	public SparseMatrix getStochasticMatrix(){
 		if(positionMap==null){
@@ -98,7 +98,7 @@ public class MatrixVectorBuilder {
 	
 	/**
 	 * retrieves the vector with initial probabilities (elements sum up to 1)
-	 * @return vector with the initial probabilites
+	 * @return vector with the initial probabilities
 	 */
 	public Vector getRestartVector(){
 		if(positionMap==null){

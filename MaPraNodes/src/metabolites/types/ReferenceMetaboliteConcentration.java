@@ -92,8 +92,8 @@ public class ReferenceMetaboliteConcentration extends ReferenceMetabolite {
 			double zScoreSigned = (double) (measurement-distribution[0])/distribution[1];
 			double zScoreUnsigned = Math.abs(zScoreSigned);
 			NormalDistribution nd = new NormalDistribution(0, 1);
-			//calculate probability of observing the Z score
-			double probability = 1-nd.cumulativeProbability(zScoreUnsigned);
+			//calculate probability of observing a more extreme Z score -> signed Z score but 2-tailed p value
+			double probability = 2*(1-nd.cumulativeProbability(zScoreUnsigned));
 			//round score and probability
 			if(Double.isFinite(zScoreSigned) && !Double.isNaN(zScoreSigned)){
 				zScoreSigned = Math.round(zScoreSigned*100)/100d;

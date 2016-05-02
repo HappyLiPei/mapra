@@ -70,11 +70,11 @@ public class TestMetaboliteScoringInReference {
 		 assertEquals("Type of ScoredMetabolite (input: NaN , 3) is incorrect","binary" ,sm.getType());
 		 assertEquals("Score of ScoredMetabolite (input: NaN , 3) is inccorect", 0, sm.getScore(), 1E-10);
 		 assertEquals("Porbability of ScoredMetabolite (input: NaN , 3) is incorrect", 0.112, sm.getProbability(), 1E-5);
-		 //all probabilities calculated with R: 1-pnorm(z,0,1)
+		 //all probabilities calculated with R: 2*(1-pnorm(|z|,0,1))
 		 sm =c.scoreMeasurement(1, 3);
 		 assertEquals("Type of ScoredMetabolite (input: 1 , 3) is incorrect","concentration" ,sm.getType());
 		 assertEquals("Score of ScoredMetabolite (input: 1 , 3) is inccorect", -2, sm.getScore(), 1E-10);
-		 assertEquals("Porbability of ScoredMetabolite (input: 1 , 3) is incorrect", 0.02275013, sm.getProbability(), 1E-5);
+		 assertEquals("Porbability of ScoredMetabolite (input: 1 , 3) is incorrect", 0.04550026, sm.getProbability(), 1E-5);
 		 sm =c.scoreMeasurement(1, 4);
 		 assertEquals("Type of ScoredMetabolite (input: 1 , 4) is incorrect","concentration" ,sm.getType());
 		 assertEquals("Score of ScoredMetabolite (input: 1 , 4) is inccorect", 30, sm.getScore(), 1E-10);
@@ -82,11 +82,11 @@ public class TestMetaboliteScoringInReference {
 		 sm =c.scoreMeasurement(1, 5);
 		 assertEquals("Type of ScoredMetabolite (input: 1 , 5) is incorrect","concentration" ,sm.getType());
 		 assertEquals("Score of ScoredMetabolite (input: 1 , 5) is inccorect", 2.5, sm.getScore(), 1E-10);
-		 assertEquals("Porbability of ScoredMetabolite (input: 1 , 5) is incorrect", 0.006209665, sm.getProbability(), 1E-5);
+		 assertEquals("Porbability of ScoredMetabolite (input: 1 , 5) is incorrect", 0.01241933, sm.getProbability(), 1E-5);
 		 sm =c.scoreMeasurement(1, 6);
 		 assertEquals("Type of ScoredMetabolite (input: 1 , 6) is incorrect","concentration" ,sm.getType());
 		 assertEquals("Score of ScoredMetabolite (input: 1 , 6) is inccorect", 0, sm.getScore(), 1E-10);
-		 assertEquals("Porbability of ScoredMetabolite (input: 1 , 6) is incorrect", 0.5, sm.getProbability(), 1E-5);
+		 assertEquals("Porbability of ScoredMetabolite (input: 1 , 6) is incorrect", 1, sm.getProbability(), 1E-5);
 		 
 		 //test special cases -> should actually never happen on prepared real data!
 		 sm =c.scoreMeasurement(1, 1);
