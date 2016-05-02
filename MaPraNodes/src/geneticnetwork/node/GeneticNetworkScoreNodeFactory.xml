@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knimeNode icon="./default.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>PhenoToGenoNode</name>
+    <name>GeneticNetworkScore</name>
     
     <shortDescription>
         
@@ -10,8 +10,9 @@
         <intro>Insert long description here...</intro>
         
         
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
+        <option name="Use Weighted Edges">description of first option</option>
+        <option name="Restart Probability">description of first option</option>
+        <option name="Number of Iterations">description of first option</option>
         <!-- possibly more options that can also be grouped by tabs -->
         <!--
         <tab name="Standard Options">
@@ -25,10 +26,9 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Phenomizer"> Phenomizer ...Description of first input port...</inPort>
-        <inPort index="1" name="Disease Gene Association"> Disease Gene Association... Description of second input port...</inPort>
-        <inPort index="2" name="All Genes"> All Genes... Description of third input port...</inPort>
-        <outPort index="0" name="Gene Scores">Scored Genes ...Description of first output port...</outPort>
+        <inPort index="0" name="Scored Genes"> Scored Genes ...Description of first input port...</inPort>
+        <inPort index="1" name="Network">Network ...Description of second input port...</inPort>
+        <outPort index="0" name="Gene Scores"> Gene Scores ...Description of first output port...</outPort>
     </ports>    
 
 </knimeNode>

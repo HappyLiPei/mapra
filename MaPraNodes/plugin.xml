@@ -7,6 +7,7 @@
 		<node category-path="/PhenoNodes" factory-class="phenomizertonetwork.node.PhenomizerToNetworkNodeFactory" id="phenomizertonetwork.PhenomizerToNetworkNodeFactory"/>
    <node category-path="/" factory-class="phenotogeno.node.PhenoToGenoNodeNodeFactory" id="phenotogeno.node.PhenoToGenoNodeNodeFactory"/>
 <node category-path="/" factory-class="metabolites.node.ScoreMetabolitesNodeFactory" id="metabolites.node.ScoreMetabolitesNodeFactory"/>
+<node category-path="/" factory-class="geneticnetwork.node.GeneticNetworkScoreNodeFactory" id="geneticnetwork.node.GeneticNetworkScoreNodeFactory"/>
 </extension>
 
    <extension point="org.knime.workbench.repository.categories">

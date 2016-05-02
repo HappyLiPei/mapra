@@ -1,4 +1,4 @@
-gene1	gene2	combined_score
+gene1	gene2	weight
 MTG1	MTG2	2
 MTG1	MTG3	2
 MTG1	MTG4	2

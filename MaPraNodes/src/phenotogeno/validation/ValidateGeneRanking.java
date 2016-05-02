@@ -164,9 +164,5 @@ public class ValidateGeneRanking {
 		fow.closew();
 
 	}
-	
-	//TODO: different patient simulators, write patients to file, one simulator reads from file
-	//TODO: disease iterator -> chooses disease to simulate, e.g. random, all disease, only mito diseases
-
 
 }

@@ -25,10 +25,9 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="In-Port name">Description of first input port...</inPort>
-        <!-- possibly more input ports here-->
-        <outPort index="0" name="Scored Metabolites">Description of first output port...</outPort>
-        <!-- possibly more output ports here-->
+        <inPort index="0" name="Reference">Reference... Description of first input port...</inPort>
+        <inPort index="1" name="Measurement">Measurements from patient ...Description of first input port...</inPort>
+        <outPort index="0" name="Scored Metabolites">Scored Metabolites ...Description of first output port...</outPort>
     </ports>    
     
 </knimeNode>
