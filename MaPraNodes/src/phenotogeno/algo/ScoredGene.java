@@ -39,4 +39,11 @@ public class ScoredGene extends Gene {
 	public String getImportantDiseases(){
 		return this.important_disease_ids;
 	}
+	
+	/**
+	 * generates a string representation of this scored gene consisting of gene id, score and contributors to the score
+	 */
+	public String toString(){
+		return getId()+"\t"+score+"\t"+important_disease_ids;
+	}
 }

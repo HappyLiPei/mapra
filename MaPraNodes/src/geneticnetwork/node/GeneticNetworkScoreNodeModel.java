@@ -2,23 +2,25 @@ package geneticnetwork.node;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
-import org.knime.core.data.DataCell;
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataColumnSpecCreator;
-import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.RowKey;
-import org.knime.core.data.def.DefaultRow;
+import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
+
+import geneticnetwork.algorithm.NetworkScoreDriver;
+import nodeutils.TableFunctions;
+import phenotogeno.algo.ScoredGene;
+import phenotogeno.node.PhenoToGenoNodeNodeModel;
+
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
@@ -79,14 +81,19 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     		new SettingsModelIntegerBounded(CFGKEY_NUMBER_OF_ITERATIONS, DEFAULT_NUMBER_OF_ITERATIONS,
     				MIN_NUMBER_OF_ITERATIONS, MAX_NUMBER_OF_ITERATIONS);
     
-    //input ports
+    //inports
+    /** inport of the table containing the gene scores */
     private static final int INPORT_GENESCORES=0;
+    /** inport of the table containing the genetic network (table of edges)*/
     private static final int INPORT_NETWORK=1;
     
     //column names
-    private static final String NODE1 ="gene1";
-    private static final String NODE2 ="gene2";
-    private static final String EDGEWEIGHT="weight";
+    /** name of the column gene1 = gene id corresponding to a node of the network, the node is end point of an (undirected) edge) */
+    public static final String GENE1 ="gene1";
+    /** name of the column gene2 = gene id corresponding to a node of the network, the node is end point of an (undirected) edge) */
+    public static final String GENE2 ="gene2";
+    /** name of the column edgeweight = column with an integer edge weight for each weight, only if the edge weight option is used*/
+    public static final String EDGEWEIGHT="weight";
 
     /**
      * Constructor for the node model.
@@ -102,51 +109,18 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     @Override
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
-
-        // TODO do something here
-        logger.info("Node Model Stub... this is not yet implemented !");
         
-        System.out.println("Weights "+m_edge_weights.getBooleanValue());
-        System.out.println("Restart probability "+m_restart_probability.getDoubleValue());
-        System.out.println("Iterations "+m_number_of_iterations.getIntValue());
-
+        HashMap<String, Double> scores = GeneticNetworkScoreTableProcessor.
+        		getGeneScores(inData[INPORT_GENESCORES], logger);
+        String [][] network = GeneticNetworkScoreTableProcessor.
+        		getNetworkEdges(inData[INPORT_NETWORK], m_edge_weights.getBooleanValue(), logger);
         
-        // the data table spec of the single output table, 
-        // the table will have three columns:
-        DataColumnSpec[] allColSpecs = new DataColumnSpec[3];
-        allColSpecs[0] = 
-            new DataColumnSpecCreator("Column 0", StringCell.TYPE).createSpec();
-        allColSpecs[1] = 
-            new DataColumnSpecCreator("Column 1", DoubleCell.TYPE).createSpec();
-        allColSpecs[2] = 
-            new DataColumnSpecCreator("Column 2", IntCell.TYPE).createSpec();
-        DataTableSpec outputSpec = new DataTableSpec(allColSpecs);
-        // the execution context will provide us with storage capacity, in this
-        // case a data container to which we will add rows sequentially
-        // Note, this container can also handle arbitrary big data tables, it
-        // will buffer to disc if necessary.
-        BufferedDataContainer container = exec.createDataContainer(outputSpec);
-        // let's add m_count rows to it
-        for (int i = 0; i < 100; i++) {
-            RowKey key = new RowKey("Row " + i);
-            // the cells of the current row, the types of the cells must match
-            // the column spec (see above)
-            DataCell[] cells = new DataCell[3];
-            cells[0] = new StringCell("String_" + i); 
-            cells[1] = new DoubleCell(0.5 * i); 
-            cells[2] = new IntCell(i);
-            DataRow row = new DefaultRow(key, cells);
-            container.addRowToTable(row);
-            
-            // check if the execution monitor was canceled
-            exec.checkCanceled();
-            exec.setProgress(i / (double)100, 
-                "Adding row " + i);
-        }
-        // once we are done, we close the container and return its table
-        container.close();
-        BufferedDataTable out = container.getTable();
-        return new BufferedDataTable[]{out};
+        NetworkScoreDriver driver = new NetworkScoreDriver(network, scores);
+        driver.SetNetworkScoreAlgorithm(m_restart_probability.getDoubleValue(), m_number_of_iterations.getIntValue());
+        LinkedList<ScoredGene> result = driver.runNetworkScoreAlgorithm();
+        
+        BufferedDataTable resTable = GeneticNetworkScoreTableProcessor.generateOutputTable(result, exec);
+        return new BufferedDataTable[]{resTable};
     }
 
     /**
@@ -163,13 +137,22 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     protected DataTableSpec[] configure(final DataTableSpec[] inSpecs)
             throws InvalidSettingsException {
         
-        // TODO: check if user settings are available, fit to the incoming
-        // table structure, and the incoming types are feasible for the node
-        // to execute. If the node can execute in its current state return
-        // the spec of its output data table(s) (if you can, otherwise an array
-        // with null elements), or throw an exception with a useful user message
+    	//check port 0: gene scores from phenotogeno
+    	TableFunctions.checkColumn(inSpecs, INPORT_GENESCORES, PhenoToGenoNodeNodeModel.GENE_ID,
+    			new DataType[]{StringCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_GENESCORES, PhenoToGenoNodeNodeModel.GENE_PROBABILITY,
+    			new DataType[]{DoubleCell.TYPE}, null);
+    	//check port 1: genetic network
+    	TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, GENE1, 
+    			new DataType[]{StringCell.TYPE}, null);
+       	TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, GENE2, 
+    			new DataType[]{StringCell.TYPE}, null);
+       	if(m_edge_weights.getBooleanValue()){
+       		TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, EDGEWEIGHT, new DataType[] {IntCell.TYPE}, 
+       				"Please uncheck the option \"Use Weighted Edges\" in the node dialog or use another network table with edge weights");
+       	}
 
-        return new DataTableSpec[]{null};
+        return new DataTableSpec[]{GeneticNetworkScoreTableProcessor.generateOutputSpec()};
     }
 
     /**
