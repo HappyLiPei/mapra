@@ -123,4 +123,51 @@ public class Vector {
 			}
 		}
 	}
+	
+	/**
+	 * performs subtraction of this vector and the vector v (this-v), both vectors remain unchanged
+	 * @param v vector that is subtracted from this
+	 * @return a new vector object with new vector = this-v
+	 */
+	public Vector subtractVector(Vector v){
+		if(v.getLength()==vector_entries.length){
+			double [] vector_new = new double [vector_entries.length];
+			for(int i=0; i<vector_entries.length; i++){
+				vector_new[i]=vector_entries[i]-v.getEntry(i);
+			}
+			return new Vector(vector_new);
+		}
+		else{
+			return null;
+		}
+	}
+	
+	/**
+	 * subtracts a vector from this object, the operation modifies this vector itself, but vector v of the argument
+	 * remains unchanged: this=this-v
+	 * @param v vector that is subtracted from this
+	 */
+	public void subtractVectorInPlace(Vector v){
+		if(v.getLength()==vector_entries.length){
+			for(int i=0; i<vector_entries.length; i++){
+				vector_entries[i]=vector_entries[i]-v.getEntry(i);
+			}
+		}
+	}
+	
+	/**
+	 * calculates the maximum norm of this vector (max norm = maximum absolute value of the vector elements)  
+	 * @return maximum norm of this vector
+	 */
+	public double calculateMaxNorm(){
+		double max = -1;
+		double cur =1;
+		for(int i=0; i<vector_entries.length; i++){
+			cur = Math.abs(vector_entries[i]);
+			if(cur>max){
+				max= cur;
+			}
+		}
+		return max;
+	}
 }

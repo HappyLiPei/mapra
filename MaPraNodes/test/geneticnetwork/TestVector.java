@@ -89,5 +89,42 @@ public class TestVector {
 		assertArrayEquals("In place addition of vector 2 and 4 is incorrect (dimension mismatch)",
 				vectors[1], vectorobjects[1].getData(), 1E-10); 
 	}
+	
+	@Test
+	public void testSubtraction(){
+		//v1-v2
+		Vector res = vectorobjects[0].subtractVector(vectorobjects[1]);
+		assertArrayEquals("Subtraction vector1-vector2 is incorrect",
+				new double[]{0.99, 4.98, 3.01, -0.98}, res.getData(), 1E-10);
+		//v1-v3
+		res = vectorobjects[0].subtractVector(vectorobjects[2]);
+		assertArrayEquals("Subtraction vector1-vector3 is incorrect",
+				new double[]{1.5, 6.5, 3.1, -0.8}, res.getData(), 1E-10);
+		//v2-v3
+		res = vectorobjects[1].subtractVector(vectorobjects[2]);
+		assertArrayEquals("Subtraction vector2-vector3 is incorrect",
+				new double[]{0.51, 1.52, 0.09, 0.18}, res.getData(), 1E-10);
+		//v1-v4 -> dimension mismatch
+		res = vectorobjects[0].subtractVector(vectorobjects[3]);
+		assertNull("Subtraction of vector 1 and 4 is incorrect (dimension mismatch)", res);
+		//inplace v1-v2
+		vectorobjects[0].subtractVectorInPlace(vectorobjects[1]);
+		assertArrayEquals("In place Subtraction vector1-vector2 is incorrect",
+				new double[]{0.99, 4.98, 3.01, -0.98}, vectorobjects[0].getData(), 1E-10);
+	}
+	
+	@Test
+	public void testMaxNorm(){
+		//v1
+		assertEquals("Max norm of vector 1 is incorrect", 5, vectorobjects[0].calculateMaxNorm(),1E-10);
+		//v2
+		assertEquals("Max norm of vector 2 is incorrect", 0.02, vectorobjects[1].calculateMaxNorm(),1E-10);
+		//v3
+		assertEquals("Max norm of vector 3 is incorrect", 1.5, vectorobjects[2].calculateMaxNorm(),1E-10);
+		//v4
+		assertEquals("Max norm of vector 4 is incorrect", 1, vectorobjects[3].calculateMaxNorm(),1E-10);
+		//special case v=(0)
+		assertEquals("Max norm of 0 vector is incorrect", 0, new Vector(new double[]{0}).calculateMaxNorm(),1E-10);
+	}
 
 }
