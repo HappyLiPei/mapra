@@ -1,5 +1,8 @@
 package geneticnetwork.node;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
@@ -21,8 +24,6 @@ import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
  */
 public class GeneticNetworkScoreNodeDialog extends DefaultNodeSettingsPane {
 	
-	//TODO: choose iteration until convergence
-	
     private final SettingsModelBoolean edge_weights =
     		new SettingsModelBoolean(GeneticNetworkScoreNodeModel.CFGKEY_EDGE_WEIGHTS,
     				GeneticNetworkScoreNodeModel.DEFAULT_EDGE_WEIGHTS);
@@ -38,17 +39,31 @@ public class GeneticNetworkScoreNodeDialog extends DefaultNodeSettingsPane {
     				GeneticNetworkScoreNodeModel.DEFAULT_NUMBER_OF_ITERATIONS,
     				GeneticNetworkScoreNodeModel.MIN_NUMBER_OF_ITERATIONS,
     				GeneticNetworkScoreNodeModel.MAX_NUMBER_OF_ITERATIONS);
+    
+    private final SettingsModelBoolean iteration_convergence =
+    		new SettingsModelBoolean(GeneticNetworkScoreNodeModel.CFGKEY_ITERATION_CONVERGENCE,
+    				GeneticNetworkScoreNodeModel.DEFAULT_ITERATION_CONVERGENCE);
 
     /**
      * New pane for configuring GeneticNetworkScore node dialog.
      */
     protected GeneticNetworkScoreNodeDialog() {
+    	
         super();
+        
         createNewGroup("Network");
         addDialogComponent(new DialogComponentBoolean(edge_weights, "Use Weighted Edges"));
         createNewGroup("Random Walk with Restart");
         addDialogComponent(new DialogComponentNumberEdit(restart_probability, "Restart Probability", 6));
-        addDialogComponent(new DialogComponentNumber(number_of_iterations, "Number of Iterations",1, 6));                    
+        addDialogComponent(new DialogComponentNumber(number_of_iterations, "Number of Iterations",1, 6));  
+        addDialogComponent(new DialogComponentBoolean(iteration_convergence, "Iterate until Convergence"));
+        
+        iteration_convergence.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				number_of_iterations.setEnabled(!iteration_convergence.getBooleanValue());				
+			}
+		});
     }
 }
 

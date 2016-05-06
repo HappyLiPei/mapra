@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Phenomizer for PhenoDis
 Bundle-SymbolicName: phenomizer;singleton:=true
-Bundle-Version: 2.0.2
+Bundle-Version: 2.0.3
 Bundle-ClassPath: phenomizer.jar,
  libs/commons-math3-3.6.1.jar
 Bundle-Activator: phenomizer.node.PhenomizerNodePlugin

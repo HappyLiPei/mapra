@@ -41,8 +41,6 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
 	/** the logger instance for writing to KNIME console and log */
     private static final NodeLogger logger = NodeLogger
             .getLogger(GeneticNetworkScoreNodeModel.class);
-      
-    //TODO: option for iteration until convergence
     
     //weighting
     /** key of the option "edge weights" */
@@ -81,6 +79,15 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     		new SettingsModelIntegerBounded(CFGKEY_NUMBER_OF_ITERATIONS, DEFAULT_NUMBER_OF_ITERATIONS,
     				MIN_NUMBER_OF_ITERATIONS, MAX_NUMBER_OF_ITERATIONS);
     
+    //option for iteration until convergence
+    /** key of the option "iterate until convergence" */
+    static final String CFGKEY_ITERATION_CONVERGENCE = "iteration_convergence";
+    /** default value of the option "iterate until convergence" */
+    static final boolean DEFAULT_ITERATION_CONVERGENCE =false;
+    /** option object (settings model) to choose iteration until convergence*/
+    private final SettingsModelBoolean m_iteration_convergence =
+    		new SettingsModelBoolean(CFGKEY_ITERATION_CONVERGENCE, DEFAULT_ITERATION_CONVERGENCE);
+    
     //inports
     /** inport of the table containing the gene scores */
     private static final int INPORT_GENESCORES=0;
@@ -116,7 +123,8 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
         		getNetworkEdges(inData[INPORT_NETWORK], m_edge_weights.getBooleanValue(), logger);
         
         NetworkScoreDriver driver = new NetworkScoreDriver(network, scores);
-        driver.SetNetworkScoreAlgorithm(m_restart_probability.getDoubleValue(),false, m_number_of_iterations.getIntValue());
+        driver.SetNetworkScoreAlgorithm(m_restart_probability.getDoubleValue(),
+        		m_iteration_convergence.getBooleanValue(), m_number_of_iterations.getIntValue());
         LinkedList<ScoredGene> result = driver.runNetworkScoreAlgorithm();
         
         logger.info("Random Walk finished after "+driver.getNumberOfIterationsDone()+" iterations. "
@@ -167,6 +175,7 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
         m_edge_weights.saveSettingsTo(settings);
         m_restart_probability.saveSettingsTo(settings);
         m_number_of_iterations.saveSettingsTo(settings);
+        m_iteration_convergence.saveSettingsTo(settings);
     }
 
     /**
@@ -179,6 +188,7 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
         m_edge_weights.loadSettingsFrom(settings);
         m_restart_probability.loadSettingsFrom(settings);
         m_number_of_iterations.loadSettingsFrom(settings);
+        m_iteration_convergence.loadSettingsFrom(settings);
     }
 
     /**
@@ -191,6 +201,7 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
         m_edge_weights.validateSettings(settings);
         m_restart_probability.validateSettings(settings);
         m_number_of_iterations.validateSettings(settings);
+        m_iteration_convergence.validateSettings(settings);
     }
     
     /**
