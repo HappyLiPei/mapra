@@ -19,8 +19,6 @@ import phenotogeno.algo.ScoredGene;
 
 public class TestGeneticNetworkScore {
 	
-	//TODO:test iteration until convergence
-	
 	private String [][] networkFromFile;
 	private HashMap<String, Double> scoresFromFile;
 	
@@ -80,7 +78,7 @@ public class TestGeneticNetworkScore {
 	public void testCase1WithDriver(){
 		prepareDataForCase(1);
 		NetworkScoreDriver n1= new NetworkScoreDriver(networkFromFile, scoresFromFile);
-		n1.SetNetworkScoreAlgorithm(0.9, 3);
+		n1.SetNetworkScoreAlgorithm(0.9, false, 3);
 		LinkedList<ScoredGene> res1 = n1.runNetworkScoreAlgorithm();
 		compareToExpected(res1);
 	}
@@ -89,7 +87,7 @@ public class TestGeneticNetworkScore {
 	public void testCase2WithDriver(){
 		prepareDataForCase(2);
 		NetworkScoreDriver n2= new NetworkScoreDriver(networkFromFile, scoresFromFile);
-		n2.SetNetworkScoreAlgorithm(0.5, 1);
+		n2.SetNetworkScoreAlgorithm(0.5, false, 1);
 		LinkedList<ScoredGene> res2 = n2.runNetworkScoreAlgorithm();
 		compareToExpected(res2);
 	}
@@ -98,9 +96,36 @@ public class TestGeneticNetworkScore {
 	public void testCase3WithDriver(){
 		prepareDataForCase(3);
 		NetworkScoreDriver n3= new NetworkScoreDriver(networkFromFile, scoresFromFile);
-		n3.SetNetworkScoreAlgorithm(0.2, 2);
+		n3.SetNetworkScoreAlgorithm(0.2, false, 2);
 		LinkedList<ScoredGene> res3 = n3.runNetworkScoreAlgorithm();
 		compareToExpected(res3);
+	}
+	
+	@Test
+	public void testCase4WithDriver(){
+		prepareDataForCase(4);
+		NetworkScoreDriver n4= new NetworkScoreDriver(networkFromFile, scoresFromFile);
+		n4.SetNetworkScoreAlgorithm(0.9, true, -1);
+		LinkedList<ScoredGene> res4 = n4.runNetworkScoreAlgorithm();
+		compareToExpected(res4);
+	}
+	
+	@Test
+	public void testCase5WithDriver(){
+		prepareDataForCase(5);
+		NetworkScoreDriver n5= new NetworkScoreDriver(networkFromFile, scoresFromFile);
+		n5.SetNetworkScoreAlgorithm(0.5, true, -1);
+		LinkedList<ScoredGene> res5 = n5.runNetworkScoreAlgorithm();
+		compareToExpected(res5);
+	}
+	
+	@Test
+	public void testCase6WithDriver(){
+		prepareDataForCase(6);
+		NetworkScoreDriver n6= new NetworkScoreDriver(networkFromFile, scoresFromFile);
+		n6.SetNetworkScoreAlgorithm(0.2, true, -1);
+		LinkedList<ScoredGene> res6 = n6.runNetworkScoreAlgorithm();
+		compareToExpected(res6);
 	}
 	
 	private void prepareDataForCase(int testCase){

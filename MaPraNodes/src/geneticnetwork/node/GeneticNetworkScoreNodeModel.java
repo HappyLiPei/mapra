@@ -42,7 +42,7 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     private static final NodeLogger logger = NodeLogger
             .getLogger(GeneticNetworkScoreNodeModel.class);
       
-    //TODO: option iterate until convergence???
+    //TODO: option for iteration until convergence
     
     //weighting
     /** key of the option "edge weights" */
@@ -116,8 +116,11 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
         		getNetworkEdges(inData[INPORT_NETWORK], m_edge_weights.getBooleanValue(), logger);
         
         NetworkScoreDriver driver = new NetworkScoreDriver(network, scores);
-        driver.SetNetworkScoreAlgorithm(m_restart_probability.getDoubleValue(), m_number_of_iterations.getIntValue());
+        driver.SetNetworkScoreAlgorithm(m_restart_probability.getDoubleValue(),false, m_number_of_iterations.getIntValue());
         LinkedList<ScoredGene> result = driver.runNetworkScoreAlgorithm();
+        
+        logger.info("Random Walk finished after "+driver.getNumberOfIterationsDone()+" iterations. "
+        		+ "Convergence is "+driver.getConvergenceNorm()+".");
         
         BufferedDataTable resTable = GeneticNetworkScoreTableProcessor.generateOutputTable(result, exec);
         return new BufferedDataTable[]{resTable};

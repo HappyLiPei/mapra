@@ -31,20 +31,25 @@ public class NetworkScoreDriver {
 		this.scores_raw = scores_raw;
 	}
 	
-	//TODO: adapt to run until convergence
 	/**
-	 * method to set the parameters for the network score algorith,
+	 * method to set the parameters for the network score algorithm,
 	 * @param restart fraction of the original scores that is kept (restart probability) 
+	 * @param convergence flag to indicate if the random walk is executed until convergence or for a fixed number of steps
 	 * @param iterations maximum distance of nodes to consider (number of iterations in random walk) 
 	 */
-	public void SetNetworkScoreAlgorithm(double restart, int iterations){
+	public void SetNetworkScoreAlgorithm(double restart, boolean convergence, int iterations){
 		
 		DataTransformerGeneticNetwork dt = new DataTransformerGeneticNetwork();
 		Edge[] network= dt.transformEdges(network_raw);
 		ScoredGenes scores =dt.transformGeneScores(scores_raw);
 		builder = new MatrixVectorBuilder(network, scores);
 		
-		rwwr = new RandomWalkWithRestartFixedIterations(restart, iterations);
+		if(!convergence){
+			rwwr = new RandomWalkWithRestartFixedIterations(restart, iterations);
+		}
+		else{
+			rwwr = new RandomWalkWithRestartUntilConvergence(restart);
+		}
 	}
 	
 	/**
@@ -56,5 +61,20 @@ public class NetworkScoreDriver {
 		return n.runNetworkScoreAlgorithm();
 	}
 	
-	//TODO: getter for rwwr params iterations and difference to previous
+	/**
+	 * retrieves the number of steps that were done in the random walk with restart
+	 * @return number of steps of the random walk with restart
+	 */
+	public int getNumberOfIterationsDone(){
+		return rwwr.getNumberOfIterations();
+	}
+	
+	/**
+	 * retrieves a parameter describing the convergence of the random walk with restart
+	 * @return max norm of the difference between the final result and the result of the second last step
+	 */
+	public double getConvergenceNorm(){
+		return rwwr.getDifferenceToPrevious();
+	}
+
 }

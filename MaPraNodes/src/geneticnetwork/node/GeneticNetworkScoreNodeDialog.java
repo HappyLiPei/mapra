@@ -21,6 +21,8 @@ import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
  */
 public class GeneticNetworkScoreNodeDialog extends DefaultNodeSettingsPane {
 	
+	//TODO: choose iteration until convergence
+	
     private final SettingsModelBoolean edge_weights =
     		new SettingsModelBoolean(GeneticNetworkScoreNodeModel.CFGKEY_EDGE_WEIGHTS,
     				GeneticNetworkScoreNodeModel.DEFAULT_EDGE_WEIGHTS);
