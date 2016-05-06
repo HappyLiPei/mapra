@@ -31,6 +31,7 @@ public class NetworkScoreDriver {
 		this.scores_raw = scores_raw;
 	}
 	
+	//TODO: adapt to run until convergence
 	/**
 	 * method to set the parameters for the network score algorith,
 	 * @param restart fraction of the original scores that is kept (restart probability) 
@@ -43,7 +44,7 @@ public class NetworkScoreDriver {
 		ScoredGenes scores =dt.transformGeneScores(scores_raw);
 		builder = new MatrixVectorBuilder(network, scores);
 		
-		rwwr = new RandomWalkWithRestart(iterations, restart);
+		rwwr = new RandomWalkWithRestartFixedIterations(restart, iterations);
 	}
 	
 	/**
@@ -55,4 +56,5 @@ public class NetworkScoreDriver {
 		return n.runNetworkScoreAlgorithm();
 	}
 	
+	//TODO: getter for rwwr params iterations and difference to previous
 }

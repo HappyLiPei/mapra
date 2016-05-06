@@ -1,6 +1,6 @@
 package geneticnetwork.algorithm;
 
-public class RandomWalkWithRestartUntilConvergence extends AbstractRandomWalkWithRestart {
+public class RandomWalkWithRestartUntilConvergence extends RandomWalkWithRestart {
 	
 	/** criterion of the max norm to indicate convergence*/
 	private double convergenceCriterion;

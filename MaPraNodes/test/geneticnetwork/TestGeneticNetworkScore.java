@@ -11,12 +11,15 @@ import geneticnetwork.algorithm.DataTransformerGeneticNetwork;
 import geneticnetwork.algorithm.MatrixVectorBuilder;
 import geneticnetwork.algorithm.NetworkScoreAlgorithm;
 import geneticnetwork.algorithm.NetworkScoreDriver;
-import geneticnetwork.algorithm.RandomWalkWithRestart;
+import geneticnetwork.algorithm.RandomWalkWithRestartFixedIterations;
+import geneticnetwork.algorithm.RandomWalkWithRestartUntilConvergence;
 import geneticnetwork.io.FileUtilitiesGeneticNetwork;
 import io.FileInputReader;
 import phenotogeno.algo.ScoredGene;
 
 public class TestGeneticNetworkScore {
+	
+	//TODO:test iteration until convergence
 	
 	private String [][] networkFromFile;
 	private HashMap<String, Double> scoresFromFile;
@@ -28,7 +31,7 @@ public class TestGeneticNetworkScore {
 	public void testCase1WithoutDriver() {
 		
 		prepareDataForCase(1);
-		NetworkScoreAlgorithm n1= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestart(3, 0.9));
+		NetworkScoreAlgorithm n1= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestartFixedIterations(0.9,3));
 		LinkedList<ScoredGene> res1 = n1.runNetworkScoreAlgorithm();
 		compareToExpected(res1);
 	}
@@ -36,7 +39,7 @@ public class TestGeneticNetworkScore {
 	@Test
 	public void testCase2WithoutDriver() {
 		prepareDataForCase(2);
-		NetworkScoreAlgorithm n2= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestart(1, 0.5));
+		NetworkScoreAlgorithm n2= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestartFixedIterations(0.5,1));
 		LinkedList<ScoredGene> res2 = n2.runNetworkScoreAlgorithm();
 		compareToExpected(res2);
 	}
@@ -44,9 +47,33 @@ public class TestGeneticNetworkScore {
 	@Test
 	public void testCase3WithoutDriver() {
 		prepareDataForCase(3);
-		NetworkScoreAlgorithm n3= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestart(2, 0.2));
+		NetworkScoreAlgorithm n3= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestartFixedIterations(0.2,2));
 		LinkedList<ScoredGene> res3 = n3.runNetworkScoreAlgorithm();
 		compareToExpected(res3);
+	}
+	
+	@Test
+	public void testCase4WithoutDriver() {
+		prepareDataForCase(4);
+		NetworkScoreAlgorithm n4= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestartUntilConvergence(0.9));
+		LinkedList<ScoredGene> res4 = n4.runNetworkScoreAlgorithm();
+		compareToExpected(res4);
+	}
+	
+	@Test
+	public void testCase5WithoutDriver() {
+		prepareDataForCase(5);
+		NetworkScoreAlgorithm n5= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestartUntilConvergence(0.5));
+		LinkedList<ScoredGene> res5 = n5.runNetworkScoreAlgorithm();
+		compareToExpected(res5);
+	}
+	
+	@Test
+	public void testCase6WithoutDriver() {
+		prepareDataForCase(6);
+		NetworkScoreAlgorithm n6= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestartUntilConvergence(0.2));
+		LinkedList<ScoredGene> res6 = n6.runNetworkScoreAlgorithm();
+		compareToExpected(res6);
 	}
 	
 	@Test
@@ -80,17 +107,17 @@ public class TestGeneticNetworkScore {
 		
 		//read network edges
 		boolean weight=false;
-		if(testCase==2|| testCase==3){
+		if(testCase==2|| testCase==3 || testCase==5 || testCase==6){
 			weight = true;
 		}
 		networkFromFile = FileUtilitiesGeneticNetwork.readEdges("../TestData/GeneticNetwork/MTGNetwork.txt", weight);
 		
 		//read scores
 		String fileScores="";
-		if(testCase==1|| testCase==2){
+		if(testCase==1|| testCase==2 || testCase==4 || testCase==5){
 			fileScores="../TestData/GeneticNetwork/Input_PTG1.txt";
 		}
-		else if(testCase==3){
+		else if(testCase==3 || testCase==6){
 			fileScores="../TestData/GeneticNetwork/Input_PTG2.txt";
 		}
 		scoresFromFile = FileUtilitiesGeneticNetwork.readGeneScoresFrom(fileScores);

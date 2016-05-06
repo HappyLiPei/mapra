@@ -1,6 +1,6 @@
 package geneticnetwork.algorithm;
 
-public class RandomWalkWithRestartFixedIterations extends AbstractRandomWalkWithRestart{
+public class RandomWalkWithRestartFixedIterations extends RandomWalkWithRestart{
 	
 	/** number of iterations to perform*/
 	private double numberOfIterations;
