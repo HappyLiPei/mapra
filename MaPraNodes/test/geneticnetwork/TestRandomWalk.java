@@ -6,7 +6,8 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import geneticnetwork.algorithm.RandomWalkWithRestart;
+import geneticnetwork.algorithm.RandomWalkWithRestartFixedIterations;
+import geneticnetwork.algorithm.RandomWalkWithRestartUntilConvergence;
 import geneticnetwork.datastructures.SparseMatrix;
 import geneticnetwork.datastructures.Vector;
 import io.FileInputReader;
@@ -16,45 +17,93 @@ public class TestRandomWalk {
 	private SparseMatrix matrix;
 	private Vector vector;
 	private double [] expected;
+	private double norm;
 	
 	@Test
 	public void testCase1() {
 		
 		prepareDataForCase(1);
-		RandomWalkWithRestart r1 = new RandomWalkWithRestart(3, 0.9);
+		RandomWalkWithRestartFixedIterations r1 = new RandomWalkWithRestartFixedIterations(0.9,3);
 		r1.setMatrix(matrix);
 		r1.setVector(vector);
 		Vector res1= r1.doRandomWalkWithRestart();
 		
 		assertArrayEquals("Results for test case 1 are incorrect", expected, res1.getData(), 1E-9);
 		checkSum(res1.getData());
+		assertEquals("Number of iterations for test case 1 is incorrect", 3, r1.getNumberOfIterations());
+		assertEquals("Difference to previous step for test case 1 is incorrect", norm, r1.getDifferenceToPrevious(), 1E-10);
 	}
 
 	@Test
 	public void testCase2() {
 		
 		prepareDataForCase(2);
-		RandomWalkWithRestart r2 = new RandomWalkWithRestart(1, 0.5);
+		RandomWalkWithRestartFixedIterations r2 = new RandomWalkWithRestartFixedIterations(0.5,1);
 		r2.setMatrix(matrix);
 		r2.setVector(vector);
 		Vector res2= r2.doRandomWalkWithRestart();
 		
 		assertArrayEquals("Results for test case 2 are incorrect", expected, res2.getData(), 1E-9);
 		checkSum(res2.getData());
-		
+		assertEquals("Number of iterations for test case 2 is incorrect", 1, r2.getNumberOfIterations());
+		assertEquals("Difference to previous step for test case 2 is incorrect", norm, r2.getDifferenceToPrevious(), 1E-10);
 	}
 	
 	@Test
 	public void testCase3() {
 		
 		prepareDataForCase(3);
-		RandomWalkWithRestart r3 = new RandomWalkWithRestart(2, 0.2);
+		RandomWalkWithRestartFixedIterations r3 = new RandomWalkWithRestartFixedIterations(0.2,2);
 		r3.setMatrix(matrix);
 		r3.setVector(vector);
 		Vector res3= r3.doRandomWalkWithRestart();
 		
 		assertArrayEquals("Results for test case 3 are incorrect", expected, res3.getData(), 1E-9);
 		checkSum(res3.getData());
+		assertEquals("Number of iterations for test case 3 is incorrect", 2, r3.getNumberOfIterations());
+		assertEquals("Difference to previous step for test case 3 is incorrect", norm, r3.getDifferenceToPrevious(), 1E-10);
+	}
+	
+	@Test
+	public void testCase4(){
+		
+		prepareDataForCase(4);
+		RandomWalkWithRestartUntilConvergence r4 = new RandomWalkWithRestartUntilConvergence(0.9);
+		r4.setMatrix(matrix);
+		r4.setVector(vector);
+		Vector res4= r4.doRandomWalkWithRestart();
+		
+		assertArrayEquals("Results for test case 4 are incorrect", expected, res4.getData(), 1E-9);
+		checkSum(res4.getData());
+		assertEquals("Difference to previous step for test case 4 is incorrect", norm, r4.getDifferenceToPrevious(), 1E-11);
+	}
+	
+	@Test
+	public void testCase5(){
+		
+		prepareDataForCase(5);
+		RandomWalkWithRestartUntilConvergence r5 = new RandomWalkWithRestartUntilConvergence(0.5);
+		r5.setMatrix(matrix);
+		r5.setVector(vector);
+		Vector res5= r5.doRandomWalkWithRestart();
+		
+		assertArrayEquals("Results for test case 5 are incorrect", expected, res5.getData(), 1E-9);
+		checkSum(res5.getData());
+		assertEquals("Difference to previous step for test case 5 is incorrect", norm, r5.getDifferenceToPrevious(), 1E-11);
+	}
+	
+	@Test
+	public void testCase6(){
+		
+		prepareDataForCase(6);
+		RandomWalkWithRestartUntilConvergence r6 = new RandomWalkWithRestartUntilConvergence(0.2);
+		r6.setMatrix(matrix);
+		r6.setVector(vector);
+		Vector res6= r6.doRandomWalkWithRestart();
+		
+		assertArrayEquals("Results for test case 5 are incorrect", expected, res6.getData(), 1E-9);
+		checkSum(res6.getData());
+		assertEquals("Difference to previous step for test case 5 is incorrect", norm, r6.getDifferenceToPrevious(), 1E-11);
 	}
 	
 	private void checkSum(double [] data){
@@ -65,17 +114,18 @@ public class TestRandomWalk {
 		assertEquals("Result is not a valid probability distribution!", 1, sum, 1E-10); 
 	}
 	
+	//cases 4-6 identical to 1-3, but 4-6 are run until convergence
 	private void prepareDataForCase(int testCase){
 		
 		//read matrix
 		String fileMatrix="";
-		if(testCase==1){
+		if(testCase==1||testCase==4){
 			fileMatrix="../TestData/GeneticNetwork/matrices/matrix_unweighted_PTG1.txt";
 		}
-		else if(testCase==2){
+		else if(testCase==2||testCase==5){
 			fileMatrix="../TestData/GeneticNetwork/matrices/matrix_weighted_PTG1.txt";
 		}
-		else if(testCase==3){
+		else if(testCase==3||testCase==6){
 			fileMatrix="../TestData/GeneticNetwork/matrices/matrix_weighted_PTG2.txt";
 		}
 		String[] matrixLines = FileInputReader.readAllLinesFrom(fileMatrix).toArray(new String[0]);
@@ -88,10 +138,10 @@ public class TestRandomWalk {
 		
 		//read restart vector
 		String fileRestart="";
-		if(testCase==1|| testCase==2){
+		if(testCase==1|| testCase==2 || testCase==4 || testCase==5){
 			fileRestart="../TestData/GeneticNetwork/restartVectors/restartVec_PTG1.txt";
 		}
-		else if(testCase==3){
+		else if(testCase==3||testCase==6){
 			fileRestart="../TestData/GeneticNetwork/restartVectors/restartVec_PTG2.txt";
 		}
 		LinkedList<String> resVectorLines = FileInputReader.readAllLinesFrom(fileRestart);
@@ -109,6 +159,16 @@ public class TestRandomWalk {
 		pos=0;
 		for(String line:resFromFile){
 			expected[pos++]=Double.parseDouble(line);
+		}
+		
+		//read norm
+		if(testCase<=3){
+			LinkedList<String> normFromFile= FileInputReader.readAllLinesFrom(
+					"../TestData/GeneticNetwork/maxnorm/norm"+testCase+".txt");
+			norm=Double.parseDouble(normFromFile.peek());
+		}
+		else{
+			norm=1E-11;
 		}
 	}
 
