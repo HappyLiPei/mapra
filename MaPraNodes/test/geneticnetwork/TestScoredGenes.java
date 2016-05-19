@@ -4,21 +4,46 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.junit.Test;
 
 import geneticnetwork.algorithm.DataTransformerGeneticNetwork;
 import geneticnetwork.datastructures.ScoredGenes;
 import geneticnetwork.io.FileUtilitiesGeneticNetwork;
+import io.FileInputReader;
+import phenotogeno.algo.ScoredGene;
 
 public class TestScoredGenes {
 
 	@Test
-	public void testScoredGenes() {
+	public void testScoredGenesFromFile() {
 		
 		HashMap<String, Double> mapping = 
 				FileUtilitiesGeneticNetwork.readGeneScoresFrom("../TestData/PhenoToGeno/ExpectedResults/expRes_2.txt");
 		ScoredGenes toTest = (new DataTransformerGeneticNetwork()).transformGeneScores(mapping);
+		checkDataStructure(toTest);
+	}
+	
+	@Test
+	public void testScoredGenesFromList(){
+		
+		LinkedList<String> scoresFromFile=FileInputReader.readAllLinesFrom(
+				"../TestData/PhenoToGeno/ExpectedResults/expRes_2.txt");
+		scoresFromFile.remove(0);
+		
+		LinkedList<ScoredGene> list = new LinkedList<ScoredGene>();
+		for(String line: scoresFromFile){
+			String [] split = line.split("\t");
+			ScoredGene entry = new ScoredGene(split[0], Double.parseDouble(split[1]), "");
+			list.add(entry);
+		}
+		
+		ScoredGenes toTest = (new DataTransformerGeneticNetwork()).transformGeneScoresFromAlgo(list);
+		checkDataStructure(toTest);
+	}
+	
+	private void checkDataStructure(ScoredGenes toTest){
 		
 		double [] expectedScores = new double []{0.0, 0.0, 0.08333, 0.0, 0.0, 0.0, 0.0, 0.0, 0.08333, 0.08333,
 				0.0, 0.08333, 0.0, 0.0, 0.22975, 0.08333, 0.15972, 0.08333, 0.08333, 0.0, 

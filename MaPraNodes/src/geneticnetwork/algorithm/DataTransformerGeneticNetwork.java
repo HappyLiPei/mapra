@@ -8,6 +8,7 @@ import geneticnetwork.datastructures.Edge;
 import geneticnetwork.datastructures.ScoredGenes;
 import geneticnetwork.datastructures.UnweightedEdge;
 import geneticnetwork.datastructures.WeightedEdge;
+import phenotogeno.algo.ScoredGene;
 
 public class DataTransformerGeneticNetwork {
 	
@@ -19,6 +20,26 @@ public class DataTransformerGeneticNetwork {
 	 */
 	public ScoredGenes transformGeneScores (HashMap<String, Double> scores){
 		return new ScoredGenes(scores);
+	}
+	
+	/**
+	 * transform the results of PhenoToGeno directly passed from the algorithm into an ScoredGenes object
+	 * @param scores list of ScoredGene objects
+	 * @return a ScoredGenes object
+	 */
+	public ScoredGenes transformGeneScoresFromAlgo (LinkedList<ScoredGene> scores){
+		
+		//transform list of ScoredGenes into hashmap
+		HashMap<String, Double> mapping = new HashMap<String, Double> (scores.size()*3);
+		for(ScoredGene curGene: scores){
+			String id = curGene.getId();
+			if(!mapping.containsKey(id)){
+				mapping.put(id, curGene.getScore());
+			}
+		}
+		
+		//transform hasmap to ScoredGenes object
+		return new ScoredGenes(mapping);
 	}
 	
 	/**
