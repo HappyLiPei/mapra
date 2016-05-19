@@ -104,7 +104,6 @@ public abstract class RandomWalkWithRestart {
 		return this.differenceToPrevious;
 	}
 	
-	//TODO: test method
 	/**
 	 * method to create a copy of the settings of this random walk with restart (restart probability, number of iterations
 	 * to perform) and stores them in a new random walk with restart object,

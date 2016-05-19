@@ -49,6 +49,20 @@ public class TestMatrixVectorBuilder {
 		checkMatrix(mvb);
 	}
 	
+	@Test
+	public void runTestCaseRepeat(){
+		readEdgesAndScores(true, 2);
+		MatrixVectorBuilder mvb1 = new MatrixVectorBuilder(edges, inputPTG);
+		checkPositionMap(mvb1,ids.length);
+		checkRestartVector(mvb1);
+		checkMatrix(mvb1);
+		readEdgesAndScores(true, 3);
+		MatrixVectorBuilder mvb2 = new MatrixVectorBuilder(inputPTG, mvb1);
+		checkPositionMap(mvb2,ids.length);
+		checkRestartVector(mvb2);
+		checkMatrix(mvb2);
+	}
+	
 	private void readEdgesAndScores(boolean weight, int input){
 		
 		//input data
@@ -74,6 +88,7 @@ public class TestMatrixVectorBuilder {
 		if(!weight){
 			w="un"+w;
 		}
+		
 		LinkedList<String> matrixFile = FileInputReader.readAllLinesFrom(
 				"../TestData/GeneticNetwork/matrices/matrix_"+w+"_PTG"+input+".txt");
 		matrix = new double [matrixFile.size()][matrixFile.size()];

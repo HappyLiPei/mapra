@@ -40,21 +40,18 @@ public class MatrixVectorBuilder {
 	}
 	
 	/**
-	 * constructor for generating a MatrixVectorBuilder using a pre-calculated matrix (from another MatrixVectorBuilder)
+	 * constructor for generating a MatrixVectorBuilder using a pre-calculated matrix from another MatrixVectorBuilder
 	 * with a different scoring result from PhenoToGeno (on the same set of genes!!!) 
 	 * @param scores ScoredGenes object storing the scores obtained from PhenoToGeno
-	 * @param criticalPosition critical position within the pre-calculated matrix (position of the first singleton node)
-	 * @param positionMap position map (gene id->position in matrix) for the pre-calculated matrix
-	 * @param matrix matrix calculated by a different MatrixVectorBuilder object
+	 * @param builder MatrixVecotrBuilder whose matrix should be reused
 	 */
-	public MatrixVectorBuilder(ScoredGenes scores, int criticalPosition, HashMap<String, Integer> positionMap,
-				SparseMatrix matrix){
+	public MatrixVectorBuilder(ScoredGenes scores, MatrixVectorBuilder builder){
 		//network is not needed
 		this.network =null;
 		// data calculated by previous object
-		this.criticalPosition =criticalPosition;
-		this.positionMap = positionMap;
-		this.matrix = matrix;
+		this.criticalPosition =builder.getCriticalPosition();
+		this.positionMap = builder.getIdPositionMap();
+		this.matrix = builder.getStochasticMatrix();
 		// is different from previous object
 		this.scores = scores;
 		this.restartVector = null;
