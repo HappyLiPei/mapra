@@ -23,4 +23,9 @@ public class RandomWalkWithRestartUntilConvergence extends RandomWalkWithRestart
 		return getDifferenceToPrevious()>convergenceCriterion;
 	}
 
+	@Override
+	public RandomWalkWithRestart copy() {
+		return new RandomWalkWithRestartUntilConvergence(getRestartProbability());
+	}
+
 }

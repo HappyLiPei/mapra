@@ -27,7 +27,6 @@ public class TestGeneticNetworkScore {
 
 	@Test
 	public void testCase1WithoutDriver() {
-		
 		prepareDataForCase(1);
 		NetworkScoreAlgorithm n1= new NetworkScoreAlgorithm(getBuilder(), new RandomWalkWithRestartFixedIterations(0.9,3));
 		LinkedList<ScoredGene> res1 = n1.runNetworkScoreAlgorithm();

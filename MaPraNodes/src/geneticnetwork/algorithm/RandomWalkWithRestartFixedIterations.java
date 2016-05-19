@@ -25,4 +25,9 @@ public class RandomWalkWithRestartFixedIterations extends RandomWalkWithRestart{
 		return getNumberOfIterations()<numberOfIterations;
 	}
 
+	@Override
+	public RandomWalkWithRestart copy() {
+		return new RandomWalkWithRestartFixedIterations(getRestartProbability(), numberOfIterations);
+	}
+
 }

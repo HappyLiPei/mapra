@@ -101,9 +101,49 @@ public class TestRandomWalk {
 		r6.setVector(vector);
 		Vector res6= r6.doRandomWalkWithRestart();
 		
-		assertArrayEquals("Results for test case 5 are incorrect", expected, res6.getData(), 1E-9);
+		assertArrayEquals("Results for test case 6 are incorrect", expected, res6.getData(), 1E-9);
 		checkSum(res6.getData());
-		assertEquals("Difference to previous step for test case 5 is incorrect", norm, r6.getDifferenceToPrevious(), 1E-11);
+		assertEquals("Difference to previous step for test case 6 is incorrect", norm, r6.getDifferenceToPrevious(), 1E-11);
+	}
+	
+	@Test
+	public void testCase1Repeat(){
+		
+		prepareDataForCase(1);
+		RandomWalkWithRestartFixedIterations r = new RandomWalkWithRestartFixedIterations(0.9,3);
+		r.setMatrix(matrix);
+		r.setVector(vector);
+		r.doRandomWalkWithRestart();
+		
+		prepareDataForCase(1);
+		RandomWalkWithRestartFixedIterations r2 = (RandomWalkWithRestartFixedIterations) r.copy();
+		r2.setMatrix(matrix);
+		r2.setVector(vector);
+		Vector resRep = r2.doRandomWalkWithRestart();
+		
+		assertArrayEquals("Results for test case1 Repeat are incorrect", expected, resRep.getData(), 1E-9);
+		checkSum(resRep.getData());
+		assertEquals("Difference to previous step for test case1 Repeat is incorrect", norm, r2.getDifferenceToPrevious(), 1E-11);
+	}
+	
+	@Test
+	public void testCase6Repeat(){
+		
+		prepareDataForCase(6);
+		RandomWalkWithRestartUntilConvergence r = new RandomWalkWithRestartUntilConvergence(0.2);
+		r.setMatrix(matrix);
+		r.setVector(vector);
+		r.doRandomWalkWithRestart();
+		
+		prepareDataForCase(6);
+		RandomWalkWithRestartUntilConvergence r2 = (RandomWalkWithRestartUntilConvergence) r.copy();
+		r2.setMatrix(matrix);
+		r2.setVector(vector);
+		Vector resRep = r2.doRandomWalkWithRestart();
+		
+		assertArrayEquals("Results for test case6 Repeat are incorrect", expected, resRep.getData(), 1E-9);
+		checkSum(resRep.getData());
+		assertEquals("Difference to previous step for test case6 Repeat is incorrect", norm, r2.getDifferenceToPrevious(), 1E-11);
 	}
 	
 	private void checkSum(double [] data){

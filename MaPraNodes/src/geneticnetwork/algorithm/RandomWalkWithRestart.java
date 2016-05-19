@@ -103,6 +103,23 @@ public abstract class RandomWalkWithRestart {
 	public double getDifferenceToPrevious(){
 		return this.differenceToPrevious;
 	}
+	
+	//TODO: test method
+	/**
+	 * method to create a copy of the settings of this random walk with restart (restart probability, number of iterations
+	 * to perform) and stores them in a new random walk with restart object,
+	 * the method allows to run the same settings on different matrix-vector combinations
+	 * @return random walk with restart object with the same settings as this object
+	 */
+	public abstract RandomWalkWithRestart copy();
+	
+	/**
+	 * retrieves the restart probability used in this random walk with restart
+	 * @return restart probability of the random walk
+	 */
+	public double getRestartProbability(){
+		return this.restartProbability;
+	}
 
 
 }
