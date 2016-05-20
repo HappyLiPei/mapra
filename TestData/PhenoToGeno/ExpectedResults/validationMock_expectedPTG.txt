@@ -1,3 +1,4 @@
+patient_id	disease_id	rankPTG_best	rankPTG_worst	rankPTG_average
 0	101	5.0	18.0	11.4
 1	102	5.0	18.0	12.25
 2	103	8.0	18.0	13.0

@@ -74,6 +74,45 @@ public class TestGeneticNetworkScore {
 	}
 	
 	@Test
+	public void testCase14WithoutDriver(){
+		prepareDataForCase(1);
+		MatrixVectorBuilder mvb = getBuilder();
+		NetworkScoreAlgorithm n1= new NetworkScoreAlgorithm(mvb, new RandomWalkWithRestartFixedIterations(0.9,3));
+		LinkedList<ScoredGene> res1 = n1.runNetworkScoreAlgorithm();
+		compareToExpected(res1);
+		prepareDataForCase(4);
+		NetworkScoreAlgorithm n2 = new NetworkScoreAlgorithm(getBuilder(mvb), new RandomWalkWithRestartUntilConvergence(0.9));
+		LinkedList<ScoredGene> res2 = n2.runNetworkScoreAlgorithm();
+		compareToExpected(res2);		
+	}
+	
+	@Test
+	public void testCase25WithoutDriver(){
+		prepareDataForCase(2);
+		MatrixVectorBuilder mvb = getBuilder();
+		NetworkScoreAlgorithm n1= new NetworkScoreAlgorithm(mvb, new RandomWalkWithRestartFixedIterations(0.5,1));
+		LinkedList<ScoredGene> res1 = n1.runNetworkScoreAlgorithm();
+		compareToExpected(res1);
+		prepareDataForCase(5);
+		NetworkScoreAlgorithm n2 = new NetworkScoreAlgorithm(getBuilder(mvb), new RandomWalkWithRestartUntilConvergence(0.5));
+		LinkedList<ScoredGene> res2 = n2.runNetworkScoreAlgorithm();
+		compareToExpected(res2);
+	}
+	
+	@Test
+	public void testCase36WithoutDriver(){
+		prepareDataForCase(3);
+		MatrixVectorBuilder mvb = getBuilder();
+		NetworkScoreAlgorithm n1= new NetworkScoreAlgorithm(mvb, new RandomWalkWithRestartFixedIterations(0.2,2));
+		LinkedList<ScoredGene> res1 = n1.runNetworkScoreAlgorithm();
+		compareToExpected(res1);
+		prepareDataForCase(6);
+		NetworkScoreAlgorithm n2 = new NetworkScoreAlgorithm(getBuilder(mvb), new RandomWalkWithRestartUntilConvergence(0.2));
+		LinkedList<ScoredGene> res2 = n2.runNetworkScoreAlgorithm();
+		compareToExpected(res2);
+	}
+	
+	@Test
 	public void testCase1WithDriver(){
 		prepareDataForCase(1);
 		NetworkScoreDriver n1= new NetworkScoreDriver(networkFromFile, scoresFromFile);
@@ -164,6 +203,11 @@ public class TestGeneticNetworkScore {
 	private MatrixVectorBuilder getBuilder(){
 		DataTransformerGeneticNetwork dt = new DataTransformerGeneticNetwork();
 		return new MatrixVectorBuilder(dt.transformEdges(networkFromFile), dt.transformGeneScores(scoresFromFile));
+	}
+	
+	private MatrixVectorBuilder getBuilder(MatrixVectorBuilder builder){
+		DataTransformerGeneticNetwork dt = new DataTransformerGeneticNetwork();
+		return new MatrixVectorBuilder(dt.transformGeneScores(scoresFromFile), builder);
 	}
 	
 	private void compareToExpected(LinkedList<ScoredGene> g){
