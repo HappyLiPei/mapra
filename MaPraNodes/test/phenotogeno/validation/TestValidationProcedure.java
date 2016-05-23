@@ -87,6 +87,27 @@ public class TestValidationProcedure {
 		assertArrayEquals("Validation result is incorrect", expected.toArray(new String[0]), actual.toArray(new String[0]));
 
 	}
+	
+	@Test
+	public void testValidationProcedureFromFile() throws IOException{
+		
+		String outfile = folder.newFile().getAbsolutePath();
+		SimulatorIteratorFromFile simiter =new SimulatorIteratorFromFile(
+				"../TestData/PhenoToGeno/PatientFiles/PatientsMock.txt");
+		RandomWalkWithRestart rwwr = new RandomWalkWithRestartFixedIterations(0.9, 1);
+		ValidateGeneRanking val = new ValidateGeneRanking(				
+				ontology, symptoms, ksz_with_freq, genes_raw, map_raw, Pvalfolder, network_raw,
+				rwwr, simiter, simiter, outfile);
+		val.prepareData();
+		val.simulateAndRank();
+		
+		LinkedList<String> actual = FileInputReader.readAllLinesFrom(outfile);
+		LinkedList<String> expected = FileInputReader.readAllLinesFrom(
+				"../TestData/PhenoToGeno/ExpectedResults/validationMock_expectedNW.txt");
+		assertEquals("Size of the validation result is incorrect", expected.size(), actual.size());
+		assertArrayEquals("Validation result is incorrect", expected.toArray(new String[0]), actual.toArray(new String[0]));
+		
+	}
 
 }
 
