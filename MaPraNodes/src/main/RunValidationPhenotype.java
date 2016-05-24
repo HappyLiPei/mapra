@@ -16,10 +16,11 @@ import phenotogeno.validation.PatientSimulator;
 import phenotogeno.validation.PatientSimulatorDrawSymptoms;
 import phenotogeno.validation.PatientSimulatorVeryFrequentSymptoms;
 import phenotogeno.validation.PatientSimulatorWriteToFile;
+import phenotogeno.validation.SimulatorIteratorFromFile;
 import phenotogeno.validation.ValidateGeneRanking;
 
 public class RunValidationPhenotype {
-	
+	//TODO:integration option for using filter
 public static void main(String args[]) throws Exception{
 		
 		//get command line arguments
@@ -77,6 +78,11 @@ public static void main(String args[]) throws Exception{
 		else if(mode.equals("draw")){
 			i = new DiseaseIteratorAll();
 			s = new PatientSimulatorDrawSymptoms(outPatient);
+		}
+		else if(mode.equals("file")){
+			SimulatorIteratorFromFile fromFile=new SimulatorIteratorFromFile(outPatient);
+			i = fromFile;
+			s = fromFile;
 		}
 		else{
 			throw new Exception("Invalide mode: "+mode+" !" );
