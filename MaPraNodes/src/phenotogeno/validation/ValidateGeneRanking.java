@@ -101,7 +101,7 @@ public class ValidateGeneRanking {
 	 * @param associations_raw associations between diseases and genes from a file read by {@link FileUtilitiesPTG}
 	 * @param pvalFolder path to folder with sampled score distributions for p value calculation
 	 * @param network_raw genetic network as edge list read from a file by {@link FileUtilitiesGeneticNetwork}
-	 * @param rwwrSettings settings for the random walk with restart (restart probabiliy, iterations)
+	 * @param rwwrSettings settings for the random walk with restart (restart probability, iterations)
 	 * @param simulator Simulator for generating patients
 	 * @param iter iterator determining which disease is simulated next 
 	 * @param outfile path to file to which all output is written
@@ -116,6 +116,22 @@ public class ValidateGeneRanking {
 				new PhenomizerFilterAllDiseases(), simulator, iter, outfile);		
 	}
 	
+	/**
+	 * generates an object for validation of PhenoToGeno and NetworkScore using a specific filter at the Phenomizer-PTG
+	 * interface
+	 * @param onto_raw ontology of symptoms read from a file by {@link FileUtilitiesPhenomizer}
+	 * @param symptoms_raw list of symptoms read from a file by {@link FileUtilitiesPhenomizer}
+	 * @param ksz_raw associations between diseases and symptoms from a file read by {@link FileUtilitiesPhenomizer}
+	 * @param genes_raw list of gene ids read from a file read by {@link FileUtilitiesPTG}
+	 * @param associations_raw associations between diseases and genes from a file read by {@link FileUtilitiesPTG}
+	 * @param pvalFolder path to folder with sampled score distributions for p value calculation
+	 * @param network_raw genetic network as edge list read from a file by {@link FileUtilitiesGeneticNetwork}
+	 * @param rwwrSettings settings for the random walk with restart (restart probability, iterations)
+	 * @param phenomizerFilter filter specifying the behavior of the Phenomizer-PTG interface
+	 * @param simulator Simulator for generating patients
+	 * @param iter iterator determining which disease is simulated next 
+	 * @param outfile path to file to which all output is written
+	 */
 	public ValidateGeneRanking(int [][] onto_raw, LinkedList<Integer> symptoms_raw,
 			HashMap<Integer, LinkedList<Integer[]>> ksz_raw, LinkedList<String> genes_raw,
 			HashMap<Integer, LinkedList<String>> associations_raw, String pvalFolder,

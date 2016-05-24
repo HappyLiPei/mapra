@@ -16,15 +16,19 @@ import phenotogeno.validation.PatientSimulator;
 import phenotogeno.validation.PatientSimulatorDrawSymptoms;
 import phenotogeno.validation.PatientSimulatorVeryFrequentSymptoms;
 import phenotogeno.validation.PatientSimulatorWriteToFile;
+import phenotogeno.validation.PhenomizerFilter;
+import phenotogeno.validation.PhenomizerFilterAllDiseases;
+import phenotogeno.validation.PhenomizerFilterSignificant;
+import phenotogeno.validation.PhenomizerFilterTop20;
 import phenotogeno.validation.SimulatorIteratorFromFile;
 import phenotogeno.validation.ValidateGeneRanking;
 
 public class RunValidationPhenotype {
-	//TODO:integration option for using filter
+
 public static void main(String args[]) throws Exception{
 		
 		//get command line arguments
-		String mode = args[0];
+		String runMode = args[0];
 		String rwwrOpt = args[1];
 		String fileOnto = args[2];
 		String fileSymp = args[3];
@@ -47,7 +51,7 @@ public static void main(String args[]) throws Exception{
 			edgeWeight=true;
 		}
 		else{
-			throw new Exception("Invalide random walk option: "+rwwrEl[0]+" !" );
+			throw new Exception("Invalid random walk option: "+rwwrEl[0]+" !" );
 		}
 		double restart = Double.parseDouble(rwwrEl[1]);
 		if(rwwrEl.length==2){
@@ -66,30 +70,55 @@ public static void main(String args[]) throws Exception{
 		LinkedList<String> genes = FileUtilitiesPTG.readGeneList(fileGenes);
 		HashMap<Integer, LinkedList<String>> asso = FileUtilitiesPTG.readDiseaseGeneAssociation(fileAsso);
 		String [][] network = FileUtilitiesGeneticNetwork.readEdges(fileNetwork, edgeWeight);
-	
+		
+		//check mode of simulation
+		String [] splitMode = runMode.split("\\+");
+		String simMode = splitMode[0];
 		DiseaseIterator i = null;
 		PatientSimulator s = null;
 		
-		//check mode of simulation
-		if(mode.equals("veryFreq")){
+		if(simMode.equals("veryFreq")){
 			i = new DiseaseIteratorAll();
 			s = new PatientSimulatorVeryFrequentSymptoms(outPatient);
 		}
-		else if(mode.equals("draw")){
+		else if(simMode.equals("draw")){
 			i = new DiseaseIteratorAll();
 			s = new PatientSimulatorDrawSymptoms(outPatient);
 		}
-		else if(mode.equals("file")){
+		else if(simMode.equals("file")){
 			SimulatorIteratorFromFile fromFile=new SimulatorIteratorFromFile(outPatient);
 			i = fromFile;
 			s = fromFile;
 		}
 		else{
-			throw new Exception("Invalide mode: "+mode+" !" );
+			throw new Exception("Invalide mode: "+simMode+" !" );
+		}
+		
+		//check mode for interface Phenomizer-PTG
+		PhenomizerFilter f = null;
+		
+		if(splitMode.length<2){
+			System.out.println("No filter mode specified, no filtering is performed.");
+			f = new PhenomizerFilterAllDiseases();
+		}
+		else{
+			String filterMode = splitMode[1];
+			if(filterMode.equals("all")){
+				f = new PhenomizerFilterAllDiseases();
+			}
+			else if(filterMode.equals("top20")){
+				f = new PhenomizerFilterTop20();
+			}
+			else if(filterMode.equals("sign")){
+				f = new PhenomizerFilterSignificant();
+			}
+			else{
+				throw new Exception("Invalid filter mode "+filterMode);
+			}
 		}
 		
 		//run validation
-		ValidateGeneRanking vgr = new ValidateGeneRanking(onto, symp, ksz, genes, asso, scoreDist, network, walk, s, i, outRes);
+		ValidateGeneRanking vgr = new ValidateGeneRanking(onto, symp, ksz, genes, asso, scoreDist, network, walk, f, s, i, outRes);
 		vgr.prepareData();
 		vgr.simulateAndRank();
 		
