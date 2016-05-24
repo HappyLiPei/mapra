@@ -37,8 +37,8 @@ public class ScoredGeneComparator implements Comparator<ScoredGene>{
 	public int compare(ScoredGene o1, ScoredGene o2) {
 		
 		//consider 5 decimal places of the scores
-		int score1 = (int) Math.round(o1.getScore()*Math.pow(10,decimalplaces));
-		int score2 = (int) Math.round(o2.getScore()*Math.pow(10,decimalplaces));
+		long score1 = (long) Math.round(o1.getScore()*Math.pow(10,decimalplaces));
+		long score2 = (long) Math.round(o2.getScore()*Math.pow(10,decimalplaces));
 		
 		//if scores differ in less than 5 decimal places -> consider them as equal
 		if(score1==score2){
@@ -46,7 +46,7 @@ public class ScoredGeneComparator implements Comparator<ScoredGene>{
 			return o1.getId().compareTo(o2.getId());
 		}
 		//else -> compare scores
-		return -Integer.compare(score1, score2);
+		return -Long.compare(score1, score2);
 	}
 	
 	/**
@@ -61,11 +61,11 @@ public class ScoredGeneComparator implements Comparator<ScoredGene>{
 	public int compareWithoutID(ScoredGene g1, ScoredGene g2){
 		
 		//consider 5 decimal places of the socres
-		int score1 = (int) Math.round(g1.getScore()*Math.pow(10,decimalplaces));
-		int score2 = (int) Math.round(g2.getScore()*Math.pow(10,decimalplaces));
+		long score1 = (long) Math.round(g1.getScore()*Math.pow(10,decimalplaces));
+		long score2 = (long) Math.round(g2.getScore()*Math.pow(10,decimalplaces));
 		
 		//if scores differ in less than 5 decimal places -> consider them as equal
-		return -Integer.compare(score1, score2);
+		return -Long.compare(score1, score2);
 		
 	}
 
