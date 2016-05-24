@@ -38,13 +38,16 @@ import phenotogeno.TestPhenoToGenoAlgo;
 import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
 import phenotogeno.TestScoredGeneComparator;
+import phenotogeno.validation.TestFilter;
 import phenotogeno.validation.TestIteratorAll;
 import phenotogeno.validation.TestRankCalculation;
 import phenotogeno.validation.TestSimulator;
+import phenotogeno.validation.TestSimulatorIteratorFromFile;
 import phenotogeno.validation.TestValidationProcedure;
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestIOReaderWriter.class, 
+				//phenomizer
 				TestFileUtilities.class,
 				TestPhenomizer.class,
 				TestFrequencyConverter.class,
@@ -56,26 +59,33 @@ import phenotogeno.validation.TestValidationProcedure;
 				TestComparatorPheno.class,
 				TestSampling.class,
 				TestSimMatrixCalculator.class,
+				//validation phenomizer
 				TestValidationWithFrequentWeightsPreparation.class,
 				TestValidationWithFrequentWeightsRanking.class,
 				TestValidationWithFrequentWeights.class,
 				TestValidationIO.class,
 				TestValidationOMIMPreparation.class,
 				TestValidationOMIM.class,
+				//phenotogeno
 				TestPhenoToGenoFileIO.class,
 				TestPhenoToGenoDataStructures.class,
 				TestPhenoToGenoAlgo.class,
 				TestScoredGeneComparator.class,
 				TestPhenoToGeno.class,
 				TestCombinationWithPhenomizer.class,
+				//validation phenotype/phenotogeno
 				TestRankCalculation.class,
 				TestValidationProcedure.class,
 				TestIteratorAll.class,
 				TestSimulator.class,
+				TestSimulatorIteratorFromFile.class,
+				TestFilter.class,
+				//metabolite scores
 				TestFileUtilitiesMetabolites.class,
 				TestDataTransformerMetabolites.class,
 				TestMetaboliteScoringInReference.class,
 				TestScoreMetabolites.class,
+				//network score
 				TestFileParserNetworkScore.class,
 				TestEdges.class,
 				TestScoredGenes.class,
