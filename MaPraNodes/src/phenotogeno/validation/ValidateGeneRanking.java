@@ -55,6 +55,8 @@ public class ValidateGeneRanking {
 	private Ontology ontology;
 	/** SymptomDiseaseAssociations object for Phenomizer*/
 	private SymptomDiseaseAssociations sda;
+	/** PhenomizerFilter object handling the interface between Phenomizer and PhenoToGeno*/
+	private PhenomizerFilter phenomizerFilter;
 	/** DiseaseGeneassociation object for PhenoToGeno*/
 	private DiseaseGeneAssociation dga;
 	/** array of Edge objects for NetworkScore*/
@@ -91,7 +93,7 @@ public class ValidateGeneRanking {
 	}
 	
 	/**
-	 * generates an object for validation of PhenoToGeno and NetworkScore
+	 * generates an object for validation of PhenoToGeno and NetworkScore using the default filter (all diseases)
 	 * @param onto_raw ontology of symptoms read from a file by {@link FileUtilitiesPhenomizer}
 	 * @param symptoms_raw list of symptoms read from a file by {@link FileUtilitiesPhenomizer}
 	 * @param ksz_raw associations between diseases and symptoms from a file read by {@link FileUtilitiesPhenomizer}
@@ -110,6 +112,16 @@ public class ValidateGeneRanking {
 			String[][] network_raw, RandomWalkWithRestart rwwrSettings,
 			PatientSimulator simulator, DiseaseIterator iter, String outfile){
 		
+		this(onto_raw, symptoms_raw, ksz_raw, genes_raw, associations_raw, pvalFolder, network_raw, rwwrSettings,
+				new PhenomizerFilterAllDiseases(), simulator, iter, outfile);		
+	}
+	
+	public ValidateGeneRanking(int [][] onto_raw, LinkedList<Integer> symptoms_raw,
+			HashMap<Integer, LinkedList<Integer[]>> ksz_raw, LinkedList<String> genes_raw,
+			HashMap<Integer, LinkedList<String>> associations_raw, String pvalFolder,
+			String[][] network_raw, RandomWalkWithRestart rwwrSettings, PhenomizerFilter phenomizerFilter,
+			PatientSimulator simulator, DiseaseIterator iter, String outfile){
+		
 		this.onto_raw = onto_raw;
 		this.symptoms_raw = symptoms_raw;
 		this.ksz_raw = ksz_raw;
@@ -119,6 +131,7 @@ public class ValidateGeneRanking {
 		
 		this.folder = new PValueFolder(pvalFolder);
 		this.rwwrSettings = rwwrSettings;
+		this.phenomizerFilter = phenomizerFilter;
 		
 		dtPheno = new DataTransformer();
 		dtPTG = new PhenoToGenoDataTransformer();
@@ -134,11 +147,16 @@ public class ValidateGeneRanking {
 	 * initializes the validation by preparing all data structures for Phenomizer, PhenoToGeno and NetworkScore 
 	 */
 	public void prepareData(){
+		
 		//data for Phenomizer and PTG
 		this.ontology = new Ontology(onto_raw);
 		sda = dtPheno.generateSymptomDiseaseAssociation(ontology, symptoms_raw, ksz_raw);
 		dga = dtPTG.getDiseaseGeneAssociation(genes_raw, associations_raw);
 		iter.setSDA(sda);
+		
+		//interface Phenomizer and PTG
+		phenomizerFilter.setTotalDiseases(sda.numberOfDiseases());
+		
 		//data for network score
 		if(network_raw!=null){
 			edges = dtNW.transformEdges(network_raw);
@@ -192,11 +210,12 @@ public class ValidateGeneRanking {
 			
 			//run Phenomizer: Phenomizer with pvalues and weights, reuse data structures
 			PhenomizerAlgorithmWithPval phenomizer = new PhenomizerAlgorithmWithPval(
-					sda.numberOfDiseases(), ontology, patient.getSymptoms(), sda, 
+					phenomizerFilter.getResultSize(), ontology, patient.getSymptoms(), sda, 
 					new SimilarityCalculatorOneSidedWeight(), folder, new BenjaminiHochbergCorrector(), ic, sim);
 			LinkedList<String[]> diseaseScores = phenomizer.runPhenomizer();
 			//parse result -> data transformer -> input PTG
 			LinkedList<ScoredDisease> inputPTG = dtPTG.getPhenomizerResultFromAlgo(diseaseScores, dga);
+			inputPTG = phenomizerFilter.filter(inputPTG);
 			
 			// run PhenoToGeno
 			PhenoToGenoAlgo ptg = new PhenoToGenoAlgo(inputPTG, dga);
