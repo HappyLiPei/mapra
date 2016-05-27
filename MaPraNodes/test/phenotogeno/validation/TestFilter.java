@@ -77,6 +77,19 @@ public class TestFilter {
 		compareLists(5, phenores5, 4, filter.filter(phenores5));
 	}
 	
+	@Test
+	public void testFilterTopP(){
+		
+		PhenomizerFilterTopPvalue filter = new PhenomizerFilterTopPvalue();
+		assertEquals("Result size (uninitialized) is incorrect", 0, filter.getResultSize());
+		filter.setTotalDiseases(42);
+		assertEquals("Result size is incorrect", 42, filter.getResultSize());
+		
+		compareLists(2, phenores2, 4, filter.filter(phenores2));
+		compareLists(3, phenores3, 2, filter.filter(phenores3));
+		compareLists(5, phenores5, 4, filter.filter(phenores5));
+	}
+	
 	private void compareLists(int number, LinkedList<ScoredDisease> list_expected, int size_expected, LinkedList<ScoredDisease> list_actual){
 		
 		assertEquals("Size of list "+number+" is incorrect", size_expected, list_actual.size());

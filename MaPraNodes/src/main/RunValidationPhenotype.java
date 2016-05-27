@@ -20,13 +20,14 @@ import phenotogeno.validation.PhenomizerFilter;
 import phenotogeno.validation.PhenomizerFilterAllDiseases;
 import phenotogeno.validation.PhenomizerFilterSignificant;
 import phenotogeno.validation.PhenomizerFilterTop20;
+import phenotogeno.validation.PhenomizerFilterTopPvalue;
 import phenotogeno.validation.SimulatorIteratorFromFile;
 import phenotogeno.validation.ValidateGeneRanking;
 
 public class RunValidationPhenotype {
 
 public static void main(String args[]) throws Exception{
-		
+
 		//get command line arguments
 		String runMode = args[0];
 		String rwwrOpt = args[1];
@@ -111,6 +112,9 @@ public static void main(String args[]) throws Exception{
 			}
 			else if(filterMode.equals("sign")){
 				f = new PhenomizerFilterSignificant();
+			}
+			else if(filterMode.equals("topP")){
+				f = new PhenomizerFilterTopPvalue();
 			}
 			else{
 				throw new Exception("Invalid filter mode "+filterMode);
