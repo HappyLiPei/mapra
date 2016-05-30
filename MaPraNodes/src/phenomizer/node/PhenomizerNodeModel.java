@@ -223,7 +223,6 @@ public class PhenomizerNodeModel extends NodeModel {
     	m_folder.validateSettings(settings);
     	//checks if files length_*.txt are available
     	if(settings.getBoolean(CFGKEY_PVALUE)){
-    		logger.info(settings.getString(CFGKEY_FOLDER));
 	    	PValueFolder p = new PValueFolder(settings.getString(CFGKEY_FOLDER));
 	    	for(int i=1; i<=10; i++){
 	    		if(!p.checkFile(i)){
