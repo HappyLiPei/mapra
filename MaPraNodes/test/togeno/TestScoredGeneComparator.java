@@ -10,9 +10,9 @@ import togeno.ScoredGene;
 import togeno.ScoredGeneComparator;
 
 public class TestScoredGeneComparator {
-	//TODO: move + test with different number of decimal places
+
 	@Test
-	public void testComparator() {
+	public void testComparator5DecimalPlaces() {
 		
 		ScoredGeneComparator c = new ScoredGeneComparator();
 		
@@ -35,9 +35,8 @@ public class TestScoredGeneComparator {
 	}
 	
 	@Test
-	public void testSorting(){
+	public void testSortingDifferentNumberOfDecimalPlaces(){
 		
-		ScoredGeneComparator c = new ScoredGeneComparator();
 		ScoredGene g1 = new ScoredGene("G1", 0.34, "");
 		ScoredGene g2 = new ScoredGene("G2", 0.523, "");
 		ScoredGene g3 = new ScoredGene("G3",0.00001, "");
@@ -45,13 +44,20 @@ public class TestScoredGeneComparator {
 		ScoredGene g5 = new ScoredGene("G5", 0.111112,"");
 		ScoredGene g6 = new ScoredGene("G6", 0.00002, "");
 		
-		ScoredGene [] g = new ScoredGene [] {g1,g2,g3,g4,g5,g6};
+		checkSorting(new ScoredGeneComparator(), new ScoredGene[]{g1,g2,g3,g4,g5,g6},
+				new String []{"G2", "G1", "G4", "G5", "G6", "G3"}, 5);
+		checkSorting(new ScoredGeneComparator(2), new ScoredGene[]{g1,g2,g3,g4,g5,g6},
+				new String []{"G2", "G1", "G4", "G5", "G3", "G6"}, 2);
+		checkSorting(new ScoredGeneComparator(10), new ScoredGene[]{g1,g2,g3,g4,g5,g6},
+				new String []{"G2", "G1", "G5", "G4", "G6", "G3"}, 10);
+	}
+	
+	private void checkSorting(ScoredGeneComparator c, ScoredGene[] g, String [] expected_order, int places){
 		Arrays.sort(g, c);
-		
-		String[] expected_order = new String[]{"G2", "G1", "G4", "G5", "G6", "G3"};
 		for (int i = 0; i<expected_order.length; i++){
-			assertEquals("Id at position "+i+" is incorrect", expected_order[i] , g[i].getId());
-		}
+			assertEquals("Id at position "+i+" is incorrect (sorting accorind to "+places+" decimal places",
+					expected_order[i] , g[i].getId());
+		}		
 	}
 
 }
