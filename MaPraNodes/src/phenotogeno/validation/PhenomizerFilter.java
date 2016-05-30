@@ -2,7 +2,7 @@ package phenotogeno.validation;
 
 import java.util.LinkedList;
 
-import phenotogeno.algo.ScoredDisease;
+import togeno.ScoredDiseaseOrMetabolite;
 
 /** object to model the interface between Phenomizer and PhenoToGeno, it handles to output size of Phenomizer
  * and filters the output of Phenomizer*/
@@ -30,6 +30,6 @@ public abstract class PhenomizerFilter {
 	 * @param phenomizerUnfiltered unfiltered list of scored diseases
 	 * @return filtered list of scored diseases
 	 */
-	public abstract LinkedList<ScoredDisease> filter(LinkedList<ScoredDisease> phenomizerUnfiltered);
+	public abstract LinkedList<ScoredDiseaseOrMetabolite> filter(LinkedList<ScoredDiseaseOrMetabolite> phenomizerUnfiltered);
 	
 }

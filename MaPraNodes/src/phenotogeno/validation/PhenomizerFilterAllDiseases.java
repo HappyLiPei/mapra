@@ -2,7 +2,7 @@ package phenotogeno.validation;
 
 import java.util.LinkedList;
 
-import phenotogeno.algo.ScoredDisease;
+import togeno.ScoredDiseaseOrMetabolite;
 
 /** PhenomizerFilter that does not filter the Phenomizer result at all*/
 public class PhenomizerFilterAllDiseases extends PhenomizerFilter {
@@ -19,7 +19,7 @@ public class PhenomizerFilterAllDiseases extends PhenomizerFilter {
 	/**
 	 * the result of Phenomizer is not filtered
 	 */
-	public LinkedList<ScoredDisease> filter(LinkedList<ScoredDisease> phenomizerUnfiltered) {
+	public LinkedList<ScoredDiseaseOrMetabolite> filter(LinkedList<ScoredDiseaseOrMetabolite> phenomizerUnfiltered) {
 		return phenomizerUnfiltered;
 	}
 

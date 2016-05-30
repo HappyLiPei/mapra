@@ -10,13 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.FileInputReader;
-import phenotogeno.algo.DiseaseGeneAssociation;
-import phenotogeno.algo.PhenoToGenoAlgo;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.algo.PhenoToGenoDriver;
-import phenotogeno.algo.ScoredDisease;
 import phenotogeno.io.FileUtilitiesPTG;
+import togeno.GeneAssociation;
+import togeno.ScoredDiseaseOrMetabolite;
 import togeno.ScoredGene;
+import togeno.ToGenoAlgo;
 
 public class TestPhenoToGeno {
 	
@@ -50,7 +50,7 @@ public class TestPhenoToGeno {
 	public void testWithReuse(){
 		
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
-		DiseaseGeneAssociation dga = dt.getDiseaseGeneAssociation(genes_raw, map_raw);
+		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes_raw, map_raw);
 		
 		//iterate over 8 test cases
 		for(int num=1; num<=8; num++){
@@ -58,15 +58,15 @@ public class TestPhenoToGeno {
 			//get phenomizer result
 			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
 					"../TestData/PhenoToGeno/phenores_"+num+".txt");
-			LinkedList<ScoredDisease> phenoRes = dt.getPhenomizerResult(query, dga);
+			LinkedList<ScoredDiseaseOrMetabolite> phenoRes = dt.getPhenomizerResult(query, dga);
 			
-			PhenoToGenoAlgo a = new PhenoToGenoAlgo(phenoRes,dga);
-			LinkedList<ScoredGene> actual = a.runPhenoToGene();
+			ToGenoAlgo a = new ToGenoAlgo(phenoRes,dga);
+			LinkedList<ScoredGene> actual = a.runToGene();
 			
 			//check results
 			compareToExpected(num, actual);
 			
-			dga.resetDiseaseScores();
+			dga.resetScores();
 		}	
 	}
 	

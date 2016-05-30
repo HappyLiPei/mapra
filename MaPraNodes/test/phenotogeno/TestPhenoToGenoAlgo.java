@@ -12,18 +12,18 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import phenotogeno.algo.DiseaseGeneAssociation;
-import phenotogeno.algo.PhenoToGenoAlgo;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
-import phenotogeno.algo.ScoredDisease;
 import phenotogeno.io.FileUtilitiesPTG;
 import togeno.AnnotatedGene;
+import togeno.GeneAssociation;
+import togeno.ScoredDiseaseOrMetabolite;
 import togeno.ScoredGene;
 import togeno.ScoredGeneComparator;
+import togeno.ToGenoAlgo;
 
 public class TestPhenoToGenoAlgo {
 	
-	private DiseaseGeneAssociation dga;
+	private GeneAssociation dga;
 	
 	@Before
 	public void generateDGA(){
@@ -42,13 +42,13 @@ public class TestPhenoToGenoAlgo {
 	public void testAnnotationOfGenes() throws NoSuchMethodException, SecurityException,
 	IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
-		LinkedList<ScoredDisease> pred = new LinkedList<ScoredDisease>();
-		pred.add(new ScoredDisease(100, 0.0));
-		pred.add(new ScoredDisease(101, 1.0));
+		LinkedList<ScoredDiseaseOrMetabolite> pred = new LinkedList<ScoredDiseaseOrMetabolite>();
+		pred.add(new ScoredDiseaseOrMetabolite(100, 0.0));
+		pred.add(new ScoredDiseaseOrMetabolite(101, 1.0));
 		
-		PhenoToGenoAlgo algo = new PhenoToGenoAlgo(pred, dga);
+		ToGenoAlgo algo = new ToGenoAlgo(pred, dga);
 		
-		Method m = PhenoToGenoAlgo.class.getDeclaredMethod("annotateGenes",null);
+		Method m = ToGenoAlgo.class.getDeclaredMethod("annotateGenes",null);
 		m.setAccessible(true);
 		m.invoke(algo, null);
 
@@ -99,8 +99,8 @@ public class TestPhenoToGenoAlgo {
 		g6.add("112", 0.05);
 		AnnotatedGene[] genes = new AnnotatedGene[]{g1,g2,g3,g4,g5,g6};
 		
-		PhenoToGenoAlgo algo = new PhenoToGenoAlgo(null, dga);
-		Method m = PhenoToGenoAlgo.class.getDeclaredMethod("scoreGenes",AnnotatedGene[].class);
+		ToGenoAlgo algo = new ToGenoAlgo(null, dga);
+		Method m = ToGenoAlgo.class.getDeclaredMethod("scoreGenes",AnnotatedGene[].class);
 		m.setAccessible(true);
 		LinkedList<ScoredGene> res =(LinkedList<ScoredGene>) m.invoke(algo, (Object) genes);
 		

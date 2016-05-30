@@ -19,13 +19,13 @@ import phenomizer.algorithm.PhenomizerAlgorithmWithPval;
 import phenomizer.algorithm.SimilarityCalculatorOneSidedWeight;
 import phenomizer.algorithm.SymptomDiseaseAssociations;
 import phenomizer.io.FileUtilitiesPhenomizer;
-import phenotogeno.algo.DiseaseGeneAssociation;
-import phenotogeno.algo.PhenoToGenoAlgo;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
-import phenotogeno.algo.ScoredDisease;
 import phenotogeno.io.FileUtilitiesPTG;
 import togeno.AnnotatedGene;
+import togeno.GeneAssociation;
+import togeno.ScoredDiseaseOrMetabolite;
 import togeno.ScoredGene;
+import togeno.ToGenoAlgo;
 
 /** structure for running a validation with simulated data on PhenoToGeno*/
 public class ValidateGeneRanking {
@@ -58,7 +58,7 @@ public class ValidateGeneRanking {
 	/** PhenomizerFilter object handling the interface between Phenomizer and PhenoToGeno*/
 	private PhenomizerFilter phenomizerFilter;
 	/** DiseaseGeneassociation object for PhenoToGeno*/
-	private DiseaseGeneAssociation dga;
+	private GeneAssociation dga;
 	/** array of Edge objects for NetworkScore*/
 	private Edge[] edges;
 	/** random walk with restart object representing the settings for the random walk*/
@@ -230,14 +230,14 @@ public class ValidateGeneRanking {
 					new SimilarityCalculatorOneSidedWeight(), folder, new BenjaminiHochbergCorrector(), ic, sim);
 			LinkedList<String[]> diseaseScores = phenomizer.runPhenomizer();
 			//parse result -> data transformer -> input PTG
-			LinkedList<ScoredDisease> inputPTG = dtPTG.getPhenomizerResultFromAlgo(diseaseScores, dga);
+			LinkedList<ScoredDiseaseOrMetabolite> inputPTG = dtPTG.getPhenomizerResultFromAlgo(diseaseScores, dga);
 			inputPTG = phenomizerFilter.filter(inputPTG);
 			
 			// run PhenoToGeno
-			PhenoToGenoAlgo ptg = new PhenoToGenoAlgo(inputPTG, dga);
-			LinkedList<ScoredGene> geneScores = ptg.runPhenoToGene();
+			ToGenoAlgo ptg = new ToGenoAlgo(inputPTG, dga);
+			LinkedList<ScoredGene> geneScores = ptg.runToGene();
 			//clear dga data structure for reuse
-			dga.resetDiseaseScores();
+			dga.resetScores();
 			
 			//evaluate results of PhenoToGeno
 			double [] ranksPTG = calculateGeneRanks(geneScores, currentGenes);

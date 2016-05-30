@@ -8,16 +8,16 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import phenotogeno.algo.DiseaseGeneAssociation;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
-import phenotogeno.algo.ScoredDisease;
 import phenotogeno.io.FileUtilitiesPTG;
+import togeno.GeneAssociation;
+import togeno.ScoredDiseaseOrMetabolite;
 
 public class TestFilter {
 	
-	private LinkedList<ScoredDisease> phenores2;
-	private LinkedList<ScoredDisease> phenores3;
-	private LinkedList<ScoredDisease> phenores5;
+	private LinkedList<ScoredDiseaseOrMetabolite> phenores2;
+	private LinkedList<ScoredDiseaseOrMetabolite> phenores3;
+	private LinkedList<ScoredDiseaseOrMetabolite> phenores5;
 	
 	@Before
 	public void prepare(){
@@ -31,7 +31,7 @@ public class TestFilter {
 		LinkedList<String[]> pheno_raw5 = FileUtilitiesPTG.readPhenomizerResult("../TestData/PhenoToGeno/phenores_5.txt");
 		
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
-		DiseaseGeneAssociation dga = dt.getDiseaseGeneAssociation(genes, map);
+		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes, map);
 		
 		phenores2 = dt.getPhenomizerResult(pheno_raw2, dga);
 		phenores3 = dt.getPhenomizerResult(pheno_raw3, dga);
@@ -90,7 +90,7 @@ public class TestFilter {
 		compareLists(5, phenores5, 4, filter.filter(phenores5));
 	}
 	
-	private void compareLists(int number, LinkedList<ScoredDisease> list_expected, int size_expected, LinkedList<ScoredDisease> list_actual){
+	private void compareLists(int number, LinkedList<ScoredDiseaseOrMetabolite> list_expected, int size_expected, LinkedList<ScoredDiseaseOrMetabolite> list_actual){
 		
 		assertEquals("Size of list "+number+" is incorrect", size_expected, list_actual.size());
 		for(int i=0; i<size_expected; i++){

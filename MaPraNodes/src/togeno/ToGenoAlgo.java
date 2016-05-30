@@ -1,32 +1,31 @@
-package phenotogeno.algo;
+package togeno;
 
 import java.util.Collections;
 import java.util.LinkedList;
 
-import togeno.AnnotatedGene;
-import togeno.ScoredGene;
-import togeno.ScoredGeneComparator;
-
-public class PhenoToGenoAlgo {
+/** algorithm to transfer scores from diseases/metabolites to associated genes*/
+public class ToGenoAlgo {
 	
-	private LinkedList<ScoredDisease> pheno_res;
-	private DiseaseGeneAssociation dga;
+	/** result from Phenomizer or MetaboliteScore: ids associated with pvalues*/
+	private LinkedList<ScoredDiseaseOrMetabolite> score_res;
+	/** object representing associations between genes and diseases/metabolites*/
+	private GeneAssociation dga;
 	
 	/**
-	 * generates a PhenoToGenoAlgo for transferring Phenomizer p values to genes
-	 * @param pheno_res result of Phenomizer als list of scored diseases (disease id + p value)
-	 * @param dga DiseaseGeneAssociation stores associations between diseases and genes
+	 * generates a ToGenoAlgo for transferring Phenomizer/MetaboliteScore p values to genes
+	 * @param score_res result of Phenomizer/MetaboliteScore as list of scored diseases/metabolites (id + p value)
+	 * @param dga GeneAssociation stores associations between diseases/metabolites and genes
 	 */
-	public PhenoToGenoAlgo (LinkedList<ScoredDisease> pheno_res, DiseaseGeneAssociation dga){
-		this.pheno_res = pheno_res;
+	public ToGenoAlgo (LinkedList<ScoredDiseaseOrMetabolite> score_res, GeneAssociation dga){
+		this.score_res = score_res;
 		this.dga = dga;
 	}
 	
 	/**
-	 * method to execute the PhenoToGenoAlgorithm
+	 * method to execute the ToGenoAlgorithm
 	 * @return a sorted list of ScoredGenes (sorted in descending order according to score)
 	 */
-	public LinkedList<ScoredGene> runPhenoToGene(){
+	public LinkedList<ScoredGene> runToGene(){
 		annotateGenes();
 		LinkedList<ScoredGene> result= scoreGenes(dga.getAllGenes());
 		//sort result according to score
@@ -35,15 +34,15 @@ public class PhenoToGenoAlgo {
 	}
 	
 	/**
-	 * method to transfer the Phenomizer p values to all associated genes of the corresponding disease,
-	 * the method used by runPhenoToGene()
+	 * method to transfer the Phenomizer/MetaboliteScore p values to all associated genes of the corresponding disease/metabolite,
+	 * the method used by runToGene()
 	 */
 	private void annotateGenes(){
-		for (ScoredDisease scoredDisease: pheno_res){
+		for (ScoredDiseaseOrMetabolite scoredDisease: score_res){
 			//calculate score from p value
-			double score = (double) 1/(1+dga.numberOfDiseases()*scoredDisease.getPval());
+			double score = (double) 1/(1+dga.numberOfDiseasesOrMetabolites()*scoredDisease.getPval());
 			//get gene annotations for the current diseases
-			AnnotatedGene [] genes = dga.getGenesForDiseaseWithID(scoredDisease.getId());
+			AnnotatedGene [] genes = dga.getGenesForDiseaseMetaboliteWithID(scoredDisease.getId());
 			
 			//no genes known for the current disease -> distribute score equally on all genes
 			if(genes.length==0){

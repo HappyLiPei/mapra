@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import togeno.AnnotatedGene;
+import togeno.GeneAssociation;
+import togeno.ScoredDiseaseOrMetabolite;
 
 public class PhenoToGenoDataTransformer {
 	
@@ -17,8 +19,8 @@ public class PhenoToGenoDataTransformer {
 	 * @param dga DiseaseGeneAssocation object representing disease - gene associations
 	 * @return List of ScoredDiseases required for PhenoToGenoAlgo
 	 */
-	public LinkedList<ScoredDisease> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
-			DiseaseGeneAssociation dga){
+	public LinkedList<ScoredDiseaseOrMetabolite> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
+			GeneAssociation dga){
 		
 		return getPhenomizerResult(phenomizer_input, dga, 0, 1);
 	}
@@ -33,8 +35,8 @@ public class PhenoToGenoDataTransformer {
 	 * @param dga DiseaseGeneAssocation object representing disease - gene associations
 	 * @return List of ScoredDiseases required for PhenoToGenoAlgo
 	 */
-	public LinkedList<ScoredDisease> getPhenomizerResultFromAlgo(LinkedList<String[]> phenomizer_input,
-			DiseaseGeneAssociation dga){
+	public LinkedList<ScoredDiseaseOrMetabolite> getPhenomizerResultFromAlgo(LinkedList<String[]> phenomizer_input,
+			GeneAssociation dga){
 		
 		return getPhenomizerResult(phenomizer_input, dga, 0, 2);
 	} 
@@ -50,20 +52,20 @@ public class PhenoToGenoDataTransformer {
 	 * @param posPval position of the pvalue within the arrays of phenomizer_input
 	 * @return List of ScoredDiseases required for PhenoToGenoAlgo
 	 */
-	private LinkedList<ScoredDisease> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
-			DiseaseGeneAssociation dga, int posId, int posPval){
+	private LinkedList<ScoredDiseaseOrMetabolite> getPhenomizerResult(LinkedList<String[]> phenomizer_input,
+			GeneAssociation dga, int posId, int posPval){
 		
-		LinkedList<ScoredDisease> result = new LinkedList<ScoredDisease>();
+		LinkedList<ScoredDiseaseOrMetabolite> result = new LinkedList<ScoredDiseaseOrMetabolite>();
 		for(String[] disease_pval: phenomizer_input){
 			String disease_id = disease_pval[posId];
 			//test if disease is part of disease - gene annotation
-			if(dga.containsDisease(disease_id)){
+			if(dga.containsDiseaseOrMetabolite(disease_id)){
 				double pvalue = Double.parseDouble(disease_pval[posPval]);
 				//test if pvalue is 0, if yes -> replace it by 0.001
 				if(pvalue<1E-3){
 					pvalue =0.001;
 				}
-				ScoredDisease d = new ScoredDisease(disease_id, pvalue);
+				ScoredDiseaseOrMetabolite d = new ScoredDiseaseOrMetabolite(disease_id, pvalue);
 				result.add(d);
 			}
 		}
@@ -79,7 +81,7 @@ public class PhenoToGenoDataTransformer {
 	 * @param association hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
 	 * @return a DiseaseGeneAssociation object require for PhenoToGeno algo
 	 */
-	public DiseaseGeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,
+	public GeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,
 			HashMap<Integer, LinkedList<String>> association){
 		
 		//remove duplicates from gene_list
@@ -113,7 +115,7 @@ public class PhenoToGenoDataTransformer {
 		}
 
 		// association disease - gene
-		return new DiseaseGeneAssociation(genes, associationsCorrected);
+		return new GeneAssociation(genes, associationsCorrected);
 	}
 
 }

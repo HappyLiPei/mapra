@@ -10,10 +10,10 @@ import org.junit.Test;
 import phenomizer.algorithm.FrequencyConverter;
 import phenomizer.algorithm.PhenomizerDriver;
 import phenomizer.io.FileUtilitiesPhenomizer;
-import phenotogeno.algo.DiseaseGeneAssociation;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
-import phenotogeno.algo.ScoredDisease;
 import phenotogeno.io.FileUtilitiesPTG;
+import togeno.GeneAssociation;
+import togeno.ScoredDiseaseOrMetabolite;
 
 public class TestCombinationWithPhenomizer {
 
@@ -60,8 +60,8 @@ public class TestCombinationWithPhenomizer {
 		HashMap<Integer, LinkedList<String>> mapping =
 				FileUtilitiesPTG.readDiseaseGeneAssociation("../TestData/PhenoToGeno/gene_diseases.txt");
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
-		DiseaseGeneAssociation dga =dt.getDiseaseGeneAssociation(genes_raw, mapping);
-		LinkedList<ScoredDisease> transformed = dt.getPhenomizerResultFromAlgo(res, dga);
+		GeneAssociation dga =dt.getDiseaseGeneAssociation(genes_raw, mapping);
+		LinkedList<ScoredDiseaseOrMetabolite> transformed = dt.getPhenomizerResultFromAlgo(res, dga);
 		
 		assertEquals("Size of parsed data is incorrect", res.size(), transformed.size());
 		for(int pos =0; pos<res.size(); pos++){

@@ -3,7 +3,10 @@ package phenotogeno.algo;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import togeno.GeneAssociation;
+import togeno.ScoredDiseaseOrMetabolite;
 import togeno.ScoredGene;
+import togeno.ToGenoAlgo;
 
 //call this class from node to run PhenoToGeno
 public class PhenoToGenoDriver {
@@ -12,8 +15,8 @@ public class PhenoToGenoDriver {
 	private LinkedList<String> genes_raw;
 	private HashMap<Integer, LinkedList<String>> mapping;
 	
-	private LinkedList<ScoredDisease> phenomizer;
-	private DiseaseGeneAssociation dga;
+	private LinkedList<ScoredDiseaseOrMetabolite> phenomizer;
+	private GeneAssociation dga;
 	
 	/**
 	 * generates a driver for PhenoToGeno,
@@ -37,8 +40,8 @@ public class PhenoToGenoDriver {
 	 */
 	public LinkedList<ScoredGene> runPhenoToGeno(){
 		prepareData();
-		PhenoToGenoAlgo ptg = new PhenoToGenoAlgo(phenomizer, dga);
-		return ptg.runPhenoToGene();
+		ToGenoAlgo ptg = new ToGenoAlgo(phenomizer, dga);
+		return ptg.runToGene();
 	}
 	
 	/**
