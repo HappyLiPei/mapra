@@ -9,7 +9,7 @@ public class AnnotatedGene extends Gene {
 	//saves maximum score
 	private double currentMax;
 	//saves list of at most 3 disease ids 
-	private LinkedList<Integer> currentMaxIds;
+	private LinkedList<String> currentMaxIds;
 	//indicates if currentMax is a truncated list, moreMax = true -> there are more than 3 ids with max score
 	private boolean moreMax;
 	
@@ -22,7 +22,7 @@ public class AnnotatedGene extends Gene {
 		super(id);
 		currentScore = 1;
 		currentMax =-1;
-		currentMaxIds = new LinkedList<Integer>();
+		currentMaxIds = new LinkedList<String>();
 		moreMax=false;
 	}
 	
@@ -31,7 +31,7 @@ public class AnnotatedGene extends Gene {
 	 * @param disease_id PhenoDis disease id
 	 * @param score gene score resulting from Phenomizer prediction for the disease with id disease_id
 	 */
-	public void add(int disease_id, double score) {
+	public void add(String disease_id, double score) {
 		currentScore = currentScore*(1-score);
 		//new score is equal to max
 		if(Math.abs(currentMax-score)<1E-5){
@@ -44,7 +44,7 @@ public class AnnotatedGene extends Gene {
 			}
 		} else if(score>currentMax){
 			currentMax=score;
-			currentMaxIds=new LinkedList<Integer>();
+			currentMaxIds=new LinkedList<String>();
 			currentMaxIds.add(disease_id);
 			moreMax=false;
 		}
@@ -54,10 +54,10 @@ public class AnnotatedGene extends Gene {
 	 * retrieves at most 3 disease ids with maximum score annotated to this gene -> important disease annotation
 	 * @return array of disease_ids (PhenoDis) with maximum score
 	 */
-	public int [] getDiseaseIds(){
-		int [] ids_return = new int [currentMaxIds.size()];
+	public String [] getDiseaseIds(){
+		String [] ids_return = new String [currentMaxIds.size()];
 		int position=0;
-		for(int disease_id:currentMaxIds){
+		for(String disease_id:currentMaxIds){
 			ids_return[position] = disease_id;
 			position++;
 		}
@@ -91,7 +91,7 @@ public class AnnotatedGene extends Gene {
 	public void resetAnnotation(){
 		currentScore = 1;
 		currentMax =-1;
-		currentMaxIds = new LinkedList<Integer>();
+		currentMaxIds = new LinkedList<String>();
 		moreMax=false;
 	}
 	

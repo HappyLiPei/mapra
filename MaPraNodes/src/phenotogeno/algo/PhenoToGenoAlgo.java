@@ -68,9 +68,9 @@ public class PhenoToGenoAlgo {
 			double combined_score = g.getFinalScore();
 			combined_score =(double) Math.round(combined_score*100000)/100000;
 			//get diseases with maximum contribution to the gene (at most 3 diseases)
-			int [] ids = g.getDiseaseIds();
+			String [] ids = g.getDiseaseIds();
 			String important_dis ="";
-			for(int id:ids){
+			for(String id:ids){
 				if(important_dis.length()==0){
 					important_dis=""+id;
 				}

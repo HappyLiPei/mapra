@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class DiseaseGeneAssociation {
 	
-	private HashMap<Integer, LinkedList<String>> diseaseID_genesID;
+	private HashMap<String, LinkedList<String>> diseaseID_genesID;
 	private HashMap<String, AnnotatedGene> geneID_gene;
 	private AnnotatedGene[] allGenes;
 	
@@ -17,7 +17,7 @@ public class DiseaseGeneAssociation {
 	 * 	the disease is represented as a PhenoDis disease id (integer),
 	 * 	the genes are a list of ids (e.g. ensembl) (String)
 	 */
-	public DiseaseGeneAssociation(AnnotatedGene[] genes, HashMap<Integer, LinkedList<String>> mapping) {
+	public DiseaseGeneAssociation(AnnotatedGene[] genes, HashMap<String, LinkedList<String>> mapping) {
 		this.diseaseID_genesID = mapping;
 		this.allGenes = genes;
 		buildGeneIDMap();
@@ -41,7 +41,7 @@ public class DiseaseGeneAssociation {
 	 * 	array is empty if no genes are annotated,
 	 * 	array is null if the disease id is invalid 
 	 */
-	public AnnotatedGene[] getGenesForDiseaseWithID(int disease_id){
+	public AnnotatedGene[] getGenesForDiseaseWithID(String disease_id){
 		
 		//disease id valid
 		if(diseaseID_genesID.containsKey(disease_id)){
@@ -65,6 +65,11 @@ public class DiseaseGeneAssociation {
 			return null;
 		}	
 	}
+	
+	public AnnotatedGene[] getGenesForDiseaseWithID(int disease_id){
+		return getGenesForDiseaseWithID(disease_id+"");
+	}
+
 	
 	/**
 	 * retrieves the gene object corresponding to a id
@@ -111,8 +116,8 @@ public class DiseaseGeneAssociation {
 	 * @return true if there is an entry for the disease in this object, 
 	 * 			false if there is no entry for the disease
 	 */
-	public boolean containsDisease(int disease_id) {
-		return diseaseID_genesID.containsKey(disease_id);
+	public boolean containsDisease(String disease_id) {
+		return diseaseID_genesID.containsKey(disease_id+"");
 	}
 	
 	/**

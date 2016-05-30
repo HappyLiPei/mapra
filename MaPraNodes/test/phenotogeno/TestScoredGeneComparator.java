@@ -10,7 +10,7 @@ import phenotogeno.algo.ScoredGene;
 import phenotogeno.algo.ScoredGeneComparator;
 
 public class TestScoredGeneComparator {
-
+	//TODO: move + test with different number of decimal places
 	@Test
 	public void testComparator() {
 		

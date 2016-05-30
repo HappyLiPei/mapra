@@ -65,7 +65,7 @@ public class TestCombinationWithPhenomizer {
 		
 		assertEquals("Size of parsed data is incorrect", res.size(), transformed.size());
 		for(int pos =0; pos<res.size(); pos++){
-			assertEquals("Id of Result "+(pos+1)+" is not parsed correctly", expectedID[pos],
+			assertEquals("Id of Result "+(pos+1)+" is not parsed correctly", expectedID[pos]+"",
 					transformed.get(pos).getId());
 			assertEquals("Pvalue of Result "+(pos+1)+" is not parsed correctly", expectedPV[pos],
 					transformed.get(pos).getPval(),1E-5);

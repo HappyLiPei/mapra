@@ -2,7 +2,7 @@ package phenotogeno.algo;
 
 public class ScoredDisease {
 	
-	private int id;
+	private String id;
 	private double pval;
 
 	/**
@@ -11,7 +11,12 @@ public class ScoredDisease {
 	 * @param pval pvalue of the disease in the result of Phenomizer
 	 */
 	public ScoredDisease(int id, double pval){
-		this.id = id;
+		this.id = id+"";
+		this.pval = pval;
+	}
+	
+	public ScoredDisease(String id, double pval){
+		this.id =id;
 		this.pval = pval;
 	}
 	
@@ -19,7 +24,7 @@ public class ScoredDisease {
 	 * retrieves the PhenoDis id of the disease
 	 * @return PhenoDis disease if
 	 */
-	public int getId(){
+	public String getId(){
 		return id;
 	}
 	

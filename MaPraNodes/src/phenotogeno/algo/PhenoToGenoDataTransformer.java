@@ -53,7 +53,7 @@ public class PhenoToGenoDataTransformer {
 		
 		LinkedList<ScoredDisease> result = new LinkedList<ScoredDisease>();
 		for(String[] disease_pval: phenomizer_input){
-			int disease_id = Integer.parseInt(disease_pval[posId]);
+			String disease_id = disease_pval[posId];
 			//test if disease is part of disease - gene annotation
 			if(dga.containsDisease(disease_id)){
 				double pvalue = Double.parseDouble(disease_pval[posPval]);
@@ -97,11 +97,11 @@ public class PhenoToGenoDataTransformer {
 		}
 		
 		//remove all genes from association map that are not in the gene list and remove all duplicates
-		HashMap<Integer, LinkedList<String>> associationsCorrected =
-				new HashMap<Integer, LinkedList<String>>(association.size()*3);
+		HashMap<String, LinkedList<String>> associationsCorrected =
+				new HashMap<String, LinkedList<String>>(association.size()*3);
 		for(int id:association.keySet()){
 			LinkedList<String> genesCorrected = new LinkedList<String>();
-			associationsCorrected.put(id, genesCorrected);
+			associationsCorrected.put(id+"", genesCorrected);
 			for(String entry_gene:association.get(id)){
 				// gene is in gene list && gene is no duplicate 
 				if(dedup_gene_list.contains(entry_gene) && !genesCorrected.contains(entry_gene)){

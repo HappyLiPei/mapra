@@ -66,7 +66,7 @@ public class TestPhenoToGenoDataStructures {
 			assertEquals("Size of Phenomizer Result is incorrect"+mode, 9, pheno_res.size());
 			int pos=0;
 			for(ScoredDisease sd : pheno_res){
-				assertEquals("Disease id at position "+pos+" is incorrect"+mode, expected_ids[pos], sd.getId());
+				assertEquals("Disease id at position "+pos+" is incorrect"+mode, expected_ids[pos]+"", sd.getId());
 				assertEquals("Score at position "+pos+" is incorrect"+mode, expected_scores[pos], sd.getPval(), 1E-10);
 				pos++;
 			}
@@ -107,15 +107,15 @@ public class TestPhenoToGenoDataStructures {
 			assertTrue("Pointers are not set correctly"+mode,g==all[41]);
 			
 			//test gene retrieval for a certain diseases
-			AnnotatedGene [] genes =dga.getGenesForDiseaseWithID(100);
+			AnnotatedGene [] genes =dga.getGenesForDiseaseWithID("100");
 			assertEquals("Genes for disease 100 are incorrect"+mode, 0, genes.length);
-			genes = dga.getGenesForDiseaseWithID(111);
+			genes = dga.getGenesForDiseaseWithID("111");
 			assertNull(genes);
-			genes = dga.getGenesForDiseaseWithID(103);
+			genes = dga.getGenesForDiseaseWithID("103");
 			String [] ids = getIds(genes);
 			assertArrayEquals("Genes for disease 103 are incorrect"+mode,
 					new String []{"MTG4", "MTG5", "MTG6", "MTG7", "MTG8", "MTG14"}, ids);
-			genes = dga.getGenesForDiseaseWithID(108);
+			genes = dga.getGenesForDiseaseWithID("108");
 			ids = getIds(genes);
 			assertArrayEquals("Genes for disease 108 are incorrect"+mode,
 					new String []{"MTG15", "MTG21", "MTG24"}, ids);
