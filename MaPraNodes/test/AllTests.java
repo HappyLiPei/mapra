@@ -37,13 +37,13 @@ import phenotogeno.TestPhenoToGeno;
 import phenotogeno.TestPhenoToGenoAlgo;
 import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
-import phenotogeno.TestScoredGeneComparator;
 import phenotogeno.validation.TestFilter;
 import phenotogeno.validation.TestIteratorAll;
 import phenotogeno.validation.TestRankCalculation;
 import phenotogeno.validation.TestSimulator;
 import phenotogeno.validation.TestSimulatorIteratorFromFile;
 import phenotogeno.validation.TestValidationProcedure;
+import togeno.TestScoredGeneComparator;
 
 @RunWith(Suite.class)
 @SuiteClasses({ TestIOReaderWriter.class, 
@@ -70,9 +70,10 @@ import phenotogeno.validation.TestValidationProcedure;
 				TestPhenoToGenoFileIO.class,
 				TestPhenoToGenoDataStructures.class,
 				TestPhenoToGenoAlgo.class,
-				TestScoredGeneComparator.class,
 				TestPhenoToGeno.class,
 				TestCombinationWithPhenomizer.class,
+				//togeno
+				TestScoredGeneComparator.class,
 				//validation phenotype/phenotogeno
 				TestRankCalculation.class,
 				TestValidationProcedure.class,

@@ -1,4 +1,4 @@
-package phenotogeno;
+package togeno;
 
 import static org.junit.Assert.*;
 
