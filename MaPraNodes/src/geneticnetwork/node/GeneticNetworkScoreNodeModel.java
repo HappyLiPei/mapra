@@ -18,8 +18,8 @@ import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 
 import geneticnetwork.algorithm.NetworkScoreDriver;
 import nodeutils.TableFunctions;
-import phenotogeno.algo.ScoredGene;
 import phenotogeno.node.PhenoToGenoNodeNodeModel;
+import togeno.ScoredGene;
 
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;

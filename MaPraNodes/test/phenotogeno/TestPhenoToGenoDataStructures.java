@@ -7,11 +7,11 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import phenotogeno.algo.AnnotatedGene;
 import phenotogeno.algo.DiseaseGeneAssociation;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.algo.ScoredDisease;
 import phenotogeno.io.FileUtilitiesPTG;
+import togeno.AnnotatedGene;
 
 public class TestPhenoToGenoDataStructures {
 	

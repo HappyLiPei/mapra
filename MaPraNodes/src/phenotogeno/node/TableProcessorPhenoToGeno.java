@@ -21,7 +21,7 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
 import phenomizer.node.PhenomizerNodeModel;
-import phenotogeno.algo.ScoredGene;
+import togeno.ScoredGene;
 
 public class TableProcessorPhenoToGeno {
 	
@@ -296,7 +296,7 @@ public class TableProcessorPhenoToGeno {
         	data[indexProb] = new DoubleCell(g.getScore());
         	
         	//add major contribution to score either as list of ids or list of disease names
-        	String importantDiseases = g.getImportantDiseases();
+        	String importantDiseases = g.getImportantContributors();
         	//list of disease names and ids
         	if(idToName.size()!=0 && !importantDiseases.equals("")){
         		String [] components = importantDiseases.split(",");

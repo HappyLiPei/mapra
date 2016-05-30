@@ -1,7 +1,8 @@
-package phenotogeno.algo;
+package togeno;
 
 import java.util.Comparator;
 
+/** comparator for comparing and sorting {@link ScoredGene} objects */
 public class ScoredGeneComparator implements Comparator<ScoredGene>{
 	
 	/** number of decimal places to consider for equality -> assume data is rounded to that number of decimal places*/

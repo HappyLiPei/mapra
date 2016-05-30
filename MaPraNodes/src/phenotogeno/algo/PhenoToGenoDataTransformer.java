@@ -3,6 +3,8 @@ package phenotogeno.algo;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import togeno.AnnotatedGene;
+
 public class PhenoToGenoDataTransformer {
 	
 	/**

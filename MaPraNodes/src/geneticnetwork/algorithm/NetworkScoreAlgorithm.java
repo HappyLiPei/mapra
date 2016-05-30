@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import geneticnetwork.datastructures.Vector;
-import phenotogeno.algo.ScoredGene;
-import phenotogeno.algo.ScoredGeneComparator;
+import togeno.ScoredGene;
+import togeno.ScoredGeneComparator;
 
 public class NetworkScoreAlgorithm {
 	

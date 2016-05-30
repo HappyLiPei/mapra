@@ -12,7 +12,7 @@ import geneticnetwork.algorithm.DataTransformerGeneticNetwork;
 import geneticnetwork.datastructures.ScoredGenes;
 import geneticnetwork.io.FileUtilitiesGeneticNetwork;
 import io.FileInputReader;
-import phenotogeno.algo.ScoredGene;
+import togeno.ScoredGene;
 
 public class TestScoredGenes {
 

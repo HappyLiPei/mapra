@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import io.FileInputReader;
-import phenotogeno.algo.ScoredGene;
+import togeno.ScoredGene;
 
 public class TestRankCalculation {
 

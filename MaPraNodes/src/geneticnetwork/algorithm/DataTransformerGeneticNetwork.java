@@ -8,7 +8,7 @@ import geneticnetwork.datastructures.Edge;
 import geneticnetwork.datastructures.ScoredGenes;
 import geneticnetwork.datastructures.UnweightedEdge;
 import geneticnetwork.datastructures.WeightedEdge;
-import phenotogeno.algo.ScoredGene;
+import togeno.ScoredGene;
 
 public class DataTransformerGeneticNetwork {
 	

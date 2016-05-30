@@ -19,8 +19,8 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
 import nodeutils.TableFunctions;
-import phenotogeno.algo.ScoredGene;
 import phenotogeno.node.PhenoToGenoNodeNodeModel;
+import togeno.ScoredGene;
 
 public class GeneticNetworkScoreTableProcessor {
 	

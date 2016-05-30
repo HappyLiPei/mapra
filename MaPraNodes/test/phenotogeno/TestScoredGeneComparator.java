@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import phenotogeno.algo.ScoredGene;
-import phenotogeno.algo.ScoredGeneComparator;
+import togeno.ScoredGene;
+import togeno.ScoredGeneComparator;
 
 public class TestScoredGeneComparator {
 	//TODO: move + test with different number of decimal places

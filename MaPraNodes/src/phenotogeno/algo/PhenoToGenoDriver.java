@@ -3,6 +3,8 @@ package phenotogeno.algo;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import togeno.ScoredGene;
+
 //call this class from node to run PhenoToGeno
 public class PhenoToGenoDriver {
 	

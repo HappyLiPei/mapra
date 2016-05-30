@@ -15,8 +15,8 @@ import phenotogeno.algo.PhenoToGenoAlgo;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.algo.PhenoToGenoDriver;
 import phenotogeno.algo.ScoredDisease;
-import phenotogeno.algo.ScoredGene;
 import phenotogeno.io.FileUtilitiesPTG;
+import togeno.ScoredGene;
 
 public class TestPhenoToGeno {
 	
@@ -91,11 +91,11 @@ public class TestPhenoToGeno {
 					gExpected[1], gActual.getScore()+"");
 			if(gExpected.length==2){
 				assertEquals("Disease annotation at row "+(i+1)+" of result "+num+" is incorrect",
-						"",gActual.getImportantDiseases());
+						"",gActual.getImportantContributors());
 			}
 			else{
 				assertEquals("Disease annotation at row "+(i+1)+" of result "+num+" is incorrect",
-						gExpected[2],gActual.getImportantDiseases());
+						gExpected[2],gActual.getImportantContributors());
 			}
 		}
 	}

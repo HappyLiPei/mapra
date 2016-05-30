@@ -3,6 +3,10 @@ package phenotogeno.algo;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import togeno.AnnotatedGene;
+import togeno.ScoredGene;
+import togeno.ScoredGeneComparator;
+
 public class PhenoToGenoAlgo {
 	
 	private LinkedList<ScoredDisease> pheno_res;
@@ -68,7 +72,7 @@ public class PhenoToGenoAlgo {
 			double combined_score = g.getFinalScore();
 			combined_score =(double) Math.round(combined_score*100000)/100000;
 			//get diseases with maximum contribution to the gene (at most 3 diseases)
-			String [] ids = g.getDiseaseIds();
+			String [] ids = g.getContributorIds();
 			String important_dis ="";
 			for(String id:ids){
 				if(important_dis.length()==0){

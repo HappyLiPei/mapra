@@ -24,7 +24,7 @@ import org.knime.core.node.NodeSettingsWO;
 import nodeutils.TableFunctions;
 import phenomizer.node.PhenomizerNodeModel;
 import phenotogeno.algo.PhenoToGenoDriver;
-import phenotogeno.algo.ScoredGene;
+import togeno.ScoredGene;
 
 
 /**

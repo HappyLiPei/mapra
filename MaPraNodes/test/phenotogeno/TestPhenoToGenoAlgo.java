@@ -12,14 +12,14 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import phenotogeno.algo.AnnotatedGene;
 import phenotogeno.algo.DiseaseGeneAssociation;
 import phenotogeno.algo.PhenoToGenoAlgo;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.algo.ScoredDisease;
-import phenotogeno.algo.ScoredGene;
-import phenotogeno.algo.ScoredGeneComparator;
 import phenotogeno.io.FileUtilitiesPTG;
+import togeno.AnnotatedGene;
+import togeno.ScoredGene;
+import togeno.ScoredGeneComparator;
 
 public class TestPhenoToGenoAlgo {
 	
@@ -60,13 +60,13 @@ public class TestPhenoToGenoAlgo {
 		for (AnnotatedGene g: genes){
 			if(anno.contains(g.getId())){
 				assertArrayEquals("Disease annotation for "+g.getId()+" is incorrect"
-						,new String[]{"101"} ,g.getDiseaseIds());
+						,new String[]{"101"} ,g.getContributorIds());
 				assertEquals("Probability for "+g.getId()+" is incorrect",
 						1-(1-1d/50)*(1-1d/12), g.getFinalScore(), 1E-10);
 			}
 			else{
 				assertArrayEquals("Disease annotation for "+g.getId()+" is incorrect"
-						,new String[]{"100"} ,g.getDiseaseIds());
+						,new String[]{"100"} ,g.getContributorIds());
 				assertEquals("Probability for "+g.getId()+" is incorrect",
 						1d/50, g.getFinalScore(), 1E-10);
 			}
@@ -110,7 +110,7 @@ public class TestPhenoToGenoAlgo {
 			assertEquals("Score for gene "+(i+1)+" is incorrect",
 					expected_scores[i], res.get(i).getScore(), 1E-5);
 			assertEquals("Annotation for gene "+(i+1)+" is incorrect",
-					expected_origin[i], res.get(i).getImportantDiseases());
+					expected_origin[i], res.get(i).getImportantContributors());
 		}
 		
 		//check sorting function

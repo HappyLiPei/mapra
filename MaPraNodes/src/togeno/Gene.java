@@ -1,7 +1,9 @@
-package phenotogeno.algo;
+package togeno;
 
+/** object representing a gene*/
 public class Gene {
 	
+	/** unqiue identifier of the gene e.g Ensembl id*/
 	private String id;
 	
 	/**

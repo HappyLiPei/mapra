@@ -19,13 +19,13 @@ import phenomizer.algorithm.PhenomizerAlgorithmWithPval;
 import phenomizer.algorithm.SimilarityCalculatorOneSidedWeight;
 import phenomizer.algorithm.SymptomDiseaseAssociations;
 import phenomizer.io.FileUtilitiesPhenomizer;
-import phenotogeno.algo.AnnotatedGene;
 import phenotogeno.algo.DiseaseGeneAssociation;
 import phenotogeno.algo.PhenoToGenoAlgo;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.algo.ScoredDisease;
-import phenotogeno.algo.ScoredGene;
 import phenotogeno.io.FileUtilitiesPTG;
+import togeno.AnnotatedGene;
+import togeno.ScoredGene;
 
 /** structure for running a validation with simulated data on PhenoToGeno*/
 public class ValidateGeneRanking {

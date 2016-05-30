@@ -15,7 +15,7 @@ import geneticnetwork.algorithm.RandomWalkWithRestartFixedIterations;
 import geneticnetwork.algorithm.RandomWalkWithRestartUntilConvergence;
 import geneticnetwork.io.FileUtilitiesGeneticNetwork;
 import io.FileInputReader;
-import phenotogeno.algo.ScoredGene;
+import togeno.ScoredGene;
 
 public class TestGeneticNetworkScore {
 	

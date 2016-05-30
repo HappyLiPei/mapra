@@ -3,8 +3,8 @@ package phenotogeno.validation;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import phenotogeno.algo.ScoredGene;
-import phenotogeno.algo.ScoredGeneComparator;
+import togeno.ScoredGene;
+import togeno.ScoredGeneComparator;
 
 /** RankCalculator provides helpful methods for calculating ranks */
 public class RankCalculator {

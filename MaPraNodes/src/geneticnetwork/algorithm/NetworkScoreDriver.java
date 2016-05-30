@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import geneticnetwork.datastructures.Edge;
 import geneticnetwork.datastructures.ScoredGenes;
-import phenotogeno.algo.ScoredGene;
+import togeno.ScoredGene;
 
 public class NetworkScoreDriver {
 	
