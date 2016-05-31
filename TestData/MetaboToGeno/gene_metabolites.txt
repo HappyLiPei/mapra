@@ -1,0 +1,36 @@
+metabolite_id	gene_id	source
+M01	MTG20	test
+M02	MTG21	test
+M03	MTG22	test
+M03	MTG23	test
+M03	MTG24	test
+M04	MTG22	test
+M04	MTG24	test
+M04	MTG25	test
+M04	MTG19	test
+M05	MTG25	test
+M05	MTG19	test
+M05	MTG18	test
+M06	MTG16	source
+M06	MTG17	source
+M06	MTG15	source
+M07	MTG15	source
+M08	MTG15	source
+M06	MTG16	test2
+M06	MTG17	test2
+M06	MTG15	test2
+M07	MTG15	test2
+M08	MTG15	test2
+M09	MTG29	database
+M09	MTG26	database
+M09	MTG27	database
+M09	MTG28	database
+M10	MTG26	database
+M10	MTG27	database
+M10	MTG28	database
+M10	MTG30	database
+M11		
+M12		
+M13		
+M14		
+M15		

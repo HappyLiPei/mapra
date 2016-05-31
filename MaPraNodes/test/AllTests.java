@@ -16,6 +16,7 @@ import metabolites.TestDataTransformerMetabolites;
 import metabolites.TestFileUtilitiesMetabolites;
 import metabolites.TestMetaboliteScoringInReference;
 import metabolites.TestScoreMetabolites;
+import metabotogeno.TestMetaboToGenoIO;
 import phenomizeralgorithm.TestComparatorPheno;
 import phenomizeralgorithm.TestDataTransformer;
 import phenomizeralgorithm.TestFrequencyConverter;
@@ -94,7 +95,9 @@ import togeno.TestScoredGeneComparator;
 				TestSparseMatrix.class,
 				TestMatrixVectorBuilder.class,
 				TestRandomWalk.class,
-				TestGeneticNetworkScore.class })
+				TestGeneticNetworkScore.class,
+				//metabotogeno
+				TestMetaboToGenoIO.class })
 public class AllTests {
 
 }
