@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import io.FileInputReader;
+import metabotogeno.algo.DataTransformerMTG;
 import phenotogeno.io.FileUtilitiesPTG;
 
 public class FileUtilitiesMTG {
@@ -99,9 +100,9 @@ public class FileUtilitiesMTG {
 	}
 	
 	/**
-	 * reads a list of genes from a file, each line of the file contains one gene id,
-	 * assumption: each gene id occurs exactly once in the file, assumption is assured by DataTransformer
-	 * the file starts with several comment lines (marked by #) and a table header
+	 * reads a list of genes from a file, the file starts with several comment lines (marked by #) and a table header,
+	 * each line of the file contains one gene id,
+	 * each gene id should occur exactly once in the file (checked by {@link DataTransformerMTG}) 
 	 * @param path path to the file with the gene ids
 	 * @return a list of all genes ids 
 	 */
