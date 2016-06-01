@@ -23,6 +23,7 @@ public class MetaboToGenoDriver {
 	/** list of scored metabolite objects */
 	LinkedList<ScoredDiseaseOrMetabolite>  metaboliteScores;
 	
+	//TODO: different rounding?!
 	/**
 	 * creates a driver for running MetaboToGeno
 	 * @param genes_raw list of all gene ids to consider during the scoring

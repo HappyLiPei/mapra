@@ -28,7 +28,7 @@ public class TestMetaboToGenoAlgo {
 	private LinkedList<ScoredDiseaseOrMetabolite> scores;
 	private LinkedList<ScoredGene> expected;
 	
-	//TODO: define test cases 3,4,5,6 with/without driver
+	//TODO: define test cases 4,5,6 with/without driver
 	
 	@Test
 	public void testCase1NoDriver() {
@@ -43,11 +43,19 @@ public class TestMetaboToGenoAlgo {
 		prepareForCase(2);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();
-//		
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase3NoDriver() {
+		prepareForCase(3);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();
+		
 //		for(ScoredGene g: out){
 //			System.out.println(g);
 //		}
-//		
+		
 		checkResult(out);
 	}
 	
@@ -62,6 +70,14 @@ public class TestMetaboToGenoAlgo {
 	@Test
 	public void testCase2WithDriver(){
 		prepareForCase(2);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase3WithDriver(){
+		prepareForCase(3);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
@@ -101,6 +117,7 @@ public class TestMetaboToGenoAlgo {
 			assertEquals("Score at position "+position+" is incorrect", gExp.getScore(), gAct.getScore(),1E-5);
 			assertEquals("Contributors at position "+position+" are incorrect", 
 					gExp.getImportantContributors(), gAct.getImportantContributors());
+			position++;
 		}
 	}
 
