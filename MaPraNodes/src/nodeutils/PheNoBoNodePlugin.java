@@ -2,7 +2,7 @@
  * $Revision$ $Date$ $Author$
  *
  */
-package phenomizer.node;
+package nodeutils;
 
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
@@ -16,14 +16,14 @@ import org.osgi.framework.BundleContext;
  *
  * @author 
  */
-public class PhenomizerNodePlugin extends Plugin {
+public class PheNoBoNodePlugin extends Plugin {
     // The shared instance.
-    private static PhenomizerNodePlugin plugin;
+    private static PheNoBoNodePlugin plugin;
 
     /**
      * The constructor.
      */
-    public PhenomizerNodePlugin() {
+    public PheNoBoNodePlugin() {
         super();
         plugin = this;
     }
@@ -57,7 +57,7 @@ public class PhenomizerNodePlugin extends Plugin {
      * 
      * @return Singleton instance of the Plugin
      */
-    public static PhenomizerNodePlugin getDefault() {
+    public static PheNoBoNodePlugin getDefault() {
         return plugin;
     }
 

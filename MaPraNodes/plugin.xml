@@ -1,17 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?eclipse version="3.0"?><plugin>
   
-   
    <extension point="org.knime.workbench.repository.nodes">
-		<node category-path="/PhenoNodes" factory-class="phenomizer.node.PhenomizerNodeFactory" id="phenomizer.PhenomizerNodeFactory"/>
-		<node category-path="/PhenoNodes" factory-class="phenomizertonetwork.node.PhenomizerToNetworkNodeFactory" id="phenomizertonetwork.PhenomizerToNetworkNodeFactory"/>
-   <node category-path="/" factory-class="phenotogeno.node.PhenoToGenoNodeNodeFactory" id="phenotogeno.node.PhenoToGenoNodeNodeFactory"/>
-<node category-path="/" factory-class="metabolites.node.ScoreMetabolitesNodeFactory" id="metabolites.node.ScoreMetabolitesNodeFactory"/>
-<node category-path="/" factory-class="geneticnetwork.node.GeneticNetworkScoreNodeFactory" id="geneticnetwork.node.GeneticNetworkScoreNodeFactory"/>
-</extension>
+		<node category-path="/phenobo/diseases" factory-class="phenomizer.node.PhenomizerNodeFactory" id="phenomizer.PhenomizerNodeFactory"/>
+		<node category-path="/phenobo/diseases" factory-class="phenomizertonetwork.node.PhenomizerToNetworkNodeFactory" id="phenomizertonetwork.PhenomizerToNetworkNodeFactory"/>
+   		<node category-path="/phenobo/diseases" factory-class="phenotogeno.node.PhenoToGenoNodeNodeFactory" id="phenotogeno.node.PhenoToGenoNodeNodeFactory"/>
+		<node category-path="/phenobo/genes" factory-class="geneticnetwork.node.GeneticNetworkScoreNodeFactory" id="geneticnetwork.node.GeneticNetworkScoreNodeFactory"/>
+		<node category-path="/phenobo/genes" factory-class="scorecombination.node.CombineScoresNodeFactory" id="scorecombination.node.CombineScoresNodeFactory"/>
+		<node category-path="/phenobo/metabolites" factory-class="metabolites.node.ScoreMetabolitesNodeFactory" id="metabolites.node.ScoreMetabolitesNodeFactory"/>
+		<node category-path="/phenobo/metabolites" factory-class="metabotogeno.node.MetaboToGenoNodeFactory" id="metabotogeno.node.MetaboToGenoNodeFactory"/>
+	</extension>
 
    <extension point="org.knime.workbench.repository.categories">
-      <category description="Phenomizer Nodes" icon="icon/icon_pheno.png" level-id="PhenoNodes" locked="true" name="Phenomizer nodes" path="/"/>
+      <category
+            description="Combination of Phenotype, Genotype and Metabotype"
+            icon="icons/missing.gif"
+            level-id="phenobo"
+            locked="true"
+            name="PheNoBo"
+            path="/">
+      </category>
+      <category 
+      		description="Analysis of Phenotype"
+      		icon="icon/icon_pheno.png"
+      		level-id="diseases" locked="true"
+      		name="Diseases"
+      		path="/phenobo">
+      </category>
+      <category
+            description="Analysis of Genotype"
+            icon="icons/missing.gif"
+            level-id="genes"
+            locked="true"
+            name="Genes"
+            path="/phenobo">
+      </category>
+      <category
+            description="Analysis of Metabotype"
+            icon="icons/missing.gif"
+            level-id="metabolites"
+            locked="true"
+            name="Metabolites"
+            path="/phenobo">
+      </category>
    </extension>
    
 </plugin>

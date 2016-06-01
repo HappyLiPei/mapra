@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Phenomizer for PhenoDis
-Bundle-SymbolicName: phenomizer;singleton:=true
-Bundle-Version: 2.0.4
-Bundle-ClassPath: phenomizer.jar,
+Bundle-Name: PheNoBo (Combination of Phenotype, Genotype and Metabotype)
+Bundle-SymbolicName: phenobo;singleton:=true
+Bundle-Version: 2.1.0
+Bundle-ClassPath: phenobo.jar,
  libs/commons-math3-3.6.1.jar
-Bundle-Activator: phenomizer.node.PhenomizerNodePlugin
+Bundle-Activator: nodeutils.PheNoBoNodePlugin
 Bundle-Vendor: 
  Marie-Sophie Friedl, Carolin Prexler, Maria Schelling
 Require-Bundle: org.eclipse.core.runtime,
@@ -14,7 +14,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.knime.base,
  org.junit
 Bundle-ActivationPolicy: lazy
-Export-Package: phenomizer.node,
- phenomizertonetwork.node
+Export-Package: geneticnetwork.node,
+ metabolites.node,
+ metabotogeno.node,
+ phenomizer.node,
+ phenomizertonetwork.node,
+ phenotogeno.node,
+ scorecombination.node
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 
