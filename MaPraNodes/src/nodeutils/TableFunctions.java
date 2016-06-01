@@ -9,8 +9,8 @@ import org.knime.core.node.InvalidSettingsException;
 public class TableFunctions {
 	
     /**
-     * checks if input specifications from port port contains a column named colname and 
-     * if specifications match data type type1 oder type2
+     * checks if the input specifications from port "port" contain a column named "colname" and 
+     * and checks if the specifications match any of the data types in "types"
      * @param inSpecs specifications of incoming table
      * @param port input port to use
      * @param colname name of the column to check
@@ -54,7 +54,7 @@ public class TableFunctions {
      * @return DataColumnSpec object specifying a column of a KNIME table
      */
     public static DataColumnSpec makeDataColSpec(String name, DataType type){
-    	//generate factor for column specification
+    	//generate factory for column specification
     	DataColumnSpecCreator creator = new DataColumnSpecCreator(name, type);    	
     	return creator.createSpec();
     }

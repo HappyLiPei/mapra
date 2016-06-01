@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import org.knime.core.data.DataCell;
+import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.RowKey;
@@ -18,6 +19,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
+import nodeutils.TableFunctions;
 import phenomizer.algorithm.FrequencyConverter;
 
 public class TableProcessorPhenomizer {
@@ -41,7 +43,7 @@ public class TableProcessorPhenomizer {
 	 * @return filtered LinkedList of symptom ids of the query
 	 */
 	
-	public static LinkedList<Integer> generateQuery(BufferedDataTable table_query, BufferedDataTable table_symptoms, NodeLogger l){
+	protected static LinkedList<Integer> generateQuery(BufferedDataTable table_query, BufferedDataTable table_symptoms, NodeLogger l){
 		LinkedList<Integer> query_complete = generateQuery(table_query);
 		
 		HashSet<Integer> symptoms_in_dict = new HashSet<Integer>(((int)table_symptoms.size())*3);
@@ -77,7 +79,7 @@ public class TableProcessorPhenomizer {
 	 * @return LinkedList of symptom ids of the symptom dictionary
 	 */
 	
-	public static LinkedList<Integer> generateSymptomList(BufferedDataTable table){
+	protected static LinkedList<Integer> generateSymptomList(BufferedDataTable table){
 		int index = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
 		boolean is_int =false;
 		if(table.getDataTableSpec().getColumnSpec(index).getType()==IntCell.TYPE){
@@ -101,7 +103,7 @@ public class TableProcessorPhenomizer {
 	 * @param weight: specifies if algorithm should use weights
 	 * @return HashMap which maps a disease id to the annotated symptom ids (pos 0) and to the annotated frequencies (pos 1)
 	 */
-	public static HashMap<Integer, LinkedList<Integer []>> generateKSZ(BufferedDataTable table, boolean weight){
+	protected static HashMap<Integer, LinkedList<Integer []>> generateKSZ(BufferedDataTable table, boolean weight){
 		
 		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(((int)table.size())*3);
 		int index_disease = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
@@ -170,7 +172,7 @@ public class TableProcessorPhenomizer {
 	 * @return Integer [][] of symptom ids corresponding to the edges of the ontology: (child, parent) pairs
 	 */
 	
-	public static int [][] generateEdges (BufferedDataTable table){
+	protected static int [][] generateEdges (BufferedDataTable table){
 		
 		int [][] res = new int [(int)table.size()][2];
 		int index_child = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.CHILD_ID);
@@ -204,13 +206,41 @@ public class TableProcessorPhenomizer {
 	}
 	
 	/**
+	 * generates specifications for outport table
+	 * @param pvalue: pvalue = true -> displays p values and significance in the out port table
+	 * @return: column format of output table
+	 * col 0 : disease_id (int)
+	 * col 1 : disease_name (string)
+	 * col 2 : score (double)
+	 * if pvalue=true: 2 additional columns
+	 * col 3 : p-value (double)
+	 * col 4: significance (string)
+	 */
+    protected static DataTableSpec generateOutputSpec(boolean pvalue){
+    	
+    	DataColumnSpec [] colspecs = new DataColumnSpec[3];
+    	if(pvalue){
+    		colspecs= new DataColumnSpec[5];
+    	}
+    	colspecs[0] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.DISEASE_ID, IntCell.TYPE);
+    	colspecs[1] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.DISEASE_NAME, StringCell.TYPE);
+    	colspecs[2] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.SCORE, DoubleCell.TYPE);
+    	if(pvalue){
+        	colspecs[3] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.P_VALUE, DoubleCell.TYPE);
+        	colspecs[4] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.SIGNIFICANCE, StringCell.TYPE);
+    	}
+    	
+    	return new DataTableSpec(colspecs);
+    }
+	
+	/**
 	 * wirtes output of phenomizer algorithm to a buffered data table and adds disease names from ksz inport table
 	 * @param output: result of phenomizer algorithm
 	 * @param exec: execution context of phenomizer node model
 	 * @param ksz: ksz table from inport of PhenomizerNode
 	 * @return BufferedDataTable that is passed to the outport of Phenomizer Node
 	 */
-	public static BufferedDataTable generateOutput(LinkedList<String[]> output, ExecutionContext exec, BufferedDataTable ksz){
+	protected static BufferedDataTable generateOutput(LinkedList<String[]> output, ExecutionContext exec, BufferedDataTable ksz){
 		
 		HashMap<Integer,String> IdToName = new HashMap<Integer,String>(((int)ksz.size())*3);
 		int pos_disease_name = ksz.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
@@ -236,10 +266,10 @@ public class TableProcessorPhenomizer {
 		//lenght = 2 -> no pvalue, length = 3 -> pvalue
 		int out_len = output.peek().length;
 		if(out_len==2){
-			spec = PhenomizerNodeModel.generateOutputSpec(false);
+			spec = generateOutputSpec(false);
 		}
 		else{
-			spec = PhenomizerNodeModel.generateOutputSpec(true);
+			spec = generateOutputSpec(true);
 		}
 		int index_disease_id = spec.findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
 		int index_score = spec.findColumnIndex(PhenomizerNodeModel.SCORE);

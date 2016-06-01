@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.RowKey;
@@ -20,6 +19,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
+import nodeutils.TableFunctions;
 import phenomizer.node.PhenomizerNodeModel;
 import togeno.ScoredGene;
 
@@ -39,7 +39,7 @@ public class TableProcessorPhenoToGeno {
 	 * @return
 	 * 		list of String arrays with disease ids (pos 0) and pvalues (pos 1)
 	 */
-	public static  LinkedList<String []> getPhenomizerResult(BufferedDataTable tablePheno,
+	protected static  LinkedList<String []> getPhenomizerResult(BufferedDataTable tablePheno,
 			BufferedDataTable tableAssociations, NodeLogger logger){
 		
 		//build hashset of all diseases in the disease - gene association
@@ -114,7 +114,7 @@ public class TableProcessorPhenoToGeno {
 	 * @return
 	 * 		list of gene ids (may contain duplicates!)
 	 */
-	public static LinkedList<String> getGeneList(BufferedDataTable tableGenes, NodeLogger logger){
+	protected static LinkedList<String> getGeneList(BufferedDataTable tableGenes, NodeLogger logger){
 		
 		LinkedList<String> geneList = new LinkedList<String>();
 		HashSet<String> testForDuplicates = new HashSet<String>((int) tableGenes.size()*3);
@@ -152,7 +152,7 @@ public class TableProcessorPhenoToGeno {
 	 * @return
 	 * 			mapping disease id -> list of gene ids representing associations between genes and diseases
 	 */
-	public static HashMap<Integer, LinkedList<String>> getAssociations(BufferedDataTable tableDiseaseGene,
+	protected static HashMap<Integer, LinkedList<String>> getAssociations(BufferedDataTable tableDiseaseGene,
 			BufferedDataTable tableGenes, NodeLogger logger){
 		
 		//build hasmap with all gene ids
@@ -231,12 +231,12 @@ public class TableProcessorPhenoToGeno {
 	 * (3 columns: gene id, probability, contribution)
 	 * @return DataTable specification for the table returned by PhenoToGeno
 	 */
-	public static DataTableSpec generateOutputSpec(){
+	protected static DataTableSpec generateOutputSpec(){
 		
     	DataColumnSpec [] specs = new DataColumnSpec[3];
-    	specs[0] = new DataColumnSpecCreator(PhenoToGenoNodeNodeModel.GENE_ID, StringCell.TYPE).createSpec();
-    	specs[1] = new DataColumnSpecCreator(PhenoToGenoNodeNodeModel.GENE_PROBABILITY, DoubleCell.TYPE).createSpec();
-    	specs[2] = new DataColumnSpecCreator(PhenoToGenoNodeNodeModel.CONTRIBUTION, StringCell.TYPE).createSpec();
+    	specs[0] = TableFunctions.makeDataColSpec(PhenoToGenoNodeNodeModel.GENE_ID, StringCell.TYPE);
+    	specs[1] = TableFunctions.makeDataColSpec(PhenoToGenoNodeNodeModel.GENE_PROBABILITY, DoubleCell.TYPE);
+    	specs[2] = TableFunctions.makeDataColSpec(PhenoToGenoNodeNodeModel.CONTRIBUTION, StringCell.TYPE);
     	
 		return new DataTableSpec(specs);	
 	}
@@ -253,7 +253,7 @@ public class TableProcessorPhenoToGeno {
 	 * 			DataTable with a row for each gene containing gene id, gene score and diseases (ids and names)
 	 * 			contributing to the score
 	 */
-	public static BufferedDataTable generateOutput(ExecutionContext exec, LinkedList<ScoredGene> genes,
+	protected static BufferedDataTable generateOutput(ExecutionContext exec, LinkedList<ScoredGene> genes,
 			BufferedDataTable tablePhenomizer){
 		
 		//map disease id to disease name

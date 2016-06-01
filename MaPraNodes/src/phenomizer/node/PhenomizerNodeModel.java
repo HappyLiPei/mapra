@@ -7,11 +7,8 @@ import java.util.LinkedList;
 
 import nodeutils.TableFunctions;
 
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
-import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
@@ -157,35 +154,7 @@ public class PhenomizerNodeModel extends NodeModel {
     	//check port 3: query  
     	TableFunctions.checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE},null);
 
-        return new DataTableSpec[]{generateOutputSpec(m_pval.getBooleanValue())};
-    }
-    
-	/**
-	 * generates specifications for outport table
-	 * @param pvalue: pvalue = true -> displays p values and significance in the out port table
-	 * @return: column format of output table
-	 * col 0 : disease_id (int)
-	 * col 1 : disease_name (string)
-	 * col 2 : score (double)
-	 * if pvalue=true: 2 additional columns
-	 * col 3 : p-value (double)
-	 * col 4: significance (string)
-	 */
-    public static DataTableSpec generateOutputSpec(boolean pvalue){
-    	
-    	DataColumnSpec [] colspecs = new DataColumnSpec[3];
-    	if(pvalue){
-    		colspecs= new DataColumnSpec[5];
-    	}
-    	colspecs[0] = new DataColumnSpecCreator(DISEASE_ID, IntCell.TYPE).createSpec();
-    	colspecs[1] = new DataColumnSpecCreator(DISEASE_NAME, StringCell.TYPE).createSpec();
-    	colspecs[2] = new DataColumnSpecCreator(SCORE, DoubleCell.TYPE).createSpec();
-    	if(pvalue){
-        	colspecs[3] = new DataColumnSpecCreator(P_VALUE, DoubleCell.TYPE).createSpec();
-        	colspecs[4] = new DataColumnSpecCreator(SIGNIFICANCE, StringCell.TYPE).createSpec();
-    	}
-    	
-    	return new DataTableSpec(colspecs);
+        return new DataTableSpec[]{TableProcessorPhenomizer.generateOutputSpec(m_pval.getBooleanValue())};
     }
 
     /**

@@ -46,7 +46,7 @@ public class TableProcessorScoreMetabolites {
 	 * 		LinkedList of String arrays with metabolite id (pos 0), measured concentration (pos 1) and group number
 	 * 		(pos 2)
 	 */
-	public static LinkedList<String[]> getMeasurements(BufferedDataTable table, NodeLogger l,
+	protected static LinkedList<String[]> getMeasurements(BufferedDataTable table, NodeLogger l,
 			HashMap<String, LinkedList<String[]>> reference){
 		
 		LinkedList<String[]> patient = new LinkedList<String[]>();
@@ -125,7 +125,7 @@ public class TableProcessorScoreMetabolites {
 	 * 		a mapping metabolite id-> list of String arrays with metabolite id (pos 0), type (pos 1), group (pos 2),
 	 * 		mean (pos 3), standard deviation (pos 4) and missingness (pos 5)
 	 */
-	public static HashMap<String, LinkedList<String[]>> getReferences(BufferedDataTable table, NodeLogger l){
+	protected static HashMap<String, LinkedList<String[]>> getReferences(BufferedDataTable table, NodeLogger l){
 		
 		HashMap<String, LinkedList<String[]>> references = new HashMap<String, LinkedList<String[]>>((int) table.size()*3);
 		
@@ -216,7 +216,7 @@ public class TableProcessorScoreMetabolites {
 	 * (4 columns: metabolite id, type, score, significance + 1 optional column: metabolite name)
 	 * @return DataTable specification for the table returned by ScoreMetabolites
 	 */
-	public static DataTableSpec generateOutSpec(DataTableSpec specReference){
+	protected static DataTableSpec generateOutSpec(DataTableSpec specReference){
 		
 		boolean hasNameColumn =false;
 		if(specReference.findColumnIndex(ScoreMetabolitesNodeModel.METABOLITE_NAME)!=-1){
@@ -256,7 +256,7 @@ public class TableProcessorScoreMetabolites {
 	 * 		KNIME table with scores for metabolites with 4 columns: metabolite id, type of the metabolite,
 	 * 		score, probability indicating the significance of the score + 1 optional column with metabolite names
 	 */
-	public static BufferedDataTable generateOutTable(LinkedList<ScoredMetabolite> result, ExecutionContext exec,
+	protected static BufferedDataTable generateOutTable(LinkedList<ScoredMetabolite> result, ExecutionContext exec,
 			DataTable tableReference){
 		
 		//generate specification of output table
