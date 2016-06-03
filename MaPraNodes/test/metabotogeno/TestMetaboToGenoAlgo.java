@@ -28,8 +28,6 @@ public class TestMetaboToGenoAlgo {
 	private LinkedList<ScoredDiseaseOrMetabolite> scores;
 	private LinkedList<ScoredGene> expected;
 	
-	//TODO: define test cases 6 with/without driver
-	
 	@Test
 	public void testCase1NoDriver() {
 		prepareForCase(1);
@@ -67,11 +65,14 @@ public class TestMetaboToGenoAlgo {
 		prepareForCase(5);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();
-		
-//		for(ScoredGene g: out){
-//			System.out.println(g);
-//		}
-		
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase6NoDriver() {
+		prepareForCase(6);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();
 		checkResult(out);
 	}
 	
@@ -111,6 +112,14 @@ public class TestMetaboToGenoAlgo {
 	@Test
 	public void testCase5WithDriver(){
 		prepareForCase(5);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase6WithDriver(){
+		prepareForCase(6);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
