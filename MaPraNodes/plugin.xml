@@ -14,7 +14,7 @@
    <extension point="org.knime.workbench.repository.categories">
       <category
             description="Combination of Phenotype, Genotype and Metabotype"
-            icon="icons/missing.gif"
+            icon="icon/IconDisease.png"
             level-id="phenobo"
             locked="true"
             name="PheNoBo"
@@ -22,14 +22,14 @@
       </category>
       <category 
       		description="Analysis of Phenotype"
-      		icon="icon/icon_pheno.png"
+      		icon="icon/IconDisease.png"
       		level-id="diseases" locked="true"
       		name="Diseases"
       		path="/phenobo">
       </category>
       <category
             description="Analysis of Genotype"
-            icon="icons/missing.gif"
+            icon="icon/IconGene.png"
             level-id="genes"
             locked="true"
             name="Genes"
@@ -37,7 +37,7 @@
       </category>
       <category
             description="Analysis of Metabotype"
-            icon="icons/missing.gif"
+            icon="icon/IconMetabolite.png"
             level-id="metabolites"
             locked="true"
             name="Metabolites"
