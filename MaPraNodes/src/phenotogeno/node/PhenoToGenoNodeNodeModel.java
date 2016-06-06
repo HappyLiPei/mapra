@@ -102,7 +102,7 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
     	TableFunctions.checkColumn(inSpecs, INPORT_PHENOMIZER, PhenomizerNodeModel.P_VALUE,
     			new DataType[]{DoubleCell.TYPE}, null);
     	
-    	//check disease - gene table
+    	//check disease - gene table: requires gene id and disease id
     	TableFunctions.checkColumn(inSpecs, INPORT_GENE_DISEASE, GENE_ID, new DataType[]{StringCell.TYPE}, null);
     	TableFunctions.checkColumn(inSpecs, INPORT_GENE_DISEASE, PhenomizerNodeModel.DISEASE_ID,
     			new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);

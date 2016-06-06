@@ -3,11 +3,20 @@
     <name>MetaboToGeno</name>
     
     <shortDescription>
-        
+        Transfer of metabolite scores to genes
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
+        <intro>
+        	Insert long description here...
+        	
+        	Input: score metabolites, uses only metabolite id and reported pvalue (significance column)
+        	Pairs of metabolites and genes, genes might be missing, each metabolite has to occur exactly once,
+        	even without any gene (missing value), links between metabolites and genes represent biochemical reactions
+        	or associations from GWAS
+        	Table of all genes, reference set of all genes to consider in scoring process
+        	
+        </intro>
         
         
         <option name="short name of first option (like in the dialog)">description of first option</option>
@@ -25,13 +34,17 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="In-Port name">Description of first input port...</inPort>
-        <!-- possibly more input ports here-->
-        <outPort index="0" name="Out-Port name">Description of first output port...</outPort>
-        <!-- possibly more output ports here-->
+        <inPort index="0" name="ScoreMetabolites">
+        	Output of ScoreMetabolites with columns metabolite_id and significance
+    	</inPort>
+        <inPort index="1" name="Metabolite Gene Association">
+        	Table of metabolite - gene pairs with columns metabolite_id and gene_id
+    	</inPort>
+        <inPort index="2" name="All Genes">
+        	Table of all genes with column gene_id
+    	</inPort>
+        <outPort index="0" name="Gene Scores"> 
+        	Table with scores and metabolite annotations for all genes specified at Input Port 2
+    	</outPort>
     </ports>    
-    <views>
-        <view index="0" name="name of first view">Description of first view...</view>
-        <!--view index="1" name="name of second view">Description of second view...</view-->
-    </views>
 </knimeNode>

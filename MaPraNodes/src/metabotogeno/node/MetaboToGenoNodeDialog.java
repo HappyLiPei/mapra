@@ -1,9 +1,6 @@
 package metabotogeno.node;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
-import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
-import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
-
 /**
  * <code>NodeDialog</code> for the "MetaboToGeno" Node.
  * 
@@ -23,15 +20,7 @@ public class MetaboToGenoNodeDialog extends DefaultNodeSettingsPane {
      * components.
      */
     protected MetaboToGenoNodeDialog() {
-        super();
-        
-        addDialogComponent(new DialogComponentNumber(
-                new SettingsModelIntegerBounded(
-                    MetaboToGenoNodeModel.CFGKEY_COUNT,
-                    MetaboToGenoNodeModel.DEFAULT_COUNT,
-                    Integer.MIN_VALUE, Integer.MAX_VALUE),
-                    "Counter:", /*step*/ 1, /*componentwidth*/ 5));
-                    
+        super();                    
     }
 }
 
