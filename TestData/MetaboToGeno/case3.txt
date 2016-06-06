@@ -1,5 +1,5 @@
 #case3 from metabolite score
-metabolite_id	type	score	probability
+metabolite_id	type	score	significance
 M13	concentration	8.33	0.0
 M01	binary	1.0	0.028
 M07	concentration	-2.0	0.04550

@@ -1,5 +1,5 @@
 #case2 from metabolite score
-metabolite_id	type	score	probability
+metabolite_id	type	score	significance
 M05	binary	1.0	0.0
 M08	binary	0.0	0.0
 M10	binary	0.0	0.017

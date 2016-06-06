@@ -1,5 +1,5 @@
 #case1 from metabolite score
-metabolite_id	type	score	probability
+metabolite_id	type	score	significance
 M07	concentration	-17.0	0
 M06	concentration	7.0	0
 M09	concentration	-6.5	0

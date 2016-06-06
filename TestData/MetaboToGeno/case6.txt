@@ -1,4 +1,4 @@
-metabolite_id	metabolite_name	type	score	probability
+metabolite_id	metabolite_name	type	score	significance
 M04	M04	binary	0.0	0.00
 M03	M03	binary	1.0	0.01
 M02	M02	binary	0.0	0.05

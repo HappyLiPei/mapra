@@ -1,4 +1,4 @@
-metabolite_id	metabolite_name	type	score	probability
+metabolite_id	metabolite_name	type	score	significance
 M15	M15	concentration	4.2	0.0
 M14	M14	concentration	3.5	0.0
 M13	M13	concentration	3.1	0.0
