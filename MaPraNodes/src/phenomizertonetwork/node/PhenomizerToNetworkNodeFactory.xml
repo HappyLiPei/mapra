@@ -3,12 +3,12 @@
     <name>PhenomizerToNetwork</name>
     
     <shortDescription>
-        Cytoscape wrapper for displaying the results of Phenomizer
+        Cytoscape wrapper for visualizing the results of Phenomizer
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	PhenomizerToNetwork generates and displays a (disease) network for the diseases of PhenoDis.
+        	PhenomizerToNetwork generates and displays a disease network for the diseases of PhenoDis.
         	The aim of the node is to visualize the predictions of Phenomizer within this network.
         	<br/>
 			The node requires the program Cytoscape (recommended version 3.2.1) to show the resulting network.
@@ -50,7 +50,7 @@
     	</option>
         <option name="Cytoscape executable">
         	The file chooser is active only if the <i>Run Cytoscape option</i> is ticked.
-        	The option requires a script called <i>cytoscape.sh</i> or <i>cytoscape.bat</i> (part of the Cytoscape installation).
+        	The option requires a script called <i>cytoscape.sh</i> (part of the Cytoscape installation).
     	</option>
         
 

@@ -24,7 +24,7 @@
 			The output of Phenomizer is a list of diseases with similarity score and p value.
 			The list is sorted according to p value (ascending) and score (descending).
 			The score of a disease indicates the similarity of the query symptoms and the symptoms annotated for the disease.
-			The p value of a disease (result?) helps to evaluate the significance of the score.
+			The p value of a disease helps to evaluate the significance of the score.
 			Phenomizer uses the following categories to classify the p values:
 			<ul>
 				<li> ns : not significant (p value &gt;= 0.05) </li>
@@ -43,7 +43,7 @@
     	<option name="Calculate p values">
     		Phenomizer with p values performs a significance test for the similarity score of each disease.
     		The corresponding p values are part of the output table.
-    		The p values are adjusted for multiple testing using the Bonferroni-Holm method.
+    		The p values are adjusted for multiple testing using the Benjamini-Hochberg method.
     		The diseases are ranked according to their p values.<br/>
     		Phenomizer without p values just reports similarity scores.
     		The diseases are ranked according to those scores.
