@@ -12,6 +12,7 @@ import phenomizer.io.FileUtilitiesPhenomizer;
 import phenotogeno.io.FileUtilitiesPTG;
 import phenotogeno.validation.DiseaseIterator;
 import phenotogeno.validation.DiseaseIteratorAll;
+import phenotogeno.validation.DiseaseIteratorFile;
 import phenotogeno.validation.PatientSimulator;
 import phenotogeno.validation.PatientSimulatorDrawSymptoms;
 import phenotogeno.validation.PatientSimulatorVeryFrequentSymptoms;
@@ -27,7 +28,6 @@ import phenotogeno.validation.ValidateGeneRanking;
 public class RunValidationPhenotype {
 
 public static void main(String args[]) throws Exception{
-
 		//get command line arguments
 		String runMode = args[0];
 		String rwwrOpt = args[1];
@@ -40,6 +40,13 @@ public static void main(String args[]) throws Exception{
 		String scoreDist = args[8];
 		String outRes = args[9];
 		String outPatient = args[10];
+		String numberOfPatients = null;
+		String mitoDiseaseFile = null;
+		//TODO: args[12] obligatory argument -> adapt diseaseIterator all to simulate more than 1 patient per disease
+		if(args.length>=13){
+			numberOfPatients = args[11];
+			mitoDiseaseFile = args[12];
+		}
 		
 		//parse options for random walk: [uw]+[restartprob]+[iterations]
 		RandomWalkWithRestart walk = null;
@@ -72,7 +79,7 @@ public static void main(String args[]) throws Exception{
 		HashMap<Integer, LinkedList<String>> asso = FileUtilitiesPTG.readDiseaseGeneAssociation(fileAsso);
 		String [][] network = FileUtilitiesGeneticNetwork.readEdges(fileNetwork, edgeWeight);
 		
-		//check mode of simulation
+		//check mode of simulation [veryFreq|draw|file|drawFile]+[all|top20|sign|topP]
 		String [] splitMode = runMode.split("\\+");
 		String simMode = splitMode[0];
 		DiseaseIterator i = null;
@@ -90,6 +97,13 @@ public static void main(String args[]) throws Exception{
 			SimulatorIteratorFromFile fromFile=new SimulatorIteratorFromFile(outPatient);
 			i = fromFile;
 			s = fromFile;
+		}
+		else if(simMode.equals("drawFile")){
+			if(numberOfPatients==null || mitoDiseaseFile==null){
+				throw new Exception("Mode drawFile requires numberOfPatients and file with disease id");
+			}
+			i = new DiseaseIteratorFile(Integer.parseInt(numberOfPatients), mitoDiseaseFile);
+			s = new PatientSimulatorDrawSymptoms(outPatient);
 		}
 		else{
 			throw new Exception("Invalide mode: "+simMode+" !" );
