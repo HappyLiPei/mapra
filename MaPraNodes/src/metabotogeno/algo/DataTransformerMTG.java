@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import togeno.AnnotatedGene;
+import togeno.AnnotatedGeneMultiple;
 import togeno.GeneAssociation;
 import togeno.ScoredDiseaseOrMetabolite;
 
@@ -81,7 +82,7 @@ public class DataTransformerMTG {
 		AnnotatedGene[] annoArray = new AnnotatedGene[genesNoDupl.size()];
 		int counter=0;
 		for(String geneId: genesNoDupl){
-			annoArray[counter]=new AnnotatedGene(geneId);
+			annoArray[counter]=new AnnotatedGeneMultiple(geneId);
 			counter++;
 		}
 		

@@ -15,6 +15,7 @@ import org.junit.Test;
 import phenotogeno.algo.PhenoToGenoDataTransformer;
 import phenotogeno.io.FileUtilitiesPTG;
 import togeno.AnnotatedGene;
+import togeno.AnnotatedGeneMultiple;
 import togeno.GeneAssociation;
 import togeno.ScoredDiseaseOrMetabolite;
 import togeno.ScoredGene;
@@ -78,23 +79,23 @@ public class TestPhenoToGenoAlgo {
 	public void testGenerationOfResult() throws NoSuchMethodException, SecurityException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		
-		AnnotatedGene g1= new AnnotatedGene("G1");
-		AnnotatedGene g2= new AnnotatedGene("G2");
+		AnnotatedGene g1= new AnnotatedGeneMultiple("G1");
+		AnnotatedGene g2= new AnnotatedGeneMultiple("G2");
 		g2.add("100", 0.1);
-		AnnotatedGene g3= new AnnotatedGene("G3");
+		AnnotatedGene g3= new AnnotatedGeneMultiple("G3");
 		g3.add("101", 1.0);
 		g3.add("102", 0.5);
-		AnnotatedGene g4= new AnnotatedGene("G4");
+		AnnotatedGene g4= new AnnotatedGeneMultiple("G4");
 		g4.add("103", 0.05);
 		g4.add("104", 0.05);
-		AnnotatedGene g5= new AnnotatedGene("G5");
+		AnnotatedGene g5= new AnnotatedGeneMultiple("G5");
 		g5.add("105", 0.1);
 		g5.add("106", 0.1);
 		g5.add("110", 0.01);
 		g5.add("107", 0.1);
 		g5.add("109", 0.01);
 		g5.add("108", 0.1);
-		AnnotatedGene g6= new AnnotatedGene("G6");
+		AnnotatedGene g6= new AnnotatedGeneMultiple("G6");
 		g6.add("111", 0.05);
 		g6.add("112", 0.05);
 		AnnotatedGene[] genes = new AnnotatedGene[]{g1,g2,g3,g4,g5,g6};

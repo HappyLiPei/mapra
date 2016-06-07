@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import togeno.AnnotatedGene;
+import togeno.AnnotatedGeneMultiple;
 import togeno.GeneAssociation;
 import togeno.ScoredDiseaseOrMetabolite;
 
@@ -96,7 +97,7 @@ public class PhenoToGenoDataTransformer {
 		AnnotatedGene [] genes = new AnnotatedGene [dedup_gene_list.size()];
 		int pos=0;
 		for(String s: dedup_gene_list){
-			genes[pos]=new AnnotatedGene(s);
+			genes[pos]=new AnnotatedGeneMultiple(s);
 			pos++;
 		}
 		

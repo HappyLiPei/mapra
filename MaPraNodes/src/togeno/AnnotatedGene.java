@@ -3,10 +3,8 @@ package togeno;
 import java.util.LinkedList;
 
 /** gene object with annotations and intermediate scores from several diseases/ metabolites*/
-public class AnnotatedGene extends Gene {
+public abstract class AnnotatedGene extends Gene {
 
-	/** intermediate score = product of (1-s) with s=score for disease annotated to this gene */
-	private double currentScore;
 	/** saves the current maximum score */
 	private double currentMax;
 	/** saves list of at most 3 disease/metabolite ids */ 
@@ -21,7 +19,6 @@ public class AnnotatedGene extends Gene {
 	 */
 	public AnnotatedGene(String id) {
 		super(id);
-		currentScore = 1;
 		currentMax =-1;
 		currentMaxIds = new LinkedList<String>();
 		moreMax=false;
@@ -29,12 +26,11 @@ public class AnnotatedGene extends Gene {
 	
 	/**
 	 * adds a result from Phenomizer/Metabolite Score to the gene
-	 * @param disease_id PhenoDis disease id or metabolite id
+	 * @param dis_or_met_id PhenoDis disease id or metabolite id
 	 * @param score gene score resulting from Phenomizer prediction for the disease with id dis_or_met_id or resulting
 	 * 		from MetaboliteScore for the metabolite with id dis_or_met_id
 	 */
 	public void add(String dis_or_met_id, double score) {
-		currentScore = currentScore*(1-score);
 		//new score is equal to max
 		if(Math.abs(currentMax-score)<1E-5){
 			//do not save more than 3 ids with max contribution
@@ -68,16 +64,11 @@ public class AnnotatedGene extends Gene {
 	}
 	
 	/**
-	 * retrieves the current score summarizing all annotations to this gene (1-product of (1-s) for all annotated scores s)
-	 * @return current score of the gene
+	 * retrieves the current score of this gene, the score indicates the probability that the gene is causal for 
+	 * the given metabotype
+	 * @return current score of this gene
 	 */
-	public double getFinalScore(){
-		//no annotations -> final score = 0
-		if(currentMaxIds.size()==0){
-			return 0;
-		}
-		return 1-currentScore;
-	}
+	public abstract double getFinalScore();
 	
 	/**
 	 * indicates if there are more disease/metabolite ids leading to the maximum score than saved in this object
@@ -92,7 +83,6 @@ public class AnnotatedGene extends Gene {
 	 * method allows reuse of GeneAssociations for several runs of PhenoToGeno or MetaboToGeno
 	 */
 	public void resetAnnotation(){
-		currentScore = 1;
 		currentMax =-1;
 		currentMaxIds = new LinkedList<String>();
 		moreMax=false;
