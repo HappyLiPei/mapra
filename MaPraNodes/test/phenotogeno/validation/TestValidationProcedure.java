@@ -110,6 +110,28 @@ public class TestValidationProcedure {
 	}
 	
 	@Test
+	public void testValidationProcedureDiseasesFromFile() throws IOException{
+		
+		String outfile = folder.newFile().getAbsolutePath();
+		DiseaseIteratorFile iter = new DiseaseIteratorFile(2, "../TestData/PhenoToGeno/ValidationDiseaseIdList.txt");
+		MockSimulator sim = new MockSimulator();
+		RandomWalkWithRestart rwwr = new RandomWalkWithRestartFixedIterations(0.9, 1);
+		
+		ValidateGeneRanking val = new ValidateGeneRanking(				
+				ontology, symptoms, ksz_with_freq, genes_raw, map_raw, Pvalfolder, network_raw,
+				rwwr, sim, iter, outfile);
+		val.prepareData();
+		val.simulateAndRank();
+		
+		LinkedList<String> actual = FileInputReader.readAllLinesFrom(outfile);
+		LinkedList<String> expected = FileInputReader.readAllLinesFrom(
+				"../TestData/PhenoToGeno/ExpectedResults/validationMock_expectedNW_2Patients.txt");
+		assertEquals("Size of the validation result is incorrect", expected.size(), actual.size());
+		assertArrayEquals("Validation result is incorrect", expected.toArray(new String[0]), actual.toArray(new String[0]));
+		
+	}
+	
+	@Test
 	public void testValidationTop20() throws IOException{
 		
 		String outfile = folder.newFile().getAbsolutePath();
