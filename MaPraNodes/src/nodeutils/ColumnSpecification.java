@@ -12,6 +12,8 @@ public class ColumnSpecification {
 	//metabolite columns
     /** column name for the column with metabolite ids*/
     public static final String METABOLITE_ID="metabolite_id";
+    /** column name for the column with metabolite names, this column is optional */
+    public static final String METABOLITE_NAME="metabolite_name";
     /** column name for the column with pvalues (probabilities indicating the significance of the scores)*/
     public static final String METABOLITE_SIGNIFICANCE="significance";
     
@@ -27,6 +29,8 @@ public class ColumnSpecification {
     //metabolite column types
     /** valid data types for metabolite id*/
     public static final DataType[] METABOLITE_ID_TYPE=new DataType[]{StringCell.TYPE};
+    /** valid data types for metabolite name*/
+    public static final DataType[] METABOLITE_NAME_TYPE=new DataType[]{StringCell.TYPE};
     /** valid data types for metabolite pvalue*/
     public static final DataType[] METABOLITE_SIGNIFICANCE_TYPE=new DataType[]{DoubleCell.TYPE};
     

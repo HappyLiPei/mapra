@@ -1,9 +1,13 @@
 package nodeutils;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
+import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
+import org.knime.core.data.def.DoubleCell;
+import org.knime.core.data.def.StringCell;
 import org.knime.core.node.InvalidSettingsException;
 
 public class TableFunctions {
@@ -57,6 +61,67 @@ public class TableFunctions {
     	//generate factory for column specification
     	DataColumnSpecCreator creator = new DataColumnSpecCreator(name, type);    	
     	return creator.createSpec();
+    }
+    
+    /**
+     * method to extract a String value from a row of a KNIME table
+     * @param row DataRow of a KNIME table
+     * @param index index of the cell with a String value,
+     * 		the corresponding cell can be of type {@link StringCell} or {@link DoubleCell}
+     * @return String value stored in row "row" at position "index"
+     */
+    public static String getStringValue(DataRow row, int index){
+
+    	DataCell cellWithString = row.getCell(index);
+    	
+    	//String cell
+    	if(cellWithString instanceof StringCell){
+    		String res = ((StringCell) cellWithString).getStringValue();
+    		return res;
+    	}
+    	//Double cell
+    	else if(cellWithString instanceof DoubleCell){
+    		double res = ((DoubleCell) cellWithString).getDoubleValue();
+    		return Double.toString(res);
+    	}
+    	//invalid cell type
+    	else{
+    		return null;
+    	}
+    }
+    
+    /**
+     * method to create a data cell from a {@link String} for a specific column of a KNIME table
+     * @param spec column specification of the target table
+     * @param index position of the column in the target table
+     * @param content String that specifies the cell content
+     * @return {@link DataCell} for the column at position "index" that fits to the specifications in "spec" and that
+     * 		stores the information "content"
+     */
+    public static DataCell generateDataCellFor( DataTableSpec spec, int index, String content){
+    	
+    	DataType type = spec.getColumnSpec(index).getType();
+    	if(type==StringCell.TYPE){
+    		return new StringCell(content);
+    	}
+    	return null;
+    }
+    
+    /**
+     * method to create a data cell from a {@link Double} for a specific column of a KNIME table
+     * @param spec column specification of the target table
+     * @param index position of the column in the target table
+     * @param content String that specifies the cell content
+     * @return {@link DataCell} for the column at position "index" that fits to the specifications in "spec" and that
+     * 		stores the information "content"
+     */
+    public static DataCell generateDataCellFor( DataTableSpec spec, int index, double content){
+    	
+    	DataType type = spec.getColumnSpec(index).getType();
+    	if(type==DoubleCell.TYPE){
+    		return new DoubleCell(content);
+    	}
+    	return null;
     }
 
 }

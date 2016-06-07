@@ -2,21 +2,17 @@ package metabotogeno.node;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
-import org.knime.core.data.DataCell;
-import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.RowKey;
-import org.knime.core.data.def.DefaultRow;
-import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.StringCell;
-import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
-import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 
+import metabotogeno.algo.MetaboToGenoDriver;
 import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
+import togeno.ScoredGene;
 
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
@@ -35,28 +31,14 @@ import org.knime.core.node.NodeSettingsWO;
  */
 public class MetaboToGenoNodeModel extends NodeModel {
     
-    // the logger instance
-    private static final NodeLogger logger = NodeLogger
-            .getLogger(MetaboToGenoNodeModel.class);
-        
-    /** the settings key which is used to retrieve and 
-        store the settings (from the dialog or from a settings file)    
-       (package visibility to be usable from the dialog). */
-	static final String CFGKEY_COUNT = "Count";
-
-    /** initial default count value. */
-    static final int DEFAULT_COUNT = 100;
-
-    // example value: the models count variable filled from the dialog 
-    // and used in the models execution method. The default components of the
-    // dialog work with "SettingsModels".
-    private final SettingsModelIntegerBounded m_count =
-        new SettingsModelIntegerBounded(MetaboToGenoNodeModel.CFGKEY_COUNT,
-                    MetaboToGenoNodeModel.DEFAULT_COUNT,
-                    Integer.MIN_VALUE, Integer.MAX_VALUE);
+    /** logger of the node for writing to KNIME log file and console*/
+    private static final NodeLogger logger = NodeLogger.getLogger(MetaboToGenoNodeModel.class);
     
+    /** inPort number for table with metabolite scores */
     private static final int INPORT_SCOREMETABOLITES=0;
+    /** inPort number for table with metabolite - gene associations */
     private static final int INPORT_METABOLITE_GENE=1;
+    /** inPort number for table with all gene ids*/
     private static final int INPORT_ALL_GENES=2;
 
     /**
@@ -70,45 +52,31 @@ public class MetaboToGenoNodeModel extends NodeModel {
     }
 
     /**
+     * method to execute MetaboToGeno
      * {@inheritDoc}
      */
     @Override
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
-
-        // TODO do something here
-        logger.info("Node Model Stub... this is not yet implemented !");
-
-        
-        // the data table spec of the single output table, 
-        // the table will have three columns:
-        DataTableSpec outputSpec = TableProcessorMetaboToGeno.generateOutputSpec();
-        // the execution context will provide us with storage capacity, in this
-        // case a data container to which we will add rows sequentially
-        // Note, this container can also handle arbitrary big data tables, it
-        // will buffer to disc if necessary.
-        BufferedDataContainer container = exec.createDataContainer(outputSpec);
-        // let's add m_count rows to it
-        for (int i = 0; i < m_count.getIntValue(); i++) {
-            RowKey key = new RowKey("Row " + i);
-            // the cells of the current row, the types of the cells must match
-            // the column spec (see above)
-            DataCell[] cells = new DataCell[3];
-            cells[0] = new StringCell("String_" + i); 
-            cells[1] = new DoubleCell(0.5 * i); 
-            cells[2] = new StringCell(i+"");
-            DataRow row = new DefaultRow(key, cells);
-            container.addRowToTable(row);
-            
-            // check if the execution monitor was canceled
-            exec.checkCanceled();
-            exec.setProgress(i / (double)m_count.getIntValue(), 
-                "Adding row " + i);
-        }
-        // once we are done, we close the container and return its table
-        container.close();
-        BufferedDataTable out = container.getTable();
-        return new BufferedDataTable[]{out};
+    	
+    	//read list of all genes from KNIME table
+    	LinkedList<String> allGenes=TableProcessorMetaboToGeno.getGeneList(inData[INPORT_ALL_GENES], logger);
+    	//read associations between metabolites and genes from KNIME table
+    	HashMap<String, LinkedList<String>> associations=TableProcessorMetaboToGeno.getAssociationData(
+    			inData[INPORT_METABOLITE_GENE], logger, allGenes);
+    	//read scores from ScoreMetabolites
+    	LinkedList<String[]> metaboScores = TableProcessorMetaboToGeno.getScoreMetabolitesResult(
+    			inData[INPORT_SCOREMETABOLITES], logger, associations);
+  
+    	//execute algorithm
+    	MetaboToGenoDriver driver = new MetaboToGenoDriver(allGenes, associations, metaboScores);
+    	LinkedList<ScoredGene> result = driver.runMetaboToGeno();
+    	
+    	//generate output
+    	BufferedDataTable out = TableProcessorMetaboToGeno.generateMTGOutputTable(exec, result, 
+    			inData[INPORT_SCOREMETABOLITES]);
+    	
+    	return new BufferedDataTable[]{out};
     }
 
     /**
