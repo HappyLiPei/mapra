@@ -13,7 +13,7 @@ import phenomizer.algorithm.Ontology;
 import phenomizer.algorithm.SymptomDiseaseAssociations;
 import phenomizer.io.FileUtilitiesPhenomizer;
 
-public class TestIteratorAll {
+public class TestDiseaseIterator {
 
 	@Test
 	public void testDiseaseIteratorAll() {
@@ -35,14 +35,27 @@ public class TestIteratorAll {
 		
 		//test initialized iterator
 		int [] expected = new int []{100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110};
-		assertEquals("Initialized: number of iterations is incorrect", 11, toTest.totalIterations());
-		for(int i=0; i<11; i++){
-			assertTrue("Initialized: hasNext is incorrect for iteration"+i, toTest.hasNextId());
-			assertEquals("Initialized: Disease for iteration "+i+" is incorrect", 
-					expected[i], toTest.getNextDiseaseId());
+		testIteration(toTest, expected);
+	}
+	
+	@Test
+	public void testDiseaseIteratorFile(){
+		
+		DiseaseIteratorFile iter = new DiseaseIteratorFile(2, "../TestData/PhenoToGeno/ValidationDiseaseIdList.txt");
+		int [] expected = new int []{100, 100, 101, 101, 102, 102, 103, 103, 104, 104, 105, 105,
+				106, 106, 107, 107, 108, 108, 109, 109, 110, 110};
+		testIteration(iter, expected);
+	}
+	
+	private void testIteration(DiseaseIterator iter, int [] expected){
+		assertEquals("Nmber of iterations is incorrect", expected.length, iter.totalIterations());
+		for(int i=0; i<expected.length; i++){
+			assertTrue("HasNext is incorrect for iteration"+i, iter.hasNextId());
+			assertEquals("Disease for iteration "+i+" is incorrect", 
+					expected[i], iter.getNextDiseaseId());
 		}
-		assertTrue("Initialized: hasNext is incorrect for iteration 11", !toTest.hasNextId());
-		assertEquals("Initialized: number of iterations is incorrect", 11, toTest.totalIterations());
+		assertTrue("Finished: hasNext is incorrect for iteration"+expected.length, !iter.hasNextId());
+		assertEquals("Finished: number of iterations is incorrect", expected.length, iter.totalIterations());
 	}
 
 }

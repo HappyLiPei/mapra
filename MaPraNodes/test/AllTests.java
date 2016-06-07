@@ -41,7 +41,7 @@ import phenotogeno.TestPhenoToGenoAlgo;
 import phenotogeno.TestPhenoToGenoDataStructures;
 import phenotogeno.TestPhenoToGenoFileIO;
 import phenotogeno.validation.TestFilter;
-import phenotogeno.validation.TestIteratorAll;
+import phenotogeno.validation.TestDiseaseIterator;
 import phenotogeno.validation.TestRankCalculation;
 import phenotogeno.validation.TestSimulator;
 import phenotogeno.validation.TestSimulatorIteratorFromFile;
@@ -80,7 +80,7 @@ import togeno.TestScoredGeneComparator;
 				//validation phenotype/phenotogeno
 				TestRankCalculation.class,
 				TestValidationProcedure.class,
-				TestIteratorAll.class,
+				TestDiseaseIterator.class,
 				TestSimulator.class,
 				TestSimulatorIteratorFromFile.class,
 				TestFilter.class,
