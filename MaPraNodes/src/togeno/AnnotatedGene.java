@@ -79,6 +79,15 @@ public abstract class AnnotatedGene extends Gene {
 	}
 	
 	/**
+	 * auxiliary method to retrieve the current maximum score of all diseases/metabolites that have been annotated to this 
+	 * object so far
+	 * @return current maximum score
+	 */
+	protected double getCurrentMax(){
+		return currentMax;
+	}
+	
+	/**
 	 * clears all disease/metabolite scores that were annotated so far to the gene
 	 * method allows reuse of GeneAssociations for several runs of PhenoToGeno or MetaboToGeno
 	 */
