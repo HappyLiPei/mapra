@@ -43,7 +43,7 @@ public class PhenoToGenoNodeNodeFactory
      */
     @Override
     public boolean hasDialog() {
-        return false;
+        return true;
     }
 
     /**

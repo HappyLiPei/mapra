@@ -1,6 +1,8 @@
 package phenotogeno.node;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentButtonGroup;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 /**
  * <code>NodeDialog</code> for the "PhenoToGenoNode" Node.
  * 
@@ -13,14 +15,21 @@ import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
  * @author Marie-Sophie Friedl
  */
 public class PhenoToGenoNodeNodeDialog extends DefaultNodeSettingsPane {
+	
+	/** settings model for the option annotation mode used in the node dialog*/
+	private final SettingsModelString annotation_mode = new SettingsModelString(
+			PhenoToGenoNodeNodeModel.CFGKEY_ANNOTATION_MODE, PhenoToGenoNodeNodeModel.DEFAULT_ANNOTATION_MODE);
 
     /**
      * New pane for configuring PhenoToGenoNode node dialog.
-     * This is just a suggestion to demonstrate possible default dialog
-     * components.
      */
     protected PhenoToGenoNodeNodeDialog() {
-        super();    
+        super();
+        
+        addDialogComponent(new DialogComponentButtonGroup(annotation_mode, "Gene Annotation Mode", true, 
+        		new String[]{"Combination of all disease scores", "Maximum disease score"}, 
+        		new String[]{PhenoToGenoNodeNodeModel.ANNOTATION_MODE_MULTIPLE,
+        				PhenoToGenoNodeNodeModel.ANNOTATION_MODE_MAX}));
     }
 }
 

@@ -2,6 +2,8 @@ package nodeutils;
 
 import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
+import org.knime.core.data.def.IntCell;
+import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
 
 /** class for managing all column names and valid types for them, each column can have multiple valid {@link DataType}s
@@ -9,12 +11,18 @@ import org.knime.core.data.def.StringCell;
 public class ColumnSpecification {
 	
 	//column names
+	//disease columns
+	/** column name for the with disease ids*/
+	public static final String DISEASE_ID ="disease_id";
+	/** column name for the column with pvalues of the diseases */
+	public static final String P_VALUE = "p_value";
+	
 	//metabolite columns
     /** column name for the column with metabolite ids*/
     public static final String METABOLITE_ID="metabolite_id";
     /** column name for the column with metabolite names, this column is optional */
     public static final String METABOLITE_NAME="metabolite_name";
-    /** column name for the column with pvalues (probabilities indicating the significance of the scores)*/
+    /** column name for the column with pvalues (probabilities indicating the significance of the metabolite scores)*/
     public static final String METABOLITE_SIGNIFICANCE="significance";
     
     //gene columns
@@ -26,6 +34,12 @@ public class ColumnSpecification {
     public static final String CONTRIBUTION= "contribution";
     
     //column types
+    //disease column types
+    /** valid data types for disease id*/
+    public static final DataType[] DISEASE_ID_TYPE=new DataType[]{IntCell.TYPE, LongCell.TYPE};
+    /** valid data types for disease pvalues */
+    public static final DataType[] P_VALUE_TYPE = new DataType[]{DoubleCell.TYPE};
+    
     //metabolite column types
     /** valid data types for metabolite id*/
     public static final DataType[] METABOLITE_ID_TYPE=new DataType[]{StringCell.TYPE};

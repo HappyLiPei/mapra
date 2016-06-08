@@ -19,6 +19,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
+import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
 import phenomizer.node.PhenomizerNodeModel;
 import togeno.ScoredGene;
@@ -234,9 +235,12 @@ public class TableProcessorPhenoToGeno {
 	protected static DataTableSpec generateOutputSpec(){
 		
     	DataColumnSpec [] specs = new DataColumnSpec[3];
-    	specs[0] = TableFunctions.makeDataColSpec(PhenoToGenoNodeNodeModel.GENE_ID, StringCell.TYPE);
-    	specs[1] = TableFunctions.makeDataColSpec(PhenoToGenoNodeNodeModel.GENE_PROBABILITY, DoubleCell.TYPE);
-    	specs[2] = TableFunctions.makeDataColSpec(PhenoToGenoNodeNodeModel.CONTRIBUTION, StringCell.TYPE);
+    	specs[0] = TableFunctions.makeDataColSpec(ColumnSpecification.GENE_ID, 
+    			ColumnSpecification.GENE_ID_TYPE[0]);
+    	specs[1] = TableFunctions.makeDataColSpec(ColumnSpecification.GENE_PROBABILITY, 
+    			ColumnSpecification.GENE_PROBABILITY_TYPE[0]);
+    	specs[2] = TableFunctions.makeDataColSpec(ColumnSpecification.CONTRIBUTION, 
+    			ColumnSpecification.CONTRIBUTION_TYPE[0]);
     	
 		return new DataTableSpec(specs);	
 	}
