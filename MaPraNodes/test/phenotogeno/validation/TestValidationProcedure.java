@@ -52,7 +52,7 @@ public class TestValidationProcedure {
 	public TemporaryFolder folder =  new TemporaryFolder();
 	
 	@Test
-	public void testPTGValidationProcedure() throws IOException {
+	public void testPTGValidationProcedureMultiplePTG() throws IOException {
 		
 		String outfile = folder.newFile().getAbsolutePath();
 		MockSimulator s = new MockSimulator();
@@ -69,7 +69,22 @@ public class TestValidationProcedure {
 
 	}
 	
-	//TODO: test PTGmax validation procedure
+	@Test
+	public void testPTGValidationProcedureMaxPTG() throws IOException{
+		
+		String outfile = folder.newFile().getAbsolutePath();
+		MockSimulator s = new MockSimulator();
+		ValidateGeneRanking val = new ValidateGeneRanking(ontology, symptoms, ksz_with_freq, genes_raw, map_raw,
+				Pvalfolder,null,null, new PhenomizerFilterAllDiseases(), false, s, s, outfile);
+		val.prepareData();
+		val.simulateAndRank();
+		
+		LinkedList<String> actual = FileInputReader.readAllLinesFrom(outfile);
+		LinkedList<String> expected = FileInputReader.readAllLinesFrom(
+				"../TestData/PhenoToGeno/ExpectedResults/validationMock_expectedPTGMax.txt");
+		assertEquals("Size of the validation result is incorrect", expected.size(), actual.size());
+		assertArrayEquals("Validation result is incorrect", expected.toArray(new String[0]), actual.toArray(new String[0]));
+	}
 	
 	@Test
 	public void testNWValidationProcedure() throws IOException{

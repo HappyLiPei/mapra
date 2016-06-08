@@ -126,6 +126,7 @@ public class PhenoToGenoDataTransformer {
 		return new GeneAssociation(genes, associationsCorrected);
 	}
 	
+	//TODO: remove this method if max annotation mode gives good results
 	/**
 	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes,
 	 * removes duplicates from the gene list and from the associations and
