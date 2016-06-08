@@ -88,6 +88,14 @@ public abstract class AnnotatedGene extends Gene {
 	}
 	
 	/**
+	 * auxiliary method to check if the gene has any annotations
+	 * @return true, if a disease or metabolite score was annotated to this object, otherwise it returns false 
+	 */
+	protected boolean hasAnnotation(){
+		return currentMaxIds.size()!=0;
+	}
+	
+	/**
 	 * clears all disease/metabolite scores that were annotated so far to the gene
 	 * method allows reuse of GeneAssociations for several runs of PhenoToGeno or MetaboToGeno
 	 */

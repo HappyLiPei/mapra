@@ -74,15 +74,15 @@ public class PhenoToGenoDataTransformer {
 		return result;
 	}
 	
-	//TODO: integrate new type of annotated gene
 	/**
 	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes,
 	 * removes duplicates from the gene list and from the associations and
 	 * removes genes from the associations that are not listed in the gene list
 	 * @param gene_list LinkedList of gene ids (e.g. ensembl identifier)
 	 * @param association hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
-	 * @param multiple 
-	 * @return a DiseaseGeneAssociation object require for PhenoToGeno algo
+	 * @param multiple flag to indicate the mode of annotation, if multiple = true, annotations from all diseases of
+	 * 		a gene are combined, if multiple = false, the maximum scoring disease is used to annotate a gene 
+	 * @return a DiseaseGeneAssociation object required for PhenoToGeno algo
 	 */
 	public GeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,
 			HashMap<Integer, LinkedList<String>> association, boolean multiple){
@@ -126,6 +126,15 @@ public class PhenoToGenoDataTransformer {
 		return new GeneAssociation(genes, associationsCorrected);
 	}
 	
+	/**
+	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes,
+	 * removes duplicates from the gene list and from the associations and
+	 * removes genes from the associations that are not listed in the gene list
+	 * @param gene_list LinkedList of gene ids (e.g. ensembl identifier)
+	 * @param association hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
+	 * @return a DiseaseGeneAssociation object required for PhenoToGeno algo that combines annotations
+	 * from all diseases of a gene
+	 */
 	public GeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,
 			HashMap<Integer, LinkedList<String>> association){
 		

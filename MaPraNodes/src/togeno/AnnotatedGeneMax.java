@@ -20,7 +20,14 @@ public class AnnotatedGeneMax extends AnnotatedGene{
 	 */
 	@Override
 	public double getFinalScore() {
-		return getCurrentMax();
+		
+		if(hasAnnotation()){
+			return getCurrentMax();
+		}
+		//gene does not have annotation, score = probability, not annotation => score=0
+		else{
+			return 0;
+		}
 	}
 
 }
