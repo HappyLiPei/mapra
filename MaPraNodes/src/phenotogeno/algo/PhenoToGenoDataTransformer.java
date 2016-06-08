@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import togeno.AnnotatedGene;
+import togeno.AnnotatedGeneMax;
 import togeno.AnnotatedGeneMultiple;
 import togeno.GeneAssociation;
 import togeno.ScoredDiseaseOrMetabolite;
@@ -73,17 +74,18 @@ public class PhenoToGenoDataTransformer {
 		return result;
 	}
 	
-	
+	//TODO: integrate new type of annotated gene
 	/**
 	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes,
 	 * removes duplicates from the gene list and from the associations and
 	 * removes genes from the associations that are not listed in the gene list
 	 * @param gene_list LinkedList of gene ids (e.g. ensembl identifier)
 	 * @param association hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
+	 * @param multiple 
 	 * @return a DiseaseGeneAssociation object require for PhenoToGeno algo
 	 */
 	public GeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,
-			HashMap<Integer, LinkedList<String>> association){
+			HashMap<Integer, LinkedList<String>> association, boolean multiple){
 		
 		//remove duplicates from gene_list
 		LinkedList<String> dedup_gene_list = new LinkedList<String>();
@@ -97,7 +99,12 @@ public class PhenoToGenoDataTransformer {
 		AnnotatedGene [] genes = new AnnotatedGene [dedup_gene_list.size()];
 		int pos=0;
 		for(String s: dedup_gene_list){
-			genes[pos]=new AnnotatedGeneMultiple(s);
+			if(multiple){
+				genes[pos]=new AnnotatedGeneMultiple(s);
+			}
+			else{
+				genes[pos]=new AnnotatedGeneMax(s);
+			}
 			pos++;
 		}
 		
@@ -117,6 +124,12 @@ public class PhenoToGenoDataTransformer {
 
 		// association disease - gene
 		return new GeneAssociation(genes, associationsCorrected);
+	}
+	
+	public GeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,
+			HashMap<Integer, LinkedList<String>> association){
+		
+		return getDiseaseGeneAssociation(gene_list, association, true);
 	}
 
 }
