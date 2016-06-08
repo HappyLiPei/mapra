@@ -59,6 +59,8 @@ public class ValidateGeneRanking {
 	private PhenomizerFilter phenomizerFilter;
 	/** DiseaseGeneassociation object for PhenoToGeno*/
 	private GeneAssociation dga;
+	/** flag specifying the mode of annotation used in PTG */
+	private boolean modePTG;
 	/** array of Edge objects for NetworkScore*/
 	private Edge[] edges;
 	/** random walk with restart object representing the settings for the random walk*/
@@ -113,7 +115,7 @@ public class ValidateGeneRanking {
 			PatientSimulator simulator, DiseaseIterator iter, String outfile){
 		
 		this(onto_raw, symptoms_raw, ksz_raw, genes_raw, associations_raw, pvalFolder, network_raw, rwwrSettings,
-				new PhenomizerFilterAllDiseases(), simulator, iter, outfile);		
+				new PhenomizerFilterAllDiseases(), true, simulator, iter, outfile);		
 	}
 	
 	/**
@@ -136,7 +138,7 @@ public class ValidateGeneRanking {
 			HashMap<Integer, LinkedList<Integer[]>> ksz_raw, LinkedList<String> genes_raw,
 			HashMap<Integer, LinkedList<String>> associations_raw, String pvalFolder,
 			String[][] network_raw, RandomWalkWithRestart rwwrSettings, PhenomizerFilter phenomizerFilter,
-			PatientSimulator simulator, DiseaseIterator iter, String outfile){
+			boolean modePTG, PatientSimulator simulator, DiseaseIterator iter, String outfile){
 		
 		this.onto_raw = onto_raw;
 		this.symptoms_raw = symptoms_raw;
@@ -148,6 +150,7 @@ public class ValidateGeneRanking {
 		this.folder = new PValueFolder(pvalFolder);
 		this.rwwrSettings = rwwrSettings;
 		this.phenomizerFilter = phenomizerFilter;
+		this.modePTG = modePTG;
 		
 		dtPheno = new DataTransformer();
 		dtPTG = new PhenoToGenoDataTransformer();
@@ -167,7 +170,7 @@ public class ValidateGeneRanking {
 		//data for Phenomizer and PTG
 		this.ontology = new Ontology(onto_raw);
 		sda = dtPheno.generateSymptomDiseaseAssociation(ontology, symptoms_raw, ksz_raw);
-		dga = dtPTG.getDiseaseGeneAssociation(genes_raw, associations_raw);
+		dga = dtPTG.getDiseaseGeneAssociation(genes_raw, associations_raw, modePTG);
 		iter.setSDA(sda);
 		
 		//interface Phenomizer and PTG

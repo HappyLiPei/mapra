@@ -113,8 +113,7 @@ public static void main(String args[]) throws Exception{
 		PhenomizerFilter f = null;
 		
 		if(splitMode.length<2){
-			System.out.println("No filter mode specified, no filtering is performed.");
-			f = new PhenomizerFilterAllDiseases();
+			throw new Exception("No filter mode specified");
 		}
 		else{
 			String filterMode = splitMode[1];
@@ -135,8 +134,28 @@ public static void main(String args[]) throws Exception{
 			}
 		}
 		
+		//check annotation mode for PTG
+		boolean multiple = true;
+		if(splitMode.length<3){
+			throw new Exception("No PTG annotation mode specified");
+		}
+		else{
+			String annotationMode = splitMode[2];
+			if(annotationMode.equals("multiple")){
+				multiple = true;
+			}
+			else if(annotationMode.equals("max")){
+				multiple = false;
+			}
+			
+			else{
+				throw new Exception("Invalid annotation mode "+annotationMode);
+			}
+		}
+		
 		//run validation
-		ValidateGeneRanking vgr = new ValidateGeneRanking(onto, symp, ksz, genes, asso, scoreDist, network, walk, f, s, i, outRes);
+		ValidateGeneRanking vgr = new ValidateGeneRanking(onto, symp, ksz, genes, asso, scoreDist, network,
+				walk, f, multiple, s, i, outRes);
 		vgr.prepareData();
 		vgr.simulateAndRank();
 		

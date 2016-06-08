@@ -69,6 +69,8 @@ public class TestValidationProcedure {
 
 	}
 	
+	//TODO: test PTGmax validation procedure
+	
 	@Test
 	public void testNWValidationProcedure() throws IOException{
 		
@@ -140,7 +142,7 @@ public class TestValidationProcedure {
 		
 		ValidateGeneRanking val = new ValidateGeneRanking(				
 				ontology, symptoms, ksz_with_freq, genes_raw, map_raw, Pvalfolder, network_raw, rwwr,
-				new PhenomizerFilterTop20(), s, s, outfile);
+				new PhenomizerFilterTop20(),true, s, s, outfile);
 		val.prepareData();
 		val.simulateAndRank();
 		
@@ -160,7 +162,7 @@ public class TestValidationProcedure {
 		
 		ValidateGeneRanking val = new ValidateGeneRanking(				
 				ontology, symptoms, ksz_with_freq, genes_raw, map_raw, Pvalfolder, network_raw, rwwr,
-				new PhenomizerFilterSignificant(), s, s, outfile);
+				new PhenomizerFilterSignificant(), true, s, s, outfile);
 		val.prepareData();
 		val.simulateAndRank();
 		
@@ -180,7 +182,7 @@ public class TestValidationProcedure {
 		
 		ValidateGeneRanking val = new ValidateGeneRanking(				
 				ontology, symptoms, ksz_with_freq, genes_raw, map_raw, Pvalfolder, network_raw, rwwr,
-				new PhenomizerFilterSignificant(), s, s, outfile);
+				new PhenomizerFilterSignificant(), true, s, s, outfile);
 		val.prepareData();
 		val.simulateAndRank();
 		

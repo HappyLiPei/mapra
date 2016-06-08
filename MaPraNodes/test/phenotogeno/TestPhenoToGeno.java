@@ -46,11 +46,10 @@ public class TestPhenoToGeno {
 		}
 	}
 	
-	//TODO: add more test cases: 5,6,7,8
 	@Test
 	public void testPTGAnnotMax() {
 		//iterate over 8 test cases
-		for(int num=1; num<=4; num++){
+		for(int num=1; num<=8; num++){
 			
 			//get phenomizer result
 			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
@@ -88,7 +87,6 @@ public class TestPhenoToGeno {
 		}	
 	}
 	
-	//TODO: reuse with Max: case 5,6,7,8
 	@Test
 	public void testWithReuseMax(){
 		
@@ -96,7 +94,7 @@ public class TestPhenoToGeno {
 		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes_raw, map_raw, false);
 		
 		//iterate over 8 test cases
-		for(int num=1; num<=4; num++){
+		for(int num=1; num<=8; num++){
 			
 			//get phenomizer result
 			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
