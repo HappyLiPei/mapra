@@ -29,9 +29,8 @@ public class TestPhenoToGeno {
 		map_raw = FileUtilitiesPTG.readDiseaseGeneAssociation("../TestData/PhenoToGeno/gene_diseases.txt");
 	}
 	
-
 	@Test
-	public void test() {
+	public void testPTGAnnotMultiple() {
 		//iterate over 8 test cases
 		for(int num=1; num<=8; num++){
 			
@@ -39,18 +38,37 @@ public class TestPhenoToGeno {
 			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
 					"../TestData/PhenoToGeno/phenores_"+num+".txt");
 			PhenoToGenoDriver driver = new PhenoToGenoDriver(query, genes_raw, map_raw);
+			driver.setModeOfAnnotation(true);
 			LinkedList<ScoredGene> actual = driver.runPhenoToGeno();
 			
 			//check results
-			compareToExpected(num, actual);
+			compareToExpected(num, actual, true);
+		}
+	}
+	
+	//TODO: add more test cases: 5,6,7,8
+	@Test
+	public void testPTGAnnotMax() {
+		//iterate over 8 test cases
+		for(int num=1; num<=4; num++){
+			
+			//get phenomizer result
+			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
+					"../TestData/PhenoToGeno/phenores_"+num+".txt");
+			PhenoToGenoDriver driver = new PhenoToGenoDriver(query, genes_raw, map_raw);
+			driver.setModeOfAnnotation(false);
+			LinkedList<ScoredGene> actual = driver.runPhenoToGeno();
+			
+			//check results
+			compareToExpected(num, actual, false);
 		}
 	}
 	
 	@Test
-	public void testWithReuse(){
+	public void testWithReuseMultiple(){
 		
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
-		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes_raw, map_raw);
+		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes_raw, map_raw, true);
 		
 		//iterate over 8 test cases
 		for(int num=1; num<=8; num++){
@@ -64,17 +82,48 @@ public class TestPhenoToGeno {
 			LinkedList<ScoredGene> actual = a.runToGene();
 			
 			//check results
-			compareToExpected(num, actual);
+			compareToExpected(num, actual, true);
 			
 			dga.resetScores();
 		}	
 	}
 	
-	private void compareToExpected(int num, LinkedList<ScoredGene> actual){
+	//TODO: reuse with Max: case 5,6,7,8
+	@Test
+	public void testWithReuseMax(){
+		
+		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
+		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes_raw, map_raw, false);
+		
+		//iterate over 8 test cases
+		for(int num=1; num<=4; num++){
+			
+			//get phenomizer result
+			LinkedList<String[] > query = FileUtilitiesPTG.readPhenomizerResult(
+					"../TestData/PhenoToGeno/phenores_"+num+".txt");
+			LinkedList<ScoredDiseaseOrMetabolite> phenoRes = dt.getPhenomizerResult(query, dga);
+			
+			ToGenoAlgo a = new ToGenoAlgo(phenoRes,dga);
+			LinkedList<ScoredGene> actual = a.runToGene();
+			
+			//check results
+			compareToExpected(num, actual, false);
+			
+			dga.resetScores();
+		}	
+	}
+	
+	private void compareToExpected(int num, LinkedList<ScoredGene> actual, boolean multiple){
+		
+		//get correct file with expected results
+		String mode="";
+		if(!multiple){
+			mode="Max";
+		}
 		
 		//get expected result
 		LinkedList<String> expected = FileInputReader.readAllLinesFrom(
-				"../TestData/PhenoToGeno/ExpectedResults/expRes_"+num+".txt");
+				"../TestData/PhenoToGeno/ExpectedResults/expRes"+mode+"_"+num+".txt");
 		//remove header
 		expected.remove(0);
 		
