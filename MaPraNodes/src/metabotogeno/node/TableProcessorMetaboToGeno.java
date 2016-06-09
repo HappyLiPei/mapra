@@ -225,7 +225,7 @@ public class TableProcessorMetaboToGeno {
 		BufferedDataContainer container = exec.createDataContainer(specOut);
 		
 		//generate table data
-		int counter =0;
+		int counter =1;
 		for(ScoredGene gene: result){
 			
 			//parse contributors

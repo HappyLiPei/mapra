@@ -7,6 +7,8 @@ import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
+import org.knime.core.data.def.IntCell;
+import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.node.InvalidSettingsException;
 
@@ -83,6 +85,50 @@ public class TableFunctions {
     	else if(cellWithString instanceof DoubleCell){
     		double res = ((DoubleCell) cellWithString).getDoubleValue();
     		return Double.toString(res);
+    	}
+    	//Int cell
+    	else if(cellWithString instanceof IntCell){
+    		int res  = ((IntCell) cellWithString).getIntValue();
+    		return Integer.toString(res);
+    	}
+    	//Long cell
+    	else if(cellWithString instanceof LongCell){
+    		long res = ((LongCell) cellWithString).getLongValue();
+    		return Long.toString(res);
+    	}
+    	//invalid cell type
+    	else{
+    		return null;
+    	}
+    }
+    
+    /**
+     * method to extract a integer value from a row of a KNIME table
+     * @param row DataRow of a KNIME table
+     * @param index index of the cell with a String value,
+     * 		the corresponding cell can be of type {@link StringCell} or {@link DoubleCell}
+     * @return Integer value stored in row "row" at position "index"
+     */
+    public static Integer getIntegerValue(DataRow row, int index){
+
+    	DataCell cellWithInteger = row.getCell(index);
+    	
+    	//int cell
+    	if(cellWithInteger instanceof IntCell){
+    		Integer res = ((IntCell) cellWithInteger).getIntValue();
+    		return res;
+    	}
+    	//long cell
+    	else if(cellWithInteger instanceof LongCell){
+    		long longValue = ((LongCell) cellWithInteger).getLongValue();
+    		try{
+    			Integer res = Math.toIntExact(longValue);
+    			return res;
+    		}
+    		// arithmetic exception -> long cannot be parsed into int
+    		catch(ArithmeticException e){
+    			return null;
+    		}
     	}
     	//invalid cell type
     	else{

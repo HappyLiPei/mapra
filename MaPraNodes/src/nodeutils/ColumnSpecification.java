@@ -12,8 +12,10 @@ public class ColumnSpecification {
 	
 	//column names
 	//disease columns
-	/** column name for the with disease ids*/
+	/** column name for the column with disease ids*/
 	public static final String DISEASE_ID ="disease_id";
+	/** column name for the column with disease names */
+	public static final String DISEASE_NAME = "disease";
 	/** column name for the column with pvalues of the diseases */
 	public static final String P_VALUE = "p_value";
 	
@@ -37,6 +39,8 @@ public class ColumnSpecification {
     //disease column types
     /** valid data types for disease id*/
     public static final DataType[] DISEASE_ID_TYPE=new DataType[]{IntCell.TYPE, LongCell.TYPE};
+    /** valid data types for disease name */
+    public static final DataType[] DISEASE_NAME_TYPE = new DataType[]{StringCell.TYPE};
     /** valid data types for disease pvalues */
     public static final DataType[] P_VALUE_TYPE = new DataType[]{DoubleCell.TYPE};
     
