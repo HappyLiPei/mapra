@@ -125,21 +125,5 @@ public class PhenoToGenoDataTransformer {
 		// association disease - gene
 		return new GeneAssociation(genes, associationsCorrected);
 	}
-	
-	//TODO: remove this method if max annotation mode gives good results
-	/**
-	 * Generates a DiseaseGeneAssociation from a list of genes and a mapping between diseases and genes,
-	 * removes duplicates from the gene list and from the associations and
-	 * removes genes from the associations that are not listed in the gene list
-	 * @param gene_list LinkedList of gene ids (e.g. ensembl identifier)
-	 * @param association hashmap phenodis disease id -> list of gene ids (e.g ensmebl)
-	 * @return a DiseaseGeneAssociation object required for PhenoToGeno algo that combines annotations
-	 * from all diseases of a gene
-	 */
-	public GeneAssociation getDiseaseGeneAssociation(LinkedList<String> gene_list,
-			HashMap<Integer, LinkedList<String>> association){
-		
-		return getDiseaseGeneAssociation(gene_list, association, true);
-	}
 
 }

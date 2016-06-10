@@ -31,7 +31,7 @@ public class TestFilter {
 		LinkedList<String[]> pheno_raw5 = FileUtilitiesPTG.readPhenomizerResult("../TestData/PhenoToGeno/phenores_5.txt");
 		
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
-		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes, map);
+		GeneAssociation dga = dt.getDiseaseGeneAssociation(genes, map, true);
 		
 		phenores2 = dt.getPhenomizerResult(pheno_raw2, dga);
 		phenores3 = dt.getPhenomizerResult(pheno_raw3, dga);

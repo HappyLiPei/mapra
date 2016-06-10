@@ -60,7 +60,7 @@ public class TestCombinationWithPhenomizer {
 		HashMap<Integer, LinkedList<String>> mapping =
 				FileUtilitiesPTG.readDiseaseGeneAssociation("../TestData/PhenoToGeno/gene_diseases.txt");
 		PhenoToGenoDataTransformer dt = new PhenoToGenoDataTransformer();
-		GeneAssociation dga =dt.getDiseaseGeneAssociation(genes_raw, mapping);
+		GeneAssociation dga =dt.getDiseaseGeneAssociation(genes_raw, mapping, true);
 		LinkedList<ScoredDiseaseOrMetabolite> transformed = dt.getPhenomizerResultFromAlgo(res, dga);
 		
 		assertEquals("Size of parsed data is incorrect", res.size(), transformed.size());
