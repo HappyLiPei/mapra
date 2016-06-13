@@ -5,12 +5,12 @@ import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
 
 /**
- * <code>NodeFactory</code> for the "CombineScores" Node.
+ * <code>NodeFactory</code> for the "CombineScores2Ports" Node.
  * 
  *
  * @author Marie-Sophie Friedl
  */
-public class CombineScoresNodeFactory 
+public class CombineScores2PortsNodeFactory 
         extends NodeFactory<CombineScoresNodeModel> {
 
     /**
@@ -18,7 +18,7 @@ public class CombineScoresNodeFactory
      */
     @Override
     public CombineScoresNodeModel createNodeModel() {
-        return new CombineScoresNodeModel(3);
+        return new CombineScoresNodeModel(2);
     }
 
     /**
@@ -26,7 +26,7 @@ public class CombineScoresNodeFactory
      */
     @Override
     public int getNrNodeViews() {
-        return 1;
+        return 0;
     }
 
     /**

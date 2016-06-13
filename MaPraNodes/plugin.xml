@@ -7,41 +7,19 @@
    		<node category-path="/phenobo/diseases" factory-class="phenotogeno.node.PhenoToGenoNodeNodeFactory" id="phenotogeno.node.PhenoToGenoNodeNodeFactory"/>
 		<node category-path="/phenobo/genes" factory-class="geneticnetwork.node.GeneticNetworkScoreNodeFactory" id="geneticnetwork.node.GeneticNetworkScoreNodeFactory"/>
 		<node category-path="/phenobo/genes" factory-class="scorecombination.node.CombineScoresNodeFactory" id="scorecombination.node.CombineScoresNodeFactory"/>
+		<node category-path="/phenobo/genes" factory-class="scorecombination.node.CombineScores2PortsNodeFactory" id="scorecombination.node.CombineScores2PortsNodeFactory"/>
 		<node category-path="/phenobo/metabolites" factory-class="metabolites.node.ScoreMetabolitesNodeFactory" id="metabolites.node.ScoreMetabolitesNodeFactory"/>
 		<node category-path="/phenobo/metabolites" factory-class="metabotogeno.node.MetaboToGenoNodeFactory" id="metabotogeno.node.MetaboToGenoNodeFactory"/>
-	</extension>
+</extension>
 
    <extension point="org.knime.workbench.repository.categories">
-      <category
-            description="Combination of Phenotype, Genotype and Metabotype"
-            icon="icon/IconDisease.png"
-            level-id="phenobo"
-            locked="true"
-            name="PheNoBo"
-            path="/">
+      <category description="Combination of Phenotype, Genotype and Metabotype" icon="icon/IconDisease.png" level-id="phenobo" locked="true" name="PheNoBo" path="/">
       </category>
-      <category 
-      		description="Analysis of Phenotype"
-      		icon="icon/IconDisease.png"
-      		level-id="diseases" locked="true"
-      		name="Diseases"
-      		path="/phenobo">
+      <category description="Analysis of Phenotype" icon="icon/IconDisease.png" level-id="diseases" locked="true" name="Diseases" path="/phenobo">
       </category>
-      <category
-            description="Analysis of Genotype"
-            icon="icon/IconGene.png"
-            level-id="genes"
-            locked="true"
-            name="Genes"
-            path="/phenobo">
+      <category description="Analysis of Genotype" icon="icon/IconGene.png" level-id="genes" locked="true" name="Genes" path="/phenobo">
       </category>
-      <category
-            description="Analysis of Metabotype"
-            icon="icon/IconMetabolite.png"
-            level-id="metabolites"
-            locked="true"
-            name="Metabolites"
-            path="/phenobo">
+      <category description="Analysis of Metabotype" icon="icon/IconMetabolite.png" level-id="metabolites" locked="true" name="Metabolites" path="/phenobo">
       </category>
    </extension>
    

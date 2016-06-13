@@ -54,14 +54,17 @@ public class CombineScoresNodeModel extends NodeModel {
                     CombineScoresNodeModel.DEFAULT_COUNT,
                     Integer.MIN_VALUE, Integer.MAX_VALUE);
     
+    private int numberOfInPorts;
+    
 
     /**
      * Constructor for the node model.
+     * @param numberOfInPorts number of inports to create
      */
-    protected CombineScoresNodeModel() {
-    
-        // TODO one incoming port and one outgoing port is assumed
-        super(3, 1);
+    protected CombineScoresNodeModel(int numberOfInPorts) {
+    	
+    	super(numberOfInPorts, 1);
+    	this.numberOfInPorts=numberOfInPorts;
     }
 
     /**
