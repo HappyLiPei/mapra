@@ -26,7 +26,7 @@ public class CombineScoresNodeFactory
      */
     @Override
     public int getNrNodeViews() {
-        return 1;
+        return 0;
     }
 
     /**
@@ -43,7 +43,7 @@ public class CombineScoresNodeFactory
      */
     @Override
     public boolean hasDialog() {
-        return true;
+        return false;
     }
 
     /**

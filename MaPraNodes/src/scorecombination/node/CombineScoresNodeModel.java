@@ -34,18 +34,12 @@ import org.knime.core.node.NodeSettingsWO;
  */
 public class CombineScoresNodeModel extends NodeModel {
     
-    // the logger instance
-    private static final NodeLogger logger = NodeLogger
-            .getLogger(CombineScoresNodeModel.class);
+    /** logger of the node to write to KNIME console and log file*/
+    private static final NodeLogger logger = NodeLogger.getLogger(CombineScoresNodeModel.class);
         
-    /** the settings key which is used to retrieve and 
-        store the settings (from the dialog or from a settings file)    
-       (package visibility to be usable from the dialog). */
+
 	static final String CFGKEY_COUNT = "Count";
-
-    /** initial default count value. */
     static final int DEFAULT_COUNT = 100;
-
     // example value: the models count variable filled from the dialog 
     // and used in the models execution method. The default components of the
     // dialog work with "SettingsModels".
@@ -54,6 +48,7 @@ public class CombineScoresNodeModel extends NodeModel {
                     CombineScoresNodeModel.DEFAULT_COUNT,
                     Integer.MIN_VALUE, Integer.MAX_VALUE);
     
+    /** number of input ports of this node*/
     private int numberOfInPorts;
     
 
@@ -121,9 +116,6 @@ public class CombineScoresNodeModel extends NodeModel {
      */
     @Override
     protected void reset() {
-        // TODO Code executed on reset.
-        // Models build during execute are cleared here.
-        // Also data handled in load/saveInternals will be erased here.
     }
 
     /**
@@ -147,11 +139,6 @@ public class CombineScoresNodeModel extends NodeModel {
      */
     @Override
     protected void saveSettingsTo(final NodeSettingsWO settings) {
-
-        // TODO save user settings to the config object.
-        
-        m_count.saveSettingsTo(settings);
-
     }
 
     /**
@@ -160,13 +147,6 @@ public class CombineScoresNodeModel extends NodeModel {
     @Override
     protected void loadValidatedSettingsFrom(final NodeSettingsRO settings)
             throws InvalidSettingsException {
-            
-        // TODO load (valid) settings from the config object.
-        // It can be safely assumed that the settings are valided by the 
-        // method below.
-        
-        m_count.loadSettingsFrom(settings);
-
     }
 
     /**
@@ -175,14 +155,6 @@ public class CombineScoresNodeModel extends NodeModel {
     @Override
     protected void validateSettings(final NodeSettingsRO settings)
             throws InvalidSettingsException {
-            
-        // TODO check if the settings could be applied to our model
-        // e.g. if the count is in a certain range (which is ensured by the
-        // SettingsModel).
-        // Do not actually set any values of any member variables.
-
-        m_count.validateSettings(settings);
-
     }
     
     /**
@@ -192,14 +164,6 @@ public class CombineScoresNodeModel extends NodeModel {
     protected void loadInternals(final File internDir,
             final ExecutionMonitor exec) throws IOException,
             CanceledExecutionException {
-        
-        // TODO load internal data. 
-        // Everything handed to output ports is loaded automatically (data
-        // returned by the execute method, models loaded in loadModelContent,
-        // and user settings set through loadSettingsFrom - is all taken care 
-        // of). Load here only the other internals that need to be restored
-        // (e.g. data used by the views).
-
     }
     
     /**
@@ -209,14 +173,6 @@ public class CombineScoresNodeModel extends NodeModel {
     protected void saveInternals(final File internDir,
             final ExecutionMonitor exec) throws IOException,
             CanceledExecutionException {
-       
-        // TODO save internal models. 
-        // Everything written to output ports is saved automatically (data
-        // returned by the execute method, models saved in the saveModelContent,
-        // and user settings saved through saveSettingsTo - is all taken care 
-        // of). Save here only the other internals that need to be preserved
-        // (e.g. data used by the views).
-
     }
 
 }

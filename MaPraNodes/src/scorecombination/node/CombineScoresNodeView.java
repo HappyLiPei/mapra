@@ -17,9 +17,6 @@ public class CombineScoresNodeView extends NodeView<CombineScoresNodeModel> {
      */
     protected CombineScoresNodeView(final CombineScoresNodeModel nodeModel) {
         super(nodeModel);
-
-        // TODO instantiate the components of the view here.
-
     }
 
     /**
@@ -27,16 +24,8 @@ public class CombineScoresNodeView extends NodeView<CombineScoresNodeModel> {
      */
     @Override
     protected void modelChanged() {
-
-        // TODO retrieve the new model from your nodemodel and 
-        // update the view.
-        CombineScoresNodeModel nodeModel = 
-            (CombineScoresNodeModel)getNodeModel();
-        assert nodeModel != null;
-        
-        // be aware of a possibly not executed nodeModel! The data you retrieve
-        // from your nodemodel could be null, emtpy, or invalid in any kind.
-        
+        CombineScoresNodeModel nodeModel = (CombineScoresNodeModel)getNodeModel();
+        assert nodeModel != null;        
     }
 
     /**
@@ -44,8 +33,6 @@ public class CombineScoresNodeView extends NodeView<CombineScoresNodeModel> {
      */
     @Override
     protected void onClose() {
-    
-        // TODO things to do when closing the view
     }
 
     /**
@@ -53,8 +40,6 @@ public class CombineScoresNodeView extends NodeView<CombineScoresNodeModel> {
      */
     @Override
     protected void onOpen() {
-
-        // TODO things to do when opening the view
     }
 
 }
