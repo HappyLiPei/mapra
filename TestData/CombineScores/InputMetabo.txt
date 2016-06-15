@@ -1,4 +1,4 @@
-gene_id	score
+gene_id	gene_probability
 MTG5	0.1
 MTG61	0.05
 MTG2	0.05
