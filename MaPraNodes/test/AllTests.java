@@ -46,6 +46,7 @@ import phenotogeno.validation.TestRankCalculation;
 import phenotogeno.validation.TestSimulator;
 import phenotogeno.validation.TestSimulatorIteratorFromFile;
 import phenotogeno.validation.TestValidationProcedure;
+import scorecombination.TestCSIO;
 import togeno.TestScoredGeneComparator;
 
 @RunWith(Suite.class)
@@ -101,7 +102,9 @@ import togeno.TestScoredGeneComparator;
 				//metabotogeno
 				TestMetaboToGenoIO.class,
 				TestMetaboToGenoDataStructures.class,
-				TestMetaboToGenoAlgo.class })
+				TestMetaboToGenoAlgo.class,
+				//combinescores
+				TestCSIO.class})
 public class AllTests {
 
 }
