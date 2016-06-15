@@ -55,5 +55,13 @@ public class ScoredGenes {
 	public String[] getAllScoredGenes(){
 		return allGeneIds;
 	}
+	
+	/**
+	 * retrieves the number of gene-score pairs stored in this object
+	 * @return number of genes managed by this object
+	 */
+	public int size(){
+		return allGeneIds.length;
+	}
 
 }
