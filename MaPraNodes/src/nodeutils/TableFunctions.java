@@ -69,7 +69,7 @@ public class TableFunctions {
      * method to extract a String value from a row of a KNIME table
      * @param row DataRow of a KNIME table
      * @param index index of the cell with a String value,
-     * 		the corresponding cell can be of type {@link StringCell} or {@link DoubleCell}
+     * 		the corresponding cell can be of type {@link StringCell}, {@link DoubleCell}, {@link IntCell} and {@link LongCell}
      * @return String value stored in row "row" at position "index"
      */
     public static String getStringValue(DataRow row, int index){
@@ -103,10 +103,10 @@ public class TableFunctions {
     }
     
     /**
-     * method to extract a integer value from a row of a KNIME table
+     * method to extract an integer value from a row of a KNIME table
      * @param row DataRow of a KNIME table
      * @param index index of the cell with a String value,
-     * 		the corresponding cell can be of type {@link StringCell} or {@link DoubleCell}
+     * 		the corresponding cell can be of type {@link StringCell}, {@link LongCell} or {@link DoubleCell}
      * @return Integer value stored in row "row" at position "index"
      */
     public static Integer getIntegerValue(DataRow row, int index){
@@ -129,6 +129,28 @@ public class TableFunctions {
     		catch(ArithmeticException e){
     			return null;
     		}
+    	}
+    	//invalid cell type
+    	else{
+    		return null;
+    	}
+    }
+    
+    /**
+     * method to extract a double value from a row of a KNIME table
+     * @param row DataRow of a KNIME table
+     * @param index index of the cell with a String value,
+     * 		the corresponding cell has to be of type {@link DoubleCell}
+     * @return Double value stored in row "row" at position "index"
+     */
+    public static Double getDoubleValue(DataRow row, int index){
+    	
+    	DataCell cellWithDouble = row.getCell(index);
+    	
+    	//double cell
+    	if(cellWithDouble instanceof DoubleCell){
+    		double res = ((DoubleCell) cellWithDouble).getDoubleValue();
+    		return res;
     	}
     	//invalid cell type
     	else{

@@ -2,20 +2,17 @@ package scorecombination.node;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
-import org.knime.core.data.DataCell;
-import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.RowKey;
-import org.knime.core.data.def.DefaultRow;
-import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.StringCell;
-import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 
 import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
+import scorecombination.algo.CombineScoresDriver;
+import togeno.ScoredGene;
 
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
@@ -57,25 +54,25 @@ public class CombineScoresNodeModel extends NodeModel {
     @Override
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
-
-        // TODO do something here
-        logger.info("Node Model Stub... this is not yet implemented !");
-
-        DataTableSpec outputSpec = CombineScoresTableProcessor.generateOutputSpec();
-        BufferedDataContainer container = exec.createDataContainer(outputSpec);
-        for (int i = 0; i < 100; i++) {
-            RowKey key = new RowKey("Row " + i);
-            DataCell[] cells = new DataCell[2];
-            cells[0] = new StringCell("String_" + i); 
-            cells[1] = new DoubleCell(0.5 * i); 
-            DataRow row = new DefaultRow(key, cells);
-            container.addRowToTable(row);
-            exec.checkCanceled();
-            exec.setProgress(i / (double)100, 
-                "Adding row " + i);
-        }
-        container.close();
-        BufferedDataTable out = container.getTable();
+    	
+    	//driver for running the algorithm
+    	CombineScoresDriver driver = new CombineScoresDriver();
+    	
+    	//generate input data and add it to the driver
+    	for(int i=0; i<numberOfInPorts; i++){
+    		HashMap<String,Double> scores = CombineScoresTableProcessor.getScoreSet(inData[i], i, logger);
+    		System.out.println(i);
+    		for(String key:scores.keySet()){
+    			System.out.println(key+"\t"+scores.get(key));
+    		}
+    		driver.addInput(scores);
+    	}
+    	
+    	//run the algorithm
+    	LinkedList<ScoredGene> result = driver.runCombineScores();
+    	
+    	//return a KNIME table with the calculated gene scores
+        BufferedDataTable out = CombineScoresTableProcessor.generateOutputTable(result, exec);
         return new BufferedDataTable[]{out};
     }
 
@@ -87,7 +84,7 @@ public class CombineScoresNodeModel extends NodeModel {
     }
 
     /**
-     * method to check the tables at all input Ports, dependent on the variable numberOfInPorts
+     * method to check the tables at all input Ports, dependent on the variable numberOfInPorts     *
      * {@inheritDoc}
      */
     @Override

@@ -43,7 +43,7 @@ public class CombineScores2PortsNodeFactory
      */
     @Override
     public boolean hasDialog() {
-        return true;
+        return false;
     }
 
     /**
