@@ -6,10 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
-import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.IntCell;
-import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
@@ -17,8 +13,8 @@ import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 
 import geneticnetwork.algorithm.NetworkScoreDriver;
+import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
-import phenotogeno.node.PhenoToGenoNodeNodeModel;
 import togeno.ScoredGene;
 
 import org.knime.core.node.ExecutionContext;
@@ -93,14 +89,6 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     private static final int INPORT_GENESCORES=0;
     /** inport of the table containing the genetic network (table of edges)*/
     private static final int INPORT_NETWORK=1;
-    
-    //column names
-    /** name of the column gene1 = gene id corresponding to a node of the network, the node is end point of an (undirected) edge) */
-    public static final String GENE1 ="gene1";
-    /** name of the column gene2 = gene id corresponding to a node of the network, the node is end point of an (undirected) edge) */
-    public static final String GENE2 ="gene2";
-    /** name of the column edgeweight = column with an integer edge weight for each weight, only if the edge weight option is used*/
-    public static final String EDGEWEIGHT="weight";
 
     /**
      * Constructor for the node model.
@@ -117,11 +105,13 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
         
+    	//read input data from tables at input ports
         HashMap<String, Double> scores = GeneticNetworkScoreTableProcessor.
         		getGeneScores(inData[INPORT_GENESCORES], logger);
         String [][] network = GeneticNetworkScoreTableProcessor.
         		getNetworkEdges(inData[INPORT_NETWORK], m_edge_weights.getBooleanValue(), logger);
         
+        //configure and run network algorithm
         NetworkScoreDriver driver = new NetworkScoreDriver(network, scores);
         driver.SetNetworkScoreAlgorithm(m_restart_probability.getDoubleValue(),
         		m_iteration_convergence.getBooleanValue(), m_number_of_iterations.getIntValue());
@@ -130,6 +120,7 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
         logger.info("Random Walk finished after "+driver.getNumberOfIterationsDone()+" iterations. "
         		+ "Convergence is "+driver.getConvergenceNorm()+".");
         
+        //generate and return output table
         BufferedDataTable resTable = GeneticNetworkScoreTableProcessor.generateOutputTable(result, exec);
         return new BufferedDataTable[]{resTable};
     }
@@ -148,19 +139,23 @@ public class GeneticNetworkScoreNodeModel extends NodeModel {
     protected DataTableSpec[] configure(final DataTableSpec[] inSpecs)
             throws InvalidSettingsException {
         
-    	//check port 0: gene scores from phenotogeno
-    	TableFunctions.checkColumn(inSpecs, INPORT_GENESCORES, PhenoToGenoNodeNodeModel.GENE_ID,
-    			new DataType[]{StringCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_GENESCORES, PhenoToGenoNodeNodeModel.GENE_PROBABILITY,
-    			new DataType[]{DoubleCell.TYPE}, null);
-    	//check port 1: genetic network
-    	TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, GENE1, 
-    			new DataType[]{StringCell.TYPE}, null);
-       	TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, GENE2, 
-    			new DataType[]{StringCell.TYPE}, null);
+    	//check port 0: gene scores from phenotogeno (gene id and gene score columns)
+    	TableFunctions.checkColumn(inSpecs, INPORT_GENESCORES, ColumnSpecification.GENE_ID,
+    			ColumnSpecification.GENE_ID_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_GENESCORES, ColumnSpecification.GENE_PROBABILITY,
+    			ColumnSpecification.GENE_PROBABILITY_TYPE, null);
+    	
+    	//check port 1: genetic network (gene id columns)
+    	TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, ColumnSpecification.GENE1, 
+    			ColumnSpecification.GENE1_TYPE, null);
+       	TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, ColumnSpecification.GENE2, 
+    			ColumnSpecification.GENE2_TYPE, null);
+       	
+       	//port 1: optional column edge weight required only if edge weight option is checked
        	if(m_edge_weights.getBooleanValue()){
-       		TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, EDGEWEIGHT, new DataType[] {IntCell.TYPE}, 
-       				"Please uncheck the option \"Use Weighted Edges\" in the node dialog or use another network table with edge weights");
+       		TableFunctions.checkColumn(inSpecs, INPORT_NETWORK, ColumnSpecification.EDGEWEIGHT,
+   				ColumnSpecification.EDGEWEIGHT_TYPE, 
+       			"Please uncheck the option \"Use Weighted Edges\" in the node dialog or use another network table with edge weights");
        	}
 
         return new DataTableSpec[]{GeneticNetworkScoreTableProcessor.generateOutputSpec()};

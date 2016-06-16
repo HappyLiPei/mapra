@@ -34,6 +34,12 @@ public class ColumnSpecification {
     public static final String GENE_PROBABILITY = "gene_probability";
     /** column name for the column with the major contributors (metabolites or diseases) to the gene score*/
     public static final String CONTRIBUTION= "contribution";
+    /** column name for the column with gene ids corresponding to nodes of a genetic network, the node is start point of an (undirected) edge) */
+    public static final String GENE1 ="gene1";
+    /** column name for the column with gene ids corresponding to nodes of a genetic network, the node is end point of an (undirected) edge) */
+    public static final String GENE2 ="gene2";
+    /** column name for the column with edge weights = integer edge weights for each weight (required only if the edge weight option of NetworkScore is used )*/
+    public static final String EDGEWEIGHT="weight";
     
     //column types
     //disease column types
@@ -59,5 +65,11 @@ public class ColumnSpecification {
     public static final DataType[] GENE_PROBABILITY_TYPE = new DataType[]{DoubleCell.TYPE};
     /** valid data types for the contributors*/
     public static final DataType[] CONTRIBUTION_TYPE = new DataType[]{StringCell.TYPE};
+    /** valid data types for gene1*/
+    public static final DataType[] GENE1_TYPE = new DataType[]{StringCell.TYPE};
+    /** valid data types for gene2*/
+    public static final DataType[] GENE2_TYPE = new DataType[]{StringCell.TYPE};
+    /** valid data types for edge weight (optional column)*/
+    public static final DataType[] EDGEWEIGHT_TYPE = new DataType[]{IntCell.TYPE};
 
 }

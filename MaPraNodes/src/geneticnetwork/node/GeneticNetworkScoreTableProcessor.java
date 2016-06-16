@@ -18,6 +18,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
+import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
 import phenotogeno.node.PhenoToGenoNodeNodeModel;
 import togeno.ScoredGene;
@@ -85,10 +86,10 @@ public class GeneticNetworkScoreTableProcessor {
 		}
 		
 		DataTableSpec specNetwork = tableNetwork.getDataTableSpec();
-		int indexGene1 = specNetwork.findColumnIndex(GeneticNetworkScoreNodeModel.GENE1);
-		int indexGene2 = specNetwork.findColumnIndex(GeneticNetworkScoreNodeModel.GENE2);
+		int indexGene1 = specNetwork.findColumnIndex(ColumnSpecification.GENE1);
+		int indexGene2 = specNetwork.findColumnIndex(ColumnSpecification.GENE2);
 		// indexWeight = -1 if !weights
-		int indexWeight = specNetwork.findColumnIndex(GeneticNetworkScoreNodeModel.EDGEWEIGHT);
+		int indexWeight = specNetwork.findColumnIndex(ColumnSpecification.EDGEWEIGHT);
 		
 		int position =0;
 		for (DataRow r: tableNetwork){

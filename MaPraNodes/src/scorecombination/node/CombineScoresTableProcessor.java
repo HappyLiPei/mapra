@@ -19,6 +19,7 @@ import nodeutils.TableFunctions;
 import scorecombination.algo.CombineScoresDriver;
 import togeno.ScoredGene;
 
+/** class with methods to transform KNIME tables for the ScoreCombineation node*/
 public class CombineScoresTableProcessor {
 	
 	/**
