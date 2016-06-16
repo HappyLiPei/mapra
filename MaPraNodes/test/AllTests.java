@@ -49,6 +49,7 @@ import phenotogeno.validation.TestValidationProcedure;
 import scorecombination.TestCSIO;
 import scorecombination.TestCombineScoreBayes;
 import scorecombination.TestDataTransformerCS;
+import scorecombination.TestScoreCombination;
 import togeno.TestScoredGeneComparator;
 
 @RunWith(Suite.class)
@@ -108,7 +109,8 @@ import togeno.TestScoredGeneComparator;
 				//combinescores
 				TestCSIO.class,
 				TestDataTransformerCS.class,
-				TestCombineScoreBayes.class})
+				TestCombineScoreBayes.class,
+				TestScoreCombination.class})
 public class AllTests {
 
 }

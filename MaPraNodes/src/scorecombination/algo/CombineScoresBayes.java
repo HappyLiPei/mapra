@@ -8,7 +8,6 @@ import geneticnetwork.datastructures.ScoredGenes;
 import togeno.ScoredGene;
 import togeno.ScoredGeneComparator;
 
-//TODO: implement and test
 /** CombineScoresBayes is an algorithm for combining several sets of gene scores, 
  * e.g. scores for each gene from phenotype, metabotype and genotype analysis,
  * it is able to handle empty input and genes that are not part of all sets of gene scores */
@@ -27,7 +26,10 @@ public class CombineScoresBayes {
 	
 	//TODO: rounding of final scores?!? number of decimal places -> sorting, creation of scored genes!
 	
-	//TODO: call methods and sort result before returning: test and comment
+	/**
+	 * method for calculating the combined scores for the gene scores managed by this object
+	 * @return list of {@link ScoredGene}s with the combined scores
+	 */
 	public LinkedList<ScoredGene> combineScores(){
 		HashSet<String> allGenes = getAllGenes();
 		LinkedList<ScoredGene> combination = calculateScores(allGenes);
