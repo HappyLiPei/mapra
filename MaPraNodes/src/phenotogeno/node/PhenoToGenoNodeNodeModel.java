@@ -55,13 +55,7 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
     /** inport number of the table with all genes */
     private static final int INPORT_ALL_GENES = 2;
     
-    //TODO: remove completely
-    //column names
-    public static final String GENE_ID = "gene_id";
-    public static final String GENE_PROBABILITY = "gene_probability";
-    public static final String CONTRIBUTION= "contribution";
     
-
     /**
      * Constructor for the node model.
      * 3 inports for the results from Phenomizer (0), the associations between genes and diseases (1) and the

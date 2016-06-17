@@ -229,9 +229,9 @@ public class TableProcessorPhenoToGeno {
 		
 		//get indices for filling the table
         DataTableSpec spec = TableProcessorPhenoToGeno.generateOutputSpec();
-        int indexGID = spec.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_ID);
-        int indexProb = spec.findColumnIndex(PhenoToGenoNodeNodeModel.GENE_PROBABILITY);
-        int indexCon = spec.findColumnIndex(PhenoToGenoNodeNodeModel.CONTRIBUTION);
+        int indexGID = spec.findColumnIndex(ColumnSpecification.GENE_ID);
+        int indexProb = spec.findColumnIndex(ColumnSpecification.GENE_PROBABILITY);
+        int indexCon = spec.findColumnIndex(ColumnSpecification.CONTRIBUTION);
         BufferedDataContainer c = exec.createDataContainer(spec);
         int counter =1;
         for(ScoredGene g : genes){

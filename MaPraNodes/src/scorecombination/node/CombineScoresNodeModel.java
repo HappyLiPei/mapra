@@ -61,10 +61,6 @@ public class CombineScoresNodeModel extends NodeModel {
     	//generate input data and add it to the driver
     	for(int i=0; i<numberOfInPorts; i++){
     		HashMap<String,Double> scores = CombineScoresTableProcessor.getScoreSet(inData[i], i, logger);
-    		System.out.println(i);
-    		for(String key:scores.keySet()){
-    			System.out.println(key+"\t"+scores.get(key));
-    		}
     		driver.addInput(scores);
     	}
     	
