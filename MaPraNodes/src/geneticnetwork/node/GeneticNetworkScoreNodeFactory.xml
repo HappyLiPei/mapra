@@ -3,32 +3,77 @@
     <name>GeneticNetworkScore</name>
     
     <shortDescription>
-        
+        Distribution of gene scores within a genetic network
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
-        
-        
-        <option name="Use Weighted Edges">description of first option</option>
-        <option name="Restart Probability">description of first option</option>
-        <option name="Number of Iterations">description of first option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+        <intro>
+        	<b>GeneticNetworkScore</b> is part of the phenotype and metabotype analysis implemented in <b>PheNoBo</b>.
+        	This node is the successor of the <b>PhenoToGeno</b> node and the <b>MetaboToGeno</b> node.
+        	It is the predecessor of the <b>NetworkScore</b> node.
+        	<br/><br/>
+        	The aim of GeneticNetworkScore is to refine the gene scores of PhenoToGeno and MetaboToGeno.
+        	The node calculates a new score for each gene based on a genetic network.
+        	The procedure increases the score of genes that are not associated with the patient's phenotype or metabotype if those genes interact with known causal genes for the patient's condition.
+			Therefore, the GeneticNetworkScore node enables the detection of new disease genes.
+        	<br/><br/>
+        	GeneticNetworkScore requires 2 tables with input data.
+        	For detailed information about the format of the tables have a look at the example files provided at
+        	<a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
+        	<br/><br/>
+        	The node implements a random walk with restart on the genetic network.
+   			The random walk with restart is an iterative procedure based on the function s<sub>t+1</sub> = (1-r)Ms<sub>t</sub> + rs<sub>0</sub>.
+        	The function describes a random score transfer along the edges of the network.
+        	s<sub>t</sub> is a vector and denotes the scores of all genes after t iterations.
+        	The vector s<sub>0</sub> contains the initial scores calculated by PhenoToGeno or MetaboToGeno.
+        	M is a (sparse) transition matrix representing the edges of the genetic network.
+        	The entries m<sub>i,j</sub> of M give the probability of transferring scores from gene j to gene i.
+        	The parameter r gives the fraction of the original scores s<sub>0</sub> that is not distributed within the network.
+    	</intro>
+                
+        <option name="Use Weighted Edges">
+        	This option allows to include edge weights into the calculations.
+        	The edge weights are translated into probabilities of the transition matrix M of the random walk with restart.
+        	The weight of an edge is proportional to the probability of transferring scores along the edge.
+        	If this option is checked, the table at input port 1 has to provide a column with integer edge weights.
+    	</option>
+        <option name="Restart Probability">
+        	The parameter restart probability r controls the fraction of the original scores that is distributed among the nodes of the network.
+    		For example, if the restart probability is set to r=0.9 (default value), 90% of the original score of a gene is kept and 10% of its score is distributed within its neighbors.
+		</option>
+        <option name="Number of Iterations">
+        	This option refers to the parameter t (number of steps) of the random walk with restart.
+        	It influences how far the score is spread among the neighbors of a node.
+        	For example, if the number of steps is t=2 (default value), the direct neighbors and the neighbors of the direct neighbors receive scores from a node.
+    	</option>
+    	<option name="Iterate until Convergence">
+    		This option provides an alternative to the option <i>Number of Iterations</i>.
+			If you choose this option, the scores are approximated for an infinite number of steps (t=&#8734;).
+			This means that the score of a node is distributed among all other nodes of the network.
+		</option>
+
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Scored Genes"> Scored Genes ...Description of first input port...</inPort>
-        <inPort index="1" name="Network">Network ...Description of second input port...</inPort>
-        <outPort index="0" name="Gene Scores"> Gene Scores ...Description of first output port...</outPort>
+        <inPort index="0" name="Scored Genes">
+        	<b>Scored Genes</b>:
+        	a table produced by the PhenoToGeno node or the MetaboToGeno node.
+        	GeneticNetworkScore requires not all columns generated by PhenoToGeno or MetaboToGeno.
+        	This node only depends on the columns <b>gene_id</b> and <b>gene_probability</b>.
+    	</inPort>
+        <inPort index="1" name="Network">
+        	<b>Network</b>:
+        	a table representing a genetic network.
+        	Each row corresponds to an undirected edge of the network.
+        	The edges are described by 2 columns called <b>gene1</b> and <b>gene2</b> giving the gene ids of the edge's vertices.
+        	If the option <i>Use Weighted Edges</i> is checked, the table requires a third column named <b>weight</b> with integer values.     	
+    	</inPort>
+        <outPort index="0" name="Gene Scores">
+        	<b>Gene Scores</b>:
+        	Each row represents a gene and consists of 2 columns: <b>gene_id</b> and <b>gene_probability</b>.
+        	The column gene_probability contains modified gene scores based on the scores from the table at input port 0.
+        	The gene probability indicates the likelihood that the gene is causal for the patient's disease.
+        </outPort>
     </ports>    
 
 </knimeNode>
