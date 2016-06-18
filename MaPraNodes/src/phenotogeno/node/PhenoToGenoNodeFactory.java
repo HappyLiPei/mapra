@@ -10,15 +10,15 @@ import org.knime.core.node.NodeView;
  *
  * @author Marie-Sophie Friedl
  */
-public class PhenoToGenoNodeNodeFactory 
-        extends NodeFactory<PhenoToGenoNodeNodeModel> {
+public class PhenoToGenoNodeFactory 
+        extends NodeFactory<PhenoToGenoNodeModel> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public PhenoToGenoNodeNodeModel createNodeModel() {
-        return new PhenoToGenoNodeNodeModel();
+    public PhenoToGenoNodeModel createNodeModel() {
+        return new PhenoToGenoNodeModel();
     }
 
     /**
@@ -33,9 +33,9 @@ public class PhenoToGenoNodeNodeFactory
      * {@inheritDoc}
      */
     @Override
-    public NodeView<PhenoToGenoNodeNodeModel> createNodeView(final int viewIndex,
-            final PhenoToGenoNodeNodeModel nodeModel) {
-        return new PhenoToGenoNodeNodeView(nodeModel);
+    public NodeView<PhenoToGenoNodeModel> createNodeView(final int viewIndex,
+            final PhenoToGenoNodeModel nodeModel) {
+        return new PhenoToGenoNodeView(nodeModel);
     }
 
     /**
@@ -51,7 +51,7 @@ public class PhenoToGenoNodeNodeFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new PhenoToGenoNodeNodeDialog();
+        return new PhenoToGenoNodeDialog();
     }
 
 }

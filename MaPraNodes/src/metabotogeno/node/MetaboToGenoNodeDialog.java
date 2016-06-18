@@ -1,6 +1,9 @@
 package metabotogeno.node;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentButtonGroup;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
+
 /**
  * <code>NodeDialog</code> for the "MetaboToGeno" Node.
  * 
@@ -13,6 +16,9 @@ import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
  * @author Marie-Sophie Friedl
  */
 public class MetaboToGenoNodeDialog extends DefaultNodeSettingsPane {
+	
+	private final SettingsModelString annoMode = new SettingsModelString(
+			MetaboToGenoNodeModel.CFGKEY_ANNOTATION_MODE, MetaboToGenoNodeModel.DEFAULT_ANNOTATION_MODE);
 
     /**
      * New pane for configuring MetaboToGeno node dialog.
@@ -20,7 +26,12 @@ public class MetaboToGenoNodeDialog extends DefaultNodeSettingsPane {
      * components.
      */
     protected MetaboToGenoNodeDialog() {
-        super();                    
+        super();
+        
+        addDialogComponent(new DialogComponentButtonGroup(annoMode, "Gene Annotation Mode", true, 
+        		new String[]{"Combination of all metabolite scores", "Maximum metabolite score"}, 
+        		new String[]{MetaboToGenoNodeModel.ANNOTATION_MODE_MULTIPLE,
+        				MetaboToGenoNodeModel.ANNOTATION_MODE_MAX}));
     }
 }
 

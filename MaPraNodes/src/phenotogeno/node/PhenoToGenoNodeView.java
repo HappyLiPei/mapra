@@ -8,14 +8,14 @@ import org.knime.core.node.NodeView;
  *
  * @author Marie-Sophie Friedl
  */
-public class PhenoToGenoNodeNodeView extends NodeView<PhenoToGenoNodeNodeModel> {
+public class PhenoToGenoNodeView extends NodeView<PhenoToGenoNodeModel> {
 
     /**
      * Creates a new view.
      * 
-     * @param nodeModel The model (class: {@link PhenoToGenoNodeNodeModel})
+     * @param nodeModel The model (class: {@link PhenoToGenoNodeModel})
      */
-    protected PhenoToGenoNodeNodeView(final PhenoToGenoNodeNodeModel nodeModel) {
+    protected PhenoToGenoNodeView(final PhenoToGenoNodeModel nodeModel) {
         super(nodeModel);
     }
 
@@ -24,8 +24,8 @@ public class PhenoToGenoNodeNodeView extends NodeView<PhenoToGenoNodeNodeModel> 
      */
     @Override
     protected void modelChanged() {
-        PhenoToGenoNodeNodeModel nodeModel = 
-            (PhenoToGenoNodeNodeModel)getNodeModel();
+        PhenoToGenoNodeModel nodeModel = 
+            (PhenoToGenoNodeModel)getNodeModel();
         assert nodeModel != null;
     }
 

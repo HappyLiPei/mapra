@@ -14,22 +14,22 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  * 
  * @author Marie-Sophie Friedl
  */
-public class PhenoToGenoNodeNodeDialog extends DefaultNodeSettingsPane {
+public class PhenoToGenoNodeDialog extends DefaultNodeSettingsPane {
 	
 	/** settings model for the option annotation mode used in the node dialog*/
 	private final SettingsModelString annotation_mode = new SettingsModelString(
-			PhenoToGenoNodeNodeModel.CFGKEY_ANNOTATION_MODE, PhenoToGenoNodeNodeModel.DEFAULT_ANNOTATION_MODE);
+			PhenoToGenoNodeModel.CFGKEY_ANNOTATION_MODE, PhenoToGenoNodeModel.DEFAULT_ANNOTATION_MODE);
 
     /**
      * New pane for configuring PhenoToGenoNode node dialog.
      */
-    protected PhenoToGenoNodeNodeDialog() {
+    protected PhenoToGenoNodeDialog() {
         super();
         
         addDialogComponent(new DialogComponentButtonGroup(annotation_mode, "Gene Annotation Mode", true, 
         		new String[]{"Combination of all disease scores", "Maximum disease score"}, 
-        		new String[]{PhenoToGenoNodeNodeModel.ANNOTATION_MODE_MULTIPLE,
-        				PhenoToGenoNodeNodeModel.ANNOTATION_MODE_MAX}));
+        		new String[]{PhenoToGenoNodeModel.ANNOTATION_MODE_MULTIPLE,
+        				PhenoToGenoNodeModel.ANNOTATION_MODE_MAX}));
     }
 }
 

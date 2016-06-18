@@ -43,7 +43,7 @@ public class MetaboToGenoNodeFactory
      */
     @Override
     public boolean hasDialog() {
-        return false;
+        return true;
     }
 
     /**

@@ -21,6 +21,7 @@ import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 
 /**
@@ -33,6 +34,17 @@ public class MetaboToGenoNodeModel extends NodeModel {
     
     /** logger of the node for writing to KNIME log file and console*/
     private static final NodeLogger logger = NodeLogger.getLogger(MetaboToGenoNodeModel.class);
+    
+    /** key of the option annotation mode */
+    static final String CFGKEY_ANNOTATION_MODE = "mode_of_annotation";
+    /** string value coding for annotation mode using only the maximum score */
+    static final String ANNOTATION_MODE_MAX="annoMax";
+    /** string value coding for annotation mode combining all scores */
+    static final String ANNOTATION_MODE_MULTIPLE="annoMultiple";
+    /** default value of the option annotation mode */
+    static final String DEFAULT_ANNOTATION_MODE=ANNOTATION_MODE_MULTIPLE;
+    private final SettingsModelString m_modeAnno = new SettingsModelString(
+    		CFGKEY_ANNOTATION_MODE, DEFAULT_ANNOTATION_MODE);    
     
     /** inPort number for table with metabolite scores */
     private static final int INPORT_SCOREMETABOLITES=0;
@@ -68,8 +80,16 @@ public class MetaboToGenoNodeModel extends NodeModel {
     	LinkedList<String[]> metaboScores = TableProcessorMetaboToGeno.getScoreMetabolitesResult(
     			inData[INPORT_SCOREMETABOLITES], logger, associations);
   
-    	//execute algorithm
+    	//configure driver -> select annotation mode
     	MetaboToGenoDriver driver = new MetaboToGenoDriver(allGenes, associations, metaboScores);
+    	if(m_modeAnno.getStringValue().equals(ANNOTATION_MODE_MULTIPLE)){
+    		driver.setModeOfAnnotation(true);
+    	}
+    	else{
+    		driver.setModeOfAnnotation(false);
+    	}
+    	
+    	//execute algorithm
     	LinkedList<ScoredGene> result = driver.runMetaboToGeno();
     	
     	//generate output
@@ -117,6 +137,7 @@ public class MetaboToGenoNodeModel extends NodeModel {
      */
     @Override
     protected void saveSettingsTo(final NodeSettingsWO settings) {
+    	m_modeAnno.saveSettingsTo(settings);
     }
 
     /**
@@ -125,6 +146,7 @@ public class MetaboToGenoNodeModel extends NodeModel {
     @Override
     protected void loadValidatedSettingsFrom(final NodeSettingsRO settings)
             throws InvalidSettingsException {
+    	m_modeAnno.loadSettingsFrom(settings);
     }
 
     /**
@@ -133,6 +155,15 @@ public class MetaboToGenoNodeModel extends NodeModel {
     @Override
     protected void validateSettings(final NodeSettingsRO settings)
             throws InvalidSettingsException {
+    	
+    	m_modeAnno.validateSettings(settings);
+    	
+    	//this should never happen
+    	String mode = settings.getString(CFGKEY_ANNOTATION_MODE);
+    	if(!mode.equals(ANNOTATION_MODE_MAX) && !mode.equals(ANNOTATION_MODE_MULTIPLE)){
+    		throw new InvalidSettingsException(
+    				"Gene Annotation Mode \""+mode+"\" is not supported by this node!");
+    	}
     }
     
     /**

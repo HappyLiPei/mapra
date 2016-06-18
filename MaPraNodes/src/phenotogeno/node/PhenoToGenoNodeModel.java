@@ -29,11 +29,11 @@ import togeno.ScoredGene;
  *
  * @author Marie-Sophie Friedl
  */
-public class PhenoToGenoNodeNodeModel extends NodeModel {
+public class PhenoToGenoNodeModel extends NodeModel {
     
 	/** the logger instance for writing to KNIME console and log*/
     private static final NodeLogger logger = NodeLogger
-            .getLogger(PhenoToGenoNodeNodeModel.class);
+            .getLogger(PhenoToGenoNodeModel.class);
     
     //option for choosing annotation mode
     /** key of the option annotation mode */
@@ -61,7 +61,7 @@ public class PhenoToGenoNodeNodeModel extends NodeModel {
      * 3 inports for the results from Phenomizer (0), the associations between genes and diseases (1) and the
      * 		list of all genes (2)
      */
-    protected PhenoToGenoNodeNodeModel() {
+    protected PhenoToGenoNodeModel() {
     	//3 incoming, 1 outgoing port
         super(3, 1);
     }

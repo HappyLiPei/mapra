@@ -4,7 +4,7 @@
    <extension point="org.knime.workbench.repository.nodes">
 		<node category-path="/phenobo/diseases" factory-class="phenomizer.node.PhenomizerNodeFactory" id="phenomizer.PhenomizerNodeFactory"/>
 		<node category-path="/phenobo/diseases" factory-class="phenomizertonetwork.node.PhenomizerToNetworkNodeFactory" id="phenomizertonetwork.PhenomizerToNetworkNodeFactory"/>
-   		<node category-path="/phenobo/diseases" factory-class="phenotogeno.node.PhenoToGenoNodeNodeFactory" id="phenotogeno.node.PhenoToGenoNodeNodeFactory"/>
+   		<node category-path="/phenobo/diseases" factory-class="phenotogeno.node.PhenoToGenoNodeFactory" id="phenotogeno.node.PhenoToGenoNodeNodeFactory"/>
 		<node category-path="/phenobo/genes" factory-class="geneticnetwork.node.GeneticNetworkScoreNodeFactory" id="geneticnetwork.node.GeneticNetworkScoreNodeFactory"/>
 		<node category-path="/phenobo/genes" factory-class="scorecombination.node.CombineScoresNodeFactory" id="scorecombination.node.CombineScoresNodeFactory"/>
 		<node category-path="/phenobo/genes" factory-class="scorecombination.node.CombineScores2PortsNodeFactory" id="scorecombination.node.CombineScores2PortsNodeFactory"/>
