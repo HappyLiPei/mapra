@@ -33,7 +33,7 @@
                 
         <option name="Use Weighted Edges">
         	This option allows to include edge weights into the calculations.
-        	The edge weights are translated into probabilities of the transition matrix M of the random walk with restart.
+        	The edge weights are translated into the probabilities of m<sub>i,j</sub> the transition matrix M of the random walk with restart.
         	The weight of an edge is proportional to the probability of transferring scores along the edge.
         	If this option is checked, the table at input port 1 has to provide a column with integer edge weights.
     	</option>
