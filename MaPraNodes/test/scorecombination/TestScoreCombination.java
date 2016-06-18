@@ -17,13 +17,14 @@ public class TestScoreCombination {
 	private double [] scores_expected;
 	private CombineScoresDriver driver;
 	
+	//TODO: update files -> enrichment scores
 	@Test
 	public void testCase1() {
 		prepareForCase(1);
 		//pheno + metabo
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputPheno.txt"));
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputMetabo.txt"));
-		checkResult();
+		checkResult(true);
 	}
 	
 	@Test
@@ -32,7 +33,7 @@ public class TestScoreCombination {
 		//pheno + geno
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputPheno.txt"));
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputGeno.txt"));
-		checkResult();
+		checkResult(true);
 	}
 	
 	@Test
@@ -42,7 +43,7 @@ public class TestScoreCombination {
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputPheno.txt"));
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputGeno.txt"));
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputMetabo.txt"));
-		checkResult();
+		checkResult(true);
 	}
 	
 	@Test
@@ -50,7 +51,7 @@ public class TestScoreCombination {
 		prepareForCase(4);
 		//geno
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputGeno.txt"));
-		checkResult();
+		checkResult(true);
 	}
 	
 	@Test
@@ -62,14 +63,14 @@ public class TestScoreCombination {
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputGeno.txt"));
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputGeno.txt"));
 		driver.addInput(FileUtilitiesCS.readScoresFromFile("../TestData/CombineScores/InputGeno.txt"));
-		checkResult();
+		checkResult(true);
 	}
 	
 	@Test
 	public void testCase6() {
 		prepareForCase(6);
 		//empty input
-		checkResult();
+		checkResult(false);
 	}
 	
 	private void prepareForCase(int number){
@@ -98,15 +99,22 @@ public class TestScoreCombination {
 		}
 	}
 	
-	private void checkResult(){
+	private void checkResult(boolean checkSum){
 		
 		LinkedList<ScoredGene> res = driver.runCombineScores();
 		assertEquals("Result size is incorrect", ids_expected.length, res.size());
 		int position=0;
+		double sum=0;
 		for(ScoredGene g: res){
 			assertEquals("Id at position "+(position+1)+" is incorrect", ids_expected[position], g.getId());
 			assertEquals("Score at position "+(position+1)+" is incorrect", scores_expected[position], g.getScore(), 1E-8);
+			sum+=g.getScore();
 			position++;
+		}
+		
+		//test if normalization works, only for non-empty input
+		if(checkSum){
+			assertEquals("Scores are not normalized correctly (sum!=1)", 1, sum, 1E-8);
 		}
 	}
 

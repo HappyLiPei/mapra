@@ -24,7 +24,7 @@ public class CombineScoresBayes {
 		this.scores = scores;
 	}
 	
-	//TODO: normalize scores, round to 10 decimal places, calculate enrichment (log10(score*size))
+	//TODO: normalize scores, round to 10 decimal places, calculate enrichment (log10(score*size)) -> ScoredGene class
 	
 	/**
 	 * method for calculating the combined scores for the gene scores managed by this object
@@ -33,6 +33,8 @@ public class CombineScoresBayes {
 	public LinkedList<ScoredGene> combineScores(){
 		HashSet<String> allGenes = getAllGenes();
 		LinkedList<ScoredGene> combination = calculateScores(allGenes);
+		//TODO: adapt unit tests!!!
+		combination = normalizeAndRound(combination);
 		Collections.sort(combination, new ScoredGeneComparator(10));
 		return combination;
 	}
@@ -97,12 +99,35 @@ public class CombineScoresBayes {
 			
 			// make new ScoredGene for result list
 			double finalScore = productP/(productP+product1_P);
-			finalScore = ((double) Math.round(finalScore*1E10))/1E10;
+			//TODO: remove if it works //finalScore = ((double) Math.round(finalScore*1E10))/1E10;
 			ScoredGene gene = new ScoredGene(geneId, finalScore, "");
 			result.add(gene);
 		}
 		
 		return result;
+	}
+	
+	//TODO: test and comment!!!
+	private LinkedList<ScoredGene> normalizeAndRound(LinkedList<ScoredGene> scores_raw){
+		
+		//calculate sum of all scores
+		double sum=0;
+		for(ScoredGene g: scores_raw){
+			sum+=g.getScore();
+		}
+		
+		//modify scores
+		LinkedList<ScoredGene> newScores = new LinkedList<ScoredGene>();
+		for(ScoredGene old: scores_raw){
+			//normlize score such that the resulting sum is 1
+			double finalScore = old.getScore()/sum;
+			//round score to 10 decimal places
+			finalScore = ((double) Math.round(finalScore*1E10))/1E10;
+			ScoredGene newGene = new ScoredGene(old.getId(), finalScore, "");
+			newScores.add(newGene);
+		}
+		
+		return newScores;
 	}
 
 }

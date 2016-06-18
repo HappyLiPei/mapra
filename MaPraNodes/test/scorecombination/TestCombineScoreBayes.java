@@ -108,12 +108,14 @@ public class TestCombineScoreBayes {
 		checkResult(res, id_exp, score_exp);
 	}
 	
+	//TODO: test method for normalization and rounding
+	
 	private void checkResult(LinkedList<ScoredGene> res, String [] id_exp, double[] score_exp){
 		
 		assertEquals("Size of result is incorrect", id_exp.length, res.size());
 		int pos=0;
 		for(ScoredGene g: res){
-			assertEquals("Score of gene "+id_exp[pos]+" is incorrect", score_exp[pos], g.getScore(), 1E-10);
+			assertEquals("Score of gene "+id_exp[pos]+" is incorrect", score_exp[pos], g.getScore(), 1E-9);
 			pos++;
 		}
 	}

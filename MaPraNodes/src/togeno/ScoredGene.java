@@ -47,4 +47,6 @@ public class ScoredGene extends Gene {
 	public String toString(){
 		return getId()+"\t"+score+"\t"+important_disOrMet_ids;
 	}
+	
+	//TODO: method for calculating the enrichtment score!
 }
