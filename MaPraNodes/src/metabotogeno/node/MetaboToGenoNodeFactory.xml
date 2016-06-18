@@ -27,12 +27,21 @@
         	<br/>
         	The second step transfers a metabolite score to all genes that have an association with that metabolite.
         	If a metabolite does not have any known associations, its score is distributed among all genes.
-        	...There are several methods to handle genes that obtain scores from more than one metabolite.
-        	Please have a look at the dialog options.
+        	There are several methods (see dialog options) to handle genes that obtain scores from more than one metabolite.
         </intro>
         
-        
-        <option name="short name of first option (like in the dialog)">description of first option</option>
+        <option name="Gene Annotation Mode">
+        	This option specifies how MetaboToGeno handles genes that obtain scores from more than one metabolite.
+        	There are two possible modes.
+        	<br/>
+        	<b>Combination of all metabolite scores</b>:
+        		This method combines the scores of all metabolites annotated to a gene.
+        		The final score of a gene is determined as (1-s<sub>1</sub>)(1-s<sub>2</sub>)...(1-s<sub>n</sub>) with s<sub>1</sub> to s<sub>n</sub> denoting the scores of its metabolites.
+        	<br/>
+        	<b>Maximum metabolite score</b>:
+        		This method takes the maximum score of all metabolites annotated to a gene.
+        		The final score of a gene is determined as max(s<sub>1</sub>,s<sub>2</sub>,...,s<sub>n</sub>) with s<sub>1</sub> to s<sub>n</sub> denoting the scores of its metabolites.
+        </option>
 
     </fullDescription>
     

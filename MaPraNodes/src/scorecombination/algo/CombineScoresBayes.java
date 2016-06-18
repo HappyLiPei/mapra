@@ -24,7 +24,7 @@ public class CombineScoresBayes {
 		this.scores = scores;
 	}
 	
-	//TODO: rounding of final scores?!? number of decimal places -> sorting, creation of scored genes!
+	//TODO: normalize scores, round to 10 decimal places, calculate enrichment (log10(score*size))
 	
 	/**
 	 * method for calculating the combined scores for the gene scores managed by this object

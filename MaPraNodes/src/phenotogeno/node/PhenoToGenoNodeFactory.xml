@@ -38,11 +38,11 @@
         	<br/>
         	<b>Combination of all disease scores</b>:
         		This method combines the scores of all diseases annotated to a gene.
-        		The final score of a gene is determined as (1-s<sub>1</sub>)(1-s<sub>2</sub>)...(1-s<sub>n</sub>) with s<sub>1</sub> to s<sub>n</sub> denoting the score of its diseases.
+        		The final score of a gene is determined as (1-s<sub>1</sub>)(1-s<sub>2</sub>)...(1-s<sub>n</sub>) with s<sub>1</sub> to s<sub>n</sub> denoting the scores of its diseases.
         	<br/>
         	<b>Maximum disease score</b>:
         		This method takes the maximum score of all diseases annotated to a gene.
-        		The final score of a gene is determined as max(s<sub>1</sub>,s<sub>2</sub>,...,s<sub>n</sub>) with s<sub>1</sub> to s<sub>n</sub> denoting the score of its diseases.
+        		The final score of a gene is determined as max(s<sub>1</sub>,s<sub>2</sub>,...,s<sub>n</sub>) with s<sub>1</sub> to s<sub>n</sub> denoting the scores of its diseases.
     	</option>
 
     </fullDescription>
