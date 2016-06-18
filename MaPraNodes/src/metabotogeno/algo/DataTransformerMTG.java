@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import togeno.AnnotatedGene;
+import togeno.AnnotatedGeneMax;
 import togeno.AnnotatedGeneMultiple;
 import togeno.GeneAssociation;
 import togeno.ScoredDiseaseOrMetabolite;
@@ -52,10 +53,12 @@ public class DataTransformerMTG {
 	 * the method removes duplicate metabolite-gene pairs and genes that are not part of the reference list
 	 * @param allGenes: list with ids of all genes (e.g. ENSG identifier)
 	 * @param associations: mapping metabolite id (e.g. Metabolon id) -> list of gene ids (e.g ENSG id)
+	 * @param multiple flag to indicate the mode of annotation, if multiple = true, annotations from all metabolites of
+	 * 		a gene are combined, if multiple = false, the maximum scoring metabolite is used to annotate a gene 
 	 * @return GeneAssociation object for storing the metabolite-gene associations
 	 */
 	public GeneAssociation getMetaboliteGeneAssociations(LinkedList<String> allGenes,
-			HashMap<String, LinkedList<String>> associations){
+			HashMap<String, LinkedList<String>> associations, boolean multiple){
 		
 		//remove duplicates from gene list
 		LinkedList<String> genesNoDupl = new LinkedList<String>();
@@ -82,7 +85,12 @@ public class DataTransformerMTG {
 		AnnotatedGene[] annoArray = new AnnotatedGene[genesNoDupl.size()];
 		int counter=0;
 		for(String geneId: genesNoDupl){
-			annoArray[counter]=new AnnotatedGeneMultiple(geneId);
+			if(multiple){
+				annoArray[counter]=new AnnotatedGeneMultiple(geneId);
+			}
+			else{
+				annoArray[counter]=new AnnotatedGeneMax(geneId);
+			}
 			counter++;
 		}
 		

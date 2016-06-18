@@ -51,7 +51,7 @@ public class PhenoToGenoDriver {
 	}
 	
 	/**
-	 * method to asjust the mode of annotation used in PhenoToGeno
+	 * method to adjust the mode of annotation used in PhenoToGeno
 	 * @param multiple specifies the mode of annotation, if multiple = true, scores from all annotations are combined,
 	 * 		if multiple = false, the score equals the maximum score of all annotated diseases
 	 */

@@ -29,114 +29,219 @@ public class TestMetaboToGenoAlgo {
 	private LinkedList<ScoredGene> expected;
 	
 	@Test
-	public void testCase1NoDriver() {
-		prepareForCase(1);
+	public void testCase1MultNoDriver() {
+		prepareForCase(1,true);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();		
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase2NoDriver() {
-		prepareForCase(2);
+	public void testCase1MaxNoDriver() {
+		prepareForCase(1,false);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();		
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase2MultNoDriver() {
+		prepareForCase(2,true);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase3NoDriver() {
-		prepareForCase(3);
+	public void testCase2MaxNoDriver() {
+		prepareForCase(2,false);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase4NoDriver() {
-		prepareForCase(4);
+	public void testCase3MultNoDriver() {
+		prepareForCase(3, true);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase5NoDriver() {
-		prepareForCase(5);
+	public void testCase3MaxNoDriver() {
+		prepareForCase(3, false);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase6NoDriver() {
-		prepareForCase(6);
+	public void testCase4MultNoDriver() {
+		prepareForCase(4, true);
 		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
 		LinkedList<ScoredGene> out = mtg.runToGene();
 		checkResult(out);
 	}
 	
+	@Test
+	public void testCase4MaxNoDriver() {
+		prepareForCase(4, false);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();
+		checkResult(out);
+	}
 	
 	@Test
-	public void testCase1WithDriver(){
-		prepareForCase(1);
+	public void testCase5MultNoDriver() {
+		prepareForCase(5, true);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase5MaxNoDriver() {
+		prepareForCase(5, false);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase6MultNoDriver() {
+		prepareForCase(6, true);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase6MaxNoDriver() {
+		prepareForCase(6, false);
+		ToGenoAlgo mtg = new ToGenoAlgo(scores, mga);
+		LinkedList<ScoredGene> out = mtg.runToGene();
+		checkResult(out);
+	}	
+	
+	@Test
+	public void testCase1MultWithDriver(){
+		prepareForCase(1, true);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase2WithDriver(){
-		prepareForCase(2);
+	public void testCase1MaxWithDriver(){
+		prepareForCase(1, false);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		driver.setModeOfAnnotation(false);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase2MultWithDriver(){
+		prepareForCase(2, true);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase3WithDriver(){
-		prepareForCase(3);
+	public void testCase2MaxWithDriver(){
+		prepareForCase(2, false);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		driver.setModeOfAnnotation(false);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase3MultWithDriver(){
+		prepareForCase(3, true);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase4WithDriver(){
-		prepareForCase(4);
+	public void testCase3MaxWithDriver(){
+		prepareForCase(3, false);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		driver.setModeOfAnnotation(false);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase4MultWithDriver(){
+		prepareForCase(4, true);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase5WithDriver(){
-		prepareForCase(5);
+	public void testCase4MaxWithDriver(){
+		prepareForCase(4, false);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		driver.setModeOfAnnotation(false);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase5MultWithDriver(){
+		prepareForCase(5, true);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
 	}
 	
 	@Test
-	public void testCase6WithDriver(){
-		prepareForCase(6);
+	public void testCase5MaxWithDriver(){
+		prepareForCase(5, false);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		driver.setModeOfAnnotation(false);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	@Test
+	public void testCase6MultWithDriver(){
+		prepareForCase(6, true);
 		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
 		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
 		checkResult(out);
 	}
 	
-	private void prepareForCase(int number){
+	@Test
+	public void testCase6MaxWithDriver(){
+		prepareForCase(6, false);
+		MetaboToGenoDriver driver = new MetaboToGenoDriver(all_raw, asso_raw, scores_raw);
+		driver.setModeOfAnnotation(false);
+		LinkedList<ScoredGene> out = driver.runMetaboToGeno();
+		checkResult(out);
+	}
+	
+	private void prepareForCase(int number, boolean multiple){
 		
 		all_raw = FileUtilitiesMTG.readGeneList("../TestData/PhenoToGeno/all_genes.txt");
 		asso_raw = FileUtilitiesMTG.readMetaboliteGeneAssociations("../TestData/MetaboToGeno/gene_metabolites.txt");
 		scores_raw = FileUtilitiesMTG.readMetaboliteScoreResult("../TestData/MetaboToGeno/case"+number+".txt");
 		
 		DataTransformerMTG dt = new DataTransformerMTG();
-		mga = dt.getMetaboliteGeneAssociations(all_raw, asso_raw);
+		mga = dt.getMetaboliteGeneAssociations(all_raw, asso_raw, multiple);
 		scores = dt.getMetaboliteScoreResult(scores_raw, mga);
 		
 		expected = new LinkedList<ScoredGene>();
-		LinkedList<String> expLines = FileInputReader.readAllLinesFrom("../TestData/MetaboToGeno/ExpectedRes/resCase"+number+".txt");
+		String mode="";
+		if(!multiple){
+			mode="Max";
+		}
+		LinkedList<String> expLines = FileInputReader.readAllLinesFrom("../TestData/MetaboToGeno/ExpectedRes/resCase"+number+mode+".txt");
 		expLines.remove(0);
 		for (String line:expLines){
 			String [] split = line.split("\t");

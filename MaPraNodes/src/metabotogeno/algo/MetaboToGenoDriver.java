@@ -18,6 +18,10 @@ public class MetaboToGenoDriver {
 	/** result of ScoreMetabolitesAlgo */
 	LinkedList<String[]> res_metaboliteScore_raw;
 	
+	/** variable indicating the mode of annotation, multiple = true -> combine multiple annotation,
+	 * multiple = false -> use maximum score that is annotated*/
+	private boolean multiple;
+	
 	/** object representing metabolite-gene associations*/
 	GeneAssociation mga;
 	/** list of scored metabolite objects */
@@ -37,6 +41,16 @@ public class MetaboToGenoDriver {
 		this.genes_raw = genes_raw;
 		this.associations_raw = associations_raw;
 		this.res_metaboliteScore_raw = res_metaboliteScore_raw;
+		this.multiple = true;
+	}
+	
+	/**
+	 * method to adjust the mode of annotation used in MetaboToGeno
+	 * @param multiple specifies the mode of annotation, if multiple = true, scores from all annotations are combined,
+	 * 		if multiple = false, the score equals the maximum score of all annotated diseases
+	 */
+	public void setModeOfAnnotation(boolean multiple){
+		this.multiple = multiple;
 	}
 	
 	/**
@@ -55,7 +69,7 @@ public class MetaboToGenoDriver {
 	 */
 	private void prepareData(){
 		DataTransformerMTG dt = new DataTransformerMTG();
-		mga = dt.getMetaboliteGeneAssociations(genes_raw, associations_raw);
+		mga = dt.getMetaboliteGeneAssociations(genes_raw, associations_raw, multiple);
 		metaboliteScores = dt.getMetaboliteScoreResult(res_metaboliteScore_raw, mga);
 	}
 

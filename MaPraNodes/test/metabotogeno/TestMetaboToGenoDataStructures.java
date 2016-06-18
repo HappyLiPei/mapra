@@ -11,6 +11,8 @@ import org.junit.Test;
 import metabotogeno.algo.DataTransformerMTG;
 import metabotogeno.io.FileUtilitiesMTG;
 import togeno.AnnotatedGene;
+import togeno.AnnotatedGeneMax;
+import togeno.AnnotatedGeneMultiple;
 import togeno.GeneAssociation;
 import togeno.ScoredDiseaseOrMetabolite;
 
@@ -32,8 +34,8 @@ public class TestMetaboToGenoDataStructures {
 	@Test
 	public void testGeneAssociationsNormal() {
 
-		GeneAssociation toTest = dt.getMetaboliteGeneAssociations(geneList, asso);
-		checkContentGeneAssociation(toTest);
+		GeneAssociation toTest = dt.getMetaboliteGeneAssociations(geneList, asso, true);
+		checkContentGeneAssociation(toTest, true);
 	}
 	
 	@Test
@@ -48,15 +50,15 @@ public class TestMetaboToGenoDataStructures {
 		asso.get("M10").add("MTG100");
 		asso.get("M04").add("MTG101");
 		
-		GeneAssociation toTest = dt.getMetaboliteGeneAssociations(geneList, asso);
-		checkContentGeneAssociation(toTest);
+		GeneAssociation toTest = dt.getMetaboliteGeneAssociations(geneList, asso, false);
+		checkContentGeneAssociation(toTest,false);
 	}
 	
 	@Test
 	public void testScoredMetabolitesNormalCase3(){
 		
 		LinkedList<String[]> scores = FileUtilitiesMTG.readMetaboliteScoreResult("../TestData/MetaboToGeno/case3.txt");
-		GeneAssociation mga = dt.getMetaboliteGeneAssociations(geneList, asso);
+		GeneAssociation mga = dt.getMetaboliteGeneAssociations(geneList, asso, true);
 		LinkedList<ScoredDiseaseOrMetabolite> metabos = dt.getMetaboliteScoreResult(scores, mga);
 		
 		checkContentScoredMetabos(metabos,3);
@@ -66,7 +68,7 @@ public class TestMetaboToGenoDataStructures {
 	public void testScoredMetabolitesNormalCase4(){
 		
 		LinkedList<String[]> scores = FileUtilitiesMTG.readMetaboliteScoreResult("../TestData/MetaboToGeno/case4.txt");
-		GeneAssociation mga = dt.getMetaboliteGeneAssociations(geneList, asso);
+		GeneAssociation mga = dt.getMetaboliteGeneAssociations(geneList, asso, true);
 		LinkedList<ScoredDiseaseOrMetabolite> metabos = dt.getMetaboliteScoreResult(scores, mga);
 		
 		checkContentScoredMetabos(metabos,4);
@@ -79,13 +81,13 @@ public class TestMetaboToGenoDataStructures {
 		scores.add(new String[]{"MTG10", "5.5"});
 		scores.addFirst(new String[]{"MTG17", "-1"});
 		
-		GeneAssociation mga = dt.getMetaboliteGeneAssociations(geneList, asso);
+		GeneAssociation mga = dt.getMetaboliteGeneAssociations(geneList, asso, false);
 		LinkedList<ScoredDiseaseOrMetabolite> metabos = dt.getMetaboliteScoreResult(scores, mga);
 		
 		checkContentScoredMetabos(metabos,4);
 	}
 	
-	private void checkContentGeneAssociation(GeneAssociation toTest){
+	private void checkContentGeneAssociation(GeneAssociation toTest, boolean multiple){
 		
 		assertEquals("Length of gene array is incorrect", 50, toTest.getAllGenes().length);
 		assertEquals("Number of genes is incorrect", 50, toTest.numberOfGenes());
@@ -104,6 +106,15 @@ public class TestMetaboToGenoDataStructures {
 		for(int i=11; i<16; i++){
 			AnnotatedGene [] genes = toTest.getGenesForDiseaseMetaboliteWithID("M"+i);
 			assertArrayEquals("Genes of metabolite M"+i+" are incorrect", associationsByMetabo[i-1], getGeneIds(genes));
+		}
+		
+		for(AnnotatedGene g: toTest.getAllGenes()){
+			if(multiple){
+				assertTrue("Annotated Gene "+g.getId()+" is not of type multiple", g instanceof AnnotatedGeneMultiple);
+			}
+			else{
+				assertTrue("Annotated Gene "+g.getId()+" is not of type max", g instanceof AnnotatedGeneMax);
+			}
 		}
 
 	}
