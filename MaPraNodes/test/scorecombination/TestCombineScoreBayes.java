@@ -85,7 +85,7 @@ public class TestCombineScoreBayes {
 		}
 		
 		LinkedList<ScoredGene> res = getScores(input_raw, ids);
-		checkResult(res, id_exp, score_exp);
+		checkResult(res, id_exp, score_exp, 1E-15);
 	}
 	
 	@Test
@@ -105,17 +105,36 @@ public class TestCombineScoreBayes {
 		}
 		
 		LinkedList<ScoredGene> res = getScores(input_raw, ids);
-		checkResult(res, id_exp, score_exp);
+		checkResult(res, id_exp, score_exp, 1E-9);
 	}
 	
-	//TODO: test method for normalization and rounding
+	@Test
+	public void testNormalizationEmptySet() 
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		
+		LinkedList<ScoredGene> input = new LinkedList<ScoredGene>();
+		LinkedList<ScoredGene> output = getNoramlizedScores(input);
+		checkResult(output, new String [0], new double[0], 1E-15);		
+	}
 	
-	private void checkResult(LinkedList<ScoredGene> res, String [] id_exp, double[] score_exp){
+	@Test
+	public void testNormalizationNormal() 
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		
+		LinkedList<ScoredGene> input = new LinkedList<ScoredGene>();
+		input.add(new ScoredGene("1", 0.1, ""));
+		input.add(new ScoredGene("2", 0.2, ""));
+		input.add(new ScoredGene("3", 0.3, ""));		
+		LinkedList<ScoredGene> output = getNoramlizedScores(input);
+		checkResult(output, new String []{"1","2","3"}, new double[]{0.1666666667,0.3333333333, 0.5}, 1E-15);		
+	}
+	
+	private void checkResult(LinkedList<ScoredGene> res, String [] id_exp, double[] score_exp, double precision){
 		
 		assertEquals("Size of result is incorrect", id_exp.length, res.size());
 		int pos=0;
 		for(ScoredGene g: res){
-			assertEquals("Score of gene "+id_exp[pos]+" is incorrect", score_exp[pos], g.getScore(), 1E-9);
+			assertEquals("Score of gene "+id_exp[pos]+" is incorrect", score_exp[pos], g.getScore(), precision);
 			pos++;
 		}
 	}
@@ -143,6 +162,18 @@ public class TestCombineScoreBayes {
 		Method m = CombineScoresBayes.class.getDeclaredMethod("calculateScores", HashSet.class);
 		m.setAccessible(true);
 		LinkedList<ScoredGene> res = (LinkedList<ScoredGene>) m.invoke(algo, ids);
+		return res;
+	}
+	
+	@SuppressWarnings("all")
+	private LinkedList<ScoredGene> getNoramlizedScores(LinkedList<ScoredGene> input) 
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		
+		CombineScoresBayes algo = new CombineScoresBayes(null);
+	
+		Method m = CombineScoresBayes.class.getDeclaredMethod("normalizeAndRound", LinkedList.class);
+		m.setAccessible(true);
+		LinkedList<ScoredGene> res = (LinkedList<ScoredGene>) m.invoke(algo, input);
 		return res;
 	}
 }
