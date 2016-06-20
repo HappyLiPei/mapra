@@ -33,13 +33,20 @@ public class ScoredGene extends Gene {
 	}
 	
 	//TODO: method for calculating the enrichtment score: different log?!
+	
 	/**
 	 * method to calculate the enrichment score of the gene given the total number of genes
 	 * @param numberOfGenes total number of genes that are considered during the scoring process
 	 * @return the enrichment score of the gene indicating if the score is better than expected by random
 	 */
 	public double getEnrichmentScore(int numberOfGenes){
-		return Math.log10(this.score)+Math.log10((double) numberOfGenes);
+		double enrichment = Math.log10(this.score)+Math.log10((double) numberOfGenes);
+		if(Double.isInfinite(enrichment)){
+			return enrichment;
+		}
+		else{
+			return (double) Math.round(enrichment*1E3)/1E3;
+		}
 	}
 	
 	/**

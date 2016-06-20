@@ -83,11 +83,13 @@ public class CombineScoresTableProcessor {
 	 * @return DataTable specification for the table returned by CombineScores
 	 */
 	protected static DataTableSpec generateOutputSpec(){
-		DataColumnSpec [] colSpec = new DataColumnSpec[2];
+		DataColumnSpec [] colSpec = new DataColumnSpec[3];
 		colSpec[0]=TableFunctions.makeDataColSpec(
 				ColumnSpecification.GENE_ID, ColumnSpecification.GENE_ID_TYPE[0]);
 		colSpec[1]=TableFunctions.makeDataColSpec(
 				ColumnSpecification.GENE_PROBABILITY, ColumnSpecification.GENE_PROBABILITY_TYPE[0]);
+		colSpec[2]=TableFunctions.makeDataColSpec(
+				ColumnSpecification.GENE_ENRICHMENT, ColumnSpecification.GENE_ENRICHMENT_TYPE[0]);
 				
 		return new DataTableSpec(colSpec);
 	}
@@ -108,6 +110,7 @@ public class CombineScoresTableProcessor {
 		//find positions to store the information
 		int indexId = specOut.findColumnIndex(ColumnSpecification.GENE_ID);
 		int indexScore = specOut.findColumnIndex(ColumnSpecification.GENE_PROBABILITY);
+		int indexEnrich = specOut.findColumnIndex(ColumnSpecification.GENE_ENRICHMENT);
 		
 		//iterate over genes and add them to table
 		int counter =1;
@@ -117,6 +120,8 @@ public class CombineScoresTableProcessor {
 			DataCell [] cells = new DataCell[specOut.getNumColumns()];
 			cells[indexId] = TableFunctions.generateDataCellFor(specOut, indexId, gene.getId());
 			cells[indexScore] = TableFunctions.generateDataCellFor(specOut, indexScore, gene.getScore());
+			cells[indexEnrich] = TableFunctions.generateDataCellFor(specOut, indexEnrich,
+					gene.getEnrichmentScore(result.size()));
 			
 			//generate key and add row to container
 			RowKey key = new RowKey("Row "+counter);

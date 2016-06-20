@@ -34,6 +34,8 @@ public class ColumnSpecification {
     public static final String GENE_PROBABILITY = "gene_probability";
     /** column name for the column with the major contributors (metabolites or diseases) to the gene score*/
     public static final String CONTRIBUTION= "contribution";
+    /** column name for the column with the enrichment score of a gene*/
+    public static final String GENE_ENRICHMENT="enrichment_score";
     /** column name for the column with gene ids corresponding to nodes of a genetic network, the node is start point of an (undirected) edge) */
     public static final String GENE1 ="gene1";
     /** column name for the column with gene ids corresponding to nodes of a genetic network, the node is end point of an (undirected) edge) */
@@ -65,6 +67,8 @@ public class ColumnSpecification {
     public static final DataType[] GENE_PROBABILITY_TYPE = new DataType[]{DoubleCell.TYPE};
     /** valid data types for the contributors*/
     public static final DataType[] CONTRIBUTION_TYPE = new DataType[]{StringCell.TYPE};
+    /** valid data types for the enrichment score*/
+    public static final DataType[] GENE_ENRICHMENT_TYPE= new DataType[]{DoubleCell.TYPE};
     /** valid data types for gene1*/
     public static final DataType[] GENE1_TYPE = new DataType[]{StringCell.TYPE};
     /** valid data types for gene2*/
