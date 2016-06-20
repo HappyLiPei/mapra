@@ -210,6 +210,7 @@ public class TestGeneticNetworkScore {
 		return new MatrixVectorBuilder(dt.transformGeneScores(scoresFromFile), builder);
 	}
 	
+	//TODO: include enrichment score?
 	private void compareToExpected(LinkedList<ScoredGene> g){
 		int pos=0;
 		assertEquals("Result size is incorrect", genesExp.length, g.size());

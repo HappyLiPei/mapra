@@ -76,7 +76,6 @@ public class CombineScoresTableProcessor {
 		return scores;
 	}
 	
-	//TODO: additional enrichment column!
 	/**
 	 * method to generate the specification for the table returned by CombineScores
 	 * (2 columns: gene id, probability)

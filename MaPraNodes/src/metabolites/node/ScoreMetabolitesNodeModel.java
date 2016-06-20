@@ -6,10 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
-import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.IntCell;
-import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -22,6 +18,7 @@ import org.knime.core.node.NodeSettingsWO;
 
 import metabolites.algo.ScoreMetabolitesDriver;
 import metabolites.types.ScoredMetabolite;
+import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
 
 
@@ -41,28 +38,7 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
     private static final int INPORT_REFERENCE=0;
     /** position of the inport receiving the measured values (position 1)*/
     private static final int INPORT_MEASUREMENT=1;
-    
-    /** column name for the column with metabolite ids*/
-    public static final String METABOLITE_ID="metabolite_id";
-    /** column name for the column with metabolite concentrations*/
-    public static final String METABOLITE_CONCENTRATION="concentration";
-    /** column name for the column with phenotype groups (age and fasting) */
-    public static final String PHENOTYPE_GROUP = "group";
-    /** column name for the column with metabolite type (binary vs. concentration)*/
-    public static final String METABOLITE_TYPE="type";
-    /** column name for the column with mean concentrations of the metabolites*/
-    public static final String METABOLITE_MEAN="mean";
-    /** column name for the column with standard deviation of the metabolite concentrations*/
-    public static final String METABOLITE_STDEV="stdev";
-    /** column name for the column with the missingness of the reference metabolites*/
-    public static final String METABOLITE_MISSINGNESS="missingness";
-    /** column name for the column with metabolite names, this column is optional */
-    public static final String METABOLITE_NAME="metabolite_name";
-    /** column name for the column with metabolite scores*/
-    public static final String METABOLITE_SCORE ="metabolite_score";
-    /** column name for the column with probabilities indicating the significance of the scores*/
-    public static final String METABOLITE_SIGNIFICANCE="significance";
-    
+        
        
     /**
      * Constructor for the node model, generates a node with 2 incoming ports and 1 outgoing port
@@ -107,22 +83,32 @@ public class ScoreMetabolitesNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	
     	//check reference metabolite table: 6 columns metabolite id, type, group, mean, stdev, missingness
-    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_ID, new DataType[]{StringCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_TYPE, new DataType[]{StringCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, PHENOTYPE_GROUP, new DataType[]{IntCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_MEAN, new DataType[]{DoubleCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_STDEV, new DataType[]{DoubleCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_MISSINGNESS, new DataType[]{DoubleCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, 
+    			ColumnSpecification.METABOLITE_ID, ColumnSpecification.METABOLITE_ID_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, 
+    			ColumnSpecification.METABOLITE_TYPE, ColumnSpecification.METABOLITE_TYPE_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, 
+    			ColumnSpecification.PHENOTYPE_GROUP, ColumnSpecification.PHENOTYPE_GROUP_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, 
+    			ColumnSpecification.METABOLITE_MEAN, ColumnSpecification.METABOLITE_MEAN_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, 
+    			ColumnSpecification.METABOLITE_STDEV, ColumnSpecification.METABOLITE_STDEV_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, 
+    			ColumnSpecification.METABOLITE_MISSINGNESS, ColumnSpecification.METABOLITE_MISSINGNESS_TYPE, null);
     	
     	//check column for metabolite names
-    	if(inSpecs[INPORT_REFERENCE].findColumnIndex(METABOLITE_NAME)!=-1){
-    		TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, METABOLITE_NAME, new DataType[]{StringCell.TYPE}, null);
+    	if(inSpecs[INPORT_REFERENCE].findColumnIndex(ColumnSpecification.METABOLITE_NAME)!=-1){
+    		TableFunctions.checkColumn(inSpecs, INPORT_REFERENCE, 
+    				ColumnSpecification.METABOLITE_NAME, ColumnSpecification.METABOLITE_NAME_TYPE, null);
     	}
     	
     	//check measurements: 3 columns id, measured concentration, group
-    	TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, METABOLITE_ID, new DataType[]{StringCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, METABOLITE_CONCENTRATION, new DataType[]{DoubleCell.TYPE}, null);
-        TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, PHENOTYPE_GROUP, new DataType[]{IntCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, 
+    			ColumnSpecification.METABOLITE_ID, ColumnSpecification.METABOLITE_ID_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, 
+    			ColumnSpecification.METABOLITE_CONCENTRATION, ColumnSpecification.METABOLITE_CONCENTRATION_TYPE, null);
+        TableFunctions.checkColumn(inSpecs, INPORT_MEASUREMENT, 
+        		ColumnSpecification.PHENOTYPE_GROUP, ColumnSpecification.PHENOTYPE_GROUP_TYPE, null);
         
         //generate specification for the table to return
         return new DataTableSpec[]{TableProcessorScoreMetabolites.generateOutSpec(inSpecs[INPORT_REFERENCE])};

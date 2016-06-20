@@ -39,7 +39,6 @@ public class NetworkScoreAlgorithm {
 		return generateResult(res);
 	}
 	
-	//TODO: rounding?!
 	/**
 	 * auxiliary method for transforming the output of RandomWalkWithRestart into a list of scored genes,
 	 * the method rounds the scores up to 10 decimal places and sorts the genes according to score

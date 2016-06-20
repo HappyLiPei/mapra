@@ -32,7 +32,7 @@ public class ScoredGene extends Gene {
 		return this.score;
 	}
 	
-	//TODO: method for calculating the enrichtment score: different log?!
+	//TODO: different log?!
 	
 	/**
 	 * method to calculate the enrichment score of the gene given the total number of genes

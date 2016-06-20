@@ -22,8 +22,22 @@ public class ColumnSpecification {
 	//metabolite columns
     /** column name for the column with metabolite ids*/
     public static final String METABOLITE_ID="metabolite_id";
-    /** column name for the column with metabolite names, this column is optional */
+    /** column name for the column with metabolite names */
     public static final String METABOLITE_NAME="metabolite_name";
+    /** column name for the column with metabolite type (binary vs. concentration)*/
+    public static final String METABOLITE_TYPE="type";
+    /** column name for the column with mean concentrations of the metabolites*/
+    public static final String METABOLITE_MEAN="mean";
+    /** column name for the column with standard deviation of the metabolite concentrations*/
+    public static final String METABOLITE_STDEV="stdev";
+    /** column name for the column with the missingness of the reference metabolites*/
+    public static final String METABOLITE_MISSINGNESS="missingness";
+    /** column name for the column with metabolite concentrations*/
+    public static final String METABOLITE_CONCENTRATION="concentration";
+    /** column name for the column with phenotype groups (age and fasting) */
+    public static final String PHENOTYPE_GROUP = "group";
+    /** column name for the column with metabolite scores (z-scores, missingness-based score)*/
+    public static final String METABOLITE_SCORE ="metabolite_score";
     /** column name for the column with pvalues (probabilities indicating the significance of the metabolite scores)*/
     public static final String METABOLITE_SIGNIFICANCE="significance";
     
@@ -57,6 +71,20 @@ public class ColumnSpecification {
     public static final DataType[] METABOLITE_ID_TYPE=new DataType[]{StringCell.TYPE};
     /** valid data types for metabolite name*/
     public static final DataType[] METABOLITE_NAME_TYPE=new DataType[]{StringCell.TYPE};
+    /** valid data types for metabolite type*/
+    public static final DataType[] METABOLITE_TYPE_TYPE=new DataType[]{StringCell.TYPE};
+    /** valid data types for metabolite mean*/
+    public static final DataType[] METABOLITE_MEAN_TYPE=new DataType[]{DoubleCell.TYPE};
+    /** valid data types for metabolite standard deviation*/
+    public static final DataType[] METABOLITE_STDEV_TYPE=new DataType[]{DoubleCell.TYPE};
+    /** valid data types for metabolite missingness*/
+    public static final DataType[] METABOLITE_MISSINGNESS_TYPE=new DataType[]{DoubleCell.TYPE};
+    /** valid data types for metabolite concentrations*/
+    public static final DataType[] METABOLITE_CONCENTRATION_TYPE= new DataType[]{DoubleCell.TYPE};
+    /** valid data types for phenotype group */
+    public static final DataType[] PHENOTYPE_GROUP_TYPE = new DataType[]{IntCell.TYPE};
+    /** valid data types for metabolite scores*/
+    public static final DataType[] METABOLITE_SCORE_TYPE =new DataType[]{DoubleCell.TYPE};
     /** valid data types for metabolite pvalue*/
     public static final DataType[] METABOLITE_SIGNIFICANCE_TYPE=new DataType[]{DoubleCell.TYPE};
     
