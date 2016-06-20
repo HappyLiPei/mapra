@@ -32,6 +32,16 @@ public class ScoredGene extends Gene {
 		return this.score;
 	}
 	
+	//TODO: method for calculating the enrichtment score: different log?!
+	/**
+	 * method to calculate the enrichment score of the gene given the total number of genes
+	 * @param numberOfGenes total number of genes that are considered during the scoring process
+	 * @return the enrichment score of the gene indicating if the score is better than expected by random
+	 */
+	public double getEnrichmentScore(int numberOfGenes){
+		return Math.log10(this.score)+Math.log10((double) numberOfGenes);
+	}
+	
 	/**
 	 * retrieves the ids of the diseases/metabolites that contributed most to the gene's score
 	 * @return a comma-seprarted String of PhenoDis ids/metabolite ids,
@@ -47,6 +57,4 @@ public class ScoredGene extends Gene {
 	public String toString(){
 		return getId()+"\t"+score+"\t"+important_disOrMet_ids;
 	}
-	
-	//TODO: method for calculating the enrichtment score!
 }

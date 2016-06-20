@@ -24,8 +24,6 @@ public class CombineScoresBayes {
 		this.scores = scores;
 	}
 	
-	//TODO: calculate enrichment (log10(score*size)) -> ScoredGene class
-	
 	/**
 	 * method for calculating the combined scores for the gene scores managed by this object
 	 * @return list of {@link ScoredGene}s with the combined scores

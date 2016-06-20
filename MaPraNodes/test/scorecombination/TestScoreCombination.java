@@ -15,9 +15,9 @@ public class TestScoreCombination {
 	
 	private String [] ids_expected;
 	private double [] scores_expected;
+	private double [] enrichment_expected;
 	private CombineScoresDriver driver;
 	
-	//TODO: update files -> enrichment scores
 	@Test
 	public void testCase1() {
 		prepareForCase(1);
@@ -89,11 +89,18 @@ public class TestScoreCombination {
 			
 			ids_expected= new String[lines.size()];
 			scores_expected = new double[lines.size()];
+			enrichment_expected = new double[lines.size()];
 			int counter=0;
 			for(String line:lines){
 				String[] split=line.split("\t");
 				ids_expected[counter]=split[0];
 				scores_expected[counter]=Double.parseDouble(split[1]);
+				if(split.length<3){
+					enrichment_expected[counter]=Double.NEGATIVE_INFINITY;
+				}
+				else{
+					enrichment_expected[counter]=Double.parseDouble(split[2]);
+				}
 				counter++;
 			}
 		}
@@ -108,6 +115,8 @@ public class TestScoreCombination {
 		for(ScoredGene g: res){
 			assertEquals("Id at position "+(position+1)+" is incorrect", ids_expected[position], g.getId());
 			assertEquals("Score at position "+(position+1)+" is incorrect", scores_expected[position], g.getScore(), 1E-8);
+			assertEquals("Enrichment score at position "+(position+1)+" is incorrect", enrichment_expected[position],
+					g.getEnrichmentScore(res.size()), 1E-3);
 			sum+=g.getScore();
 			position++;
 		}
