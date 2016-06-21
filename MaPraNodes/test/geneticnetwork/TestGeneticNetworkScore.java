@@ -24,6 +24,7 @@ public class TestGeneticNetworkScore {
 	
 	private double [] scoresExp;
 	private String [] genesExp;
+	private double [] enrichExp;
 
 	@Test
 	public void testCase1WithoutDriver() {
@@ -190,11 +191,18 @@ public class TestGeneticNetworkScore {
 				"../TestData/GeneticNetwork/ExpectedRes/res"+testCase+".txt");
 		scoresExp = new double[exp.size()];
 		genesExp = new String[exp.size()];
+		enrichExp = new double[exp.size()];
 		int pos=0;
 		for(String line:exp){
 			String [] split = line.split("\t");
 			scoresExp[pos]=Double.parseDouble(split[1]);
 			genesExp[pos] = split[0];
+			if(split.length<3){
+				enrichExp[pos]=Double.NEGATIVE_INFINITY;
+			}
+			else{
+				enrichExp[pos]=Double.parseDouble(split[2]);
+			}
 			pos++;
 		}
 		
@@ -210,15 +218,19 @@ public class TestGeneticNetworkScore {
 		return new MatrixVectorBuilder(dt.transformGeneScores(scoresFromFile), builder);
 	}
 	
-	//TODO: include enrichment score?
 	private void compareToExpected(LinkedList<ScoredGene> g){
 		int pos=0;
 		assertEquals("Result size is incorrect", genesExp.length, g.size());
+		double sum=0;
 		for(ScoredGene gene:g){
-			assertEquals("Gene id at position"+pos+" is incorrect", genesExp[pos], gene.getId());
-			assertEquals("Score at position"+pos+" is incorrect", scoresExp[pos], gene.getScore(),1E-9);
+			assertEquals("Gene id at position "+pos+" is incorrect", genesExp[pos], gene.getId());
+			assertEquals("Score at position "+pos+" is incorrect", scoresExp[pos], gene.getScore(),1E-9);
+			assertEquals("Enrichment score at position "+pos+" is incorrectment", enrichExp[pos],
+					gene.getEnrichmentScore(g.size()),1E-10);
+			sum+=gene.getScore();
 			pos++;
 		}
+		assertEquals("Scores do not sum up to 1", 1, sum, 1E-8);
 	}
 
 }

@@ -156,7 +156,6 @@ public class GeneticNetworkScoreTableProcessor {
 		return edgeArray.toArray(new String[edgeArray.size()][]);
 	}
 	
-	//TODO: add column with enrichment score
 	//TODO: adapt node manual
 	/**
 	 * generates the specification (column names + type) for the output table of the GeneticNetworkScore node
@@ -164,11 +163,13 @@ public class GeneticNetworkScoreTableProcessor {
 	 */
 	protected static DataTableSpec generateOutputSpec(){
 		
-		DataColumnSpec [] specs = new DataColumnSpec [2];
+		DataColumnSpec [] specs = new DataColumnSpec [3];
 		specs[0] = TableFunctions.makeDataColSpec(
 				ColumnSpecification.GENE_ID, ColumnSpecification.GENE_ID_TYPE[0]);
 		specs[1] = TableFunctions.makeDataColSpec(
 				ColumnSpecification.GENE_PROBABILITY, ColumnSpecification.GENE_PROBABILITY_TYPE[0]);
+		specs[2] = TableFunctions.makeDataColSpec(
+				ColumnSpecification.GENE_ENRICHMENT, ColumnSpecification.GENE_ENRICHMENT_TYPE[0]);
 		
 		return new DataTableSpec(specs);
 	}
@@ -188,6 +189,7 @@ public class GeneticNetworkScoreTableProcessor {
 		//get column positions
 		int indexId = specOut.findColumnIndex(ColumnSpecification.GENE_ID);
 		int indexProb = specOut.findColumnIndex(ColumnSpecification.GENE_PROBABILITY);
+		int indexEnrich = specOut.findColumnIndex(ColumnSpecification.GENE_ENRICHMENT);
 		
 		//iterate over scoredGenes and generate a row for each gene
 		int counter =1;
@@ -196,6 +198,8 @@ public class GeneticNetworkScoreTableProcessor {
 			DataCell [] cells = new DataCell [specOut.getNumColumns()];
 			cells[indexId]=TableFunctions.generateDataCellFor(specOut, indexId, gene.getId());
 			cells[indexProb]=TableFunctions.generateDataCellFor(specOut, indexProb, gene.getScore());
+			cells[indexEnrich]=TableFunctions.generateDataCellFor(specOut, indexEnrich, 
+					gene.getEnrichmentScore(result.size()));
 			//add row to table
 			RowKey key = new RowKey("Row "+counter);
 			DataRow row = new DefaultRow(key, cells);

@@ -3,31 +3,28 @@
     <name>ScoreMetabolites</name>
     
     <shortDescription>
-        
+        Comparison of measured metabolite concentrations to reference values
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
+        <intro>
+        	Insert long description here...
+        </intro>
         
-        
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+        <!--<option name="short name of first option (like in the dialog)">description of first option</option>-->
+
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Reference">Reference... Description of first input port...</inPort>
-        <inPort index="1" name="Measurement">Measurements from patient ...Description of first input port...</inPort>
-        <outPort index="0" name="Scored Metabolites">Scored Metabolites ...Description of first output port...</outPort>
+        <inPort index="0" name="Reference">
+        	Reference... Description of first input port...
+    	</inPort>
+        <inPort index="1" name="Measurement">
+    		Measurements from patient ...Description of first input port...
+		</inPort>
+        <outPort index="0" name="Scored Metabolites">
+        	Scored Metabolites ...Description of first output port...
+    	</outPort>
     </ports>    
     
 </knimeNode>

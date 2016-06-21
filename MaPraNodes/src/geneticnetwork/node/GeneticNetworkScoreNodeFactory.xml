@@ -29,6 +29,8 @@
         	M is a (sparse) transition matrix representing the edges of the genetic network.
         	The entries m<sub>i,j</sub> of M give the probability of transferring scores from gene j to gene i.
         	The parameter r gives the fraction of the original scores s<sub>0</sub> that is not distributed within the network.
+    		<br/>
+    		enrichment score...
     	</intro>
                 
         <option name="Use Weighted Edges">
@@ -70,9 +72,10 @@
     	</inPort>
         <outPort index="0" name="Gene Scores">
         	<b>Gene Scores</b>:
-        	Each row represents a gene and consists of 2 columns: <b>gene_id</b> and <b>gene_probability</b>.
+        	Each row represents a gene and consists of 3 columns: <b>gene_id</b>, <b>gene_probability</b> and <b>enrichment_score</b>.
         	The column gene_probability contains modified gene scores based on the scores from the table at input port 0.
         	The gene probability indicates the likelihood that the gene is causal for the patient's disease.
+        	...enrichment score...
         </outPort>
     </ports>    
 
