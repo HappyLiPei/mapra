@@ -1,4 +1,4 @@
-# Phenomizer for PhenoDis
+# PheNoBo (Combining PHEnotype, GeNOtype and MetaBOtype)
 This repository was created during bioinformatics master practical (summer 2015) at Helmholtz Zentrum.
 It contains an implementation of the Phenomizer algorithm for the PhenoDis database.
 The Phenomizer for PhenoDis is realized as a KNIME node.

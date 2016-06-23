@@ -3,32 +3,60 @@
     <name>CombineScores2Ports</name>
     
     <shortDescription>
-        
+        Combination of gene scores from phenotype, metabotype and genotype analysis (2 input ports)
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
+        <intro>
+        	<b>CombineScores</b> is the last node of <b>PheNoBo</b>.
+        	It is the successor of the <b>GeneticNetworkScore</b> node.
+        	This node combines 2 results from the phenotype, metabotype and/or genotype analysis.
+        	<br/><br/>
+        	The aim of CombineScores is to unite 2 sets of gene scores into a single gene score for each gene.
+        	The combined scores are used to rank the genes.
+        	Genes with a low rank (appearing first in the list of genes) are likely to cause the patient's condition.
+        	<br/><br/>
+        	CombineScores requires 2 tables with gene scores.
+        	For detailed information about the format of the tables have a look at the Input Port section and 
+        	at the example files provided at <a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
+        	<br/><br/>
+        	The algorithm of CombineScores calculates 2 different scores.
+        	<b>Combined Gene Score</b>:
+        	The combined gene score is a probability calculated from the scores of 2 different, independent analyses
+        	yielding scores g<sub>1</sub> and g<sub>2</sub>.
+        	The combined score g is determined by using Bayes' formula:
+        	g=g<sub>1</sub>g<sub>2</sub>/(g<sub>1</sub>g<sub>2</sub>+(1-g<sub>1</sub>)(1-g<sub>2</sub>)).
+        	<br/>
+        	<b>Enrichment score</b>:
+        	The probabilites are translated into enrichment scores to facilitate the interpretation of the results.
+    		The enrichment score of a gene with probability g is determined as log<sub>10</sub>(gn) where n denotes the total number of genes.
+    		If the enrichment score is greater than 0, the gene score is higher than expected for a random prediction (where all genes get a score of n<sup>-1</sup>).
+    		If the enrichment score is lower than 0, the gene score is lower than expected for a random prediction.
+    	</intro>
         
+        <!--<option name="short name of first option (like in the dialog)">description of first option</option> -->
         
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="In-Port name">Description of first input port...</inPort>
-        <!-- possibly more input ports here-->
-        <outPort index="0" name="Combined Scores">Description of first output port...</outPort>
-        <!-- possibly more output ports here-->
+        <inPort index="0" name="Gene Scores 1">
+        	<b>Gene Scores 1</b>:
+        	a table produced by the GeneticNetworkScore node, e.g. from the phenotype analysis.
+        	This node uses the columns <b>gene_id</b> and <b>gene_probability</b>.
+    	</inPort>
+        <inPort index="1" name="Gene Scores 2">
+        	<b>Gene Scores 2</b>:
+        	a table produced by the GeneticNetworkScore node, e.g. from the metabotype analysis.
+        	This node uses the columns <b>gene_id</b> and <b>gene_probability</b>.
+    	</inPort>
+        <outPort index="0" name="Combined Scores">
+        	<b>Combined Scores</b>:
+        	Each row represents a gene and consists of 3 columns: <b>gene_id</b>, <b>gene_probability</b> and <b>enrichment_score</b>.
+        	The column gene_probability contains the combined gene scores based on 2 independently calculated sets of gene scores (input port 0 and 1).
+        	The gene probability indicates the likelihood that the gene is causal for the patient's disease.
+        	The column enrichment_score is a gene score that is normalized for the total number of genes.
+        	If the enrichment score is above 0, the gene probability is higher than expected for a random prediction.
+        </outPort>
     </ports>    
 
 </knimeNode>

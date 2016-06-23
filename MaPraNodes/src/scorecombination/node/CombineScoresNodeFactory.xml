@@ -10,11 +10,11 @@
         <intro>
         	<b>CombineScores</b> is the last node of <b>PheNoBo</b>.
         	It is the successor of the <b>GeneticNetworkScore</b> node.
-        	This node combines the results of the phenotype, metabotype and genotype analyses.
+        	This node combines the results of the phenotype, metabotype and genotype analysis.
         	<br/><br/>
         	The aim of CombineScores is to unite the gene scores of the phenotype, metabotype and genotype analysis into 
         	a single gene score for each gene.
-        	These scores are used to rank the genes.
+        	The combined scores are used to rank the genes.
         	Genes with a low rank (appearing first in the list of genes) are likely to cause the patient's condition.
         	<br/><br/>
         	CombineScores requires 3 tables with gene scores.
@@ -33,9 +33,7 @@
     		The enrichment score of a gene with probability g is determined as log<sub>10</sub>(gn) where n denotes the total number of genes.
     		If the enrichment score is greater than 0, the gene score is higher than expected for a random prediction (where all genes get a score of n<sup>-1</sup>).
     		If the enrichment score is lower than 0, the gene score is lower than expected for a random prediction.
-        	
-    	</intro>
-        
+    	</intro>  
         
         <!--<option name="short name of first option (like in the dialog)">description of first option</option>-->
     </fullDescription>
