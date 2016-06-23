@@ -14,14 +14,14 @@
         	<br/><br/>
         	The aim of GeneticNetworkScore is to refine the gene scores of PhenoToGeno and MetaboToGeno.
         	The node calculates a new score for each gene based on a genetic network.
-        	The procedure increases the score of genes that are not associated with the patient's phenotype or metabotype if those genes interact with known causal genes for the patient's condition.
+        	The procedure increases the scores of genes that interact with known causal genes for the patient's condition.
 			Therefore, the GeneticNetworkScore node enables the detection of new disease genes.
         	<br/><br/>
-        	GeneticNetworkScore requires 2 tables with input data.
-        	For detailed information about the format of the tables have a look at the example files provided at
-        	<a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
+        	GeneticNetworkScore requires 2 tables with input data: the initial gene scores and a genetic network.
+        	For detailed information about the format of the tables have a look at the Input Port section and 
+        	at the example files provided at <a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
         	<br/><br/>
-        	The node implements a random walk with restart on the genetic network.
+        	The node implements a random walk with restart on a genetic network.
    			The random walk with restart is an iterative procedure based on the function s<sub>t+1</sub> = (1-r)Ms<sub>t</sub> + rs<sub>0</sub>.
         	The function describes a random score transfer along the edges of the network.
         	s<sub>t</sub> is a vector and denotes the scores of all genes after t iterations.
@@ -30,7 +30,7 @@
         	The entries m<sub>i,j</sub> of M give the probability of transferring scores from gene j to gene i.
         	The parameter r gives the fraction of the original scores s<sub>0</sub> that is not distributed within the network.
     		<br/><br/>
-    		Finally, the gene score of the random walk with restart is translated into an enrichment score.
+    		Finally, the gene scores of the random walk with restart are translated into enrichment scores.
     		The enrichment score of a gene with gene score g is determined as log<sub>10</sub>(gn) where n denotes the total number of genes.
     		If the enrichment score is greater than 0, the gene score is higher than expected for a random prediction (where all genes get a score of n<sup>-1</sup>).
     		If the enrichment score is lower than 0, the gene score is lower than expected for a random prediction.
@@ -38,13 +38,13 @@
                 
         <option name="Use Weighted Edges">
         	This option allows to include edge weights into the calculations.
-        	The edge weights are translated into the probabilities of m<sub>i,j</sub> the transition matrix M of the random walk with restart.
+        	The edge weights are translated into the probabilities m<sub>i,j</sub> of the transition matrix M of the random walk with restart.
         	The weight of an edge is proportional to the probability of transferring scores along the edge.
         	If this option is checked, the table at input port 1 has to provide a column with integer edge weights.
     	</option>
         <option name="Restart Probability">
         	The parameter restart probability r controls the fraction of the original scores that is distributed among the nodes of the network.
-    		For example, if the restart probability is set to r=0.9 (default value), 90% of the original score of a gene is kept and 10% of its score is distributed within its neighbors.
+    		For example, if the restart probability is set to r=0.9 (default value), 90% of the original score of a gene is kept and 10% of its score is distributed among its neighbors.
 		</option>
         <option name="Number of Iterations">
         	This option refers to the parameter t (number of steps) of the random walk with restart.
