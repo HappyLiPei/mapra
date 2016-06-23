@@ -15,15 +15,15 @@
         	The MetaboToGeno algorithm calculates a score for each gene based on the p values reported by ScoreMetabolites.
         	The score of a gene <i>x</i> indicates the probability that <i>x</i> is the causal gene for the patient's disease given the observed metabotype.
         	<br/><br/>
-        	MetaboToGeno requires 3 tables with input data.
-        	For detailed information about the format of the tables have a look at the example files provided at
-        	<a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
+        	MetaboToGeno requires 3 tables with input data: the metabolite scores, the metabolite-gene associations and the set of all genes to score.
+        	For detailed information about the format of the tables have a look at the Input Port section and 
+        	at the example files provided at <a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
         	<br/><br/>
         	The MetaboToGeno algorithm is a procedure with 2 main steps.
         	<br/>
         	The first step of the procedure is a score transformation at metabolite level.
         	The p value of each metabolite is converted to the probability that the metabolite is associated with the patient's disease. 
-        	A metabolite with p value <i>p</i> assigned a new score 1/(1+np) where <i>n</i> denotes the total number of metabolites.
+        	A metabolite with p value <i>p</i> gets a new score 1/(1+np) where <i>n</i> denotes the total number of metabolites.
         	<br/>
         	The second step transfers a metabolite score to all genes that have an association with that metabolite.
         	If a metabolite does not have any known associations, its score is distributed among all genes.
@@ -53,8 +53,8 @@
     	</inPort>
         <inPort index="1" name="Metabolite Gene Association">
         	<b>Associations Metabolite - Gene</b>: a table representing associations between metabolites and genes.
-        	...These associations can include results from GWAS and data about biochemical reactions (e.g. gene <i>x</i> catalyzes a reaction that forms metabolite <i>y</i>).
-        	The table should have two columns name <b>metabolite_id</b> and <b>gene_id</b>.
+        	These associations can include indirect relations (e.g. results from GWAS) and data about biochemical reactions (e.g. gene <i>x</i> catalyzes a reaction that forms metabolite <i>y</i>).
+        	The table should have two columns named <b>metabolite_id</b> and <b>gene_id</b>.
     		The associations are represented as pairs metabolite id (e.g. Metabolon id) - gene id (e.g. Ensmebl id).
     		Note that the gene id is allowed to be missing (for a metabolite without known genes) whereas the metabolite id is required in every row. 
     		<br/> <b>All metabolites that should be considered in the MetaboToGeno algorithm have to occur at least once in the table</b>.

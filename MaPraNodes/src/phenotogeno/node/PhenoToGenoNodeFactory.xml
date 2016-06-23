@@ -15,7 +15,7 @@
         	The PhenoToGeno algorithm calculates a score for each gene based on the p values reported by Phenomizer.
         	The score of a gene <i>x</i> indicates the probability that <i>x</i> is the causal gene for the patient's disease given the observed symptoms.
         	<br/><br/>
-        	PhenoToGeno requires 3 tables with input data.
+        	PhenoToGeno requires 3 tables with input data: the disease scores, the disease-gene associations and the set of all genes to score.
         	For detailed information about the format of the tables have a look at the example files provided at
         	<a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
         	<br/><br/>
@@ -23,7 +23,7 @@
         	<br/>
         	The first step of the method is a score transformation at disease level.
         	The p value of each disease is converted to the probability that the patient suffers from the disease. 
-        	A disease with p value <i>p</i> is assigned a new score s=1/(1+np) where <i> n </i> denotes the total number of diseases.
+        	A disease with p value <i>p</i> gets a new score s=1/(1+np) where <i> n </i> denotes the total number of diseases.
         	<br/>
         	The second step transfers a disease score to all genes that have an association with that disease.
         	If a disease does not have any known associations, its score is distributed among all genes.
@@ -56,7 +56,7 @@
         <inPort index="1" name="Disease Gene Association">
         	<b>Associations Disease - Gene</b>: a table representing associations between diseases and genes.
         	These associations should comprise all known causal genes for the diseases of PhenoDis.
-        	The table should have two columns name <b>disease_id</b> and <b>gene_id</b>.
+        	The table should have two columns named <b>disease_id</b> and <b>gene_id</b>.
     		The associations are represented as pairs PhenoDis disease id - gene id (e.g. Ensmebl id).
     		Note that the gene id is allowed to be missing (for a disease without known genes) whereas the disease id is required in every row. 
     		<br/> <b>All diseases that should be considered in the PhenoToGeno algorithm have to occur at least once in the table</b>.
