@@ -1,12 +1,14 @@
 # PheNoBo (Combining PHEnotype, GeNOtype and MetaBOtype)
-This repository was created during bioinformatics master practical (summer 2015) at Helmholtz Zentrum.
-It contains an implementation of the Phenomizer algorithm for the PhenoDis database.
-The Phenomizer for PhenoDis is realized as a KNIME node.
-As the PhenoDis database is not yet publicly available, you can test the tool with the dummy data provided in this repository.
+
+This repository was created during the bioinformatics master practical (summer 2015) at Helmholtz Zentrum.
+Originally, the repository contained Phenomizer for PhenoDis.
+
+During summer 2016 Phenomizer for PhenoDis was further extended and included in PheNoBo.
+PheNoBo is a set of KNIME nodes for predicting causal genes of rare diseases by combining phenotype, genotype and metabotype data.
+As the PhenoDis database is not yet publicly available, you can test all KNIME nodes with the dummy data provided in this repository.
 
 Content:
 
-* MaPraNodes: source code of Phenomizer for PhenoDis
-* TestData: dummy data representing diseases, symptoms, disease-symptom association, queries, all-against-all matrices and score distributions
-* phenomizer_1.4.2.jar: compiled Phenomizer KNIME nodes, just copy this file into the dropins folder of your KNIME installation to use Phenomizer for PhenoDis
-* DecisionSupportForRareDiseases.pdf: paper presenting Phenomizer for PhenoDis
+* MaPraNodes: source code of PheNoBo (including Phenomizer for PhenoDis)
+* TestData: dummy data representing diseases, metabolites, genes and their associations among each other
+* PhenomizerForPhenoDis: original implmentation and documentation of Phenomizer for PhenoDis
