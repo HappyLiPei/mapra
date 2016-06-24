@@ -8,7 +8,38 @@
     
     <fullDescription>
         <intro>
-        	Insert long description here...
+        	<b>ScoreMetabolites</b> is the first node of the metabotype analysis implemented in <b>PheNoBo</b>.
+        	This node is the predecessor of the <b>MetaboToGeno</b> node.
+        	<br/><br/>
+        	The task of ScoreMetabolites is to compare the metabolite concentrations measured for a patient to a set of reference values.
+        	This comparison results in a score and a p value for each measured metabolite.
+        	A high score and a low p value hint at metabolites which strongly deviate from the expected values.
+        	Such metabolites are likely to be related to the patient's disease.
+        	<br/><br/>
+        	ScoreMetabolites requires 2 tables with input data: the reference values and the measured metabolite concentrations.
+        	For detailed information about the format of the tables have a look at the Input Port section and 
+        	at the example files provided at <a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
+        	<br/><br/>
+        	The algorithm of ScoreMetabolites is able to calculate 2 types of scores depending on the missing values in the input data.
+        	<br/>
+        	<b>Z Score</b>:
+        		This node calculates a Z Score for each metabolite that fulfills 2 conditions:
+        		<br/>
+        		(1) There are sufficient control samples: low missingness in the reference values.
+        		<br/>
+        		(2) The metabolite was measured for the patient: the concentration in the actual measurement is not missing.
+        		<br/>
+        		The Z score is calculated as (concentration-mean)/standard deviation.
+        		The corresponding p value is calculated analytically by assuming a Normal distribution with mean 0 and standard deviation 1 for the Z scores.
+        		As the measured metabolite concentrations strongly depend on variables like age, sex and fasting state, the reference samples are divided into phenotype groups with separate mean and standard deviation values.
+        		The patient's measured concentration is then compared to the mean and standard deviation of the appropriate phenotype group during calculation of the Z score.
+        	<br/>
+        	<b>Binary Score</b>:
+        		This node calculates a Binary Score, if the data of a metabolite do not meet the conditions for calculating a Z Score. 
+        		The binary score can assume 2 different values: 0 and 1.
+        		The binary score is set to 1, if condition (2) is fulfilled but condition (1) does not hold: there are not sufficient reference values to interpret the measured concentration.
+        		The binary score is set to 0, if condition (2) is violated: the concentration of the metabolite in the patient's measurement is missing.
+        		The p value corresponding to a binary score is derived from the missingness in the control samples across all phenotype groups.
         </intro>
         
         <!--<option name="short name of first option (like in the dialog)">description of first option</option>-->
@@ -17,13 +48,47 @@
     
     <ports>
         <inPort index="0" name="Reference">
-        	Reference... Description of first input port...
+        	<b>Reference</b>:
+        	table with reference values for each metabolite.
+        	The table contains summarized values for each metabolite calculated from a set of control samples.
+        	The table has 6 columns: <b>metabolite_id</b>, <b>type</b>, <b>group</b>, <b>mean</b>, <b>stdev</b> and <b>missingness</b>.
+        	<br/>
+        	The column <b>metabolite id</b> contains the identifier (e.g. Metabolon id) of a metabolite.
+        	The column <b>group</b> refers to a phenotype group of control samples.
+        	There is a row for each metabolite id and each phenotype group.
+        	<br/>
+        	The column <b>mean</b> contains the mean value of the current metabolite within the current phenotype group.
+        	The column <b>stdev</b> contains the standard deviation of the current metabolite within the current phenotype group.
+        	The column <b>missingness</b> indicates the percentage of control samples with a missing value for the current metabolite (regardless of the group).
+        	<br/>
+        	The column <b>type</b> gives the type of the current row.
+        	There are 2 kinds of rows: rows of type <i>binary</i> and rows of type <i>concentration</i>.
+        	The binary entries have only one row per metabolite id.
+        	The columns type, mean and stdev of a binary row contain missing values (i.e. the metabolite does not fulfill condition (1)).
+        	The entries of type concentration have several rows per metabolite id.
+        	These rows should not contain any missing values (i.e. the metabolite meets condition (1)).
     	</inPort>
         <inPort index="1" name="Measurement">
-    		Measurements from patient ...Description of first input port...
+    		<b>Measurements from patient</b>:
+    		table with measured metabolite concentrations from a patient.
+    		The table should have 3 columns named <b>metabolite_id</b>, <b>concentration</b> and <b>group</b>.
+    		<br/>
+    		The metabolite id should be a unique identifier for each metabolite (e.g. the Metabolon id).
+    		The column concentration can either contain a measured concentration or a missing value (if the metabolite concentration was below the limit of detection).
+    		The column group gives information about the patient.
+    		The patients are grouped e.g. according to age, sex and/or state of fasting.
+    		<br/>
+    		<b>The measured concentrations should be logarithmized and normalized the same way than the reference data at input port 0.</b>
 		</inPort>
         <outPort index="0" name="Scored Metabolites">
-        	Scored Metabolites ...Description of first output port...
+        	<b>Scored Metabolites</b>:
+        	table with metabolite scores.
+        	Each row represents a metabolite and consists of 4 columns: <b>metabolite_id</b>, <b>type</b>, <b>metabolite_score</b> and <b>significance</b>.
+        	The column type indicates if a Z score (value <i>concentration</i>) or a binary score (value <i>binary</i>) was calculated.
+        	The column metabolite_score contains the Z scores and the binary scores.
+        	The column significance gives the probability of observing a more extreme score than the actual score.
+        	<br/>
+        	If the metabolite names are provided at input port 0, they are added as an additional column called <b>metabolite_name</b>.
     	</outPort>
     </ports>    
     

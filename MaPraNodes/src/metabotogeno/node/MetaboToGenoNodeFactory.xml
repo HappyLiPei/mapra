@@ -13,7 +13,7 @@
         	<br/><br/>
         	The aim of MetaboToGeno is to transform the per-metabolite results of ScoreMetabolites into predictions of causal genes.
         	The MetaboToGeno algorithm calculates a score for each gene based on the p values reported by ScoreMetabolites.
-        	The score of a gene <i>x</i> indicates the probability that <i>x</i> is the causal gene for the patient's disease given the observed metabotype.
+        	The score of a gene <i>x</i> indicates the probability that <i>x</i> is the causal gene for the patient's metabotype.
         	<br/><br/>
         	MetaboToGeno requires 3 tables with input data: the metabolite scores, the metabolite-gene associations and the set of all genes to score.
         	For detailed information about the format of the tables have a look at the Input Port section and 
