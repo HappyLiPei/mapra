@@ -6,6 +6,7 @@ import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
+import org.knime.core.data.MissingCell;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
@@ -172,7 +173,27 @@ public class TableFunctions {
     	if(type==StringCell.TYPE){
     		return new StringCell(content);
     	}
-    	return null;
+    	if(type==IntCell.TYPE){
+    		try{
+    			int contentInt = Integer.parseInt(content);
+    			return new IntCell(contentInt);
+    		}
+    		//invalid String representation of a number
+    		catch(NumberFormatException e){
+    			return new MissingCell(null);
+    		}
+    	}
+    	if(type==DoubleCell.TYPE){
+    		try{
+    			double contentDouble = Double.parseDouble(content);
+    			return new DoubleCell(contentDouble);
+    		}
+    		//invalid String representation of a number
+    		catch(NumberFormatException e){
+    			return new MissingCell(null);
+    		}
+    	}
+    	return new MissingCell(null);
     }
     
     /**
@@ -189,7 +210,7 @@ public class TableFunctions {
     	if(type==DoubleCell.TYPE){
     		return new DoubleCell(content);
     	}
-    	return null;
+    	return new MissingCell(null);
     }
 
 }

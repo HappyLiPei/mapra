@@ -5,13 +5,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
 
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
-import org.knime.core.data.def.IntCell;
-import org.knime.core.data.def.LongCell;
-import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
@@ -37,57 +34,63 @@ import phenomizer.algorithm.PhenomizerDriver;
  */
 public class PhenomizerNodeModel extends NodeModel {
     
-    // the logger instance
+	/** the logger instance for writing to KNIME console and log */
     private static final NodeLogger logger = NodeLogger.getLogger(PhenomizerNodeModel.class);
     
-    //inport positions
-    private static final int INPORT_SYMPTOM_DICT =0;
-    private static final int INPORT_ISA = 1;
-    private static final int INPORT_KSZ = 2;
-    private static final int INPORT_QUERY = 3;
-    
-    //column names
-    public static final String SYMPTOM_ID ="symptom_id";
-    public static final String SYMPTOM_NAME = "symptom_name";
-    public static final String DISEASE_ID ="disease_id";
-    public static final String DISEASE_NAME = "disease";
-    public static final String FREQUENCY ="frequency";
-    public static final String CHILD_ID = "child_id";
-    public static final String PARENT_ID = "parent_id";
-    public static final String SCORE = "score";
-    public static final String P_VALUE = "p_value";
-    public static final String SIGNIFICANCE = "significance";
-    
-    //settingsmodels:
-    //size of output
+    //settingsmodel for size of output
+    /** key of the option "output size" (number of top scoring diseases in the output table) */
     protected static final String CFGKEY_OUTPUTSIZE="outputsize";
+    /** default value of the option "output size" */
     protected static final int DEF_OUTPUTSIZE=20;
+    /** minimum valid value of the option "output size" */
     protected static final int MIN_OUTPUTSIZE=1;
+    /** maximum valid value of the option "output size" */
     protected static final int MAX_OUTPUTSIZE=Integer.MAX_VALUE;
+    /** option object (settings model) to adapt the output size */
     private final SettingsModelIntegerBounded m_outputsize = new SettingsModelIntegerBounded(CFGKEY_OUTPUTSIZE, DEF_OUTPUTSIZE, MIN_OUTPUTSIZE, MAX_OUTPUTSIZE);
-    //use weights for similarity score
+    
+    //settingsmodel for weighted score
+    /** key of the option "weights" (calculate weighted similarity score) */
     protected static final String CFGKEY_WEIGHT="weight";
+    /** default value of the option "weights" */
     protected static final boolean DEF_WEIGHT=false;
+    /** option object (settings model) to calculate weighted scores */
     private final SettingsModelBoolean m_weight = new SettingsModelBoolean(CFGKEY_WEIGHT, DEF_WEIGHT);
-    //calculate p values
+    
+    //settingsmodel for calculation of p values
+    /** key of the option "p value" (calculate p values) */
     protected static final String CFGKEY_PVALUE="pvalue";
+    /** default value of the option "p value" */
     protected static final boolean DEF_PVALUE=false;
+    /** option object (settings model) to calculate p values */
     private final SettingsModelBoolean m_pval = new SettingsModelBoolean(CFGKEY_PVALUE, DEF_PVALUE);
-    //folder to pvalues
+    
+    //settignsmodel for the folder with score distributions
+    /** key of the option "p value folder" (path to folder with sampled score distributions) */
     protected static final String CFGKEY_FOLDER="pval_folder";
+    /** default value of the option "p value folder" */
     protected static final String DEF_FOLDER="";
+    /** option object (settings model) to choose the folder with the score distributions for calculating the p values */
     private final SettingsModelString m_folder = new SettingsModelString(CFGKEY_FOLDER, DEF_FOLDER);
+    
+    //inport positions
+    /** inport of the table containing the symptoms (from PhenoDis)*/
+    private static final int INPORT_SYMPTOM_DICT =0;
+    /** inport of the table containing ontology of symptoms (from PhenoDis)*/
+    private static final int INPORT_ISA = 1;
+    /** inport of the table containing the disease-symptom relations (from PhenoDis)*/
+    private static final int INPORT_KSZ = 2;
+    /** inport of the table containing the symptoms of the query */
+    private static final int INPORT_QUERY = 3;
     
     /**
      * Constructor for the node model.
-     * 4 inports:
-     * 	-symptom dictionary (0)
-     * 	-isa table (1)
-     * 	-ksz table (2)
-     * 	-query table (3)
+     * 4 inports for symptom dictionary (0), isa table (1), ksz table (2) and query table (3)
      */
     protected PhenomizerNodeModel() {
+    	//4 input ports, 1 output port
         super(4, 1);
+        //assure that pvalue and pvalue folder have consistent values
         if(!DEF_PVALUE){
         	m_folder.setEnabled(m_pval.getBooleanValue());
         }
@@ -100,11 +103,15 @@ public class PhenomizerNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
     	
-    	//read in tables from inports into phenomizer data structure
-        LinkedList<Integer> query = TableProcessorPhenomizer.generateQuery(inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
-        LinkedList<Integer> symptoms = TableProcessorPhenomizer.generateSymptomList(inData[INPORT_SYMPTOM_DICT]);
-        int [][] edges = TableProcessorPhenomizer.generateEdges(inData[INPORT_ISA]);
-        HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessorPhenomizer.generateKSZ(inData[INPORT_KSZ], m_weight.getBooleanValue());
+    	//read in tables and convert them into Phenomizer data structure
+        LinkedList<Integer> query = TableProcessorPhenomizer.generateQuery(
+        		inData[INPORT_QUERY], inData[INPORT_SYMPTOM_DICT], logger);
+        LinkedList<Integer> symptoms = TableProcessorPhenomizer.generateSymptomList(
+        		inData[INPORT_SYMPTOM_DICT], logger, false);
+        int [][] edges = TableProcessorPhenomizer.generateEdges(
+        		inData[INPORT_ISA], logger);
+        HashMap<Integer,LinkedList<Integer[]>> diseases = TableProcessorPhenomizer.generateKSZ(
+        		inData[INPORT_KSZ], m_weight.getBooleanValue(), logger);
         
         //run Phenomizer algorithm
     	PhenomizerDriver d = new PhenomizerDriver(query, symptoms, diseases, edges);
@@ -138,22 +145,36 @@ public class PhenomizerNodeModel extends NodeModel {
             throws InvalidSettingsException {
     	
     	//check port 0: symptom table
-    	TableFunctions.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, SYMPTOM_NAME, new DataType[]{StringCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, ColumnSpecification.SYMPTOM_ID, 
+    			ColumnSpecification.SYMPTOM_ID_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_SYMPTOM_DICT, ColumnSpecification.SYMPTOM_NAME,
+    			ColumnSpecification.SYMPTOM_NAME_TYPE, null);
+    	
     	//check port 1: isa table
-    	TableFunctions.checkColumn(inSpecs, INPORT_ISA, CHILD_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_ISA, PARENT_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_ISA, ColumnSpecification.CHILD_ID, 
+    			ColumnSpecification.CHILD_ID_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_ISA, ColumnSpecification.PARENT_ID, 
+    			ColumnSpecification.PARENT_ID_TYPE, null);
+    	
     	//check port 2: ksz table
-    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, DISEASE_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, DISEASE_NAME, new DataType[]{StringCell.TYPE}, null);
-    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE}, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, ColumnSpecification.DISEASE_ID, 
+    			ColumnSpecification.DISEASE_ID_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, ColumnSpecification.DISEASE_NAME, 
+    			ColumnSpecification.DISEASE_NAME_TYPE, null);
+    	TableFunctions.checkColumn(inSpecs, INPORT_KSZ, ColumnSpecification.SYMPTOM_ID, 
+    			ColumnSpecification.SYMPTOM_ID_TYPE, null);
+    	//check for frequency annotation if weights are used
     	if(m_weight.getBooleanValue()){
-    		TableFunctions.checkColumn(inSpecs, INPORT_KSZ, FREQUENCY, new DataType[]{StringCell.TYPE},
+    		TableFunctions.checkColumn(inSpecs, INPORT_KSZ, ColumnSpecification.FREQUENCY, 
+    				ColumnSpecification.FREQUENCY_TYPE,
 			"Please uncheck the option \"use frequency weights\" in the node dialog or use another input table with frequency values");
     	}
+    	
     	//check port 3: query  
-    	TableFunctions.checkColumn(inSpecs, INPORT_QUERY, SYMPTOM_ID, new DataType[]{IntCell.TYPE, LongCell.TYPE},null);
-
+    	TableFunctions.checkColumn(inSpecs, INPORT_QUERY, ColumnSpecification.SYMPTOM_ID,
+    			ColumnSpecification.SYMPTOM_ID_TYPE, null);
+    	
+    	//return output specification for table with results
         return new DataTableSpec[]{TableProcessorPhenomizer.generateOutputSpec(m_pval.getBooleanValue())};
     }
 

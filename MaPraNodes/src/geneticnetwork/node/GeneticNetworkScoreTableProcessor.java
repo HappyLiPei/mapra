@@ -156,7 +156,6 @@ public class GeneticNetworkScoreTableProcessor {
 		return edgeArray.toArray(new String[edgeArray.size()][]);
 	}
 	
-	//TODO: adapt node manual
 	/**
 	 * generates the specification (column names + type) for the output table of the GeneticNetworkScore node
 	 * @return DataTableSpec of the output table

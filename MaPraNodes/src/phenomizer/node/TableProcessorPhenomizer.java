@@ -8,151 +8,143 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.MissingCell;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.def.DefaultRow;
-import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.IntCell;
-import org.knime.core.data.def.LongCell;
-import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 
+import nodeutils.ColumnSpecification;
 import nodeutils.TableFunctions;
 import phenomizer.algorithm.FrequencyConverter;
+import phenomizer.algorithm.PhenomizerDriver;
 
+/** class for converting the KNIME tables of the Phenomizer node */
 public class TableProcessorPhenomizer {
 	
 	/**
-	 * converts BufferedDataTable with query symptoms to phenomizer data structure
-	 * @param table: table with query symptoms received at inport of PhenomizerNode
-	 * @return LinkedList of symptom ids of the query
+	 * converts a KNIME table with query symptoms into a data structure for {@link PhenomizerDriver},
+	 * the method recognizes and removes symptom ids that are not part of the list of all symptoms
+	 * @param table_query table with the query symptoms received at the input port of the Phenomizer node
+	 * @param table_symptoms table with the symptom dictionary received at the input port of the Phenomizer node
+	 * @param logger logger of the Phenomizer node to make output to the KNIME console
+	 * @return filtered list of symptom ids representing the query symptoms for Phenomizer
 	 */
-	
-	private static LinkedList<Integer> generateQuery(BufferedDataTable table){
-		return generateSymptomList(table);
-	}
-	
-	/**
-	 * converts BufferedDataTable with query symptoms to phenomizer data structure
-	 * and removes ids that are not part of the ontology
-	 * @param table_query: table with query symptoms received at inport of PhenomizerNode
-	 * @param table_symptoms: table with symptom dictionary received at inport of PhenomizerNode
-	 * @param l: node logger to make output to KNIME konsole
-	 * @return filtered LinkedList of symptom ids of the query
-	 */
-	
-	protected static LinkedList<Integer> generateQuery(BufferedDataTable table_query, BufferedDataTable table_symptoms, NodeLogger l){
-		LinkedList<Integer> query_complete = generateQuery(table_query);
+	protected static LinkedList<Integer> generateQuery(BufferedDataTable table_query, BufferedDataTable table_symptoms, NodeLogger logger){
 		
+		//unfiltered query
+		LinkedList<Integer> query_complete = generateSymptomList(table_query, logger, true);
+		
+		//read in set of all symptoms
 		HashSet<Integer> symptoms_in_dict = new HashSet<Integer>(((int)table_symptoms.size())*3);
-		int index = table_symptoms.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
-		boolean is_int =false;
-		if(table_symptoms.getDataTableSpec().getColumnSpec(index).getType()==IntCell.TYPE){
-			is_int = true;
-		}
+		int index = table_symptoms.getDataTableSpec().findColumnIndex(ColumnSpecification.SYMPTOM_ID);
 		for(DataRow r: table_symptoms){
-			if(is_int){
-				symptoms_in_dict.add(((IntCell) r.getCell(index)).getIntValue());
-			}
-			else{
-				symptoms_in_dict.add((int) ((LongCell) r.getCell(index)).getLongValue());
+			Integer symptomId = TableFunctions.getIntegerValue(r, index);
+			if(symptomId!=null){
+				symptoms_in_dict.add(symptomId);
 			}
 		}
 		
+		//filter query
 		LinkedList<Integer> res = new LinkedList<Integer>();
 		for(Integer i: query_complete){
 			if(symptoms_in_dict.contains(i)){
 				res.add(i);
 			}
 			else{
-				l.warn("Symptom_id " +i+ " ist not part of the ontology: Phenomizer will ignore this symptom.");
+				logger.warn("Symptom_id " +i+ " of the query is not part of the list of all symptoms:"
+						+ " Phenomizer will ignore this symptom.");
 			}
 		}
 		return res;
 	}
 	
 	/**
-	 * converts BufferedDataTable with symptom dictionary to phenomizer data structure
-	 * @param table: table with symptom dictionary received at inport of PhenomizerNode
-	 * @return LinkedList of symptom ids of the symptom dictionary
+	 * converts a KNIME table with symptoms into a data structure for {@link PhenomizerDriver},
+	 * the method is able to skip rows with missing symptom ids
+	 * @param table table with symptom dictionary (list of all symptoms) received at the input port of the Phenomizer node
+	 * @param logger logger of the Phenomizer node to make output to the KNIME console
+	 * @return list of symptom ids of the symptom dictionary
 	 */
-	
-	protected static LinkedList<Integer> generateSymptomList(BufferedDataTable table){
-		int index = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
-		boolean is_int =false;
-		if(table.getDataTableSpec().getColumnSpec(index).getType()==IntCell.TYPE){
-			is_int = true;
-		}
+	protected static LinkedList<Integer> generateSymptomList(BufferedDataTable table, NodeLogger logger, boolean query){
+		
+		//data structures for reading symptom ids
+		int index = table.getDataTableSpec().findColumnIndex(ColumnSpecification.SYMPTOM_ID);
 		LinkedList<Integer> result = new LinkedList<Integer>();
+		
+		//extract symptom id of every row
 		for (DataRow r: table){
-			if(is_int){
-				result.add(((IntCell) r.getCell(index)).getIntValue());
+			Integer symptomId = TableFunctions.getIntegerValue(r, index);
+			if(symptomId==null){
+				if(query){
+					logger.warn("Error parsing symptom id of row "+r.getKey()+" in the table containing the query symptoms."
+							+ " This node will ignore it.");
+				}
+				else{
+					logger.warn("Error parsing symptom id of row "+r.getKey()+" in the table containing the list of all symptoms."
+						+ " This node will ignore it.");
+				}
 			}
 			else{
-				result.add((int) ((LongCell) r.getCell(index)).getLongValue());
+				result.add(symptomId);
 			}
 		}
 		return result;
 	}
 	
 	/**
-	 * converts BufferedDataTable with disease annotation to phenomizer data structure
-	 * @param table: table with disease annotation received at inport of PhenomizerNode
-	 * @param weight: specifies if algorithm should use weights
-	 * @return HashMap which maps a disease id to the annotated symptom ids (pos 0) and to the annotated frequencies (pos 1)
+	 * converts a KNIME table with symptom-disease annotation into a data structure for {@link PhenomizerDriver},
+	 * @param table table with the symptom-disease annotation received at input port of the Phenomizer node
+	 * @param weight flag that specifies if algorithm uses weights
+	 * @return HashMap which maps a disease id to an int array containing one annotated symptom id (pos 0) 
+	 * 		and the annotated frequency (pos 1)
 	 */
-	protected static HashMap<Integer, LinkedList<Integer []>> generateKSZ(BufferedDataTable table, boolean weight){
+	protected static HashMap<Integer, LinkedList<Integer []>> generateKSZ(BufferedDataTable table, boolean weight, NodeLogger logger){
 		
 		HashMap<Integer, LinkedList<Integer[]>> res = new HashMap<Integer, LinkedList<Integer[]>>(((int)table.size())*3);
-		int index_disease = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
-		int index_symptom = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.SYMPTOM_ID);
-		int index_frequency = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.FREQUENCY);
-		
-		boolean disease_is_int=false;
-		if(table.getDataTableSpec().getColumnSpec(index_disease).getType()==IntCell.TYPE){
-			disease_is_int = true;
-		}
-		boolean symptom_is_int=false;
-		if(table.getDataTableSpec().getColumnSpec(index_symptom).getType()==IntCell.TYPE){
-			symptom_is_int = true;
-		}
+		int index_disease = table.getDataTableSpec().findColumnIndex(ColumnSpecification.DISEASE_ID);
+		int index_symptom = table.getDataTableSpec().findColumnIndex(ColumnSpecification.SYMPTOM_ID);
+		int index_frequency = table.getDataTableSpec().findColumnIndex(ColumnSpecification.FREQUENCY);
 		
 		FrequencyConverter f = new FrequencyConverter();
 		for(DataRow r : table){
-			int disease_id=-1;
-			int symptom_id=-1;
-			if(disease_is_int){
-				disease_id = ((IntCell) r.getCell(index_disease)).getIntValue();
+			//read disease id and symptom id, check for missing values
+			Integer disease_id= TableFunctions.getIntegerValue(r, index_disease);
+			Integer symptom_id= TableFunctions.getIntegerValue(r, index_symptom);
+			if(disease_id==null){
+				logger.warn("Error parsing disease id of row "+r.getKey()+" in the table containing the symptoms-disease associations."
+						+ " This node will ignore it.");
+				continue;
 			}
-			else{
-				disease_id = (int) ((LongCell) r.getCell(index_disease)).getLongValue();
-			}
-			if(symptom_is_int){
-				symptom_id = ((IntCell) r.getCell(index_symptom)).getIntValue();
-			}
-			else{
-				symptom_id = (int) ((LongCell) r.getCell(index_symptom)).getLongValue();
+			if(symptom_id==null){
+				logger.warn("Error parsing symptom id of row "+r.getKey()+" in the table containing the symptoms-disease associations."
+						+ " This node will ignore it.");
+				continue;
 			}
 			
+			//get correct weighting factor
 			Integer [] symptom_and_freq = new Integer [2];
 			symptom_and_freq[0]=symptom_id;
+			//do not use weight
 			if(index_frequency==-1||!weight){
 				symptom_and_freq[1]=FrequencyConverter.NO_WEIGHT;
 			}
+			//use weight -> parse frequency annotation
 			else{
-				//missing value
-				if(r.getCell(index_frequency).getType()!=StringCell.TYPE){
+				String frequency = TableFunctions.getStringValue(r, index_frequency);
+				//missing frequency annotation
+				if(frequency==null){
 					//symptom is weighted as frequent
 					symptom_and_freq[1]=f.convertFrequency("");
 				}
 				else{
-					symptom_and_freq[1]= f.convertFrequency(
-						((StringCell) r.getCell(index_frequency)).getStringValue());
+					symptom_and_freq[1]= f.convertFrequency(frequency);
 				}
 			}
 			
+			//add disease, symptom and weight to result
 			if(res.containsKey(disease_id)){
 				res.get(disease_id).add(symptom_and_freq);
 			}
@@ -167,101 +159,97 @@ public class TableProcessorPhenomizer {
 	}
 	
 	/**
-	 * converts BufferedDataTable with ontology edges to phenomizer data structure
-	 * @param table: table with ontology edges received at inport of PhenomizerNode
-	 * @return Integer [][] of symptom ids corresponding to the edges of the ontology: (child, parent) pairs
+	 * converts a KNIME table with ontology edges into a data structure for {@link PhenomizerDriver}
+	 * @param table KNIME table with ontology edges received at the input port of the Phenomizer node
+	 * @param logger logger of the Phenomizer node to make output to the KNIME console
+	 * @return int [][] of symptom ids corresponding to the edges of the ontology: (child, parent) pairs
 	 */
 	
-	protected static int [][] generateEdges (BufferedDataTable table){
+	protected static int [][] generateEdges (BufferedDataTable table, NodeLogger logger){
 		
-		int [][] res = new int [(int)table.size()][2];
-		int index_child = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.CHILD_ID);
-		int index_parent = table.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.PARENT_ID);
-		boolean child_is_int=false;
-		if(table.getDataTableSpec().getColumnSpec(index_child).getType()==IntCell.TYPE){
-			child_is_int = true;
-		}
-		boolean parent_is_int=false;
-		if(table.getDataTableSpec().getColumnSpec(index_parent).getType()==IntCell.TYPE){
-			parent_is_int = true;
-		}
+		//data structures for reading the edge of the ontology
+		LinkedList<int[]> resList = new LinkedList<int[]>();
+		int index_child = table.getDataTableSpec().findColumnIndex(ColumnSpecification.CHILD_ID);
+		int index_parent = table.getDataTableSpec().findColumnIndex(ColumnSpecification.PARENT_ID);
 		
-		int rowcounter = 0;
 		for(DataRow r: table){
-			if(child_is_int){
-				res[rowcounter][0] = ((IntCell) r.getCell(index_child)).getIntValue();
+			//extract symptom ids of parent and child and check if they are missing
+			Integer childId = TableFunctions.getIntegerValue(r, index_child);
+			Integer parentId = TableFunctions.getIntegerValue(r, index_parent);
+			if(childId!=null && parentId!=null){
+				resList.add(new int[]{childId, parentId});
 			}
-			else{
-				res[rowcounter][0] = (int)((LongCell) r.getCell(index_child)).getLongValue();
+			if(childId==null){
+				logger.warn("Error parsing child id of row "+r.getKey()+" in the table containing the ontology."
+						+ " This node will ignore it.");
 			}
-			if(parent_is_int){
-				res[rowcounter][1] = ((IntCell) r.getCell(index_parent)).getIntValue();
+			if(parentId==null){
+				logger.warn("Error parsing parent id of row "+r.getKey()+" in the table containing the ontology."
+						+ " This node will ignore it.");
 			}
-			else{
-				res[rowcounter][1] = (int) ((LongCell) r.getCell(index_parent)).getLongValue();
-			}
-			rowcounter++;
 		}
-		return res;
+		
+		//convert list into array
+		return resList.toArray(new int[0][]);
 	}
 	
 	/**
-	 * generates specifications for outport table
-	 * @param pvalue: pvalue = true -> displays p values and significance in the out port table
-	 * @return: column format of output table
-	 * col 0 : disease_id (int)
-	 * col 1 : disease_name (string)
-	 * col 2 : score (double)
-	 * if pvalue=true: 2 additional columns
-	 * col 3 : p-value (double)
-	 * col 4: significance (string)
+	 * generates specifications for output table of Phenomizer
+	 * @param pvalue pvalue = true -> displays p values and significance in the out port table
+	 * @return specification format of output table:
+	 * 		column 0 with disease_id (int), column 1 with disease_name (string),
+	 * 		column 2 with similarity score (double),
+	 * 		if pvalue=true -> 2 additional columns: column 3 with p-value (double) and column 4 with significance (string)
 	 */
     protected static DataTableSpec generateOutputSpec(boolean pvalue){
     	
+    	//initialize specification according to p value option
     	DataColumnSpec [] colspecs = new DataColumnSpec[3];
     	if(pvalue){
     		colspecs= new DataColumnSpec[5];
     	}
-    	colspecs[0] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.DISEASE_ID, IntCell.TYPE);
-    	colspecs[1] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.DISEASE_NAME, StringCell.TYPE);
-    	colspecs[2] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.SCORE, DoubleCell.TYPE);
+    	
+    	//add column specifications
+    	colspecs[0] = TableFunctions.makeDataColSpec(ColumnSpecification.DISEASE_ID,
+    			ColumnSpecification.DISEASE_ID_TYPE[0]);
+    	colspecs[1] = TableFunctions.makeDataColSpec(ColumnSpecification.DISEASE_NAME, 
+    			ColumnSpecification.DISEASE_NAME_TYPE[0]);
+    	colspecs[2] = TableFunctions.makeDataColSpec(ColumnSpecification.SCORE, 
+    			ColumnSpecification.SCORE_TYPE[0]);
+    	//columns for p values (optional)
     	if(pvalue){
-        	colspecs[3] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.P_VALUE, DoubleCell.TYPE);
-        	colspecs[4] = TableFunctions.makeDataColSpec(PhenomizerNodeModel.SIGNIFICANCE, StringCell.TYPE);
+        	colspecs[3] = TableFunctions.makeDataColSpec(ColumnSpecification.P_VALUE, 
+        			ColumnSpecification.P_VALUE_TYPE[0]);
+        	colspecs[4] = TableFunctions.makeDataColSpec(ColumnSpecification.SIGNIFICANCE, 
+        			ColumnSpecification.SIGNIFICANCE_TYPE[0]);
     	}
     	
     	return new DataTableSpec(colspecs);
     }
 	
 	/**
-	 * wirtes output of phenomizer algorithm to a buffered data table and adds disease names from ksz inport table
-	 * @param output: result of phenomizer algorithm
-	 * @param exec: execution context of phenomizer node model
-	 * @param ksz: ksz table from inport of PhenomizerNode
-	 * @return BufferedDataTable that is passed to the outport of Phenomizer Node
+	 * writes the output of the {@link PhenomizerDriver} to a KNIME table and adds disease names extracted
+	 * from the symptom-disease table
+	 * @param output result of the Phenomizer algorithm
+	 * @param exec execution context of the Phenomizer node
+	 * @param ksz symptom-disease table from the input port of the Phenomizer node
+	 * @return a KNIME table that is passed to the output port of the Phenomizer node
 	 */
 	protected static BufferedDataTable generateOutput(LinkedList<String[]> output, ExecutionContext exec, BufferedDataTable ksz){
 		
+		//read disease names from ksz table and store them in a map id -> name
 		HashMap<Integer,String> IdToName = new HashMap<Integer,String>(((int)ksz.size())*3);
-		int pos_disease_name = ksz.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
-		int pos_disease_id = ksz.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
-		boolean is_int = false;
-		if(ksz.getDataTableSpec().getColumnSpec(pos_disease_id).getType()==IntCell.TYPE){
-			is_int=true;
-		}
+		int pos_disease_name = ksz.getDataTableSpec().findColumnIndex(ColumnSpecification.DISEASE_NAME);
+		int pos_disease_id = ksz.getDataTableSpec().findColumnIndex(ColumnSpecification.DISEASE_ID);
 		for(DataRow r: ksz){
-			int id=-1;
-			if(is_int){
-				id = ((IntCell) r.getCell(pos_disease_id)).getIntValue();
-			}
-			else{
-				id = (int) ((LongCell) r.getCell(pos_disease_id)).getLongValue();
-			}
-			if(!IdToName.containsKey(id)){
-				IdToName.put(id, ((StringCell) r.getCell(pos_disease_name)).getStringValue());
+			Integer id=TableFunctions.getIntegerValue(r, pos_disease_id);
+			String name=TableFunctions.getStringValue(r, pos_disease_name);
+			if(id!=null && name!=null && !IdToName.containsKey(id)){
+				IdToName.put(id, name);
 			}
 		}
 		
+		//get and read specifications of the table to return
 		DataTableSpec spec = new DataTableSpec();
 		//lenght = 2 -> no pvalue, length = 3 -> pvalue
 		int out_len = output.peek().length;
@@ -271,40 +259,53 @@ public class TableProcessorPhenomizer {
 		else{
 			spec = generateOutputSpec(true);
 		}
-		int index_disease_id = spec.findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
-		int index_score = spec.findColumnIndex(PhenomizerNodeModel.SCORE);
-		int index_disease_name = spec.findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
-		int index_p_value = spec.findColumnIndex(PhenomizerNodeModel.P_VALUE);
-		int index_significance = spec.findColumnIndex(PhenomizerNodeModel.SIGNIFICANCE);
+		int index_disease_id = spec.findColumnIndex(ColumnSpecification.DISEASE_ID);
+		int index_score = spec.findColumnIndex(ColumnSpecification.SCORE);
+		int index_disease_name = spec.findColumnIndex(ColumnSpecification.DISEASE_NAME);
+		int index_p_value = spec.findColumnIndex(ColumnSpecification.P_VALUE);
+		int index_significance = spec.findColumnIndex(ColumnSpecification.SIGNIFICANCE);
 		
+		//generate table content
 		BufferedDataContainer c = exec.createDataContainer(spec);
-		int counter = 0;
+		int counter = 1;
 		for(String [] rowdata : output){
-			counter++;
-			RowKey key = new RowKey("Row "+counter);
+			//get data for current row
+			//disease id
 			DataCell [] cells = new DataCell [spec.getNumColumns()];
+			cells[index_disease_id] = TableFunctions.generateDataCellFor(spec, index_disease_id, rowdata[0]);
+			//disease name
 			int id = Integer.parseInt(rowdata[0]);
-			cells[index_disease_id] = new IntCell(id);
-			cells[index_disease_name] = new StringCell(IdToName.get(id));
-			cells[index_score] = new DoubleCell(Double.parseDouble(rowdata[1]));
+			if(IdToName.containsKey(id)){
+				cells[index_disease_name] = TableFunctions.generateDataCellFor(spec, index_disease_name,IdToName.get(id));
+			}
+			else{
+				cells[index_disease_name] = new MissingCell(null);
+			}
+			//score
+			cells[index_score] = TableFunctions.generateDataCellFor(spec, index_score, rowdata[1]);
+			//pvalue
 			if(out_len==3){
 				double pval = Double.parseDouble(rowdata[2]);
-				cells[index_p_value] = new DoubleCell(pval);
-				cells[index_significance] = new StringCell(getSignificance(pval));
+				cells[index_p_value] = TableFunctions.generateDataCellFor(spec, index_p_value, pval);
+				cells[index_significance] = TableFunctions.generateDataCellFor(spec, index_significance, getSignificance(pval));
 			}
+			//add row to table
+			RowKey key = new RowKey("Row "+counter);
 	    	DataRow row = new DefaultRow(key, cells);
 	    	c.addRowToTable(row);
+	    	counter++;
 		}
 		c.close();
-
+		
+		//return table
 		return c.getTable();
 	}
 	
-	/** translates p value into star representation indicating the significance of the p value
-	 * @param pval : p value
-	 * @return : "" if pval >= 0.05
-	 * 			* if 0.01 <= pval < 0.05
-	 * 			** if 0.001 <= pval < 0.01
+	/** translates the p value into star representation indicating the significance of the p value
+	 * @param pval p value
+	 * @return "" if pval >= 0.05,
+	 * 			* if 0.01 <= pval < 0.05,
+	 * 			** if 0.001 <= pval < 0.01,
 	 * 			*** if 0.0001 <= pval < 0.001
 	 */
 	private static String getSignificance(Double pval){

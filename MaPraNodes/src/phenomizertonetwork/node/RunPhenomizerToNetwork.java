@@ -17,7 +17,7 @@ import phenomizertonetwork.network.CytoscapeFileGenerator;
 import phenomizertonetwork.network.DistanceMatrix;
 import phenomizertonetwork.network.PhenoResults;
 import execprocess.Executor;
-import phenomizer.node.PhenomizerNodeModel;
+import nodeutils.ColumnSpecification;
 
 public class RunPhenomizerToNetwork {
 	
@@ -54,7 +54,7 @@ public class RunPhenomizerToNetwork {
     	
     	//read in disease names, if they are provided in the matrix table, disease names will be displayed as node labels
     	HashMap<Integer,String> idstoname = new HashMap<Integer,String>();
-    	if(matrix.getSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME)!=-1){
+    	if(matrix.getSpec().findColumnIndex(ColumnSpecification.DISEASE_NAME)!=-1){
     		idstoname = getDiseaseNames(matrix);
     	}
     	
@@ -88,13 +88,13 @@ public class RunPhenomizerToNetwork {
 		int [] ids = new int[length];
 		double [] scores = new double[length];
 		double [] pvalues = new double[length];
-		boolean pval = (table.getSpec().findColumnIndex(PhenomizerNodeModel.P_VALUE)!=-1);
+		boolean pval = (table.getSpec().findColumnIndex(ColumnSpecification.P_VALUE)!=-1);
 		int index=0;
 		for(DataRow r: table){
-			ids[index]=((IntCell) r.getCell(table.getSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID))).getIntValue();
-			scores[index]=((DoubleCell) r.getCell(table.getSpec().findColumnIndex(PhenomizerNodeModel.SCORE))).getDoubleValue();
+			ids[index]=((IntCell) r.getCell(table.getSpec().findColumnIndex(ColumnSpecification.DISEASE_ID))).getIntValue();
+			scores[index]=((DoubleCell) r.getCell(table.getSpec().findColumnIndex(ColumnSpecification.SCORE))).getDoubleValue();
 			if(pval){
-				pvalues[index]=((DoubleCell) r.getCell(table.getSpec().findColumnIndex(PhenomizerNodeModel.P_VALUE))).getDoubleValue();
+				pvalues[index]=((DoubleCell) r.getCell(table.getSpec().findColumnIndex(ColumnSpecification.P_VALUE))).getDoubleValue();
 			}
 			index++;
 		}
@@ -115,7 +115,7 @@ public class RunPhenomizerToNetwork {
 	 * @return: set of all PhenoDis ids from the table
 	 */
 	private static HashSet<String> getIdsToColor(BufferedDataTable phenores){
-    	int index = phenores.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_ID);
+    	int index = phenores.getDataTableSpec().findColumnIndex(ColumnSpecification.DISEASE_ID);
     	HashSet<String> hs = new HashSet<String>((int) phenores.size()*3);
     	if(index!=-1){
     		for(DataRow r: phenores){
@@ -156,7 +156,7 @@ public class RunPhenomizerToNetwork {
 		int rows = (int) matrix.size();
 		DataTableSpec s = matrix.getDataTableSpec();
 		String [] colnames=s.getColumnNames();
-		int pos_name = s.findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
+		int pos_name = s.findColumnIndex(ColumnSpecification.DISEASE_NAME);
 		//check if disease names are available
 		boolean name = true;
 		if(pos_name==-1){
@@ -220,7 +220,7 @@ public class RunPhenomizerToNetwork {
 	 */
 	private static HashMap<Integer,String> getDiseaseNames(BufferedDataTable matrix){
 		HashMap<Integer, String> res = new HashMap<Integer,String>((int) (matrix.size()*3));
-		int index_name = matrix.getDataTableSpec().findColumnIndex(PhenomizerNodeModel.DISEASE_NAME);
+		int index_name = matrix.getDataTableSpec().findColumnIndex(ColumnSpecification.DISEASE_NAME);
 		for(DataRow r: matrix){
 			res.put(Integer.valueOf(r.getKey().getString()), ((StringCell) r.getCell(index_name)).getStringValue());
 		}

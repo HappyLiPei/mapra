@@ -12,12 +12,26 @@ public class ColumnSpecification {
 	
 	//column names
 	//disease columns
-	/** column name for the column with disease ids*/
+	/** column name for the column with symptom ids*/
+    public static final String SYMPTOM_ID ="symptom_id";
+    /** column name for the column with symptom names*/
+    public static final String SYMPTOM_NAME = "symptom_name";
+    /** column name for the column with frequency terms for symptom-disease associations*/
+    public static final String FREQUENCY ="frequency";
+    /** column name for the column with symptom ids representing children in the ontoloy of symptoms*/
+    public static final String CHILD_ID = "child_id";
+    /** column name for the column with symptom ids representing parents in the ontoloy of symptoms*/
+    public static final String PARENT_ID = "parent_id";
+    /** column name for the column with disease ids*/
 	public static final String DISEASE_ID ="disease_id";
 	/** column name for the column with disease names */
 	public static final String DISEASE_NAME = "disease";
+	/** column name for the column with disease scores (similarity between disease and query) */
+	public static final String SCORE = "score";
 	/** column name for the column with pvalues of the diseases */
 	public static final String P_VALUE = "p_value";
+	/** column name for the column with symbolic pvalues of the diseases (indicating significance at different niveaus)*/
+	public static final String SIGNIFICANCE = "significance";
 	
 	//metabolite columns
     /** column name for the column with metabolite ids*/
@@ -59,12 +73,26 @@ public class ColumnSpecification {
     
     //column types
     //disease column types
+	/** valid data types for symptom id */
+    public static final DataType[] SYMPTOM_ID_TYPE =new DataType[]{IntCell.TYPE, LongCell.TYPE};
+    /** valid data types for symptom name*/
+    public static final DataType[] SYMPTOM_NAME_TYPE = new DataType[]{StringCell.TYPE};
+    /** valid data type for frequency */
+    public static final DataType[] FREQUENCY_TYPE = new DataType[]{StringCell.TYPE};
+    /** valid data types for child id */
+    public static final DataType[] CHILD_ID_TYPE = new DataType[]{IntCell.TYPE, LongCell.TYPE};
+    /** valid data types for parent id */
+    public static final DataType[] PARENT_ID_TYPE = new DataType[]{IntCell.TYPE, LongCell.TYPE};
     /** valid data types for disease id*/
     public static final DataType[] DISEASE_ID_TYPE=new DataType[]{IntCell.TYPE, LongCell.TYPE};
     /** valid data types for disease name */
     public static final DataType[] DISEASE_NAME_TYPE = new DataType[]{StringCell.TYPE};
+	/** valid data types for score */
+	public static final DataType[] SCORE_TYPE = new DataType[]{DoubleCell.TYPE};
     /** valid data types for disease pvalues */
     public static final DataType[] P_VALUE_TYPE = new DataType[]{DoubleCell.TYPE};
+	/** valid data types for significance string*/
+	public static final DataType[] SIGNIFICANCE_TYPE = new DataType[]{StringCell.TYPE};
     
     //metabolite column types
     /** valid data types for metabolite id*/
