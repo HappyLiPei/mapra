@@ -20,7 +20,8 @@
         	For detailed information about the format of the tables have a look at the Input Port section and 
         	at the example files provided at <a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
         	<br/><br/>
-        	The algorithm of CombineScores calculates 2 different scores.
+        	CombineScores calculates 2 different scores.
+        	<br/>
         	<b>Combined Gene Score</b>:
         	The combined gene score is a probability calculated from the scores of 2 different, independent analyses
         	yielding scores g<sub>1</sub> and g<sub>2</sub>.
@@ -28,10 +29,12 @@
         	g=g<sub>1</sub>g<sub>2</sub>/(g<sub>1</sub>g<sub>2</sub>+(1-g<sub>1</sub>)(1-g<sub>2</sub>)).
         	<br/>
         	<b>Enrichment score</b>:
-        	The probabilites are translated into enrichment scores to facilitate the interpretation of the results.
+        	The probabilities are translated into enrichment scores to facilitate the interpretation of the results.
     		The enrichment score of a gene with probability g is determined as log<sub>10</sub>(gn) where n denotes the total number of genes.
     		If the enrichment score is greater than 0, the gene score is higher than expected for a random prediction (where all genes get a score of n<sup>-1</sup>).
     		If the enrichment score is lower than 0, the gene score is lower than expected for a random prediction.
+    		<br/>
+    		The algorithm of CombineScores is derived from the Phen-Gen tool (see Javed et al., 2014) and is described in more detail at...
     	</intro>
         
         <!--<option name="short name of first option (like in the dialog)">description of first option</option> -->

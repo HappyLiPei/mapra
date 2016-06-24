@@ -28,6 +28,8 @@
         	The second step transfers a metabolite score to all genes that have an association with that metabolite.
         	If a metabolite does not have any known associations, its score is distributed among all genes.
         	There are several methods (see dialog options) to handle genes that obtain scores from more than one metabolite.
+        	<br/>
+        	The algorithm of MetaboToGeno is derived from the Phen-Gen tool (see Javed et al., 2014) and is described in more detail at...
         </intro>
         
         <option name="Gene Annotation Mode">

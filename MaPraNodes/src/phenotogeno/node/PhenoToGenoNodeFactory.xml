@@ -19,6 +19,8 @@
         	For detailed information about the format of the tables have a look at the example files provided at
         	<a href="https://github.com/marie-sophie/mapra">https://github.com/marie-sophie/mapra</a>.
         	<br/><br/>
+        	The algorithm of PhenoToGeno is derived from the Phen-Gen tool (see Javed et al., 2014)...
+        	<br/>
         	The PhenoToGeno algorithm is a procedure with 2 main steps.
         	<br/>
         	The first step of the method is a score transformation at disease level.
@@ -28,7 +30,8 @@
         	The second step transfers a disease score to all genes that have an association with that disease.
         	If a disease does not have any known associations, its score is distributed among all genes.
         	There are several methods (see dialog options) to handle genes that obtain scores from more than one disease.
-        	<br/><br/>
+        	<br/>
+        	The algorithm of PhenoToGeno is derived from the Phen-Gen tool (see Javed et al., 2014) and is described in more detail at...
     	</intro>
         
         
