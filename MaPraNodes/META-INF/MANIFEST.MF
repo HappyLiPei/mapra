@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: PheNoBo (Combination of Phenotype, Genotype and Metabotype)
 Bundle-SymbolicName: phenobo;singleton:=true
-Bundle-Version: 2.1.6
+Bundle-Version: 2.1.7
 Bundle-ClassPath: phenobo.jar,
  libs/commons-math3-3.6.1.jar
 Bundle-Activator: nodeutils.PheNoBoNodePlugin
